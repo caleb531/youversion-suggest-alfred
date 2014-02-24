@@ -506,6 +506,7 @@ def search_bible(input):
 			
 			# Result information
 			result = Reference()
+			result.id = None
 			result.url = bible_url
 			
 			if query.version != None:
@@ -545,7 +546,7 @@ def search_bible(input):
 				result.title = book.name
 			
 			# Create result data using the given information
-			if result.id != '':
+			if result.id != None:
 				result.id += '.{version}'.format(version=query.version.lower())
 				result.url += result.id
 				result.version = query.version.upper()
@@ -555,7 +556,7 @@ def search_bible(input):
 	xml = '<?xml version="1.0"?>\n<items>\n'
 	for result in results:	
 	
-		if result.id != '':
+		if result.id != None:
 			xml += """
 			<item uid='{id}' arg='{url}'>
 				<title>{title}</title>
@@ -567,4 +568,4 @@ def search_bible(input):
 	xml += '\n</items>'
 	return xml
 	
-print(search_bible("{query}"))
+print(search_bible("jo 11"))

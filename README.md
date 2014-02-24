@@ -6,9 +6,9 @@
 
 YouVersion Suggest is an Alfred workflow which allows you to search the online [YouVersion](https://www.youversion.com/) bible quickly and conveniently.
 
-Type the `yv` keyword, along with a space and a phrase representing your search query. The query can the phrase you want to search, *or* the bible book/chapter/verse you want to search. As you type, YouVersion Suggest will display a list of suggestions matching your query.
+Type the `yv` keyword, along with a space and a phrase representing your search query. The query can be the phrase you want to search, *or* the bible book/chapter/verse you want to search. As you type, YouVersion Suggest will display a list of suggestions matching your query.
 
-## Examples
+## Query Examples
 
 * `ephesians`
 * `eph 3`
