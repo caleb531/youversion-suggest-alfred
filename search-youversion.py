@@ -568,4 +568,4 @@ def search_bible(input):
 	xml += '\n</items>'
 	return xml
 	
-print(search_bible("jo 11"))
+print(search_bible("{query}"))
