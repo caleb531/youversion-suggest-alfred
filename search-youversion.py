@@ -398,7 +398,7 @@ bible_url = 'https://www.bible.com/bible'
 search_url = 'https://www.bible.com/search'
 
 # Regular expression for parsing a bible reference
-bible_ref_exp = '(^((\d+ )?[a-z ]+)( (\d+)(\:(\d+)?)?)?( [a-z\d ]+)?$)'
+bible_ref_exp = '(^((\d+ )?[a-z ]+)( (\d+)(\:(\d+)?)?)?( [a-z\d]+)?$)'
 
 # Guess a translation based on the given text
 def guess_version(text):
@@ -446,10 +446,10 @@ def search_bible(input):
 	result = Reference()
 	result.id = 'search-youversion'
 	# Determine if the query includes the translation with which to search
-	version_match = re.findall('( [a-z\d ]+$)', input)
+	version_match = re.findall('( [a-z\d]+)$', input)
 	if len(version_match) != 0:
-		version = version_match[0][1]
-		result.version = guess_version(version_match[0][1])
+		version = version_match[0][1:]
+		result.version = guess_version(version)
 	else:
 		# Otherwise, search using the default translation
 		result.version = default_version
