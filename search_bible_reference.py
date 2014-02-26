@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Import print function
+from __future__ import print_function
 # Import required modules
 import cgi, re, time, urllib
 # Ensure compatibility with Python 3
@@ -398,7 +400,7 @@ bible_url = 'https://www.bible.com/bible'
 search_url = 'https://www.bible.com/search'
 
 # Regular expression for parsing a bible reference
-bible_ref_exp = '(^((\d+ )?[a-z ]+)( (\d+)(\:(\d+)?)?)?( [a-z\d]+)?$)'
+bible_ref_patt = '(^((\d+ )?[a-z ]+)( (\d+)(\:(\d+)?)?)?( [a-z\d]+)?)$'
 
 # Guess a translation based on the given text
 def guess_version(text):
@@ -419,19 +421,37 @@ def guess_version(text):
 		return version_guess
 
 # Search the bible for the given book/chapter/verse/version
-def search_bible(input):
+def search_bible(query_str):
 	results = []
 	
 	# Remove extra whitespace
-	input = input.strip()
-	input = re.sub('(\s)+', ' ', input)
+	query_str = query_str.strip()
+	query_str = re.sub('(\s)+', ' ', query_str)
 	# Lowercase query for consistency
-	input = input.lower()
+	query_str = query_str.lower()
 	# Convert chapter.verse to chapter:verse
-	input = re.sub('(\d+)\.(\d+)', '\\1:\\2', input)
+	query_str = re.sub('(\d+)\.(\d+)', '\\1:\\2', query_str)
+	
+	# Give the user the option to search the given query (instead of choosing a suggested reference)
+	result = Reference()
+	result.id = 'search-youversion'
+	# Determine if the query includes the translation with which to search
+	version_match = re.findall('( [a-z\d]+)$', query_str)
+	if len(version_match) != 0:
+		version = version_match[0][1:]
+		result.version = guess_version(version)
+	else:
+		# Otherwise, search using the default translation
+		result.version = default_version
+	result.title = 'Search YouVersion for \'' + cgi.escape(query_str) + '\''
+	result.subtitle = result.version.upper() + ' translation'
+	result.url = '{base}?q={query}&amp;version_id={version}'.format(base=search_url, query=urllib.quote_plus(query_str), version=result.version.lower())
+	
+	# Prompt user to search the typed query before showing suggestions
+	results.append(result)
 	
 	# Match section of the bible based on query
-	parts = re.findall(bible_ref_exp, input)
+	parts = re.findall(bible_ref_patt, query_str)
 	
 	# 0 = full query
 	# 1 = book name
@@ -442,34 +462,14 @@ def search_bible(input):
 	# 6 = verse
 	# 7 = version
 	
-	# Give the user the option to search the given query (instead of choosing a suggested reference)
-	result = Reference()
-	result.id = 'search-youversion'
-	# Determine if the query includes the translation with which to search
-	version_match = re.findall('( [a-z\d]+)$', input)
-	if len(version_match) != 0:
-		version = version_match[0][1:]
-		result.version = guess_version(version)
-	else:
-		# Otherwise, search using the default translation
-		result.version = default_version
-	result.title = 'Search YouVersion for \'' + cgi.escape(input) + '\''
-	result.subtitle = result.version.upper() + ' translation'
-	result.url = search_url + '?q=' + urllib.quote_plus(input) + '&amp;version_id=' + result.version.lower()
-	result.url = '{base}?q={query}&amp;version_id={version}'.format(base=search_url, query=urllib.quote_plus(input), version=result.version.lower())
-	
-	# Prompt user to search the typed query before showing suggestions
-	results.append(result)
-	
 	if parts != []:
 	
 		parts = parts[0]
 		
-		# Match book names
-
+		# Create query object for storing query data
 		query = Query()
 		
-		# Parse book name if given
+		# Parse partial book name if given
 		if parts[1] != None and parts[1] != '':
 			query.book = parts[1]
 		else:
@@ -568,4 +568,4 @@ def search_bible(input):
 	xml += '\n</items>'
 	return xml
 	
-print(search_bible("{query}"))
+print(search_bible("{query}"), end='')
