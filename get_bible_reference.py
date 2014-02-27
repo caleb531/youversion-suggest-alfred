@@ -150,4 +150,4 @@ def get_bible_reference(query_str):
 		
 		return ''
 
-print(get_bible_reference("https://www.bible.com/bible/esv/eph.3.17.esv"), end='')
+print(get_bible_reference("{query}"), end='')
