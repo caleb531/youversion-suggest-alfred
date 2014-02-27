@@ -142,11 +142,16 @@ def get_bible_reference(query_str):
 		# Parse HTML content
 		parser = VerseParser(verse_id)
 		parser.feed(html)
-		# Print formatted verse reference
-		return '{verse}\n({verse_name} {version})'.format(verse=parser.verse, verse_name=parser.verse_name, version=version)
-	
+		# If verse was found
+		if parser.verse != '':
+			# Print formatted verse reference
+			return '{verse}\n({verse_name} {version})'.format(verse=parser.verse, verse_name=parser.verse_name, version=version)
+		else:
+			# Otherwise, return empty string
+			return ''
+			
 	else:
-		# Otherwise, return an empty string
+		# Otherwise, return empty string
 		
 		return ''
 
