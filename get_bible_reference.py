@@ -14,21 +14,31 @@ try:
 	from HTMLParser import HTMLParser
 except ImportError:
 	from html.parser import HTMLParser
-# Ensure unichr() function exists
-try:
-	unichr
-except NameError:
-	unichr = chr
 
 # Class for creating collections of regular expression patterns
 class Patterns():
 	pass
 
+# List of allowed entity codes
+allowed_entities = [
+	# En-dash
+	'8211',
+	# Em-dash
+	'8212',
+	# Left single curly quote
+	'8216',
+	# Right single curly quote
+	'8217',
+	# Left double curly quote
+	'8220',
+	# Right double curly quote
+	'8221']
+
 # Create object for storing patterns
 patt = Patterns()
 patt.base_url = '^https?://www\.bible\.com/bible/([a-z\d]+)/'
-patt.verse_id = '([a-z]+)\.(\d+)\.(\d+)'
-patt.chapter_id = '([a-z]+)\.(\d+)'
+patt.verse_id = '(\d?[a-z]+)\.(\d+)\.(\d+)'
+patt.chapter_id = '([a-z\d]+)\.(\d+)'
 patt.version_id = '(?<=/bible/)([a-z\d]+)'
 
 # Remove extra whitespace from the given string
@@ -89,6 +99,8 @@ class VerseParser(HTMLParser):
 				self.in_verse = False
 				# Remove extran whitespace from verse
 				self.verse = remove_extra_whitespace(self.verse)
+				if self.verse.startswith('\"') and self.verse.count('\"') == 1:
+					self.verse = self.verse[1:]
 			elif self.in_verse_name:
 				# Signify end of verse name
 				self.in_verse_name = False
@@ -108,15 +120,15 @@ class VerseParser(HTMLParser):
 		
 	# Handle numbered character entities
 	def handle_charref(self, name):
-		if self.in_verse and self.in_content:
-			self.verse += unichr(int(name))
+		if self.in_verse and self.in_content and name in allowed_entities:
+			self.verse += '&#{num};'.format(num=name)
 	
 # Retrieve bible reference using the given URL
 def get_bible_reference(query_str):
-		
+	
 	# If the given query string is a valid bible URL
 	if re.search(patt.base_url + patt.verse_id, query_str):
-
+		
 		# Parse version from URL
 		version = re.search(patt.version_id, query_str).group(1).upper()
 		
@@ -138,4 +150,4 @@ def get_bible_reference(query_str):
 		
 		return ''
 
-print(get_bible_reference("{query}"), end='')
+print(get_bible_reference("https://www.bible.com/bible/esv/eph.3.17.esv"), end='')
