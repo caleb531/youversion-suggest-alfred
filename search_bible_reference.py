@@ -393,7 +393,7 @@ all_versions = (
 	'WEB'
 )
 # Default translation for all results
-default_version = 'ESV'
+default_version = 'NIV'
 
 # Base query URL
 bible_url = 'https://www.bible.com/bible'
