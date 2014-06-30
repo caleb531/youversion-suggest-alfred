@@ -397,7 +397,7 @@ default_version = 'NIV'
 
 # Base query URL
 bible_url = 'https://www.bible.com/bible'
-search_url = 'https://www.bible.com/search'
+search_url = 'https://www.bible.com/search/bible'
 
 # Regular expression for parsing a bible reference
 bible_ref_patt = '(^((\d+ )?[a-z ]+)( (\d+)(\:(\d+)?)?)?( [a-z\d]+)?)$'
