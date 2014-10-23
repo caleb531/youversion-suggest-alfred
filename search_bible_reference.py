@@ -1,12 +1,9 @@
-#!/usr/bin/env python
+# Search bible references corresponding to the typed query
 
 # Import print function
 from __future__ import print_function
 # Import required modules
 import cgi, re, time, urllib
-# Ensure compatibility with Python 3
-if hasattr(urllib, 'quote_plus') == False:
-	import urllib.parse as urllib
 
 # Base class for creating objects of attributes
 class AttrObject:
