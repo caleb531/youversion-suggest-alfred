@@ -1,5 +1,0 @@
-<item uid='{id}' arg='{url}' valid='{valid}'>
-    <title>{title}</title>
-    <subtitle>{subtitle}</subtitle>
-    <icon>icon.png</icon>
-</item>

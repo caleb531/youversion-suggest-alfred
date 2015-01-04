@@ -14,7 +14,7 @@ class AttrObject:
 # Subclasses used for data storage
 class Book(AttrObject): pass
 class Query(AttrObject): pass
-class Reference(AttrObject): pass
+class Result(AttrObject): pass
 
 # Load in books of the Bible
 with open('books.json', 'r') as file:
@@ -24,10 +24,6 @@ with open('books.json', 'r') as file:
 with open('versions.json', 'r') as file:
     all_versions = tuple(json.loads(file.read()))
 
-# Load in XML <item> template
-with open('item.xml', 'r') as file:
-    item_xml = file.read()
-
 # Default translation for all results
 default_version = 'NIV'
 
@@ -35,7 +31,7 @@ default_version = 'NIV'
 base_url = 'https://www.bible.com/bible'
 
 # Pattern for parsing any bible reference
-bible_ref_patt = '^((\d+ )?[a-z ]+)( (\d+)((\:|\.)(\d+)?)?)?( [a-z\d]+)?$'
+bible_ref_patt = '^((\d+ )?[a-z ]+)( (\d+)((\:|\.)(\d+)?)?)?( [a-z]+\d+)?$'
 # Pattern for parsing a chapter:verse reference (irrespective of book)
 chapter_dot_verse_patt = '(\d+)\.(\d+)'
 
@@ -59,23 +55,28 @@ def guess_version(partial_version):
 
 # Builds Aflred result item as XML
 def get_result_xml(**params):
-    return item_xml.format(**params)
+    return '''
+    <item uid='{uid}' arg='{arg}' valid='{valid}'>
+        <title>{title}</title>
+        <subtitle>{subtitle}</subtitle>
+        <icon>icon.png</icon>
+    </item>\n'''.format(**params)
 
 # Retrieves XML document for Alfred results
 def get_result_list_xml(results):
     xml = '<?xml version="1.0"?>\n<items>\n'
     for result in results:
 
-        if result.id != None:
+        if result.uid:
             xml += get_result_xml(
-                id=result.id,
-                url=result.url,
+                uid=result.uid,
+                arg=result.arg,
                 title=result.title,
                 subtitle=result.subtitle,
                 valid='yes'
             )
 
-    xml += '</items>'
+    xml += '\n</items>'
     return xml
 
 # Simplify the format of the query string
@@ -87,121 +88,160 @@ def format_query_str(query_str):
     query_str = query_str.lower()
     return query_str
 
-# Search the bible for the given book/chapter/verse/version
-def search_bible(query_str):
-    results = []
-
-    # Create query object for storing query data
-    query = Query()
-    query_str = format_query_str(query_str)
-    # If reference is in form chapter.verse
-    if re.search(chapter_dot_verse_patt, query_str):
-        # Convert chapter.verse to chapter:verse
-        query.separator = '.'
-    else:
-        query.separator = ':'
+# Build the query object from the given query string
+def get_query_object(query_str):
 
     # Match section of the bible based on query
-    book_matches = re.search(bible_ref_patt, query_str)
+    ref_matches = re.search(bible_ref_patt, query_str)
 
-    if book_matches != None:
+    if ref_matches:
+
+        # Create query object for storing query data
+        query = Query()
+
+        # If reference is in form chapter.verse
+        if re.search(chapter_dot_verse_patt, query_str):
+            # Convert chapter.verse to chapter:verse
+            query.separator = '.'
+        else:
+            query.separator = ':'
 
         # Parse partial book name if given
-        if book_matches.group(1) != None and book_matches.group(1) != '':
-            query.book = book_matches.group(1).lower()
+        if ref_matches.group(1):
+            query.book = ref_matches.group(1).lower()
         else:
             query.book = None
 
         # Parse chapter if given
-        if book_matches.group(4) != None and book_matches.group(4) != '':
-            query.chapter = int(book_matches.group(4))
+        if ref_matches.group(4):
+            query.chapter = int(ref_matches.group(4))
         else:
             query.chapter = None
 
         # Parse verse if given
-        if book_matches.group(7) != None and book_matches.group(7) != '':
-            query.verse = int(book_matches.group(7))
+        if ref_matches.group(7):
+            query.verse = int(ref_matches.group(7))
         else:
             query.verse = None
 
         # Parse version if given
-        if book_matches.group(8) != None:
-            query.version = book_matches.group(8).lstrip().upper()
+        if ref_matches.group(8):
+            query.version = ref_matches.group(8).lstrip().upper()
         else:
             query.version = None
 
-        # Filter book list to match query
-        book_matches = []
-        for book in books:
-            book_name = book.name.lower()
-            # Check if book name begins with the typed book name
-            if book_name.startswith(query.book) or (book_name[0].isnumeric() and book_name[2:].startswith(query.book)):
-                book_matches.append(book)
+    else:
 
-        # Build results list from books that matched the query
-        for book in book_matches:
+        query = None
 
-            # Result information
-            result = Reference()
-            result.id = None
+    return query
 
-            if query.version != None:
-                # Guess version (translation) if possible
-                query.version = guess_version(query.version)
-            else:
-                # Otherwise, use default translation
-                query.version = default_version
+# Retrieve list of books matching the given query
+def get_book_matches(query):
+    book_matches = []
+    for book in books:
+        book_name = book.name.lower()
+        # Check if book name begins with the typed book name
+        if book_name.startswith(query.book) or (book_name[0].isnumeric() and book_name[2:].startswith(query.book)):
+            book_matches.append(book)
+    return book_matches
 
-            if query.chapter != None:
+# Retrieve search resylts matching the given query
+def get_search_results(query_str):
 
-                # Find chapter or verse
-                if query.chapter <= book.chapters:
+    query = get_query_object(query_str)
+    results = []
 
-                    if query.verse != None:
+    if not query: return results
 
-                        # Find verse if given
-                        result.id = '{book}.{chapter}.{verse}'.format(
-                            book=book.id,
-                            chapter=query.chapter,
-                            verse=query.verse
-                        )
-                        result.title = '{book} {chapter}{sep}{verse}'.format(
-                            book=book.name,
-                            chapter=query.chapter,
-                            verse=query.verse,
-                            sep=query.separator
-                        )
+    # Filter book list to match query
+    book_matches = get_book_matches(query)
 
-                    else:
+    # Build results list from books that matched the query
+    for book in book_matches:
 
-                        # Find chapter if given
-                        result.id = '{book}.{chapter}'.format(
-                            book=book.id,
-                            chapter=query.chapter
-                        )
-                        result.title = '{book} {chapter}'.format(
-                            book=book.name,
-                            chapter=query.chapter
-                        )
+        # Result information
+        result = Result()
+        result.uid = None
 
-            else:
-                # Find book if no chapter or verse is given
+        if query.version != None:
+            # Guess version (translation) if possible
+            query.version = guess_version(query.version)
+        else:
+            # Otherwise, use default translation
+            query.version = default_version
 
-                result.id = '{book}.1'.format(book=book.id)
+        if query.chapter != None:
 
-                result.title = book.name
+            # Find chapter or verse
+            if query.chapter <= book.chapters:
 
-            # Create result data using the given information
-            if result.id != None:
-                result.id += '.{version}'.format(version=query.version.lower())
-                result.url = '{base}/{version}/{id}'.format(
-                    base=base_url,
-                    version=query.version.lower(),
-                    id=result.id)
-                result.version = query.version.upper()
-                result.subtitle = '{version} translation'.format(version=result.version)
-                results.append(result)
+                if query.verse != None:
 
-    return get_result_list_xml(results)
+                    # Find verse if given
+                    result.uid = '{book}.{chapter}.{verse}'.format(
+                        book=book.id,
+                        chapter=query.chapter,
+                        verse=query.verse
+                    )
+                    result.title = '{book} {chapter}{sep}{verse}'.format(
+                        book=book.name,
+                        chapter=query.chapter,
+                        verse=query.verse,
+                        sep=query.separator
+                    )
 
-print search_bible("{query}")
+                else:
+
+                    # Find chapter if given
+                    result.uid = '{book}.{chapter}'.format(
+                        book=book.id,
+                        chapter=query.chapter
+                    )
+                    result.title = '{book} {chapter}'.format(
+                        book=book.name,
+                        chapter=query.chapter
+                    )
+
+        else:
+            # Find book if no chapter or verse is given
+
+            result.uid = '{book}.1'.format(book=book.id)
+
+            result.title = book.name
+
+        # Create result data using the given information
+        if result.uid:
+            result.uid += '.{version}'.format(version=query.version.lower())
+            result.arg = '{base}/{version}/{uid}'.format(
+                base=base_url,
+                version=query.version.lower(),
+                uid=result.uid)
+            result.subtitle = '{version} translation'.format(version=query.version.upper())
+            results.append(result)
+
+    return results
+
+# Search the bible for the given book/chapter/verse reference
+def main():
+
+    query_str = "{query}"
+    query_str = format_query_str(query_str)
+
+    results = get_search_results(query_str)
+
+    if len(results) == 0:
+
+        # If no matching results were found, indicate such
+        results = [Result({
+            'uid': 'yv-no-results',
+            'arg': None,
+            'valid': 'no',
+            'title': 'No Results',
+            'subtitle': 'No bible references matching \'{}\''.format(query_str)
+        })]
+
+    print get_result_list_xml(results)
+
+if __name__ == '__main__':
+    main()
