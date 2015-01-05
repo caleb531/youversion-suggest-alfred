@@ -18,16 +18,12 @@ class Book(AttrObject): pass
 class Query(AttrObject): pass
 class Result(AttrObject): pass
 
-# Change CWD to directory in which this file resides
-script_path = os.path.dirname(os.path.realpath('__file__'))
-os.chdir(script_path)
-
 # Load in books of the Bible
-with open('books.json', 'r') as file:
+with open('yv_suggest/bible/books.json', 'r') as file:
     books = tuple(Book(book) for book in json.loads(file.read()))
 
 # Load in Bible versions (translations)
-with open('versions.json', 'r') as file:
+with open('yv_suggest/bible/versions.json', 'r') as file:
     all_versions = tuple(json.loads(file.read()))
 
 # Default translation for all results
@@ -214,7 +210,6 @@ def get_search_results(query_str):
             # Find book if no chapter or verse is given
 
             result.uid = '{book}.1'.format(book=book.id)
-
             result.title = book.name
 
         # Create result data using the given information

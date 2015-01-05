@@ -13,3 +13,17 @@ Type the `yv` keyword, along with a space and a phrase representing your search 
 * `ephesians`
 * `eph 3`
 * `1 c 3 niv`
+
+## Testing
+
+If you are contributing to the project and would like to run the included unit tests, run the following command in the project directory:
+
+```
+python -m unittest discover
+```
+
+Additionally, if you'd like to see more detail on which tests passed and failed (including descriptions of each test), run the above command with the `-v` flag:
+
+```
+python -m unittest discover -v
+```
