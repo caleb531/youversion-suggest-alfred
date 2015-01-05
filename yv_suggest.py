@@ -2,7 +2,9 @@
 # Search bible references corresponding to the typed query
 
 # Import required modules
-import cgi, json, re, time
+import json
+import re
+import os
 
 # Base class for creating objects of attributes
 class AttrObject:
@@ -15,6 +17,10 @@ class AttrObject:
 class Book(AttrObject): pass
 class Query(AttrObject): pass
 class Result(AttrObject): pass
+
+# Change CWD to directory in which this file resides
+script_path = os.path.dirname(os.path.realpath('__file__'))
+os.chdir(script_path)
 
 # Load in books of the Bible
 with open('books.json', 'r') as file:
@@ -31,7 +37,7 @@ default_version = 'NIV'
 base_url = 'https://www.bible.com/bible'
 
 # Pattern for parsing any bible reference
-bible_ref_patt = '^((\d+ )?[a-z ]+)( (\d+)((\:|\.)(\d+)?)?)?( [a-z]+\d+)?$'
+bible_ref_patt = '^((\d+ )?[a-z ]+)( (\d+)((\:|\.)(\d+)?)?)?( [a-z]+\d*)?$'
 # Pattern for parsing a chapter:verse reference (irrespective of book)
 chapter_dot_verse_patt = '(\d+)\.(\d+)'
 
@@ -149,6 +155,7 @@ def get_book_matches(query):
 # Retrieve search resylts matching the given query
 def get_search_results(query_str):
 
+    query_str = format_query_str(query_str)
     query = get_query_object(query_str)
     results = []
 
@@ -213,11 +220,10 @@ def get_search_results(query_str):
         # Create result data using the given information
         if result.uid:
             result.uid += '.{version}'.format(version=query.version.lower())
-            result.arg = '{base}/{version}/{uid}'.format(
+            result.arg = '{base}/{uid}'.format(
                 base=base_url,
-                version=query.version.lower(),
                 uid=result.uid)
-            result.subtitle = '{version} translation'.format(version=query.version.upper())
+            result.subtitle = '{version}'.format(version=query.version.upper())
             results.append(result)
 
     return results
@@ -225,9 +231,7 @@ def get_search_results(query_str):
 # Search the bible for the given book/chapter/verse reference
 def main():
 
-    query_str = "{query}"
-    query_str = format_query_str(query_str)
-
+    query_str = "{query}".strip()
     results = get_search_results(query_str)
 
     if len(results) == 0:
