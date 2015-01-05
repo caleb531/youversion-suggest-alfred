@@ -3,6 +3,7 @@ import unittest
 import yv_suggest as yvs
 
 class SearchVersionTestCase(unittest.TestCase):
+    '''test the searching of Bible references in a specific version'''
 
     def test_search_version_numbered(self):
         '''should match version ending in number by partial name'''
@@ -32,3 +33,6 @@ class SearchVersionTestCase(unittest.TestCase):
         results = yvs.get_search_results('luke 4:8 a')
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].subtitle, 'AMP')
+
+if __name__ == '__main__':
+    unittest.main()

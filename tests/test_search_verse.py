@@ -3,6 +3,7 @@ import unittest
 import yv_suggest as yvs
 
 class SearchVerseTestCase(unittest.TestCase):
+    '''test the searching of Bible verses'''
 
     def test_search_verse(self):
         '''should match verses'''
@@ -28,3 +29,6 @@ class SearchVerseTestCase(unittest.TestCase):
         results = yvs.get_search_results('luke 4:8')
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].uid, 'luk.4.8.niv')
+
+if __name__ == '__main__':
+    unittest.main()

@@ -3,7 +3,7 @@ import unittest
 import yv_suggest as yvs
 
 class SearchBookTestCase(unittest.TestCase):
-    '''Test the searching of Bible books'''
+    '''test the searching of Bible books'''
 
     def test_search_book_partial(self):
         '''should match books by partial name'''
@@ -59,3 +59,6 @@ class SearchBookTestCase(unittest.TestCase):
         '''should not match nonexistent books'''
         results = yvs.get_search_results('foo')
         self.assertEqual(len(results), 0)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -19,11 +19,19 @@ Type the `yv` keyword, along with a space and a phrase representing your search 
 If you are contributing to the project and would like to run the included unit tests, run the following command in the project directory:
 
 ```
-python -m unittest discover
+python -m unittest tests
 ```
 
 Additionally, if you'd like to see more detail on which tests passed and failed (including descriptions of each test), run the above command with the `-v` flag:
 
 ```
-python -m unittest discover -v
+python -m unittest tests -v
+```
+
+### Running an individual test
+
+If you wish to run a single test, reference the module name
+
+```
+python -m unittest tests.test_search_book
 ```

@@ -3,6 +3,7 @@ import unittest
 import yv_suggest as yvs
 
 class SearchChapterTestCase(unittest.TestCase):
+    '''test the searching of Bible chapters'''
 
     def test_search_chapter(self):
         '''should match chapters by full reference'''
@@ -26,3 +27,6 @@ class SearchChapterTestCase(unittest.TestCase):
         '''should not match nonexistent chapters'''
         results = yvs.get_search_results('psalm 160')
         self.assertEqual(len(results), 0)
+
+if __name__ == '__main__':
+    unittest.main()
