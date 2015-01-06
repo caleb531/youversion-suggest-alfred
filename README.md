@@ -1,18 +1,21 @@
 # YouVersion Suggest
-*Copyright 2014 Caleb Evans*  
-*Released under the MIT license*
 
-## Usage
+*Copyright 2015 Caleb Evans*  
+*Released under the MIT license*
 
 YouVersion Suggest is an Alfred workflow which allows you to search the online [YouVersion](https://www.youversion.com/) bible quickly and conveniently.
 
-Type the `yv` keyword, along with a space and a phrase representing your search query. The query can be the phrase you want to search, *or* the bible book/chapter/verse you want to search. As you type, YouVersion Suggest will display a list of suggestions matching your query.
+![YouVersion Suggest in action](screenshot.png)
+
+## Usage
+
+Type the `yv` keyword, along with a space and a phrase representing the bible reference you wish to find. The phrase can be partial book name, chapter, or verse. You may also include an option version (translation) at the end of your query. As you type, YouVersion Suggest will display a list of suggestions matching your query.
 
 ### Query Examples
 
-* `ephesians`
+* `luke`
 * `eph 3`
-* `1 c 3 niv`
+* `1 c 3 esv`
 
 ## Testing
 
@@ -22,15 +25,15 @@ If you are contributing to the project and would like to run the included unit t
 python -m unittest tests
 ```
 
-Additionally, if you'd like to see more detail on which tests passed and failed (including descriptions of each test), run the above command with the `-v` flag:
+If you'd like to see additional details on which tests passed and failed (including a description of each test), run the above command with the `-v` flag:
 
 ```
 python -m unittest tests -v
 ```
 
-### Running an individual test
+### Running an individual test case
 
-If you wish to run a single test, reference the module name
+If you wish to run a single test case, reference the module name like so:
 
 ```
 python -m unittest tests.test_search_book

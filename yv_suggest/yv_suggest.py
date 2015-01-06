@@ -187,11 +187,11 @@ def get_search_results(query_str):
                         chapter=query.chapter,
                         verse=query.verse
                     )
-                    result.title = '{book} {chapter}{sep}{verse}'.format(
+                    result.title = '{book} {chapter}{separator}{verse}'.format(
                         book=book.name,
                         chapter=query.chapter,
                         verse=query.verse,
-                        sep=query.separator
+                        separator=query.separator
                     )
 
                 else:
@@ -214,10 +214,14 @@ def get_search_results(query_str):
 
         # Create result data using the given information
         if result.uid:
-            result.uid += '.{version}'.format(version=query.version.lower())
+            result.uid = '{version}/{uid}'.format(
+                version=query.version.lower(),
+                uid=result.uid
+            )
             result.arg = '{base}/{uid}'.format(
                 base=base_url,
-                uid=result.uid)
+                uid=result.uid
+            )
             result.subtitle = '{version}'.format(version=query.version.upper())
             results.append(result)
 

@@ -27,8 +27,7 @@ class SearchVerseTestCase(unittest.TestCase):
     def test_search_verse_dot(self):
         '''should use correct id for verses'''
         results = yvs.get_search_results('luke 4:8')
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].uid, 'luk.4.8.niv')
+        self.assertEqual(results[0].uid, 'niv/luk.4.8')
 
 if __name__ == '__main__':
     unittest.main()

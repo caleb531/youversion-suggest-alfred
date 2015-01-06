@@ -13,7 +13,7 @@ class SearchBookTestCase(unittest.TestCase):
 
     def test_search_book_case(self):
         '''should match books irrespective of case'''
-        query = 'Luke'
+        query = 'Matthew'
         results = yvs.get_search_results(query)
         results_lower = yvs.get_search_results(query.lower())
         results_upper = yvs.get_search_results(query.upper())
@@ -29,6 +29,12 @@ class SearchBookTestCase(unittest.TestCase):
         self.assertEqual(results[0].title, 'Ruth')
         self.assertEqual(results[1].title, 'Romans')
         self.assertEqual(results[2].title, 'Revelation')
+
+    def test_search_book_multiple_words(self):
+        '''should match books with names comprised of multiple words'''
+        results = yvs.get_search_results('song of songs')
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].title, 'Song of Songs')
 
     def test_search_book_numbered_partial(self):
         '''should match numbered books by partial numbered name'''
@@ -48,12 +54,12 @@ class SearchBookTestCase(unittest.TestCase):
     def test_search_book_id(self):
         '''should use correct id for books'''
         results = yvs.get_search_results('philippians')
-        self.assertEqual(results[0].uid, 'php.1.niv')
+        self.assertEqual(results[0].uid, 'niv/php.1')
 
     def test_search_book_url(self):
         '''should use correct url for books'''
         results = yvs.get_search_results('james')
-        self.assertEqual(results[0].arg, 'https://www.bible.com/bible/' + results[0].uid)
+        self.assertEqual(results[0].arg, 'https://www.bible.com/bible/niv/jas.1')
 
     def test_search_book_nonexistent(self):
         '''should not match nonexistent books'''

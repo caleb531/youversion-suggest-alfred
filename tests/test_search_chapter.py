@@ -21,7 +21,7 @@ class SearchChapterTestCase(unittest.TestCase):
     def test_search_chapter_id(self):
         '''should use correct id for chapters'''
         results = yvs.get_search_results('luke 4')
-        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].uid, 'niv/luk.4')
 
     def test_search_chapter_nonexistent(self):
         '''should not match nonexistent chapters'''
