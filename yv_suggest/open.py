@@ -4,11 +4,11 @@
 import webbrowser
 
 # Base URL for Bible references
-base_url = 'https://www.bible.com/bible/'
+base_url = 'https://www.bible.com/bible'
 
 # Retrieve YouVersion URL for the given Bible reference ID
 def get_ref_url(ref_uid):
-	return '{base}{uid}'.format(base=base_url, uid=ref_uid)
+	return '{base}/{uid}'.format(base=base_url, uid=ref_uid)
 
 # Open YouVersion URL for the given Bible reference ID
 def open_ref_url(ref_uid):

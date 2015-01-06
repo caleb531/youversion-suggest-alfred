@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# Search bible references corresponding to the typed query
+# Search bible references corresponding to the given query
 
-# Import required modules
 import json
 import re
 import os
+import sys
 
 # Base class for creating objects of attributes
 class AttrObject:
@@ -18,12 +18,20 @@ class Book(AttrObject): pass
 class Query(AttrObject): pass
 class Result(AttrObject): pass
 
+# Determine path to current script correctly depending on context
+if '__file__' in globals():
+    script_path = os.path.dirname(os.path.realpath(__file__))
+elif os.path.exists(sys.argv[0]):
+    script_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+else:
+    script_path = '.'
+
 # Load in books of the Bible
-with open('yv_suggest/bible/books.json', 'r') as file:
+with open(script_path + '/bible/books.json', 'r') as file:
     books = tuple(Book(book) for book in json.loads(file.read()))
 
 # Load in Bible versions (translations)
-with open('yv_suggest/bible/versions.json', 'r') as file:
+with open(script_path + '/bible/versions.json', 'r') as file:
     all_versions = tuple(json.loads(file.read()))
 
 # Default translation for all results
@@ -224,7 +232,7 @@ def get_result_list(query_str):
 # Search the bible for the given book/chapter/verse reference
 def main():
 
-    query_str = "{query}".strip()
+    query_str = "{query}"
     results = get_result_list(query_str)
 
     if len(results) == 0:
