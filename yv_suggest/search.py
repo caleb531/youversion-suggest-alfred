@@ -29,9 +29,6 @@ with open('yv_suggest/bible/versions.json', 'r') as file:
 # Default translation for all results
 default_version = 'NIV'
 
-# Base bible reference URL
-base_url = 'https://www.bible.com/bible'
-
 # Pattern for parsing any bible reference
 bible_ref_patt = '^((\d+ )?[a-z ]+)( (\d+)((\:|\.)(\d+)?)?)?( [a-z]+\d*)?$'
 # Pattern for parsing a chapter:verse reference (irrespective of book)
@@ -149,7 +146,7 @@ def get_book_matches(query):
     return book_matches
 
 # Retrieve search resylts matching the given query
-def get_search_results(query_str):
+def get_result_list(query_str):
 
     query_str = format_query_str(query_str)
     query = get_query_object(query_str)
@@ -218,10 +215,7 @@ def get_search_results(query_str):
                 version=query.version.lower(),
                 uid=result.uid
             )
-            result.arg = '{base}/{uid}'.format(
-                base=base_url,
-                uid=result.uid
-            )
+            result.arg = result.uid
             result.subtitle = '{version}'.format(version=query.version.upper())
             results.append(result)
 
@@ -231,7 +225,7 @@ def get_search_results(query_str):
 def main():
 
     query_str = "{query}".strip()
-    results = get_search_results(query_str)
+    results = get_result_list(query_str)
 
     if len(results) == 0:
 
@@ -244,7 +238,7 @@ def main():
             'subtitle': 'No bible references matching \'{}\''.format(query_str)
         })]
 
-    print get_result_list_xml(results)
+    print(get_result_list_xml(results))
 
 if __name__ == '__main__':
     main()

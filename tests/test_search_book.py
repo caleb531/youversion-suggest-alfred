@@ -7,16 +7,16 @@ class SearchBookTestCase(unittest.TestCase):
 
     def test_search_book_partial(self):
         '''should match books by partial name'''
-        results = yvs.get_search_results('luk')
+        results = yvs.get_result_list('luk')
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].title, 'Luke')
 
     def test_search_book_case(self):
         '''should match books irrespective of case'''
         query = 'Matthew'
-        results = yvs.get_search_results(query)
-        results_lower = yvs.get_search_results(query.lower())
-        results_upper = yvs.get_search_results(query.upper())
+        results = yvs.get_result_list(query)
+        results_lower = yvs.get_result_list(query.lower())
+        results_upper = yvs.get_result_list(query.upper())
         self.assertEqual(len(results), 1)
         self.assertEqual(len(results_lower), 1)
         self.assertEqual(len(results_upper), 1)
@@ -24,7 +24,7 @@ class SearchBookTestCase(unittest.TestCase):
 
     def test_search_book_partial_ambig(self):
         '''should match books by ambiguous partial name'''
-        results = yvs.get_search_results('r')
+        results = yvs.get_result_list('r')
         self.assertEqual(len(results), 3)
         self.assertEqual(results[0].title, 'Ruth')
         self.assertEqual(results[1].title, 'Romans')
@@ -32,19 +32,19 @@ class SearchBookTestCase(unittest.TestCase):
 
     def test_search_book_multiple_words(self):
         '''should match books with names comprised of multiple words'''
-        results = yvs.get_search_results('song of songs')
+        results = yvs.get_result_list('song of songs')
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].title, 'Song of Songs')
 
     def test_search_book_numbered_partial(self):
         '''should match numbered books by partial numbered name'''
-        results = yvs.get_search_results('1 cor')
+        results = yvs.get_result_list('1 cor')
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].title, '1 Corinthians')
 
     def test_search_book_nonnumbered_partial(self):
         '''should match numbered books by partial non-numbered name'''
-        results = yvs.get_search_results('john')
+        results = yvs.get_result_list('john')
         self.assertEqual(len(results), 4)
         self.assertEqual(results[0].title, 'John')
         self.assertEqual(results[1].title, '1 John')
@@ -52,18 +52,13 @@ class SearchBookTestCase(unittest.TestCase):
         self.assertEqual(results[3].title, '3 John')
 
     def test_search_book_id(self):
-        '''should use correct id for books'''
-        results = yvs.get_search_results('philippians')
+        '''should use correct ID for books'''
+        results = yvs.get_result_list('philippians')
         self.assertEqual(results[0].uid, 'niv/php.1')
-
-    def test_search_book_url(self):
-        '''should use correct url for books'''
-        results = yvs.get_search_results('james')
-        self.assertEqual(results[0].arg, 'https://www.bible.com/bible/niv/jas.1')
 
     def test_search_book_nonexistent(self):
         '''should not match nonexistent books'''
-        results = yvs.get_search_results('foo')
+        results = yvs.get_result_list('jesus')
         self.assertEqual(len(results), 0)
 
 if __name__ == '__main__':
