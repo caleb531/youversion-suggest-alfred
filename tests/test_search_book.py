@@ -23,7 +23,7 @@ class SearchBookTestCase(unittest.TestCase):
         self.assertDictEqual(results[0].__dict__, results_lower[0].__dict__)
 
     def test_whitespace(self):
-        '''should match books irrespective of leading/trailing whitespace'''
+        '''should match books irrespective of surrounding whitespace'''
         results = yvs.get_result_list('    romans    ')
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].title, 'Romans')
@@ -45,6 +45,12 @@ class SearchBookTestCase(unittest.TestCase):
     def test_numbered_partial(self):
         '''should match numbered books by partial numbered name'''
         results = yvs.get_result_list('1 cor')
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].title, '1 Corinthians')
+
+    def test_numbered_whitespace(self):
+        '''should match numbered books irrespective of extra whitespace'''
+        results = yvs.get_result_list('1    cor')
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].title, '1 Corinthians')
 

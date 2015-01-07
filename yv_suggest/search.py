@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Search bible references corresponding to the given query
+# Search bible references matching the given query
 
 import json
 import re

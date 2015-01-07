@@ -18,6 +18,12 @@ class SearchChapterTestCase(unittest.TestCase):
         self.assertEqual(results[0].title, 'Amos 3')
         self.assertEqual(results[1].title, 'Acts 3')
 
+    def test_whitespace(self):
+        '''should match chapters irrespective of surrounding whitespace'''
+        results = yvs.get_result_list('1 peter   5')
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].title, '1 Peter 5')
+
     def test_id(self):
         '''should use correct ID for chapters'''
         results = yvs.get_result_list('luke 4')
