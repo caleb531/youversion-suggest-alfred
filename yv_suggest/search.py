@@ -61,13 +61,13 @@ def guess_version(partial_version):
     return version_guess
 
 # Builds Aflred result item as XML
-def get_result_xml(**params):
+def get_result_xml(params):
     return '''
     <item uid='{uid}' arg='{arg}' valid='{valid}'>
         <title>{title}</title>
         <subtitle>{subtitle}</subtitle>
         <icon>icon.png</icon>
-    </item>\n'''.format(**params)
+    </item>\n'''.format(**params.__dict__)
 
 # Retrieves XML document for Alfred results
 def get_result_list_xml(results):
@@ -75,13 +75,7 @@ def get_result_list_xml(results):
     for result in results:
 
         if result.uid:
-            xml += get_result_xml(
-                uid=result.uid,
-                arg=result.arg,
-                title=result.title,
-                subtitle=result.subtitle,
-                valid='yes'
-            )
+            xml += get_result_xml(result)
 
     xml += '\n</items>'
     return xml
@@ -172,19 +166,19 @@ def get_result_list(query_str):
         result = Result()
         result.uid = None
 
-        if query.version != None:
+        if query.version:
             # Guess version (translation) if possible
             query.version = guess_version(query.version)
         else:
             # Otherwise, use default translation
             query.version = default_version
 
-        if query.chapter != None:
+        if query.chapter:
 
             # Find chapter or verse
             if query.chapter <= book.chapters:
 
-                if query.verse != None:
+                if query.verse:
 
                     # Find verse if given
                     result.uid = '{book}.{chapter}.{verse}'.format(
@@ -225,14 +219,14 @@ def get_result_list(query_str):
             )
             result.arg = result.uid
             result.subtitle = '{version}'.format(version=query.version.upper())
+            result.valid = 'yes'
             results.append(result)
 
     return results
 
 # Search the bible for the given book/chapter/verse reference
-def main():
+def main(query_str):
 
-    query_str = "{query}"
     results = get_result_list(query_str)
 
     if len(results) == 0:
@@ -249,4 +243,4 @@ def main():
     print(get_result_list_xml(results))
 
 if __name__ == '__main__':
-    main()
+    main('{query}')

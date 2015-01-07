@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import unittest
-import yv_suggest as yvs
+import yv_suggest.search as yvs
 from xml.etree import ElementTree as ET
 
 class SearchXmlTestCase(unittest.TestCase):
     '''test the integrity of the result list XML'''
 
-    def test_search_xml_validity(self):
+    def test_validity(self):
         '''should be valid XML'''
         results = yvs.get_result_list('john 3:16')
         xml = yvs.get_result_list_xml(results)
@@ -15,7 +15,7 @@ class SearchXmlTestCase(unittest.TestCase):
         except ET.ParseError:
             self.fail('result list XML is not valid')
 
-    def test_search_xml_structure(self):
+    def test_structure(self):
         '''should contain necessary elements/attributes/values'''
         results = yvs.get_result_list('matthew 6:34')
         result = results[0]
