@@ -4,44 +4,55 @@
 import json
 import re
 import os
+import os.path
 import sys
 
-# Determine path to current script correctly depending on context
-if '__file__' in globals():
-    script_path = os.path.dirname(os.path.realpath(__file__))
-elif os.path.exists(sys.argv[0]):
-    script_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-else:
-    script_path = '.'
+# Properly determines path to package
+def get_package_path():
+    if '__file__' in globals():
+        package_path = os.path.dirname(os.path.realpath(__file__))
+    elif os.path.exists(sys.argv[0]):
+        package_path = os.path.dirname(os.path.realpath(sys.argv[0]))
+    else:
+        package_path = '.'
+    return package_path
 
-# Load in books of the Bible
-with open(script_path + '/bible/books.json', 'r') as file:
-    books = tuple(book for book in json.loads(file.read()))
+package_path = get_package_path()
 
-# Load in Bible versions (translations)
-with open(script_path + '/bible/versions.json', 'r') as file:
-    all_versions = tuple(json.loads(file.read()))
+# Loads books of the Bible
+def get_books():
+    books_path = os.path.join(package_path, 'bible', 'books.json')
+    with open(books_path, 'r') as file:
+        books = tuple(json.loads(file.read()))
+    return books
 
-# Default translation for all results
+# Loads Bible versions
+def get_versions():
+    versions_path = os.path.join(package_path, 'bible', 'versions.json')
+    with open(versions_path, 'r') as file:
+        versions = tuple(json.loads(file.read()))
+    return versions
+
+# Default version (translation) for all results
 default_version = 'NIV'
 
 # Pattern for parsing any bible reference
-bible_ref_patt = '^((\d+ )?[a-z ]+)( (\d+)((\:|\.)(\d+)?)?)?( [a-z]+\d*)?$'
-# Pattern for parsing a chapter:verse reference (irrespective of book)
+bible_ref_patt = '^((\d )?[a-z ]+)( (\d+)((\:|\.)(\d+)?)?)?( [a-z]+\d*)?$'
+# Pattern for parsing a chapter.verse reference (irrespective of book)
 chapter_dot_verse_patt = '(\d+)\.(\d+)'
 
-# Guess a translation based on the given partial version
+# Guess a version based on the given partial version
 def guess_version(partial_version):
+    versions = get_versions()
     partial_version = partial_version.upper()
-
-    if partial_version in all_versions:
+    if partial_version in versions:
         version_guess = partial_version
     else:
         # Use a predetermined version by default
         version_guess = default_version
         if partial_version != '':
             # Attempt to guess the version used
-            for version in all_versions:
+            for version in versions:
                 if version.startswith(partial_version):
                     version_guess = version
                     break
@@ -49,26 +60,25 @@ def guess_version(partial_version):
     return version_guess
 
 # Builds Aflred result item as XML
-def get_result_xml(params):
+def get_result_xml(result):
     return '''
     <item uid='{uid}' arg='{arg}' valid='{valid}'>
         <title>{title}</title>
         <subtitle>{subtitle}</subtitle>
         <icon>icon.png</icon>
-    </item>\n'''.format(**params)
+    </item>\n'''.format(**result)
 
 # Retrieves XML document for Alfred results
 def get_result_list_xml(results):
     xml = '<?xml version="1.0"?>\n<items>\n'
-    for result in results:
 
-        if result['uid']:
-            xml += get_result_xml(result)
+    for result in results:
+        xml += get_result_xml(result)
 
     xml += '\n</items>'
     return xml
 
-# Simplify the format of the query string
+# Simplifies the format of the query string
 def format_query_str(query_str):
     # Remove extra whitespace
     query_str = query_str.strip()
@@ -77,7 +87,7 @@ def format_query_str(query_str):
     query_str = query_str.lower()
     return query_str
 
-# Build the query object from the given query string
+# Builds the query object from the given query string
 def get_query_object(query_str):
 
     # Match section of the bible based on query
@@ -125,8 +135,9 @@ def get_query_object(query_str):
 
     return query
 
-# Retrieve list of books matching the given query
+# Retrieves list of books matching the given query
 def get_book_matches(query):
+    books = get_books()
     book_matches = []
     for book in books:
         book_name = book['name'].lower()
@@ -135,7 +146,7 @@ def get_book_matches(query):
             book_matches.append(book)
     return book_matches
 
-# Retrieve search resylts matching the given query
+# Retrieves search resylts matching the given query
 def get_result_list(query_str):
 
     query_str = format_query_str(query_str)
@@ -155,10 +166,10 @@ def get_result_list(query_str):
         result['uid'] = None
 
         if query['version']:
-            # Guess version (translation) if possible
+            # Guess version if possible
             query['version'] = guess_version(query['version'])
         else:
-            # Otherwise, use default translation
+            # Otherwise, use default version
             query['version'] = default_version
 
         if query['chapter']:
@@ -206,14 +217,14 @@ def get_result_list(query_str):
                 uid=result['uid']
             )
             result['arg'] = result['uid']
-            result['subtitle'] = '{version}'.format(version=query['version'].upper())
+            result['subtitle'] = query['version'].upper()
             result['valid'] = 'yes'
             results.append(result)
 
     return results
 
-# Search the bible for the given book/chapter/verse reference
-def main(query_str):
+# Searches the bible for the given book/chapter/verse reference
+def main(query_str='{query}'):
 
     results = get_result_list(query_str)
 
@@ -222,7 +233,7 @@ def main(query_str):
         # If no matching results were found, indicate such
         results = [{
             'uid': 'yv-no-results',
-            'arg': None,
+            'arg': '',
             'valid': 'no',
             'title': 'No Results',
             'subtitle': 'No bible references matching \'{}\''.format(query_str)
@@ -231,4 +242,4 @@ def main(query_str):
     print(get_result_list_xml(results))
 
 if __name__ == '__main__':
-    main('{query}')
+    main()
