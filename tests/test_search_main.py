@@ -45,7 +45,7 @@ class SearchMainTestCase(unittest.TestCase):
             self.assertEqual(title.text, 'No Results')
 
     def test_query_param(self):
-        '''should receive typed Alfred query as default query string'''
+        '''should use typed Alfred query as default query string'''
         spec = inspect.getargspec(yvs.main)
         default_query_str = spec.defaults[0]
         self.assertEqual(default_query_str, '{query}')

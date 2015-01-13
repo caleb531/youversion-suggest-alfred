@@ -3,7 +3,7 @@ import unittest
 import yv_suggest.open as yvs
 import inspect
 
-class OpenReferenceTest(unittest.TestCase):
+class OpenTestCase(unittest.TestCase):
     '''test the handling of Bible reference URLs'''
 
     def test_url(self):
@@ -12,7 +12,7 @@ class OpenReferenceTest(unittest.TestCase):
         self.assertEqual(url, 'https://www.bible.com/bible/esv/jhn.3.16')
 
     def test_query_param(self):
-        '''should receive chosen item's arg as the default ref ID'''
+        '''should use received query parameter as default ref ID'''
         spec = inspect.getargspec(yvs.main)
         default_query_str = spec.defaults[0]
         self.assertEqual(default_query_str, '{query}')
