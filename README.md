@@ -25,11 +25,7 @@ If you are contributing to the project and would like to run the included unit t
 python -m unittest tests
 ```
 
-If you'd like to see additional details on which tests passed and failed (including a description of each test), run the above command with the `-v` flag:
-
-```
-python -m unittest tests -v
-```
+Note that running these unit tests requires Python 2.7 or newer (Python 3 is not supported).
 
 ### Running an individual test case
 
