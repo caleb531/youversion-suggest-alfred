@@ -6,6 +6,7 @@ import re
 import os
 import os.path
 import sys
+from xml.etree import ElementTree as ET
 
 # Properly determines path to package
 def get_package_path():
@@ -58,24 +59,29 @@ def guess_version(partial_version):
 
     return version_guess
 
-# Builds Aflred result item as XML
-def get_result_xml(result):
-    return '''
-    <item uid='{uid}' arg='{arg}' valid='{valid}'>
-        <title>{title}</title>
-        <subtitle>{subtitle}</subtitle>
-        <icon>icon.png</icon>
-    </item>\n'''.format(**result)
-
-# Retrieves XML document for Alfred results
+# Construct an Alfred XML string from the given results list
 def get_result_list_xml(results):
-    xml = '<?xml version="1.0"?>\n<items>\n'
-
+    root = ET.Element('items')
     for result in results:
-        xml += get_result_xml(result)
-
-    xml += '\n</items>'
-    return xml
+        # Create <item> element for result with appropriate attributes
+        item = ET.Element('item')
+        item.set('uid', result['uid'])
+        if result.get('arg'):
+            item.set('arg', result['arg'])
+        if result.get('valid'):
+            item.set('valid', result['valid'])
+        else:
+            item.set('valid', 'yes')
+        root.append(item)
+        # Create appropriate child elements of <item> element
+        title = ET.Element('title')
+        title.text = result['title']
+        subtitle = ET.Element('subtitle')
+        subtitle.text = result['subtitle']
+        icon = ET.Element('icon')
+        icon.text = 'icon.png'
+        item.extend((title, subtitle, icon))
+    return ET.tostring(root)
 
 # Simplifies the format of the query string
 def format_query_str(query_str):
@@ -220,7 +226,6 @@ def get_result_list(query_str):
             )
             result['arg'] = result['uid']
             result['subtitle'] = matched_version
-            result['valid'] = 'yes'
             results.append(result)
 
     return results
@@ -235,7 +240,6 @@ def main(query_str='{query}'):
         # If no matching results were found, indicate such
         results = [{
             'uid': 'yv-no-results',
-            'arg': '',
             'valid': 'no',
             'title': 'No Results',
             'subtitle': 'No bible references matching \'{}\''.format(query_str)
