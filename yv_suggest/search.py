@@ -6,6 +6,7 @@ import re
 import os
 import os.path
 import sys
+from xml.etree import ElementTree as ET
 
 # Properly determines path to package
 def get_package_path():
@@ -43,40 +44,44 @@ chapter_dot_verse_patt = '(\d+)\.(\d+)'
 
 # Guess a version based on the given partial version
 def guess_version(partial_version):
-    versions = get_versions()
     partial_version = partial_version.upper()
+    versions = get_versions()
     if partial_version in versions:
         version_guess = partial_version
     else:
         # Use a predetermined version by default
         version_guess = default_version
-        if partial_version != '':
-            # Attempt to guess the version used
-            for version in versions:
-                if version.startswith(partial_version):
-                    version_guess = version
-                    break
+        # Attempt to guess the version used
+        for version in versions:
+            if version.startswith(partial_version):
+                version_guess = version
+                break
 
     return version_guess
 
-# Builds Aflred result item as XML
-def get_result_xml(result):
-    return '''
-    <item uid='{uid}' arg='{arg}' valid='{valid}'>
-        <title>{title}</title>
-        <subtitle>{subtitle}</subtitle>
-        <icon>icon.png</icon>
-    </item>\n'''.format(**result)
-
-# Retrieves XML document for Alfred results
+# Construct an Alfred XML string from the given results list
 def get_result_list_xml(results):
-    xml = '<?xml version="1.0"?>\n<items>\n'
-
+    root = ET.Element('items')
     for result in results:
-        xml += get_result_xml(result)
-
-    xml += '\n</items>'
-    return xml
+        # Create <item> element for result with appropriate attributes
+        item = ET.Element('item')
+        item.set('uid', result['uid'])
+        if result.get('arg'):
+            item.set('arg', result['arg'])
+        if result.get('valid'):
+            item.set('valid', result['valid'])
+        else:
+            item.set('valid', 'yes')
+        root.append(item)
+        # Create appropriate child elements of <item> element
+        title = ET.Element('title')
+        title.text = result['title']
+        subtitle = ET.Element('subtitle')
+        subtitle.text = result['subtitle']
+        icon = ET.Element('icon')
+        icon.text = 'icon.png'
+        item.extend((title, subtitle, icon))
+    return ET.tostring(root)
 
 # Simplifies the format of the query string
 def format_query_str(query_str):
@@ -107,7 +112,7 @@ def get_query_object(query_str):
 
         # Parse partial book name if given
         if ref_matches.group(1):
-            query['book'] = ref_matches.group(1).lower()
+            query['book'] = ref_matches.group(1)
         else:
             query['book'] = None
 
@@ -125,7 +130,7 @@ def get_query_object(query_str):
 
         # Parse version if given
         if ref_matches.group(8):
-            query['version'] = ref_matches.group(8).lstrip().upper()
+            query['version'] = ref_matches.group(8).lstrip()
         else:
             query['version'] = None
 
@@ -136,15 +141,17 @@ def get_query_object(query_str):
     return query
 
 # Retrieves list of books matching the given query
-def get_book_matches(query):
+def get_matching_books(query):
     books = get_books()
-    book_matches = []
+    matching_books = []
+
     for book in books:
         book_name = book['name'].lower()
         # Check if book name begins with the typed book name
         if book_name.startswith(query['book']) or (book_name[0].isnumeric() and book_name[2:].startswith(query['book'])):
-            book_matches.append(book)
-    return book_matches
+            matching_books.append(book)
+
+    return matching_books
 
 # Retrieves search resylts matching the given query
 def get_result_list(query_str):
@@ -156,21 +163,22 @@ def get_result_list(query_str):
     if not query: return results
 
     # Filter book list to match query
-    book_matches = get_book_matches(query)
+    matching_books = get_matching_books(query)
+
+    if query['version']:
+        # Guess version if possible
+        matched_version = guess_version(query['version'])
+    else:
+        # Otherwise, use default version
+        matched_version = default_version
 
     # Build results list from books that matched the query
-    for book in book_matches:
+    for book in matching_books:
 
         # Result information
-        result = {}
-        result['uid'] = None
-
-        if query['version']:
-            # Guess version if possible
-            query['version'] = guess_version(query['version'])
-        else:
-            # Otherwise, use default version
-            query['version'] = default_version
+        result = {
+            'uid': None
+        }
 
         if query['chapter']:
 
@@ -185,11 +193,11 @@ def get_result_list(query_str):
                         chapter=query['chapter'],
                         verse=query['verse']
                     )
-                    result['title'] = '{book} {chapter}{separator}{verse}'.format(
+                    result['title'] = '{book} {chapter}{sep}{verse}'.format(
                         book=book['name'],
                         chapter=query['chapter'],
                         verse=query['verse'],
-                        separator=query['separator']
+                        sep=query['separator']
                     )
 
                 else:
@@ -213,12 +221,11 @@ def get_result_list(query_str):
         # Create result data using the given information
         if result['uid']:
             result['uid'] = '{version}/{uid}'.format(
-                version=query['version'].lower(),
+                version=matched_version.lower(),
                 uid=result['uid']
             )
             result['arg'] = result['uid']
-            result['subtitle'] = query['version'].upper()
-            result['valid'] = 'yes'
+            result['subtitle'] = matched_version
             results.append(result)
 
     return results
@@ -233,7 +240,6 @@ def main(query_str='{query}'):
         # If no matching results were found, indicate such
         results = [{
             'uid': 'yv-no-results',
-            'arg': '',
             'valid': 'no',
             'title': 'No Results',
             'subtitle': 'No bible references matching \'{}\''.format(query_str)
