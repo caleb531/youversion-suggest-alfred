@@ -24,10 +24,21 @@ class SearchVerseTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['title'], 'Luke 4.8')
 
+    def test_range(self):
+        '''should match verse ranges'''
+        results = yvs.get_result_list('1 cor 13.4-7')
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['title'], '1 Corinthians 13.4-7')
+
     def test_id(self):
         '''should use correct ID for verses'''
         results = yvs.get_result_list('luke 4:8')
         self.assertEqual(results[0]['uid'], 'niv/luk.4.8')
+
+    def test_range_id(self):
+        '''should use correct ID for verse ranges'''
+        results = yvs.get_result_list('1 cor 13.4-7')
+        self.assertEqual(results[0]['uid'], 'niv/1co.13.4-7')
 
 if __name__ == '__main__':
     unittest.main()

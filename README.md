@@ -9,13 +9,15 @@ YouVersion Suggest is an Alfred workflow which allows you to search the online [
 
 ## Usage
 
-Type the `yv` keyword, along with a space and a phrase representing the bible reference you wish to find. The phrase can be partial book name, chapter, or verse. You may also include an option version (translation) at the end of your query. As you type, YouVersion Suggest will display a list of suggestions matching your query.
+Type the `yv` keyword, along with a space and a phrase representing the bible reference you wish to find. The phrase can be partial book name, chapter, verse, or range of verses. You may also include an option version (translation) at the end of your query. As you type, YouVersion Suggest will display a list of suggestions matching your query.
 
 ### Query Examples
 
-* `luke`
-* `eph 3`
-* `1 c 3 esv`
+* `luke` => Luke
+* `eph 3` => Ephesians 3
+* `1 t 3 e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+* `mat 6:34 nlt` => Matthew 6:34 (NLT)
+* `1 co 13.4-7` => 1 Corinthians 13.4-7
 
 ## Testing
 
