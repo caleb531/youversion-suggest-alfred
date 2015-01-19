@@ -38,11 +38,20 @@ def get_versions():
 default_version = 'NIV'
 
 # Pattern for parsing any bible reference
-ref_patt = '^((\d )?[a-z ]+)( (\d+)((\:|\.)(\d+)(-(\d+))?)?( [a-z]+\d*)?)?$'
-# Pattern for parsing a chapter.verse reference (irrespective of book)
-chapter_dot_verse_patt = '(\d+)\.(\d+)'
-# Pattern for matching separator tokens at end of incomplete references
-incomplete_ref_token_patt = '[\-\.\:]$'
+ref_patt = '^{book}(?: {ch}(?:{sep}{v}{v_end}?)?{version}?)?$'.format(
+    # Book name (including preceding number, if amu)
+    book='((?:\d )?[a-z ]+)',
+    # Chapter number
+    ch='(\d+)',
+    # Chapter-verse separator
+    sep='(\:|\.)',
+    # Verse number
+    v='(\d+)',
+    #  End verse for a verse range
+    v_end='(?:-(\d+))',
+    # Version (translation) used to view reference
+    version='(?: ([a-z]+\d*))'
+)
 
 # Guess a version based on the given partial version
 def guess_version(partial_version):
@@ -89,7 +98,7 @@ def format_query_str(query_str):
     # Lowercase query for consistency
     query_str = query_str.lower()
     # Remove tokens at end of incomplete references
-    query_str = re.sub(incomplete_ref_token_patt, '', query_str)
+    query_str = re.sub('[\-\.\:]$', '', query_str)
     return query_str
 
 # Builds the query object from the given query string
@@ -103,41 +112,28 @@ def get_query_object(query_str):
         # Create query object for storing query data
         query = {}
 
-        # If reference is in form chapter.verse
-        if re.search(chapter_dot_verse_patt, query_str):
-            # Convert chapter.verse to chapter:verse
-            query['separator'] = '.'
-        else:
-            query['separator'] = ':'
-
         # Parse partial book name if given
-        if ref_matches.group(1):
-            query['book'] = ref_matches.group(1)
-        else:
-            query['book'] = None
+        query['book'] = ref_matches.group(1)
 
         # Parse chapter if given
-        if ref_matches.group(4):
-            query['chapter'] = int(ref_matches.group(4))
-        else:
-            query['chapter'] = None
+        if ref_matches.group(2):
+            query['chapter'] = int(ref_matches.group(2))
 
-        # Parse verse if given
-        if ref_matches.group(7):
-            query['verse'] = int(ref_matches.group(7))
-        else:
-            query['verse'] = None
+            # Store separator used to separate chapter from verse number
+            if ref_matches.group(3):
+                query['separator'] = ref_matches.group(3)
 
-        if ref_matches.group(9):
-            query['verse_end'] = int(ref_matches.group(9))
-        else:
-            query['verse_end'] = None
+            # Parse verse if given
+            if ref_matches.group(4):
+                query['verse'] = int(ref_matches.group(4))
 
-        # Parse version if given
-        if ref_matches.group(10):
-            query['version'] = ref_matches.group(10).lstrip()
-        else:
-            query['version'] = None
+                # Parse verse range if given
+                if ref_matches.group(5):
+                    query['verse_end'] = int(ref_matches.group(5))
+
+            # Parse version if given
+            if ref_matches.group(6):
+                query['version'] = ref_matches.group(6).lstrip()
 
     else:
 
@@ -170,7 +166,7 @@ def get_result_list(query_str):
     # Filter book list to match query
     matching_books = get_matching_books(query)
 
-    if query['version']:
+    if query.get('version'):
         # Guess version if possible
         matched_version = guess_version(query['version'])
     else:
@@ -181,11 +177,9 @@ def get_result_list(query_str):
     for book in matching_books:
 
         # Result information
-        result = {
-            'uid': None
-        }
+        result = {}
 
-        if query['chapter']:
+        if query.get('chapter'):
 
             # If chapter exists within the book
             if query['chapter'] <= book['chapters']:
@@ -200,7 +194,7 @@ def get_result_list(query_str):
                     chapter=query['chapter']
                 )
 
-                if query['verse']:
+                if query.get('verse'):
 
                     # Find verse if given
                     result['uid'] += '.{verse}'.format(
@@ -211,7 +205,7 @@ def get_result_list(query_str):
                         sep=query['separator']
                     )
 
-                    if query['verse_end']:
+                    if query.get('verse_end'):
 
                         result['uid'] += '-{verse}'.format(
                             verse=query['verse_end']
@@ -227,7 +221,7 @@ def get_result_list(query_str):
             result['title'] = book['name']
 
         # Create result data using the given information
-        if result['uid']:
+        if result.get('uid'):
             result['uid'] = '{version}/{uid}'.format(
                 version=matched_version.lower(),
                 uid=result['uid']
