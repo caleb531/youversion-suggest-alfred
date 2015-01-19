@@ -5,7 +5,7 @@
 
 YouVersion Suggest is an Alfred workflow which allows you to search the online [YouVersion](https://www.youversion.com/) bible quickly and conveniently.
 
-![YouVersion Suggest in action](screenshot.png)
+![YouVersion Suggest in action](screenshots/chapters.png)
 
 ## Usage
 
