@@ -26,7 +26,7 @@ class OpenTestCase(unittest.TestCase):
 
     def test_url_open(self):
         '''should attempt to open URL using webbrowser module'''
-        mock = self.WebbrowserMock()
+        mock = WebbrowserMock()
         yvs.webbrowser = mock
         yvs.main('nlt/jhn.3.17')
         self.assertEqual(mock.url, 'https://www.bible.com/bible/nlt/jhn.3.17')
