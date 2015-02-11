@@ -7,12 +7,13 @@ from StringIO import StringIO
 import inspect
 import sys
 
+
 class SearchMainTestCase(unittest.TestCase):
-    '''test the main search function called by the workflow'''
+    """test the main search function called by the workflow"""
 
     @contextmanager
     def redirect_stdout(self):
-        '''temporarily redirect stdout to new output stream'''
+        """temporarily redirect stdout to new output stream"""
         original_stdout = sys.stdout
         out = StringIO()
         try:
@@ -22,7 +23,7 @@ class SearchMainTestCase(unittest.TestCase):
             sys.stdout = original_stdout
 
     def test_output(self):
-        '''should output result list XML'''
+        """should output result list XML"""
         query_str = 'genesis 50:20'
         with self.redirect_stdout() as out:
             yvs.main(query_str)
@@ -32,7 +33,7 @@ class SearchMainTestCase(unittest.TestCase):
             self.assertEqual(output, xml)
 
     def test_null_result(self):
-        '''should output "No Results" XML item for empty result lists'''
+        """should output "No Results" XML item for empty result lists"""
         query_str = 'nothing'
         with self.redirect_stdout() as out:
             yvs.main(query_str)
@@ -45,7 +46,7 @@ class SearchMainTestCase(unittest.TestCase):
             self.assertEqual(title.text, 'No Results')
 
     def test_query_param(self):
-        '''should use typed Alfred query as default query string'''
+        """should use typed Alfred query as default query string"""
         spec = inspect.getargspec(yvs.main)
         default_query_str = spec.defaults[0]
         self.assertEqual(default_query_str, '{query}')
