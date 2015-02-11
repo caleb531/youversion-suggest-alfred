@@ -1,13 +1,15 @@
 #!/usr/bin/env python
+
 import unittest
 import yv_suggest.search as yvs
 from xml.etree import ElementTree as ET
 
+
 class SearchXmlTestCase(unittest.TestCase):
-    '''test the integrity of the result list XML'''
+    """test the integrity of the result list XML"""
 
     def test_validity(self):
-        '''should be valid XML'''
+        """should be valid XML"""
         results = yvs.get_result_list('john 3:16')
         xml = yvs.get_result_list_xml(results)
         try:
@@ -16,12 +18,12 @@ class SearchXmlTestCase(unittest.TestCase):
             self.fail('result list XML is not valid')
 
     def test_structure(self):
-        '''should contain necessary elements/attributes/values'''
+        """should contain necessary elements/attributes/values"""
         results = yvs.get_result_list('matthew 6:34')
         result = results[0]
         xml = yvs.get_result_list_xml(results)
         root = ET.fromstring(xml)
-        self.assertEqual(root.tag, 'items', 'root element is incorrectly named')
+        self.assertEqual(root.tag, 'items', 'root element incorrectly named')
         item = root.find('item')
         self.assertIsNotNone(item, '<item> element is missing')
         self.assertEqual(item.get('uid'), result['uid'])
