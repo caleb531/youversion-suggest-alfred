@@ -8,3 +8,4 @@ from tests.test_search_incomplete import *
 from tests.test_search_xml import *
 from tests.test_search_main import *
 from tests.test_open import *
+from tests.test_pep8 import *
