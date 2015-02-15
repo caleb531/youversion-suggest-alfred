@@ -1,3 +1,11 @@
+# OS-specific files
 .DS_Store
+
+# Python bytecode
 *.pyc
 __pycache__
+
+# Test coverage
+.coverage
+coverage.xml
+cover

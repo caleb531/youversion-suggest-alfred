@@ -27,25 +27,28 @@ suggestions matching your query.
 ## Testing
 
 If you are contributing to the project and would like to run the included unit
-tests, run the following command in the project directory:
+tests, run the `nosetests` command within the project directory.
 
 ```
-python -m unittest tests
+nosetests
 ```
 
-### Running an individual test case
+### Viewing test coverage
 
-If you wish to run a single test case, reference the module name like so:
+To view the test coverage report, run `nosetests` with the `--with-coverage` and
+`--cover-erase` options.
 
 ```
-python -m unittest tests.test_search_book
+nosetests --with-coverage --cover-erase
 ```
 
 ### Requirements for running tests
 
-Note that running these unit tests requires Python 2.7. Running these tests also
-requires the `pep8` module, which you can install using `pip`:
+Note that all scripts apart of the workflow require Python 2.7 (Python 3 is not
+supported). Running these unit tests requires `nose`, `coverage`, and `pep8` to
+be installed. If you do not have these packages installed already, you can
+install them via `pip`:
 
 ```
-pip install pep8
+pip install nose coverage pep8
 ```

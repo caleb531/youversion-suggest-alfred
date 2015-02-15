@@ -14,20 +14,16 @@ def get_package_path():
 
     if '__file__' in globals():
         package_path = os.path.dirname(os.path.realpath(__file__))
-    elif os.path.exists(sys.argv[0]):
-        package_path = os.path.dirname(os.path.realpath(sys.argv[0]))
     else:
-        package_path = '.'
+        package_path = os.path.dirname(os.path.realpath(sys.argv[0]))
 
     return package_path
-
-package_path = get_package_path()
 
 
 # Loads list of Bible books from file
 def get_books():
 
-    books_path = os.path.join(package_path, 'bible', 'books.json')
+    books_path = os.path.join(get_package_path(), 'bible', 'books.json')
     with open(books_path, 'r') as file:
         books = tuple(json.load(file))
 
@@ -37,7 +33,7 @@ def get_books():
 # Loads list of Bible versions from file
 def get_versions():
 
-    versions_path = os.path.join(package_path, 'bible', 'versions.json')
+    versions_path = os.path.join(get_package_path(), 'bible', 'versions.json')
     with open(versions_path, 'r') as file:
         versions = tuple(json.load(file))
 
@@ -77,7 +73,7 @@ def guess_version(partial_version):
         version_guess = default_version
         # Attempt to guess the version used
         for version in versions:
-            if version.startswith(partial_version):
+            if version.startswith(partial_version):  # pragma: no cover
                 version_guess = version
                 break
 

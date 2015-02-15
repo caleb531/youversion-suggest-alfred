@@ -74,5 +74,10 @@ class SearchBookTestCase(unittest.TestCase):
         results = yvs.get_result_list('jesus')
         self.assertEqual(len(results), 0)
 
+    def test_empty(self):
+        """should not match empty input"""
+        results = yvs.get_result_list('')
+        self.assertEqual(len(results), 0)
+
 if __name__ == '__main__':
     unittest.main()

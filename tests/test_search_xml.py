@@ -23,7 +23,8 @@ class SearchXmlTestCase(unittest.TestCase):
         result = results[0]
         xml = yvs.get_result_list_xml(results)
         root = ET.fromstring(xml)
-        self.assertEqual(root.tag, 'items', 'root element incorrectly named')
+        self.assertEqual(root.tag, 'items',
+                         'root element must be named <items>')
         item = root.find('item')
         self.assertIsNotNone(item, '<item> element is missing')
         self.assertEqual(item.get('uid'), result['uid'])

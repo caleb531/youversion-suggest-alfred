@@ -21,7 +21,7 @@ class TestPep8(unittest.TestCase):
         style_guide = pep8.StyleGuide(quiet=True)
         result = style_guide.check_files(glob.iglob('tests/*.py'))
         self.assertEqual(result.total_errors, 0,
-                         'Unit tests not pep8-compliant')
+                         'Unit tests are not pep8-compliant')
 
 if __name__ == '__main__':
     unittest.main()

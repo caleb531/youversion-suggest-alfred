@@ -1,0 +1,20 @@
+# Configuration for coverage.py (https://pypi.python.org/pypi/coverage)
+
+# Enable branch coverage
+[run]
+branch = True
+
+[report]
+
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Allow source to designate lines/branches to be skipped
+    pragma: no cover
+
+    # Ignore non-runnable code
+    if __name__ == .__main__.:
+
+# Only check coverage for source files
+include =
+    yv_suggest/open.py
+    yv_suggest/search.py

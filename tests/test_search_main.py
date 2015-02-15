@@ -7,6 +7,7 @@ from contextlib import contextmanager
 from StringIO import StringIO
 import inspect
 import sys
+import os
 
 
 class SearchMainTestCase(unittest.TestCase):
@@ -51,6 +52,15 @@ class SearchMainTestCase(unittest.TestCase):
         spec = inspect.getargspec(yvs.main)
         default_query_str = spec.defaults[0]
         self.assertEqual(default_query_str, '{query}')
+
+    def test_source_only(self):
+        """should run script from source only"""
+        yvs.sys.argv[0] = yvs.__file__
+        del yvs.__file__
+        results = yvs.get_result_list('e')
+        self.assertEqual(len(results), 6)
+        yvs.__file__ = yvs.sys.argv[0]
+
 
 if __name__ == '__main__':
     unittest.main()
