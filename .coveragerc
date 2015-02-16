@@ -1,7 +1,7 @@
 # Configuration for coverage.py (https://pypi.python.org/pypi/coverage)
 
-# Enable branch coverage
 [run]
+# Enable branch coverage
 branch = True
 
 [report]

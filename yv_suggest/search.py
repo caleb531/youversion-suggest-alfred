@@ -68,9 +68,8 @@ def guess_version(partial_version):
     if partial_version in versions:
         version_guess = partial_version
     else:
-        # Use a predetermined version by default
-        version_guess = None
         # Attempt to guess the version used
+        version_guess = None
         for version in versions:
             if version.startswith(partial_version):  # pragma: no cover
                 version_guess = version
