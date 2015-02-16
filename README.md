@@ -50,5 +50,7 @@ be installed. If you do not have these packages installed already, you can
 install them via `pip`:
 
 ```
-pip install nose coverage pep8
+pip install nose
+pip install coverage
+pip install pep8
 ```

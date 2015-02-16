@@ -3,7 +3,6 @@
 
 import json
 import re
-import os
 import os.path
 import sys
 from xml.etree import ElementTree as ET
@@ -44,7 +43,7 @@ def get_versions():
 default_version = 'NIV'
 
 # Pattern for parsing any bible reference
-ref_patt = '^{book}(?: {ch}(?:{sep}{v}{v_end}?)?{version}?)?$'.format(
+ref_patt = '^{book}(?:{ch}(?:{sep}{v}{v_end}?)?{version}?)?$'.format(
     # Book name (including preceding number, if amu)
     book='((?:\d )?[a-z ]+)',
     # Chapter number
@@ -87,19 +86,18 @@ def get_result_list_xml(results):
 
     for result in results:
         # Create <item> element for result with appropriate attributes
-        item = ET.Element('item')
-        item.set('uid', result['uid'])
-        item.set('arg', result.get('arg', ''))
-        item.set('valid', result.get('valid', 'yes'))
-        root.append(item)
+        item = ET.SubElement(root, 'item', {
+            'uid': result['uid'],
+            'arg': result.get('arg', ''),
+            'valid': result.get('valid', 'yes')
+        })
         # Create appropriate child elements of <item> element
-        title = ET.Element('title')
+        title = ET.SubElement(item, 'title')
         title.text = result['title']
-        subtitle = ET.Element('subtitle')
+        subtitle = ET.SubElement(item, 'subtitle')
         subtitle.text = result['subtitle']
-        icon = ET.Element('icon')
+        icon = ET.SubElement(item, 'icon')
         icon.text = 'icon.png'
-        item.extend((title, subtitle, icon))
 
     return ET.tostring(root)
 
@@ -114,6 +112,11 @@ def format_query_str(query_str):
     query_str = query_str.lower()
     # Remove tokens at end of incomplete references
     query_str = re.sub('[\-\.\:]$', '', query_str)
+
+    # Parse shorthand book name notation
+    query_str = re.sub('^(\d)(?=[a-z])', '\\1 ', query_str)
+    # Parse shorthand version notation
+    query_str = re.sub('(?<=\d)([a-z]+\d*)$', ' \\1', query_str)
 
     return query_str
 
@@ -131,7 +134,7 @@ def get_query_object(query_str):
     query = {}
 
     # Parse partial book name if given
-    query['book'] = ref_matches.group(1)
+    query['book'] = ref_matches.group(1).rstrip()
 
     # Parse chapter if given
     if ref_matches.group(2):
