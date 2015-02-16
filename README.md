@@ -20,32 +20,42 @@ suggestions matching your query.
 
 * `luke` => Luke
 * `eph 3` => Ephesians 3
-* `1 t 3 e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+* `1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
 * `mat 6:34 nlt` => Matthew 6:34 (NLT)
 * `1 co 13.4-7` => 1 Corinthians 13.4-7
 
 ## Testing
 
-If you are contributing to the project and would like to run the included unit
-tests, run the following command in the project directory:
-
-```
-python -m unittest tests
-```
-
-### Running an individual test case
-
-If you wish to run a single test case, reference the module name like so:
-
-```
-python -m unittest tests.test_search_book
-```
-
 ### Requirements for running tests
 
-Note that running these unit tests requires Python 2.7. Running these tests also
-requires the `pep8` module, which you can install using `pip`:
+Running these unit tests requires Python 2.7, as well as the following packages
+to be installed:
+
+* nose
+* coverage
+* pep8
+
+If you do not have these packages installed already, you can install them via
+`pip`:
 
 ```
-pip install pep8
+sudo pip install nose coverage pep8
+```
+
+### Running tests
+
+To run the included unit tests, run the `nosetests` command within the project
+directory.
+
+```
+nosetests
+```
+
+### Viewing test coverage
+
+To view the test coverage report, run `nosetests` with the `--with-coverage` and
+`--cover-erase` flags.
+
+```
+nosetests --with-coverage --cover-erase
 ```

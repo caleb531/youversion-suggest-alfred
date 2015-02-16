@@ -1,43 +1,39 @@
 #!/usr/bin/env python
 
-import unittest
+import nose.tools as nose
 import yv_suggest.search as yvs
 from xml.etree import ElementTree as ET
 
 
-class SearchXmlTestCase(unittest.TestCase):
-    """test the integrity of the result list XML"""
+def test_validity():
+    """should return syntactically-valid XML"""
+    results = yvs.get_result_list('john 3:16')
+    xml = yvs.get_result_list_xml(results)
+    try:
+        nose.assert_is_instance(ET.fromstring(xml), ET.Element)
+    except ET.ParseError:
+        ().fail('result list XML is not valid')
 
-    def test_validity(self):
-        """should be valid XML"""
-        results = yvs.get_result_list('john 3:16')
-        xml = yvs.get_result_list_xml(results)
-        try:
-            self.assertIsInstance(ET.fromstring(xml), ET.Element)
-        except ET.ParseError:
-            self.fail('result list XML is not valid')
 
-    def test_structure(self):
-        """should contain necessary elements/attributes/values"""
-        results = yvs.get_result_list('matthew 6:34')
-        result = results[0]
-        xml = yvs.get_result_list_xml(results)
-        root = ET.fromstring(xml)
-        self.assertEqual(root.tag, 'items', 'root element incorrectly named')
-        item = root.find('item')
-        self.assertIsNotNone(item, '<item> element is missing')
-        self.assertEqual(item.get('uid'), result['uid'])
-        self.assertEqual(item.get('arg'), result['arg'])
-        self.assertEqual(item.get('valid'), 'yes')
-        title = item.find('title')
-        self.assertIsNotNone(title, '<title> element is missing')
-        self.assertEqual(title.text, result['title'])
-        subtitle = item.find('subtitle')
-        self.assertIsNotNone(subtitle, '<subtitle> element is missing')
-        self.assertEqual(subtitle.text, result['subtitle'])
-        icon = item.find('icon')
-        self.assertIsNotNone(icon, '<icon> element is missing')
-        self.assertEqual(icon.text, 'icon.png')
-
-if __name__ == '__main__':
-    unittest.main()
+def test_structure():
+    """XML should match result list"""
+    results = yvs.get_result_list('matthew 6:34')
+    result = results[0]
+    xml = yvs.get_result_list_xml(results)
+    root = ET.fromstring(xml)
+    nose.assert_equal(root.tag, 'items',
+                      'root element must be named <items>')
+    item = root.find('item')
+    nose.assert_is_not_none(item, '<item> element is missing')
+    nose.assert_equal(item.get('uid'), result['uid'])
+    nose.assert_equal(item.get('arg'), result['arg'])
+    nose.assert_equal(item.get('valid'), 'yes')
+    title = item.find('title')
+    nose.assert_is_not_none(title, '<title> element is missing')
+    nose.assert_equal(title.text, result['title'])
+    subtitle = item.find('subtitle')
+    nose.assert_is_not_none(subtitle, '<subtitle> element is missing')
+    nose.assert_equal(subtitle.text, result['subtitle'])
+    icon = item.find('icon')
+    nose.assert_is_not_none(icon, '<icon> element is missing')
+    nose.assert_equal(icon.text, 'icon.png')

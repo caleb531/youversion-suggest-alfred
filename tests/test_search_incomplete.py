@@ -1,29 +1,25 @@
 #!/usr/bin/env python
 
-import unittest
+import nose.tools as nose
 import yv_suggest.search as yvs
 
 
-class SearchIncompleteTestCase(unittest.TestCase):
-    """test the searching of incomplete Bible references"""
+def test_incomplete_verse():
+    """should treat incomplete verse reference as chapter reference"""
+    results = yvs.get_result_list('psalm 19:')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Psalm 19')
 
-    def test_incomplete_verse(self):
-        """should treat incomplete verse reference as chapter reference"""
-        results = yvs.get_result_list('psalm 19:')
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0]['title'], 'Psalm 19')
 
-    def test_incomplete_dot_verse(self):
-        """should treat incomplete .verse reference as chapter reference"""
-        results = yvs.get_result_list('psalm 19.')
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0]['title'], 'Psalm 19')
+def test_incomplete_dot_verse():
+    """should treat incomplete .verse reference as chapter reference"""
+    results = yvs.get_result_list('psalm 19.')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Psalm 19')
 
-    def test_incomplete_verse_range(self):
-        """should treat incomplete verse ranges as single-verse references"""
-        results = yvs.get_result_list('psalm 19.7-')
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0]['title'], 'Psalm 19.7')
 
-if __name__ == '__main__':
-    unittest.main()
+def test_incomplete_verse_range():
+    """should treat incomplete verse ranges as single-verse references"""
+    results = yvs.get_result_list('psalm 19.7-')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Psalm 19:7')
