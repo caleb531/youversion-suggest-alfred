@@ -7,9 +7,9 @@ import glob
 
 def test_source_compliance():
     """source files should comply with pep8"""
-    style_guide = pep8.StyleGuide(quiet=True)
     files = glob.iglob('*/*.py')
     for file in files:
-        result = style_guide.check_files((file,))
+        style_guide = pep8.StyleGuide(quiet=True)
+        total_errors = style_guide.input_file(file)
         msg = '{} is not pep8-compliant'.format(file)
-        yield nose.assert_equal, result.total_errors, 0, msg
+        yield nose.assert_equal, total_errors, 0, msg

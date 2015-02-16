@@ -22,4 +22,4 @@ def test_incomplete_verse_range():
     """should treat incomplete verse ranges as single-verse references"""
     results = yvs.get_result_list('psalm 19.7-')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Psalm 19.7')
+    nose.assert_equal(results[0]['title'], 'Psalm 19:7')

@@ -49,7 +49,7 @@ ref_patt = '^{book}(?:{ch}(?:{sep}{v}{v_end}?)?{version}?)?$'.format(
     # Chapter number
     ch='(\d+)',
     # Chapter-verse separator
-    sep='(\:|\.)',
+    sep='(?:[\:\. ])',
     # Verse number
     v='(\d+)',
     #  End verse for a verse range
@@ -69,7 +69,7 @@ def guess_version(partial_version):
         version_guess = partial_version
     else:
         # Use a predetermined version by default
-        version_guess = default_version
+        version_guess = None
         # Attempt to guess the version used
         for version in versions:
             if version.startswith(partial_version):  # pragma: no cover
@@ -113,10 +113,8 @@ def format_query_str(query_str):
     # Remove tokens at end of incomplete references
     query_str = re.sub('[\-\.\:]$', '', query_str)
 
-    # Parse shorthand book name notation
-    query_str = re.sub('^(\d)(?=[a-z])', '\\1 ', query_str)
-    # Parse shorthand version notation
-    query_str = re.sub('(?<=\d)([a-z]+\d*)$', ' \\1', query_str)
+    # Parse shorthand book name and chapter/verse notation
+    query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
 
     return query_str
 
@@ -137,24 +135,24 @@ def get_query_object(query_str):
     query['book'] = ref_matches.group(1).rstrip()
 
     # Parse chapter if given
-    if ref_matches.group(2):
-        query['chapter'] = int(ref_matches.group(2))
-
-        # Store separator used to separate chapter from verse number
-        if ref_matches.group(3):
-            query['separator'] = ref_matches.group(3)
+    chapter_match = ref_matches.group(2)
+    if chapter_match:
+        query['chapter'] = int(chapter_match)
 
         # Parse verse if given
-        if ref_matches.group(4):
-            query['verse'] = int(ref_matches.group(4))
+        verse_match = ref_matches.group(3)
+        if verse_match:
+            query['verse'] = int(verse_match)
 
             # Parse verse range if given
-            if ref_matches.group(5):
-                query['verse_end'] = int(ref_matches.group(5))
+            verse_range_match = ref_matches.group(4)
+            if verse_range_match:
+                query['verse_end'] = int(verse_range_match)
 
         # Parse version if given
-        if ref_matches.group(6):
-            query['version'] = ref_matches.group(6).lstrip()
+        version_match = ref_matches.group(5)
+        if version_match:
+            query['version'] = version_match.lstrip()
 
     return query
 
@@ -188,13 +186,15 @@ def get_result_list(query_str):
 
     # Filter book list to match query
     matching_books = get_matching_books(query)
+    version_guess = None
 
     if 'version' in query:
         # Guess version if possible
-        matched_version = guess_version(query['version'])
-    else:
-        # Otherwise, use default version
-        matched_version = default_version
+        version_guess = guess_version(query['version'])
+
+    if not version_guess:
+        # Use default version if version could not be guessed
+        version_guess = default_version
 
     # Build results list from books that matched the query
     for book in matching_books:
@@ -220,9 +220,8 @@ def get_result_list(query_str):
                     # Find verse if given
                     result['uid'] += '.{verse}'.format(
                         verse=query['verse'])
-                    result['title'] += '{sep}{verse}'.format(
-                        verse=query['verse'],
-                        sep=query['separator'])
+                    result['title'] += ':{verse}'.format(
+                        verse=query['verse'])
 
                     if 'verse_end' in query:
 
@@ -241,10 +240,10 @@ def get_result_list(query_str):
         if 'uid' in result:
 
             result['uid'] = '{version}/{uid}'.format(
-                version=matched_version.lower(),
+                version=version_guess.lower(),
                 uid=result['uid'])
             result['arg'] = result['uid']
-            result['subtitle'] = matched_version
+            result['subtitle'] = version_guess
             results.append(result)
 
     return results

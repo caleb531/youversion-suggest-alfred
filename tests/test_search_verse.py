@@ -19,18 +19,25 @@ def test_ambiguous():
     nose.assert_equal(results[1]['title'], 'Acts 3:2')
 
 
-def test_dot():
-    """should match verses preceded by dot (instead of colon)"""
+def test_dot_separator():
+    """should match verses preceded by dot"""
     results = yvs.get_result_list('luke 4.8')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Luke 4.8')
+    nose.assert_equal(results[0]['title'], 'Luke 4:8')
+
+
+def test_space_separator():
+    """should match verses preceded by space"""
+    results = yvs.get_result_list('luke 4 8')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Luke 4:8')
 
 
 def test_range():
     """should match verse ranges"""
     results = yvs.get_result_list('1 cor 13.4-7')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], '1 Corinthians 13.4-7')
+    nose.assert_equal(results[0]['title'], '1 Corinthians 13:4-7')
 
 
 def test_id():

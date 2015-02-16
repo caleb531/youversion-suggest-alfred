@@ -79,9 +79,3 @@ def test_nonexistent():
     """should not match nonexistent books"""
     results = yvs.get_result_list('jesus')
     nose.assert_equal(len(results), 0)
-
-
-def test_empty():
-    """should not match empty input"""
-    results = yvs.get_result_list('')
-    nose.assert_equal(len(results), 0)
