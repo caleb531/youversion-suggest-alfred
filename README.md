@@ -10,10 +10,10 @@ YouVersion Suggest is an Alfred workflow which allows you to search the online
 
 ## Usage
 
-Type the `yv` keyword, along with a space and a phrase representing the bible
-reference you wish to find. The phrase can be partial book name, chapter, verse,
-or range of verses. You may also include an option version (translation) at the
-end of your query. As you type, YouVersion Suggest will display a list of
+Type the `yv` keyword, followed by a space and a phrase representing the bible
+reference you wish to find. The phrase can be part of a book name, chapter,
+verse, or range of verses. You may also include an option version (translation)
+at the end of your query. As you type, YouVersion Suggest will display a list of
 suggestions matching your query.
 
 ### Query Examples
@@ -22,7 +22,15 @@ suggestions matching your query.
 * `eph 3` => Ephesians 3
 * `1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
 * `mat 6:34 nlt` => Matthew 6:34 (NLT)
-* `1 co 13.4-7` => 1 Corinthians 13.4-7
+* `1 co 13.4-7` => 1 Corinthians 13:4-7
+
+### Supported versions
+
+#### English
+
+AMP, ASV, BOOKS, CEB, CEV, CEV, CEVUK, CPDV, DARBY, DRA, ESV, ERV, GNB, GNBDC, GNBDK, GNT, GNTD, GWT, HCSB, ISR98, KJV, LEB, MSG, NIV, NIVUK, NLT, NET, NKJV, NCV, NASB, NABRE, NIRV, OJB, RV1885, TLV, WEB
+
+YouVersion Suggest defaults to NIV, however it will always remember the last version you used to look up a reference.
 
 ## Testing
 

@@ -2,6 +2,7 @@
 # Open bible reference on YouVersion website
 
 import webbrowser
+import shared
 
 # Base URL for Bible references
 base_url = 'https://www.bible.com/bible'

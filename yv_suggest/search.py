@@ -1,46 +1,10 @@
 #!/usr/bin/env python
 # Search bible references matching the given query
 
-import json
 import re
-import os.path
-import sys
 from xml.etree import ElementTree as ET
+import shared
 
-
-# Properly determines path to package
-def get_package_path():
-
-    if '__file__' in globals():
-        package_path = os.path.dirname(os.path.realpath(__file__))
-    else:
-        package_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-
-    return package_path
-
-
-# Loads list of Bible books from file
-def get_books():
-
-    books_path = os.path.join(get_package_path(), 'bible', 'books.json')
-    with open(books_path, 'r') as file:
-        books = tuple(json.load(file))
-
-    return books
-
-
-# Loads list of Bible versions from file
-def get_versions():
-
-    versions_path = os.path.join(get_package_path(), 'bible', 'versions.json')
-    with open(versions_path, 'r') as file:
-        versions = tuple(json.load(file))
-
-    return versions
-
-
-# Default version (translation) for all results
-default_version = 'NIV'
 
 # Pattern for parsing any bible reference
 ref_patt = '^{book}(?:{ch}(?:{sep}{v}{v_end}?)?{version}?)?$'.format(
@@ -60,18 +24,17 @@ ref_patt = '^{book}(?:{ch}(?:{sep}{v}{v_end}?)?{version}?)?$'.format(
 
 
 # Guesses a version based on the given partial version
-def guess_version(partial_version):
+def guess_version(versions, version_query):
 
-    partial_version = partial_version.upper()
-    versions = get_versions()
+    version_query = version_query.upper()
 
-    if partial_version in versions:
-        version_guess = partial_version
+    if version_query in versions:
+        version_guess = version_query
     else:
         # Attempt to guess the version used
         version_guess = None
         for version in versions:
-            if version.startswith(partial_version):  # pragma: no cover
+            if version.startswith(version_query):  # pragma: no cover
                 version_guess = version
                 break
 
@@ -157,9 +120,8 @@ def get_query_object(query_str):
 
 
 # Retrieves list of books matching the given query
-def get_matching_books(query):
+def get_matching_books(books, query):
 
-    books = get_books()
     matching_books = []
 
     for book in books:
@@ -183,17 +145,18 @@ def get_result_list(query_str):
     if not query:
         return results
 
+    bible = shared.get_bible_data()
     # Filter book list to match query
-    matching_books = get_matching_books(query)
-    version_guess = None
+    matching_books = get_matching_books(bible['books'], query)
+    chosen_version = None
 
     if 'version' in query:
         # Guess version if possible
-        version_guess = guess_version(query['version'])
+        chosen_version = guess_version(bible['versions'], query['version'])
 
-    if not version_guess:
-        # Use default version if version could not be guessed
-        version_guess = default_version
+    if not chosen_version:
+        # Use last version if version could not be guessed
+        chosen_version = bible['default_version']
 
     # Build results list from books that matched the query
     for book in matching_books:
@@ -239,10 +202,10 @@ def get_result_list(query_str):
         if 'uid' in result:
 
             result['uid'] = '{version}/{uid}'.format(
-                version=version_guess.lower(),
+                version=chosen_version.lower(),
                 uid=result['uid'])
             result['arg'] = result['uid']
-            result['subtitle'] = version_guess
+            result['subtitle'] = chosen_version
             results.append(result)
 
     return results

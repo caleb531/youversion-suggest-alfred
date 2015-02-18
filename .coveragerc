@@ -18,3 +18,4 @@ exclude_lines =
 include =
     yv_suggest/open.py
     yv_suggest/search.py
+    yv_suggest/shared.py
