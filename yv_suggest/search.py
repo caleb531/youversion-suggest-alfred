@@ -94,7 +94,8 @@ def get_query_object(query_str):
     query = {}
 
     # Parse partial book name if given
-    query['book'] = ref_matches.group(1).rstrip()
+    book_match = ref_matches.group(1)
+    query['book'] = book_match.rstrip()
 
     # Parse chapter if given
     chapter_match = ref_matches.group(2)
@@ -196,7 +197,7 @@ def get_result_list(query_str):
             # Find book if no chapter or verse is given
 
             result['uid'] = '{book}.1'.format(book=book['id'])
-            result['title'] = book['name']
+            result['title'] = '{book} 1'.format(book=book['name'])
 
         # Create result data using the given information
         if 'uid' in result:
@@ -205,7 +206,8 @@ def get_result_list(query_str):
                 version=chosen_version.lower(),
                 uid=result['uid'])
             result['arg'] = result['uid']
-            result['subtitle'] = chosen_version
+            result['title'] += ' ({version})'.format(version=chosen_version)
+            result['subtitle'] = "View on YouVersion"
             results.append(result)
 
     return results

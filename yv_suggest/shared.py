@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Shared components used by other workflow modules
+# Components shared by all workflow modules
 
 import sys
 import os
