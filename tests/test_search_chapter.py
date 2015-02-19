@@ -19,13 +19,6 @@ def test_ambiguous():
     nose.assert_equal(results[1]['title'], 'Acts 3 (NIV)')
 
 
-def test_whitespace():
-    """should match chapters irrespective of surrounding whitespace"""
-    results = yvs.get_result_list('1 peter   5')
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], '1 Peter 5 (NIV)')
-
-
 def test_id():
     """should use correct ID for chapters"""
     results = yvs.get_result_list('luke 4')

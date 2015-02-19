@@ -22,13 +22,6 @@ def test_case():
     nose.assert_list_equal(results_upper, results)
 
 
-def test_whitespace():
-    """should match books irrespective of surrounding whitespace"""
-    results = yvs.get_result_list('    romans    ')
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Romans 1 (NIV)')
-
-
 def test_partial_ambiguous():
     """should match books by ambiguous partial name"""
     results = yvs.get_result_list('r')

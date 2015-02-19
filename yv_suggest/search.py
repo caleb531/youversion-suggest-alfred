@@ -7,17 +7,17 @@ import shared
 
 
 # Pattern for parsing any bible reference
-ref_patt = '^{book}(?:{ch}(?:{v}{v_end}?)?{version}?)?$'.format(
+ref_patt = '^{book}(?:{chapter}(?:{verse}{verse_end})?{version})?$'.format(
     # Book name (including preceding number, if amu)
-    book='\s?((?:\d)?[a-z ]+)\s?',
+    book='(\d?[a-z\s]+)\s?',
     # Chapter number
-    ch='\s?(\d+)\s?',
+    chapter='(\d+)\s?',
     # Verse number
-    v='\s?(\d+)\s?',
+    verse='(\d+)\s?',
     #  End verse for a verse range
-    v_end='(?:\s?(\d+))',
+    verse_end='(?:(\d+)\s?)?',
     # Version (translation) used to view reference
-    version='(?:\s?([a-z]+\d*)\s?)')
+    version='(?:([a-z]+\d*))?')
 
 
 # Guesses a version based on the given partial version
@@ -70,7 +70,7 @@ def format_query_str(query_str):
     # Remove extra whitespace
     query_str = query_str.strip()
     query_str = re.sub('\s+', ' ', query_str)
-    # Parse shorthand book name and chapter/verse notation
+    # Parse shorthand reference notation
     query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
 
     return query_str
