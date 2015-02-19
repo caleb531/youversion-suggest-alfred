@@ -22,7 +22,7 @@ def get_full_ref(ref_uid):
     chapter_match = ref_uid_matches.group(3)
     bible = shared.get_bible_data()
     for book in bible['books']:
-        if book['id'] == book_match:
+        if book['id'] == book_match:  # pragma: no cover
             book_name = book['name']
             break
     ref = '{book} {chapter}'.format(

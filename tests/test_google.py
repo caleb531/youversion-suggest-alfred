@@ -13,7 +13,16 @@ def test_query_param():
     nose.assert_equal(default_query_str, '{query}')
 
 
-def test_url_open():
+def test_url_open_chapter():
+    """should attempt to open URL using webbrowser module"""
+    mock = WebbrowserMock()
+    yvg.webbrowser = mock
+    yvg.main('esv/jhn.3')
+    nose.assert_equal(mock.url,
+                      'https://www.google.com/search?q=John+3+%28ESV%29')
+
+
+def test_url_open_verse():
     """should attempt to open URL using webbrowser module"""
     mock = WebbrowserMock()
     yvg.webbrowser = mock
