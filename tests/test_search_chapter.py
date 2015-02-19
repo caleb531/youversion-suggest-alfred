@@ -36,3 +36,9 @@ def test_nonexistent():
     """should not match nonexistent chapters"""
     results = yvs.get_result_list('psalm 160')
     nose.assert_equal(len(results), 0)
+
+
+def test_zero_chapter():
+    """should not match chapter zero"""
+    results = yvs.get_result_list('psalm 0')
+    nose.assert_equal(len(results), 0)

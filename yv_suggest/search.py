@@ -7,20 +7,17 @@ import shared
 
 
 # Pattern for parsing any bible reference
-ref_patt = '^{book}(?:{ch}(?:{sep}{v}{v_end}?)?{version}?)?$'.format(
+ref_patt = '^{book}(?:{ch}(?:{v}{v_end}?)?{version}?)?$'.format(
     # Book name (including preceding number, if amu)
-    book='((?:\d )?[a-z ]+)',
+    book='\s?((?:\d)?[a-z ]+)\s?',
     # Chapter number
-    ch='(\d+)',
-    # Chapter-verse separator
-    sep='(?:[\:\. ])',
+    ch='\s?(\d+)\s?',
     # Verse number
-    v='(\d+)',
+    v='\s?(\d+)\s?',
     #  End verse for a verse range
-    v_end='(?:-(\d+))',
+    v_end='(?:\s?(\d+))',
     # Version (translation) used to view reference
-    version='(?: ([a-z]+\d*))'
-)
+    version='(?:\s?([a-z]+\d*)\s?)')
 
 
 # Guesses a version based on the given partial version
@@ -67,14 +64,12 @@ def get_result_list_xml(results):
 # Simplifies the format of the query string
 def format_query_str(query_str):
 
+    query_str = query_str.lower()
+    # Remove all non-alphanumeric characters
+    query_str = re.sub('[^a-z0-9]', ' ', query_str)
     # Remove extra whitespace
     query_str = query_str.strip()
     query_str = re.sub('\s+', ' ', query_str)
-    # Lowercase query for consistency
-    query_str = query_str.lower()
-    # Remove tokens at end of incomplete references
-    query_str = re.sub('[\-\.\:]$', '', query_str)
-
     # Parse shorthand book name and chapter/verse notation
     query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
 
@@ -168,7 +163,7 @@ def get_result_list(query_str):
         if 'chapter' in query:
 
             # If chapter exists within the book
-            if query['chapter'] <= book['chapters']:
+            if query['chapter'] >= 1 and query['chapter'] <= book['chapters']:
 
                 # Find chapter if given
                 result['uid'] = '{book}.{chapter}'.format(
@@ -188,10 +183,12 @@ def get_result_list(query_str):
 
                     if 'verse_end' in query:
 
-                        result['uid'] += '-{verse}'.format(
-                            verse=query['verse_end'])
-                        result['title'] += '-{verse}'.format(
-                            verse=query['verse_end'])
+                        if query['verse_end'] > query['verse']:
+
+                            result['uid'] += '-{verse}'.format(
+                                verse=query['verse_end'])
+                            result['title'] += '-{verse}'.format(
+                                verse=query['verse_end'])
 
         else:
             # Find book if no chapter or verse is given
