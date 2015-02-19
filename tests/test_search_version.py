@@ -8,7 +8,7 @@ def test_numbered():
     """should match versions ending in number by partial name"""
     results = yvs.get_result_list('luke 4:8 rv1')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['subtitle'], 'RV1885')
+    nose.assert_equal(results[0]['title'], 'Luke 4:8 (RV1885)')
 
 
 def test_case():
@@ -26,21 +26,21 @@ def test_whitespace():
     """should match versions irrespective of surrounding whitespace"""
     results = yvs.get_result_list('1 peter 5:7    esv')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['subtitle'], 'ESV')
+    nose.assert_equal(results[0]['title'], '1 Peter 5:7 (ESV)')
 
 
 def test_partial():
     """should match versions by partial name"""
     results = yvs.get_result_list('luke 4:8 e')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['subtitle'], 'ESV')
+    nose.assert_equal(results[0]['title'], 'Luke 4:8 (ESV)')
 
 
 def test_partial_ambiguous():
     """should match versions by ambiguous partial name"""
     results = yvs.get_result_list('luke 4:8 a')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['subtitle'], 'AMP')
+    nose.assert_equal(results[0]['title'], 'Luke 4:8 (AMP)')
 
 
 def test_id():

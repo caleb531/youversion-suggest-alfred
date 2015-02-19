@@ -1,77 +1,37 @@
 #!/usr/bin/env python
 # Search bible references matching the given query
 
-import json
 import re
-import os.path
-import sys
 from xml.etree import ElementTree as ET
+import shared
 
-
-# Properly determines path to package
-def get_package_path():
-
-    if '__file__' in globals():
-        package_path = os.path.dirname(os.path.realpath(__file__))
-    else:
-        package_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-
-    return package_path
-
-
-# Loads list of Bible books from file
-def get_books():
-
-    books_path = os.path.join(get_package_path(), 'bible', 'books.json')
-    with open(books_path, 'r') as file:
-        books = tuple(json.load(file))
-
-    return books
-
-
-# Loads list of Bible versions from file
-def get_versions():
-
-    versions_path = os.path.join(get_package_path(), 'bible', 'versions.json')
-    with open(versions_path, 'r') as file:
-        versions = tuple(json.load(file))
-
-    return versions
-
-
-# Default version (translation) for all results
-default_version = 'NIV'
 
 # Pattern for parsing any bible reference
-ref_patt = '^{book}(?:{ch}(?:{sep}{v}{v_end}?)?{version}?)?$'.format(
+ref_patt = '^{book}(?:{chapter}(?:{verse}{verse_end})?{version})?$'.format(
     # Book name (including preceding number, if amu)
-    book='((?:\d )?[a-z ]+)',
+    book='(\d?[a-z\s]+)\s?',
     # Chapter number
-    ch='(\d+)',
-    # Chapter-verse separator
-    sep='(?:[\:\. ])',
+    chapter='(\d+)\s?',
     # Verse number
-    v='(\d+)',
+    verse='(\d+)\s?',
     #  End verse for a verse range
-    v_end='(?:-(\d+))',
+    verse_end='(?:(\d+)\s?)?',
     # Version (translation) used to view reference
-    version='(?: ([a-z]+\d*))'
-)
+    version='(?:([a-z]+\d*))?')
 
 
 # Guesses a version based on the given partial version
-def guess_version(partial_version):
+def guess_version(versions, version_query):
 
-    partial_version = partial_version.upper()
-    versions = get_versions()
+    version_query = version_query.upper()
 
-    if partial_version in versions:
-        version_guess = partial_version
+    if version_query in versions:
+        version_guess = version_query
     else:
         # Attempt to guess the version used
         version_guess = None
         for version in versions:
-            if version.startswith(partial_version):  # pragma: no cover
+            if version.startswith(version_query):  # pragma: no cover
                 version_guess = version
                 break
 
@@ -104,15 +64,13 @@ def get_result_list_xml(results):
 # Simplifies the format of the query string
 def format_query_str(query_str):
 
+    query_str = query_str.lower()
+    # Remove all non-alphanumeric characters
+    query_str = re.sub('[^a-z0-9]', ' ', query_str)
     # Remove extra whitespace
     query_str = query_str.strip()
     query_str = re.sub('\s+', ' ', query_str)
-    # Lowercase query for consistency
-    query_str = query_str.lower()
-    # Remove tokens at end of incomplete references
-    query_str = re.sub('[\-\.\:]$', '', query_str)
-
-    # Parse shorthand book name and chapter/verse notation
+    # Parse shorthand reference notation
     query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
 
     return query_str
@@ -131,7 +89,8 @@ def get_query_object(query_str):
     query = {}
 
     # Parse partial book name if given
-    query['book'] = ref_matches.group(1).rstrip()
+    book_match = ref_matches.group(1)
+    query['book'] = book_match.rstrip()
 
     # Parse chapter if given
     chapter_match = ref_matches.group(2)
@@ -157,9 +116,8 @@ def get_query_object(query_str):
 
 
 # Retrieves list of books matching the given query
-def get_matching_books(query):
+def get_matching_books(books, query):
 
-    books = get_books()
     matching_books = []
 
     for book in books:
@@ -183,17 +141,18 @@ def get_result_list(query_str):
     if not query:
         return results
 
+    bible = shared.get_bible_data()
     # Filter book list to match query
-    matching_books = get_matching_books(query)
-    version_guess = None
+    matching_books = get_matching_books(bible['books'], query)
+    chosen_version = None
 
     if 'version' in query:
         # Guess version if possible
-        version_guess = guess_version(query['version'])
+        chosen_version = guess_version(bible['versions'], query['version'])
 
-    if not version_guess:
-        # Use default version if version could not be guessed
-        version_guess = default_version
+    if not chosen_version:
+        # Use last version if version could not be guessed
+        chosen_version = bible['default_version']
 
     # Build results list from books that matched the query
     for book in matching_books:
@@ -204,7 +163,7 @@ def get_result_list(query_str):
         if 'chapter' in query:
 
             # If chapter exists within the book
-            if query['chapter'] <= book['chapters']:
+            if query['chapter'] >= 1 and query['chapter'] <= book['chapters']:
 
                 # Find chapter if given
                 result['uid'] = '{book}.{chapter}'.format(
@@ -224,25 +183,28 @@ def get_result_list(query_str):
 
                     if 'verse_end' in query:
 
-                        result['uid'] += '-{verse}'.format(
-                            verse=query['verse_end'])
-                        result['title'] += '-{verse}'.format(
-                            verse=query['verse_end'])
+                        if query['verse_end'] > query['verse']:
+
+                            result['uid'] += '-{verse}'.format(
+                                verse=query['verse_end'])
+                            result['title'] += '-{verse}'.format(
+                                verse=query['verse_end'])
 
         else:
             # Find book if no chapter or verse is given
 
             result['uid'] = '{book}.1'.format(book=book['id'])
-            result['title'] = book['name']
+            result['title'] = '{book} 1'.format(book=book['name'])
 
         # Create result data using the given information
         if 'uid' in result:
 
             result['uid'] = '{version}/{uid}'.format(
-                version=version_guess.lower(),
+                version=chosen_version.lower(),
                 uid=result['uid'])
             result['arg'] = result['uid']
-            result['subtitle'] = version_guess
+            result['title'] += ' ({version})'.format(version=chosen_version)
+            result['subtitle'] = "View on YouVersion"
             results.append(result)
 
     return results
