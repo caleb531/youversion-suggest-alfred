@@ -4,13 +4,6 @@ import nose.tools as nose
 import yv_suggest.search as yvs
 
 
-def test_numbered():
-    """should match versions ending in number by partial name"""
-    results = yvs.get_result_list('luke 4:8 rv1')
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Luke 4:8 (RV1885)')
-
-
 def test_case():
     """should match versions irrespective of case"""
     query = 'e 4:8 esv'
@@ -38,9 +31,16 @@ def test_partial():
 
 def test_partial_ambiguous():
     """should match versions by ambiguous partial name"""
-    results = yvs.get_result_list('luke 4:8 a')
+    results = yvs.get_result_list('luke 4:8 c')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Luke 4:8 (AMP)')
+    nose.assert_equal(results[0]['title'], 'Luke 4:8 (CEB)')
+
+
+def test_closest_match():
+    """should find closest match for nonexistent version"""
+    results = yvs.get_result_list('hosea 6:3 esva')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Hosea 6:3 (ESV)')
 
 
 def test_id():

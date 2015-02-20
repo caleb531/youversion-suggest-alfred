@@ -31,9 +31,14 @@ def guess_version(versions, version_query):
         # Attempt to guess the version used
         version_guess = None
         for version in versions:
-            if version.startswith(version_query):  # pragma: no cover
+            if version.startswith(version_query):
                 version_guess = version
                 break
+            else:
+                for i in range(len(version_query), 0, -1):
+                    if version.startswith(version_query[:i]):
+                        version_guess = version
+                        break
 
     return version_guess
 
