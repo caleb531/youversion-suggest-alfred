@@ -6,21 +6,24 @@ from xml.etree import ElementTree as ET
 import shared
 
 
-# Pattern for parsing any bible reference
-ref_patt = '^{book}(?:{chapter}(?:{verse}{verse_end})?{version})?$'.format(
-    # Book name (including preceding number, if amu)
-    book='(\d?[a-z\s]+)\s?',
-    # Chapter number
-    chapter='(\d+)\s?',
-    # Verse number
-    verse='(\d+)\s?',
-    #  End verse for a verse range
-    verse_end='(?:(\d+)\s?)?',
-    # Version (translation) used to view reference
-    version='(?:([a-z]+\d*))?')
+# Parse query string into components of a Bible reference
+def get_ref_matches(query_str):
+    # Pattern for parsing any bible reference
+    patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
+        # Book name (including preceding number, if any)
+        book='(?P<book>\d?[a-z\s]+)\s?',
+        # Chapter number
+        chapter='(?P<chapter>\d+)\s?',
+        # Verse number
+        verse='(?P<verse>\d+)\s?',
+        #  End verse for a verse range
+        endverse='(?P<endverse>\d+)?\s?',
+        # Version (translation) used to view reference
+        version='(?P<version>[a-z]+\d*)?')
+    return re.search(patt, query_str)
 
 
-# Guesses a version based on the given partial version
+# Find a version which best matches the given version query
 def guess_version(versions, version_query):
 
     version_query = version_query.upper()
@@ -87,7 +90,7 @@ def format_query_str(query_str):
 def get_query_object(query_str):
 
     # Match section of the bible based on query
-    ref_matches = re.search(ref_patt, query_str)
+    ref_matches = get_ref_matches(query_str)
 
     if not ref_matches:
         return None
@@ -95,27 +98,22 @@ def get_query_object(query_str):
     # Create query object for storing query data
     query = {}
 
-    # Parse partial book name if given
-    book_match = ref_matches.group(1)
+    book_match = ref_matches.group('book')
     query['book'] = book_match.rstrip()
 
-    # Parse chapter if given
-    chapter_match = ref_matches.group(2)
+    chapter_match = ref_matches.group('chapter')
     if chapter_match:
         query['chapter'] = int(chapter_match)
 
-        # Parse verse if given
-        verse_match = ref_matches.group(3)
+        verse_match = ref_matches.group('verse')
         if verse_match:
             query['verse'] = int(verse_match)
 
-            # Parse verse range if given
-            verse_range_match = ref_matches.group(4)
+            verse_range_match = ref_matches.group('endverse')
             if verse_range_match:
-                query['verse_end'] = int(verse_range_match)
+                query['endverse'] = int(verse_range_match)
 
-        # Parse version if given
-        version_match = ref_matches.group(5)
+        version_match = ref_matches.group('version')
         if version_match:
             query['version'] = version_match.lstrip()
 
@@ -149,17 +147,17 @@ def get_result_list(query_str):
         return results
 
     bible = shared.get_bible_data()
-    # Filter book list to match query
     matching_books = get_matching_books(bible['books'], query)
     chosen_version = None
 
     if 'version' in query:
-        # Guess version if possible
         chosen_version = guess_version(bible['versions'], query['version'])
 
     if not chosen_version:
-        # Use last version if version could not be guessed
         chosen_version = bible['default_version']
+
+    if 'chapter' not in query:
+        query['chapter'] = 1
 
     # Build results list from books that matched the query
     for book in matching_books:
@@ -167,41 +165,33 @@ def get_result_list(query_str):
         # Result information
         result = {}
 
-        if 'chapter' in query:
+        # If chapter exists within the book
+        if query['chapter'] >= 1 and query['chapter'] <= book['chapters']:
 
-            # If chapter exists within the book
-            if query['chapter'] >= 1 and query['chapter'] <= book['chapters']:
+            # Find chapter if given
+            result['uid'] = '{book}.{chapter}'.format(
+                book=book['id'],
+                chapter=query['chapter'])
+            result['title'] = '{book} {chapter}'.format(
+                book=book['name'],
+                chapter=query['chapter'])
 
-                # Find chapter if given
-                result['uid'] = '{book}.{chapter}'.format(
-                    book=book['id'],
-                    chapter=query['chapter'])
-                result['title'] = '{book} {chapter}'.format(
-                    book=book['name'],
-                    chapter=query['chapter'])
+            if 'verse' in query:
 
-                if 'verse' in query:
+                # Find verse if given
+                result['uid'] += '.{verse}'.format(
+                    verse=query['verse'])
+                result['title'] += ':{verse}'.format(
+                    verse=query['verse'])
 
-                    # Find verse if given
-                    result['uid'] += '.{verse}'.format(
-                        verse=query['verse'])
-                    result['title'] += ':{verse}'.format(
-                        verse=query['verse'])
+                if 'endverse' in query:
 
-                    if 'verse_end' in query:
+                    if query['endverse'] > query['verse']:
 
-                        if query['verse_end'] > query['verse']:
-
-                            result['uid'] += '-{verse}'.format(
-                                verse=query['verse_end'])
-                            result['title'] += '-{verse}'.format(
-                                verse=query['verse_end'])
-
-        else:
-            # Find book if no chapter or verse is given
-
-            result['uid'] = '{book}.1'.format(book=book['id'])
-            result['title'] = '{book} 1'.format(book=book['name'])
+                        result['uid'] += '-{verse}'.format(
+                            verse=query['endverse'])
+                        result['title'] += '-{verse}'.format(
+                            verse=query['endverse'])
 
         # Create result data using the given information
         if 'uid' in result:
