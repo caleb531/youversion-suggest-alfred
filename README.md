@@ -17,7 +17,7 @@ at the end of your query. As you type, YouVersion Suggest will display a list of
 suggestions matching your query.
 
 Choosing a result will open the selected reference on the YouVersion website.
-Choosing a result while holding down the *ctrl* key will search open a Google
+Choosing a result while holding down the *ctrl* key will open a Google
 search for the selected reference.
 
 ### Query Examples
