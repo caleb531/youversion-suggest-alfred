@@ -30,15 +30,17 @@ def guess_version(versions, version_query):
     else:
         # Attempt to guess the version used
         version_guess = None
-        for version in versions:
-            if version.startswith(version_query):
-                version_guess = version
+        version_found = False
+        # Chop off character from version query until matching version can be
+        # found (if a matching version even exists)
+        for i in xrange(len(version_query), 0, -1):
+            for version in versions:
+                if version.startswith(version_query[:i]):
+                    version_guess = version
+                    version_found = True
+                    break
+            if version_found:
                 break
-            else:
-                for i in range(len(version_query), 0, -1):
-                    if version.startswith(version_query[:i]):
-                        version_guess = version
-                        break
 
     return version_guess
 

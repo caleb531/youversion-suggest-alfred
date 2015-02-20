@@ -37,10 +37,17 @@ def test_partial_ambiguous():
 
 
 def test_closest_match():
-    """should find closest match for nonexistent version"""
-    results = yvs.get_result_list('hosea 6:3 esva')
+    """should try to find closest match for nonexistent versions"""
+    results = yvs.get_result_list('hosea 6:3 nlab')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Hosea 6:3 (ESV)')
+    nose.assert_equal(results[0]['title'], 'Hosea 6:3 (NLT)')
+
+
+def test_nonexistent():
+    """should use default version for nonexistent versions with no matches"""
+    results = yvs.get_result_list('hosea 6:3 xyz')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Hosea 6:3 (NIV)')
 
 
 def test_id():
