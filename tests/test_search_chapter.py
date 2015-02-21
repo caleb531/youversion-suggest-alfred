@@ -22,7 +22,7 @@ def test_ambiguous():
 def test_id():
     """should use correct ID for chapters"""
     results = yvs.get_result_list('luke 4')
-    nose.assert_equal(results[0]['uid'], 'niv/luk.4')
+    nose.assert_equal(results[0]['uid'], '111/luk.4')
 
 
 def test_nonexistent():

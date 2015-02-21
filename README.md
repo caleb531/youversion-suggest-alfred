@@ -32,11 +32,11 @@ search for the selected reference.
 
 #### English
 
-AMP, ASV, BOOKS, CEB, CEV, ESV, GNT, GWT, KJV, LEB, MSG, NIV, NIVUK, NLT, NET,
-NKJV, NCV, NASB, NIRV, OJB, WEB
+AMP, ASV, BOOKS, CEB, ESV, GNT, KJV, MSG, NASB, NCV, NET, NIRV, NIV, NIVUK,
+NKJV, NLT
 
-YouVersion Suggest defaults to NIV, however it will always remember the last
-version you used to look up a reference.
+YouVersion Suggest defaults to NIV, however you can always specify your
+preferred version when searching for a reference.
 
 ## Testing
 

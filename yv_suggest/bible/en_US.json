@@ -1,28 +1,71 @@
 {
   "versions": [
-    "AMP",
-    "ASV",
-    "BOOKS",
-    "CEB",
-    "CEV",
-    "ESV",
-    "GNT",
-    "GWT",
-    "KJV",
-    "LEB",
-    "MSG",
-    "NIV",
-    "NIVUK",
-    "NLT",
-    "NET",
-    "NKJV",
-    "NCV",
-    "NASB",
-    "NIRV",
-    "OJB",
-    "WEB"
+    {
+      "name": "AMP",
+      "id": 8
+    },
+    {
+      "name": "ASV",
+      "id": 12
+    },
+    {
+      "name": "BOOKS",
+      "id": 31
+    },
+    {
+      "name": "CEB",
+      "id": 37
+    },
+    {
+      "name": "ESV",
+      "id": 59
+    },
+    {
+      "name": "GNT",
+      "id": 68
+    },
+    {
+      "name": "KJV",
+      "id": 1
+    },
+    {
+      "name": "MSG",
+      "id": 97
+    },
+    {
+      "name": "NASB",
+      "id": 100
+    },
+    {
+      "name": "NCV",
+      "id": 105
+    },
+    {
+      "name": "NET",
+      "id": 107
+    },
+    {
+      "name": "NIRV",
+      "id": 110
+    },
+    {
+      "name": "NIV",
+      "id": 111
+    },
+    {
+      "name": "NIVUK",
+      "id": 113
+    },
+    {
+      "name": "NKJV",
+      "id": 114
+    },
+    {
+      "name": "NLT",
+      "id": 116
+    }
   ],
-  "default_version": "NIV",
+  "default_version": 111,
   "books": [
     {
       "name": "Genesis",

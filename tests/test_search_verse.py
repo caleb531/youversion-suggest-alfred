@@ -43,13 +43,13 @@ def test_range():
 def test_id():
     """should use correct ID for verses"""
     results = yvs.get_result_list('luke 4:8')
-    nose.assert_equal(results[0]['uid'], 'niv/luk.4.8')
+    nose.assert_equal(results[0]['uid'], '111/luk.4.8')
 
 
 def test_range_id():
     """should use correct ID for verse ranges"""
     results = yvs.get_result_list('1 cor 13.4-7')
-    nose.assert_equal(results[0]['uid'], 'niv/1co.13.4-7')
+    nose.assert_equal(results[0]['uid'], '111/1co.13.4-7')
 
 
 def test_range_invalid():

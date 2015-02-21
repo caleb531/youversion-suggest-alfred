@@ -17,5 +17,5 @@ def test_url_open():
     """should attempt to open URL using webbrowser module"""
     mock = WebbrowserMock()
     yvo.webbrowser = mock
-    yvo.main('esv/jhn.3.17')
-    nose.assert_equal(mock.url, 'https://www.bible.com/bible/esv/jhn.3.17')
+    yvo.main('59/jhn.3.17')
+    nose.assert_equal(mock.url, 'https://www.bible.com/bible/59/jhn.3.17')

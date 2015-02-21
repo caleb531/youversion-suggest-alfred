@@ -28,3 +28,15 @@ def get_bible_data():
         data = json.load(file)
 
     return data
+
+
+def get_book(books, book_id):
+    for book in books:
+        if book['id'] == book_id:  # pragma: no cover
+            return book['name']
+
+
+def get_version(versions, version_id):
+    for version in versions:
+        if version['id'] == version_id:  # pragma: no cover
+            return version

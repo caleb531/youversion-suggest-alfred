@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# Search bible references matching the given query
 
 import re
 from xml.etree import ElementTree as ET
@@ -28,24 +27,14 @@ def guess_version(versions, version_query):
 
     version_query = version_query.upper()
 
-    if version_query in versions:
-        version_guess = version_query
-    else:
-        # Attempt to guess the version used
-        version_guess = None
-        version_found = False
-        # Chop off character from version query until matching version can be
-        # found (if a matching version even exists)
-        for i in xrange(len(version_query), 0, -1):
-            for version in versions:
-                if version.startswith(version_query[:i]):
-                    version_guess = version
-                    version_found = True
-                    break
-            if version_found:
-                break
+    # Chop off character from version query until matching version can be
+    # found (if a matching version even exists)
+    for i in xrange(len(version_query), 0, -1):
+        for version in versions:
+            if version['name'].startswith(version_query[:i]):
+                return version
 
-    return version_guess
+    return None
 
 
 # Constructs an Alfred XML string from the given results list
@@ -154,7 +143,8 @@ def get_result_list(query_str):
         chosen_version = guess_version(bible['versions'], query['version'])
 
     if not chosen_version:
-        chosen_version = bible['default_version']
+        chosen_version = shared.get_version(bible['versions'],
+                                            bible['default_version'])
 
     if 'chapter' not in query:
         query['chapter'] = 1
@@ -197,10 +187,11 @@ def get_result_list(query_str):
         if 'uid' in result:
 
             result['uid'] = '{version}/{uid}'.format(
-                version=chosen_version.lower(),
+                version=chosen_version['id'],
                 uid=result['uid'])
             result['arg'] = result['uid']
-            result['title'] += ' ({version})'.format(version=chosen_version)
+            result['title'] += ' ({version})'.format(
+                version=chosen_version['name'])
             result['subtitle'] = "View on YouVersion"
             results.append(result)
 
