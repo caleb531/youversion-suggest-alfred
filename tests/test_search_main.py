@@ -4,7 +4,7 @@ import nose.tools as nose
 import yv_suggest.search as yvs
 from xml.etree import ElementTree as ET
 from contextlib import contextmanager
-from StringIO import StringIO
+from io import BytesIO
 import inspect
 import sys
 
@@ -13,7 +13,7 @@ import sys
 def redirect_stdout():
     """temporarily redirect stdout to new output stream"""
     original_stdout = sys.stdout
-    out = StringIO()
+    out = BytesIO()
     try:
         sys.stdout = out
         yield out
@@ -34,7 +34,7 @@ def test_output():
 
 def test_null_result():
     """should output "No Results" XML item for empty result lists"""
-    query_str = 'nothing'
+    query_str = 'xyz'
     with redirect_stdout() as out:
         yvs.main(query_str)
         xml = out.getvalue().strip()

@@ -4,6 +4,13 @@ import nose.tools as nose
 import yv_suggest.search as yvs
 
 
+def test_numbered():
+    """should match versions ending in number by partial name"""
+    results = yvs.get_result_list('luke 4:8 rv1')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Luke 4:8 (RV1885)')
+
+
 def test_case():
     """should match versions irrespective of case"""
     query = 'e 4:8 esv'

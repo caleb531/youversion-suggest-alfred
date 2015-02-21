@@ -68,7 +68,14 @@ def test_id():
     nose.assert_equal(results[0]['uid'], '111/php.1')
 
 
+def test_closest_match():
+    """should try to find closest match for nonexistent books"""
+    results = yvs.get_result_list('revelations')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Revelation 1 (NIV)')
+
+
 def test_nonexistent():
     """should not match nonexistent books"""
-    results = yvs.get_result_list('jesus')
+    results = yvs.get_result_list('xyz')
     nose.assert_equal(len(results), 0)

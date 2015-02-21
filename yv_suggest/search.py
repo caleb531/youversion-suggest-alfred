@@ -10,15 +10,15 @@ def get_ref_matches(query_str):
     # Pattern for parsing any bible reference
     patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
         # Book name (including preceding number, if any)
-        book='(?P<book>\d?[a-z\s]+)\s?',
+        book='(\d?(?:[^\W\d_]|\s)+)\s?',
         # Chapter number
-        chapter='(?P<chapter>\d+)\s?',
+        chapter='(\d+)\s?',
         # Verse number
-        verse='(?P<verse>\d+)\s?',
+        verse='(\d+)\s?',
         #  End verse for a verse range
-        endverse='(?P<endverse>\d+)?\s?',
+        endverse='(\d+)?\s?',
         # Version (translation) used to view reference
-        version='(?P<version>[a-z]+\d*)?')
+        version='([^\W\d_]+\d*)?')
     return re.search(patt, query_str)
 
 
@@ -87,22 +87,22 @@ def get_query_object(query_str):
     # Create query object for storing query data
     query = {}
 
-    book_match = ref_matches.group('book')
+    book_match = ref_matches.group(1)
     query['book'] = book_match.rstrip()
 
-    chapter_match = ref_matches.group('chapter')
+    chapter_match = ref_matches.group(2)
     if chapter_match:
         query['chapter'] = int(chapter_match)
 
-        verse_match = ref_matches.group('verse')
+        verse_match = ref_matches.group(3)
         if verse_match:
             query['verse'] = int(verse_match)
 
-            verse_range_match = ref_matches.group('endverse')
+            verse_range_match = ref_matches.group(4)
             if verse_range_match:
                 query['endverse'] = int(verse_range_match)
 
-        version_match = ref_matches.group('version')
+        version_match = ref_matches.group(5)
         if version_match:
             query['version'] = version_match.lstrip()
 
@@ -114,13 +114,15 @@ def get_matching_books(books, query):
 
     matching_books = []
 
-    for book in books:
-        book_name = book['name'].lower()
-        # Check if book name begins with the typed book name
-        if (book_name.startswith(query['book']) or
-            (book_name[0].isnumeric() and
-                book_name[2:].startswith(query['book']))):
-            matching_books.append(book)
+    for i in xrange(len(query['book']), 0, -1):
+        if not matching_books:
+            for book in books:
+                book_name = book['name'].lower()
+                # Check if book name begins with the typed book name
+                if (book_name.startswith(query['book'][:i]) or
+                    (book_name[0].isnumeric() and
+                        book_name[2:].startswith(query['book'][:i]))):
+                    matching_books.append(book)
 
     return matching_books
 
@@ -203,7 +205,7 @@ def main(query_str='{query}'):
 
     results = get_result_list(query_str)
 
-    if len(results) == 0:
+    if and results:
 
         # If no matching results were found, indicate such
         results = [{
