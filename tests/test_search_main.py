@@ -57,7 +57,6 @@ def test_source_only():
     """should run script assuming script is not a file"""
     yvs.shared.sys.argv[0] = yvs.shared.__file__
     del yvs.shared.__file__
-    yvs.shared.package_path = yvs.shared.get_package_path()
     results = yvs.get_result_list('e')
     nose.assert_equal(len(results), 6)
     yvs.shared.__file__ = yvs.shared.sys.argv[0]

@@ -17,13 +17,11 @@ def get_package_path():
 
     return package_path
 
-package_path = get_package_path()
-
 
 # Load Bible-related data from file
 def get_bible_data():
 
-    path = os.path.join(package_path, 'bible', 'en_US.json')
+    path = os.path.join(get_package_path(), 'bible', 'en_US.json')
     with open(path, 'r') as file:
         data = json.load(file)
 

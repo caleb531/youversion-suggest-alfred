@@ -70,7 +70,7 @@ def test_id():
 
 def test_closest_match():
     """should try to find closest match for nonexistent books"""
-    results = yvs.get_result_list('revelations')
+    results = yvs.get_result_list('relevations')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Revelation 1 (NIV)')
 

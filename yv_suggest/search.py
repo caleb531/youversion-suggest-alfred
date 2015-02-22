@@ -205,7 +205,7 @@ def main(query_str='{query}'):
 
     results = get_result_list(query_str)
 
-    if and results:
+    if not results:
 
         # If no matching results were found, indicate such
         results = [{
