@@ -8,18 +8,12 @@ import shared
 import unicodedata
 
 
-# Convert accented characters to their respective ASCII equivalents
-def strip_accents(query_str):
-    nkfd_form = unicodedata.normalize('NFKD', query_str)
-    return ''.join(c for c in nkfd_form if not unicodedata.combining(c))
-
-
 # Parse query string into components of a Bible reference
 def get_ref_matches(query_str):
     # Pattern for parsing any bible reference
     patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
         # Book name (including preceding number, if any)
-        book='(\d?[a-z\s]+)\s?',
+        book='(\d?(?:[^\W\d_]|\s)+)\s?',
         # Chapter number
         chapter='(\d+)\s?',
         # Verse number
@@ -27,8 +21,8 @@ def get_ref_matches(query_str):
         #  End verse for a verse range
         endverse='(\d+)?\s?',
         # Version (translation) used to view reference
-        version='([a-z]+\d*)?')
-    return re.search(patt, query_str)
+        version='([^\W\d_]+\d*)?')
+    return re.search(patt, query_str, flags=re.UNICODE)
 
 
 # Find a version which best matches the given version query
@@ -73,9 +67,10 @@ def get_result_list_xml(results):
 def format_query_str(query_str):
 
     query_str = query_str.lower()
-    query_str = strip_accents(query_str)
+    # Normalize all Unicode characters
+    query_str = unicodedata.normalize('NFC', query_str)
     # Remove all non-alphanumeric characters
-    query_str = re.sub('[^a-z0-9]', ' ', query_str)
+    query_str = re.sub('[\W_]', ' ', query_str, flags=re.UNICODE)
     # Remove extra whitespace
     query_str = query_str.strip()
     query_str = re.sub('\s+', ' ', query_str)
@@ -127,7 +122,7 @@ def get_matching_books(books, query):
     for i in xrange(len(query['book']), 0, -1):
         if not matching_books:
             for book in books:
-                book_name = strip_accents(book['name'].lower())
+                book_name = book['name'].lower()
                 # Check if book name begins with the typed book name
                 if (book_name.startswith(query['book'][:i]) or
                     (book_name[0].isnumeric() and
@@ -188,14 +183,12 @@ def get_result_list(query_str):
                 result['title'] += ':{verse}'.format(
                     verse=query['verse'])
 
-                if 'endverse' in query:
+                if 'endverse' in query and query['endverse'] > query['verse']:
 
-                    if query['endverse'] > query['verse']:
-
-                        result['uid'] += '-{verse}'.format(
-                            verse=query['endverse'])
-                        result['title'] += '-{verse}'.format(
-                            verse=query['endverse'])
+                    result['uid'] += '-{verse}'.format(
+                        verse=query['endverse'])
+                    result['title'] += '-{verse}'.format(
+                        verse=query['endverse'])
 
         # Create result data using the given information
         if 'uid' in result:

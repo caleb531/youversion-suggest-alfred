@@ -23,10 +23,10 @@ def test_littered():
 def test_unicode_accented():
     """should remove accents from accented characters"""
     results = yvs.get_result_list('é')
-    nose.assert_equal(len(results), 6)
+    nose.assert_equal(len(results), 0)
 
 
 def test_unicode_obscure():
-    """should recognize extended Unicode characters"""
+    """should recognize obscure Unicode characters"""
     results = yvs.get_result_list('π')
     nose.assert_equal(len(results), 0)
