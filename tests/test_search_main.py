@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.search as yvs
 from xml.etree import ElementTree as ET

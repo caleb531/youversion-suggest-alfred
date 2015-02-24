@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import unicode_literals
 import nose.tools as nose
 import pep8
 import glob

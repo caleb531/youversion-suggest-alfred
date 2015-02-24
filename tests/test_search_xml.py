@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.search as yvs
 from xml.etree import ElementTree as ET
@@ -12,7 +13,7 @@ def test_validity():
     try:
         nose.assert_is_instance(ET.fromstring(xml), ET.Element)
     except ET.ParseError:
-        ().fail('result list XML is not valid')
+        assert False, 'result list XML is not valid'
 
 
 def test_structure():

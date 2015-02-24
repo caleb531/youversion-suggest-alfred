@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.open as yvo
 from webbrowser_mock import WebbrowserMock
