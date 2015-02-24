@@ -1,8 +1,17 @@
 #!/usr/bin/env python
+# coding=utf-8
 
+from __future__ import unicode_literals
 import re
 from xml.etree import ElementTree as ET
 import shared
+import unicodedata
+
+
+# Convert accented characters to their respective ASCII equivalents
+def strip_accents(query_str):
+    nkfd_form = unicodedata.normalize('NFKD', query_str)
+    return ''.join(c for c in nkfd_form if not unicodedata.combining(c))
 
 
 # Parse query string into components of a Bible reference
@@ -10,7 +19,7 @@ def get_ref_matches(query_str):
     # Pattern for parsing any bible reference
     patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
         # Book name (including preceding number, if any)
-        book='(\d?(?:[^\W\d_]|\s)+)\s?',
+        book='(\d?[a-z\s]+)\s?',
         # Chapter number
         chapter='(\d+)\s?',
         # Verse number
@@ -18,7 +27,7 @@ def get_ref_matches(query_str):
         #  End verse for a verse range
         endverse='(\d+)?\s?',
         # Version (translation) used to view reference
-        version='([^\W\d_]+\d*)?')
+        version='([a-z]+\d*)?')
     return re.search(patt, query_str)
 
 
@@ -64,6 +73,7 @@ def get_result_list_xml(results):
 def format_query_str(query_str):
 
     query_str = query_str.lower()
+    query_str = strip_accents(query_str)
     # Remove all non-alphanumeric characters
     query_str = re.sub('[^a-z0-9]', ' ', query_str)
     # Remove extra whitespace
@@ -117,7 +127,7 @@ def get_matching_books(books, query):
     for i in xrange(len(query['book']), 0, -1):
         if not matching_books:
             for book in books:
-                book_name = book['name'].lower()
+                book_name = strip_accents(book['name'].lower())
                 # Check if book name begins with the typed book name
                 if (book_name.startswith(query['book'][:i]) or
                     (book_name[0].isnumeric() and

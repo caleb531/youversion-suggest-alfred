@@ -7,7 +7,12 @@ import os.path
 import json
 
 
-# Properly determines path to package
+def get_language():
+    return preferred_language
+
+preferred_language = 'en_US'
+
+
 def get_package_path():
 
     if '__file__' in globals():
@@ -18,10 +23,10 @@ def get_package_path():
     return package_path
 
 
-# Load Bible-related data from file
 def get_bible_data():
 
-    path = os.path.join(get_package_path(), 'bible', 'en_US.json')
+    path = os.path.join(get_package_path(), 'bible',
+                        '{}.json'.format(get_language()))
     with open(path, 'r') as file:
         data = json.load(file)
 
