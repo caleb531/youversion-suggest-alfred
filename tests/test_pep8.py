@@ -7,10 +7,10 @@ import pep8
 import glob
 
 
-def test_source_compliance():
-    """source files should comply with pep8"""
+def test_compliance():
     files = glob.iglob('*/*.py')
     for file in files:
+        test_compliance.__doc__ = '{} should comply with pep8'.format(file)
         style_guide = pep8.StyleGuide(quiet=True)
         total_errors = style_guide.input_file(file)
         msg = '{} is not pep8-compliant'.format(file)

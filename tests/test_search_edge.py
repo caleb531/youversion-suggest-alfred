@@ -21,7 +21,7 @@ def test_littered():
 
 
 def test_unicode_accented():
-    """should remove accents from accented characters"""
+    """should recognize accented Unicode characters"""
     results = yvs.get_result_list('é')
     nose.assert_equal(len(results), 0)
 

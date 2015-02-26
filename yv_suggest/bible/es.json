@@ -1,0 +1,389 @@
+{
+  "versions": [
+    {
+      "name": "BLPH",
+      "id": 28
+    },
+    {
+      "name": "DHHD",
+      "id": 52
+    },
+    {
+      "name": "LBLA",
+      "id": 89
+    },
+    {
+      "name": "NBLH",
+      "id": 103
+    },
+    {
+      "name": "NTV",
+      "id": 127
+    },
+    {
+      "name": "NVI",
+      "id": 128
+    },
+    {
+      "name": "PDT",
+      "id": 197
+    },
+    {
+      "name": "RVC",
+      "id": 146
+    },
+    {
+      "name": "RVES",
+      "id": 147
+    },
+    {
+      "name": "RVR1960",
+      "id": 149
+    },
+    {
+      "name": "RVR95",
+      "id": 150
+    },
+    {
+      "name": "TLA",
+      "id": 176
+    },
+    {
+      "name": "TLAD",
+      "id": 178
+    }
+  ],
+  "default_version": 128,
+  "books": [
+    {
+      "name": "Génesis",
+      "id": "gen",
+      "chapters": 50
+    },
+    {
+      "name": "Éxodo",
+      "id": "exo",
+      "chapters": 40
+    },
+    {
+      "name": "Levítico",
+      "id": "lev",
+      "chapters": 27
+    },
+    {
+      "name": "Números",
+      "id": "num",
+      "chapters": 36
+    },
+    {
+      "name": "Deuteronomio",
+      "id": "deu",
+      "chapters": 34
+    },
+    {
+      "name": "Josué",
+      "id": "jos",
+      "chapters": 24
+    },
+    {
+      "name": "Jueces",
+      "id": "jdg",
+      "chapters": 21
+    },
+    {
+      "name": "Rut",
+      "id": "rut",
+      "chapters": 4
+    },
+    {
+      "name": "1 Samuel",
+      "id": "1sa",
+      "chapters": 31
+    },
+    {
+      "name": "2 Samuel",
+      "id": "2sa",
+      "chapters": 24
+    },
+    {
+      "name": "1 Reyes",
+      "id": "1ki",
+      "chapters": 22
+    },
+    {
+      "name": "2 Reyes",
+      "id": "2ki",
+      "chapters": 25
+    },
+    {
+      "name": "1 Crónicas",
+      "id": "1ch",
+      "chapters": 29
+    },
+    {
+      "name": "2 Crónicas",
+      "id": "2ch",
+      "chapters": 36
+    },
+    {
+      "name": "Esdras",
+      "id": "ezr",
+      "chapters": 10
+    },
+    {
+      "name": "Nehemías",
+      "id": "neh",
+      "chapters": 13
+    },
+    {
+      "name": "Ester",
+      "id": "est",
+      "chapters": 10
+    },
+    {
+      "name": "Job",
+      "id": "job",
+      "chapters": 42
+    },
+    {
+      "name": "Salmos",
+      "id": "psa",
+      "chapters": 150
+    },
+    {
+      "name": "Proverbios",
+      "id": "pro",
+      "chapters": 31
+    },
+    {
+      "name": "Eclesiastés",
+      "id": "ecc",
+      "chapters": 12
+    },
+    {
+      "name": "Cantares",
+      "id": "sng",
+      "chapters": 8
+    },
+    {
+      "name": "Isaías",
+      "id": "isa",
+      "chapters": 66
+    },
+    {
+      "name": "Jeremías",
+      "id": "jer",
+      "chapters": 52
+    },
+    {
+      "name": "Lamentaciones",
+      "id": "lam",
+      "chapters": 5
+    },
+    {
+      "name": "Ezequiel",
+      "id": "ezk",
+      "chapters": 48
+    },
+    {
+      "name": "Daniel",
+      "id": "dan",
+      "chapters": 12
+    },
+    {
+      "name": "Oseas",
+      "id": "hos",
+      "chapters": 14
+    },
+    {
+      "name": "Joel",
+      "id": "jol",
+      "chapters": 3
+    },
+    {
+      "name": "Amós",
+      "id": "amo",
+      "chapters": 9
+    },
+    {
+      "name": "Abdías",
+      "id": "oba",
+      "chapters": 1
+    },
+    {
+      "name": "Jonás",
+      "id": "jon",
+      "chapters": 4
+    },
+    {
+      "name": "Miqueas",
+      "id": "mic",
+      "chapters": 7
+    },
+    {
+      "name": "Nahúm",
+      "id": "nah",
+      "chapters": 3
+    },
+    {
+      "name": "Habacuc",
+      "id": "hab",
+      "chapters": 3
+    },
+    {
+      "name": "Sofonías",
+      "id": "zep",
+      "chapters": 3
+    },
+    {
+      "name": "Hageo",
+      "id": "hag",
+      "chapters": 2
+    },
+    {
+      "name": "Zacarías",
+      "id": "zec",
+      "chapters": 14
+    },
+    {
+      "name": "Malaquías",
+      "id": "mal",
+      "chapters": 4
+    },
+    {
+      "name": "Mateo",
+      "id": "mat",
+      "chapters": 28
+    },
+    {
+      "name": "Marco",
+      "id": "mrk",
+      "chapters": 16
+    },
+    {
+      "name": "Lucas",
+      "id": "luk",
+      "chapters": 24
+    },
+    {
+      "name": "Juan",
+      "id": "jhn",
+      "chapters": 21
+    },
+    {
+      "name": "Hechos",
+      "id": "act",
+      "chapters": 28
+    },
+    {
+      "name": "Romanos",
+      "id": "rom",
+      "chapters": 16
+    },
+    {
+      "name": "1 Coríntios",
+      "id": "1co",
+      "chapters": 16
+    },
+    {
+      "name": "2 Coríntios",
+      "id": "2co",
+      "chapters": 13
+    },
+    {
+      "name": "Gálatas",
+      "id": "gal",
+      "chapters": 6
+    },
+    {
+      "name": "Efesios",
+      "id": "eph",
+      "chapters": 6
+    },
+    {
+      "name": "Filipenses",
+      "id": "php",
+      "chapters": 4
+    },
+    {
+      "name": "Colosenses",
+      "id": "col",
+      "chapters": 4
+    },
+    {
+      "name": "1 Tesalonicenses",
+      "id": "1th",
+      "chapters": 5
+    },
+    {
+      "name": "2 Tesalonicenses",
+      "id": "2th",
+      "chapters": 3
+    },
+    {
+      "name": "1 Timoteo",
+      "id": "1ti",
+      "chapters": 6
+    },
+    {
+      "name": "2 Timoteo",
+      "id": "2ti",
+      "chapters": 4
+    },
+    {
+      "name": "Tito",
+      "id": "tit",
+      "chapters": 3
+    },
+    {
+      "name": "Filemón",
+      "id": "phm",
+      "chapters": 1
+    },
+    {
+      "name": "Hebreos",
+      "id": "heb",
+      "chapters": 13
+    },
+    {
+      "name": "Santiago",
+      "id": "jas",
+      "chapters": 5
+    },
+    {
+      "name": "1 Pedro",
+      "id": "1pe",
+      "chapters": 5
+    },
+    {
+      "name": "2 Pedro",
+      "id": "2pe",
+      "chapters": 3
+    },
+    {
+      "name": "1 Juan",
+      "id": "1jn",
+      "chapters": 5
+    },
+    {
+      "name": "2 Juan",
+      "id": "2jn",
+      "chapters": 1
+    },
+    {
+      "name": "3 Juan",
+      "id": "3jn",
+      "chapters": 1
+    },
+    {
+      "name": "Juda",
+      "id": "jud",
+      "chapters": 1
+    },
+    {
+      "name": "Apocalipsis",
+      "id": "rev",
+      "chapters": 22
+    }
+  ]
+}

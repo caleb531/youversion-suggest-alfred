@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Components shared by all workflow modules
+# -*- coding: utf-8 -*-
 
 import sys
 import os
@@ -10,7 +10,7 @@ import json
 def get_language():
     return preferred_language
 
-preferred_language = 'en_US'
+preferred_language = 'en'
 
 
 def get_package_path():
