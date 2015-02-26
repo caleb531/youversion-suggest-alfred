@@ -3,7 +3,6 @@
 
 from __future__ import unicode_literals
 import re
-from xml.etree import ElementTree as ET
 import shared
 import unicodedata
 
@@ -38,29 +37,6 @@ def guess_version(versions, version_query):
                 return version
 
     return None
-
-
-# Constructs an Alfred XML string from the given results list
-def get_result_list_xml(results):
-
-    root = ET.Element('items')
-
-    for result in results:
-        # Create <item> element for result with appropriate attributes
-        item = ET.SubElement(root, 'item', {
-            'uid': result['uid'],
-            'arg': result.get('arg', ''),
-            'valid': result.get('valid', 'yes')
-        })
-        # Create appropriate child elements of <item> element
-        title = ET.SubElement(item, 'title')
-        title.text = result['title']
-        subtitle = ET.SubElement(item, 'subtitle')
-        subtitle.text = result['subtitle']
-        icon = ET.SubElement(item, 'icon')
-        icon.text = 'icon.png'
-
-    return ET.tostring(root)
 
 
 # Simplifies the format of the query string
@@ -144,12 +120,17 @@ def get_result_list(query_str):
     if not query:
         return results
 
-    bible = shared.get_bible_data()
+    prefs = shared.get_prefs()
+    bible = shared.get_bible_data(prefs['language'])
     matching_books = get_matching_books(bible['books'], query)
     chosen_version = None
 
     if 'version' in query:
         chosen_version = guess_version(bible['versions'], query['version'])
+
+    if not chosen_version:
+        chosen_version = shared.get_version(bible['versions'],
+                                            prefs['version'])
 
     if not chosen_version:
         chosen_version = shared.get_version(bible['versions'],
@@ -220,7 +201,7 @@ def main(query_str='{query}'):
             'subtitle': 'No bible references matching \'{}\''.format(query_str)
         }]
 
-    print(get_result_list_xml(results))
+    print(shared.get_result_list_xml(results))
 
 if __name__ == '__main__':
     main()

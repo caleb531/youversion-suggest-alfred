@@ -30,7 +30,7 @@ def test_output():
         yvs.main(query_str)
         output = out.getvalue().strip()
         results = yvs.get_result_list(query_str)
-        xml = yvs.get_result_list_xml(results).strip()
+        xml = yvs.shared.get_result_list_xml(results).strip()
         nose.assert_equal(output, xml)
 
 
