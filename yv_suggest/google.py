@@ -9,7 +9,7 @@ import shared
 base_url = 'https://www.google.com/search'
 
 
-def get_full_ref(ref_uid):
+def get_full_ref(ref_uid, use_prefs=False):
 
     patt = '{version}/{book_id}\.{chapter}(?:\.{verses})?'.format(
         version='(\d+)',
@@ -21,7 +21,8 @@ def get_full_ref(ref_uid):
     book_id = ref_uid_matches.group(2)
     chapter = ref_uid_matches.group(3)
 
-    bible = shared.get_bible_data()
+    prefs = shared.get_prefs(use_prefs=use_prefs)
+    bible = shared.get_bible_data(prefs['language'])
     book_name = shared.get_book(bible['books'], book_id)
     ref = '{book} {chapter}'.format(
         book=book_name,
@@ -40,18 +41,18 @@ def get_full_ref(ref_uid):
     return ref
 
 
-def get_search_url(ref_uid):
-    ref = get_full_ref(ref_uid)
+def get_search_url(ref_uid, use_prefs=False):
+    ref = get_full_ref(ref_uid, use_prefs)
     encoded_ref = urllib.quote_plus(ref)
     return '{base}?q={query_str}'.format(base=base_url, query_str=encoded_ref)
 
 
-def open_search_url(ref_uid):
-    webbrowser.open(get_search_url(ref_uid))
+def open_search_url(ref_uid, use_prefs=False):
+    webbrowser.open(get_search_url(ref_uid, use_prefs))
 
 
-def main(ref_uid='{query}'):
-    open_search_url(ref_uid)
+def main(ref_uid='{query}', use_prefs=False):
+    open_search_url(ref_uid, use_prefs)
 
 if __name__ == '__main__':
-    main()
+    main(use_prefs=True)

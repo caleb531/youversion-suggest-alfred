@@ -5,6 +5,8 @@ import sys
 import os
 import os.path
 import json
+import re
+import unicodedata
 from xml.etree import ElementTree as ET
 
 alfred_data_dir = os.path.join(os.path.expanduser('~'),
@@ -37,16 +39,14 @@ def get_bible_data(language):
 
 def get_book(books, book_id):
     for book in books:
-        if book['id'] == book_id:  # pragma: no cover
+        if book['id'] == book_id:
             return book['name']
-    return None
 
 
 def get_version(versions, version_id):
     for version in versions:
-        if version['id'] == version_id:  # pragma: no cover
+        if version['id'] == version_id:
             return version
-    return None
 
 
 # Constructs an Alfred XML string from the given results list
@@ -72,29 +72,41 @@ def get_result_list_xml(results):
     return ET.tostring(root)
 
 
-def create_prefs():
+def get_defaults():
 
-    os.makedirs(alfred_data_dir, 0o755)
     defaults_path = os.path.join(get_package_path(), 'data',
                                  'defaults.json')
-
     with open(defaults_path, 'r') as defaults_file:
-        defaults_text = defaults_file.read()
-        with open(prefs_path, 'w') as prefs_file:
-            prefs_file.write(defaults_text)
+        defaults = json.load(defaults_file)
 
-    return json.loads(defaults_text)
+    return defaults
 
 
-def get_prefs():
+def create_prefs():
 
     try:
-        # Create preferences file if it doesn't exist
-        prefs = create_prefs()
+        os.makedirs(alfred_data_dir, 0o755)
     except OSError:
-        # Otherwise, update existing preferences file
+        pass
+    defaults = get_defaults()
+    with open(prefs_path, 'w') as prefs_file:
+        json.dump(defaults, prefs_file)
+
+    return defaults
+
+
+def get_prefs(use_prefs=True):
+
+    if use_prefs is False:
+        return get_defaults()
+
+    try:
+        # Update existing preferences file
         with open(prefs_path, 'r') as prefs_file:
             prefs = json.load(prefs_file)
+    except IOError:
+        # Otherwise, create preferences file if it doesn't exist
+        prefs = create_prefs()
 
     return prefs
 
@@ -105,10 +117,43 @@ def update_prefs(prefs):
         json.dump(prefs, prefs_file)
 
 
-def get_languages():
+def delete_prefs():
+    try:
+        os.remove(prefs_path)
+    except OSError:
+        pass
 
-    languages_path = os.path.join(get_package_path(), 'data', 'languages.json')
-    with open(languages_path, 'r') as languages_file:
-        languages = json.load(languages_file)
 
-    return languages
+# Parse query string into components of a Bible reference
+def get_ref_matches(query_str):
+
+    # Pattern for parsing any bible reference
+    patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
+        # Book name (including preceding number, if any)
+        book='(\d?(?:[^\W\d_]|\s)+)\s?',
+        # Chapter number
+        chapter='(\d+)\s?',
+        # Verse number
+        verse='(\d+)\s?',
+        #  End verse for a verse range
+        endverse='(\d+)?\s?',
+        # Version (translation) used to view reference
+        version='([^\W\d_]+\d*)?')
+    return re.search(patt, query_str, flags=re.UNICODE)
+
+
+# Simplifies the format of the query string
+def format_query_str(query_str):
+
+    query_str = query_str.lower()
+    # Normalize all Unicode characters
+    query_str = unicodedata.normalize('NFC', query_str)
+    # Remove all non-alphanumeric characters
+    query_str = re.sub('[\W_]', ' ', query_str, flags=re.UNICODE)
+    # Remove extra whitespace
+    query_str = query_str.strip()
+    query_str = re.sub('\s+', ' ', query_str)
+    # Parse shorthand reference notation
+    query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
+
+    return query_str

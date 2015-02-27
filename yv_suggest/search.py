@@ -2,26 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-import re
 import shared
-import unicodedata
-
-
-# Parse query string into components of a Bible reference
-def get_ref_matches(query_str):
-    # Pattern for parsing any bible reference
-    patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
-        # Book name (including preceding number, if any)
-        book='(\d?(?:[^\W\d_]|\s)+)\s?',
-        # Chapter number
-        chapter='(\d+)\s?',
-        # Verse number
-        verse='(\d+)\s?',
-        #  End verse for a verse range
-        endverse='(\d+)?\s?',
-        # Version (translation) used to view reference
-        version='([^\W\d_]+\d*)?')
-    return re.search(patt, query_str, flags=re.UNICODE)
 
 
 # Find a version which best matches the given version query
@@ -39,28 +20,11 @@ def guess_version(versions, version_query):
     return None
 
 
-# Simplifies the format of the query string
-def format_query_str(query_str):
-
-    query_str = query_str.lower()
-    # Normalize all Unicode characters
-    query_str = unicodedata.normalize('NFC', query_str)
-    # Remove all non-alphanumeric characters
-    query_str = re.sub('[\W_]', ' ', query_str, flags=re.UNICODE)
-    # Remove extra whitespace
-    query_str = query_str.strip()
-    query_str = re.sub('\s+', ' ', query_str)
-    # Parse shorthand reference notation
-    query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
-
-    return query_str
-
-
 # Builds the query object from the given query string
 def get_query_object(query_str):
 
     # Match section of the bible based on query
-    ref_matches = get_ref_matches(query_str)
+    ref_matches = shared.get_ref_matches(query_str)
 
     if not ref_matches:
         return None
@@ -104,23 +68,23 @@ def get_matching_books(books, query):
                     (book_name[0].isnumeric() and
                         book_name[2:].startswith(query['book'][:i]))):
                     matching_books.append(book)
-        else:
+        else:  # pragma: no cover
             break
 
     return matching_books
 
 
 # Retrieves search resylts matching the given query
-def get_result_list(query_str):
+def get_result_list(query_str, use_prefs=False):
 
-    query_str = format_query_str(query_str)
+    query_str = shared.format_query_str(query_str)
     query = get_query_object(query_str)
     results = []
 
     if not query:
         return results
 
-    prefs = shared.get_prefs()
+    prefs = shared.get_prefs(use_prefs)
     bible = shared.get_bible_data(prefs['language'])
     matching_books = get_matching_books(bible['books'], query)
     chosen_version = None
@@ -128,7 +92,7 @@ def get_result_list(query_str):
     if 'version' in query:
         chosen_version = guess_version(bible['versions'], query['version'])
 
-    if not chosen_version:
+    if not chosen_version and use_prefs:
         chosen_version = shared.get_version(bible['versions'],
                                             prefs['version'])
 
@@ -174,7 +138,7 @@ def get_result_list(query_str):
         # Create result data using the given information
         if 'uid' in result:
 
-            result['uid'] = 'yv-{version}/{uid}'.format(
+            result['uid'] = '{version}/{uid}'.format(
                 version=chosen_version['id'],
                 uid=result['uid'])
             result['arg'] = result['uid']
@@ -187,9 +151,9 @@ def get_result_list(query_str):
 
 
 # Outputs an Alfred XML string from the given query string
-def main(query_str='{query}'):
+def main(query_str='{query}', use_prefs=False):
 
-    results = get_result_list(query_str)
+    results = get_result_list(query_str, use_prefs)
 
     if not results:
 
@@ -204,4 +168,4 @@ def main(query_str='{query}'):
     print(shared.get_result_list_xml(results))
 
 if __name__ == '__main__':
-    main()
+    main(use_prefs=True)
