@@ -103,3 +103,12 @@ def update_prefs(prefs):
 
     with open(prefs_path, 'w') as prefs_file:
         json.dump(prefs, prefs_file)
+
+
+def get_languages():
+
+    languages_path = os.path.join(get_package_path(), 'data', 'languages.json')
+    with open(languages_path, 'r') as languages_file:
+        languages = json.load(languages_file)
+
+    return languages

@@ -174,7 +174,7 @@ def get_result_list(query_str):
         # Create result data using the given information
         if 'uid' in result:
 
-            result['uid'] = '{version}/{uid}'.format(
+            result['uid'] = 'yv-{version}/{uid}'.format(
                 version=chosen_version['id'],
                 uid=result['uid'])
             result['arg'] = result['uid']
