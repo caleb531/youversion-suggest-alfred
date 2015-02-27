@@ -95,9 +95,9 @@ def create_prefs():
     return defaults
 
 
-def get_prefs(use_prefs=True):
+def get_prefs(ignore_prefs=False):
 
-    if use_prefs is False:
+    if ignore_prefs is True:
         return get_defaults()
 
     try:

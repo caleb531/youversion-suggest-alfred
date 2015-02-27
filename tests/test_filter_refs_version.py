@@ -62,4 +62,4 @@ def test_nonexistent():
 def test_id():
     """should use correct ID for versions"""
     results = yvs.get_result_list('malachi 3:2 esv')
-    nose.assert_equal(results[0]['uid'], '59/mal.3.2')
+    nose.assert_equal(results[0]['uid'], 'yvs-59/mal.3.2')

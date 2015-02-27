@@ -75,7 +75,7 @@ def get_matching_books(books, query):
 
 
 # Retrieves search resylts matching the given query
-def get_result_list(query_str, use_prefs=False):
+def get_result_list(query_str, ignore_prefs=True):
 
     query_str = shared.format_query_str(query_str)
     query = get_query_object(query_str)
@@ -84,7 +84,7 @@ def get_result_list(query_str, use_prefs=False):
     if not query:
         return results
 
-    prefs = shared.get_prefs(use_prefs)
+    prefs = shared.get_prefs(ignore_prefs)
     bible = shared.get_bible_data(prefs['language'])
     matching_books = get_matching_books(bible['books'], query)
     chosen_version = None
@@ -92,7 +92,7 @@ def get_result_list(query_str, use_prefs=False):
     if 'version' in query:
         chosen_version = guess_version(bible['versions'], query['version'])
 
-    if not chosen_version and use_prefs:
+    if not chosen_version and not ignore_prefs:
         chosen_version = shared.get_version(bible['versions'],
                                             prefs['version'])
 
@@ -138,10 +138,10 @@ def get_result_list(query_str, use_prefs=False):
         # Create result data using the given information
         if 'uid' in result:
 
-            result['uid'] = '{version}/{uid}'.format(
+            result['arg'] = '{version}/{uid}'.format(
                 version=chosen_version['id'],
                 uid=result['uid'])
-            result['arg'] = result['uid']
+            result['uid'] = 'yvs-{}'.format(result['arg'])
             result['title'] += ' ({version})'.format(
                 version=chosen_version['name'])
             result['subtitle'] = "View on YouVersion"
@@ -151,15 +151,15 @@ def get_result_list(query_str, use_prefs=False):
 
 
 # Outputs an Alfred XML string from the given query string
-def main(query_str='{query}', use_prefs=False):
+def main(query_str='{query}', ignore_prefs=True):
 
-    results = get_result_list(query_str, use_prefs)
+    results = get_result_list(query_str, ignore_prefs)
 
     if not results:
 
         # If no matching results were found, indicate such
         results = [{
-            'uid': 'yv-no-results',
+            'uid': 'yvs-no-results',
             'valid': 'no',
             'title': 'No Results',
             'subtitle': 'No bible references matching \'{}\''.format(query_str)
@@ -168,4 +168,4 @@ def main(query_str='{query}', use_prefs=False):
     print(shared.get_result_list_xml(results))
 
 if __name__ == '__main__':
-    main(use_prefs=True)
+    main(ignore_prefs=False)

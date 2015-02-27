@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import unicode_literals
 import shared
 
 
@@ -14,7 +15,7 @@ def main(query_str='{query}'):
     prefs[key] = value
 
     if key == 'language':
-        bible = shared.get_bible_data(value)
+        bible = shared.get_bible_data(language=value)
         # If preferred version is not in the new chosen language
         if not shared.get_version(bible['versions'], prefs['version']):
             # Set version to default version of new language

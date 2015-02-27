@@ -67,7 +67,7 @@ def test_nonnumbered_partial():
 def test_id():
     """should use correct ID for books"""
     results = yvs.get_result_list('philippians')
-    nose.assert_equal(results[0]['uid'], '111/php.1')
+    nose.assert_equal(results[0]['uid'], 'yvs-111/php.1')
 
 
 def test_closest_match():

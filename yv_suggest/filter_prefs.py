@@ -5,16 +5,16 @@ import re
 import shared
 
 
-def get_language_result_list(query_str):
+def get_language_result_list(query_str, ignore_prefs=True):
 
-    prefs = shared.get_prefs()
+    prefs = shared.get_prefs(ignore_prefs)
     languages = shared.get_languages()
     results = []
 
     for language in languages:
 
         result = {
-            'uid': 'yv-language-{}'.format(language['id']),
+            'uid': 'yvs-language-{}'.format(language['id']),
             'arg': 'language:{}'.format(language['id']),
             'title': language['name']
         }
@@ -31,16 +31,16 @@ def get_language_result_list(query_str):
     return results
 
 
-def get_version_result_list(query_str):
+def get_version_result_list(query_str, ignore_prefs=True):
 
-    prefs = shared.get_prefs()
+    prefs = shared.get_prefs(ignore_prefs)
     versions = shared.get_bible_data(prefs['language'])['versions']
     results = []
 
     for version in versions:
 
         result = {
-            'uid': 'yv-version-{}'.format(version['id']),
+            'uid': 'yvs-version-{}'.format(version['id']),
             'arg': 'version:{}'.format(version['id']),
             'title': version['name']
         }
@@ -66,7 +66,7 @@ def get_pref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
-def get_result_list(query_str):
+def get_result_list(query_str, ignore_prefs=True):
 
     query_str = shared.format_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
@@ -79,19 +79,19 @@ def get_result_list(query_str):
 
         if pref_name:
             if pref_name.startswith('l'):
-                results = get_language_result_list(pref_value)
+                results = get_language_result_list(pref_value, ignore_prefs)
             elif pref_name.startswith('v'):
-                results = get_version_result_list(pref_value)
+                results = get_version_result_list(pref_value, ignore_prefs)
 
     return results
 
 
-def main(query_str='{query}'):
+def main(query_str='{query}', ignore_prefs=True):
 
-    results = get_result_list(query_str)
+    results = get_result_list(query_str, ignore_prefs)
 
     print(shared.get_result_list_xml(results))
 
 
 if __name__ == '__main__':
-    main()
+    main(ignore_prefs=False)
