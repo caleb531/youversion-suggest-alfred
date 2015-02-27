@@ -5,22 +5,9 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.filter_refs as yvs
 from xml.etree import ElementTree as ET
-from contextlib import contextmanager
-from io import BytesIO
+from context_managers import redirect_stdout
 import inspect
 import sys
-
-
-@contextmanager
-def redirect_stdout():
-    """temporarily redirect stdout to new output stream"""
-    original_stdout = sys.stdout
-    out = BytesIO()
-    try:
-        sys.stdout = out
-        yield out
-    finally:
-        sys.stdout = original_stdout
 
 
 def test_output():

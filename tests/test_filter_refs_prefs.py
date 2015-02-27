@@ -8,7 +8,7 @@ import os
 
 
 def test_version_remembrance():
-    """should remember version prefs"""
+    """should remember version preferences"""
     prefs = yvs.shared.get_prefs()
     original_version = prefs['version']
     prefs['version'] = 59
@@ -21,7 +21,7 @@ def test_version_remembrance():
 
 
 def test_language_remembrance():
-    """should remember language prefs"""
+    """should remember language preferences"""
     prefs = yvs.shared.get_prefs()
     original_version = prefs['language']
     prefs['language'] = 'es'
@@ -34,7 +34,7 @@ def test_language_remembrance():
 
 
 def test_creation():
-    """should create prefs if nonexistent"""
+    """should create preferences if nonexistent"""
     yvs.shared.delete_prefs()
     nose.assert_false(os.path.exists(yvs.shared.prefs_path))
     defaults = yvs.shared.get_defaults()
@@ -44,6 +44,6 @@ def test_creation():
 
 
 def test_delete_nonexistent():
-    """should fail silently when attempting to delete nonexistent prefs"""
+    """should attempt to delete nonexistent preferences without error"""
     yvs.shared.delete_prefs()
     yvs.shared.delete_prefs()

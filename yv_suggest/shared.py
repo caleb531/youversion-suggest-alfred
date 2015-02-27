@@ -157,3 +157,13 @@ def format_query_str(query_str):
     query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
 
     return query_str
+
+
+def get_languages():
+
+    languages_path = os.path.join(get_package_path(),
+                                  'data', 'languages.json')
+    with open(languages_path, 'r') as languages_file:
+        languages = json.load(languages_file)
+
+    return languages

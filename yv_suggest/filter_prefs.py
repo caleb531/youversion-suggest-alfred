@@ -5,19 +5,10 @@ import re
 import shared
 
 
-def get_languages():
-
-    languages_path = os.path.join(get_package_path(), 'data', 'languages.json')
-    with open(languages_path, 'r') as languages_file:
-        languages = json.load(languages_file)
-
-    return languages
-
-
 def get_language_result_list(query_str):
 
     prefs = shared.get_prefs()
-    languages = get_languages()
+    languages = shared.get_languages()
     results = []
 
     for language in languages:
@@ -34,7 +25,7 @@ def get_language_result_list(query_str):
         else:
             result['subtitle'] = 'Set this as your preferred language'
 
-        if not query_str or result['title'].startswith(query_str):
+        if not query_str or result['title'].lower().startswith(query_str):
             results.append(result)
 
     return results
