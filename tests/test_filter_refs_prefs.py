@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 import nose.tools as nose
-import yv_suggest.search as yvs
+import yv_suggest.filter_refs as yvs
 import os
 
 
