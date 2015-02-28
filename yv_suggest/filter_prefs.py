@@ -74,11 +74,10 @@ def get_result_list(query_str, ignore_prefs=True):
         pref_name = pref_matches.group(1)
         pref_value = pref_matches.group(2)
 
-        if pref_name:
-            if pref_name.startswith('l'):
-                results = get_language_result_list(pref_value, ignore_prefs)
-            elif pref_name.startswith('v'):
-                results = get_version_result_list(pref_value, ignore_prefs)
+        if pref_name.startswith('l'):
+            results = get_language_result_list(pref_value, ignore_prefs)
+        elif pref_name.startswith('v'):
+            results = get_version_result_list(pref_value, ignore_prefs)
 
     return results
 

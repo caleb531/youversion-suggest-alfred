@@ -37,7 +37,7 @@ def test_creation():
     yvs.shared.delete_prefs()
     nose.assert_false(os.path.exists(yvs.shared.prefs_path))
     defaults = yvs.shared.get_defaults()
-    prefs = yvs.shared.get_prefs(ignore_prefs=False)
+    prefs = yvs.shared.get_prefs()
     nose.assert_true(os.path.exists(yvs.shared.prefs_path))
     nose.assert_equal(prefs, defaults)
 

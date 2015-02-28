@@ -39,7 +39,7 @@ def get_bible_data(language):
 
 def get_book(books, book_id):
     for book in books:
-        if book['id'] == book_id:
+        if book['id'] == book_id:  # pragma: no cover
             return book['name']
 
 
@@ -97,7 +97,7 @@ def get_prefs(ignore_prefs=False):
         # Update existing preferences file
         with open(prefs_path, 'r') as prefs_file:
             prefs = json.load(prefs_file)
-    except IOError:
+    except IOError:  # pragma: no cover
         # Otherwise, create preferences file if it doesn't exist
         prefs = create_prefs()
 

@@ -36,6 +36,18 @@ def test_filter_versions():
     nose.assert_equal(results[0]['arg'], 'version:110')
 
 
+def test_nonexistent():
+    """should not match nonexistent preferences"""
+    results = yvs.get_result_list('xyz')
+    nose.assert_equal(len(results), 0)
+
+
+def test_invalid():
+    """should not match nonexistent preferences"""
+    results = yvs.get_result_list('!@#')
+    nose.assert_equal(len(results), 0)
+
+
 def test_main_output():
     """should output result list XML"""
     query_str = 'language'
