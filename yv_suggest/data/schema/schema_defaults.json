@@ -1,7 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Defaults",
-  "description": "The base set of key/values for workflow preferences",
+  "description": "The default values for workflow preferences",
+  "type": "object",
   "properties": {
     "language:": {
       "description": "The preferred language to use for Bible data",

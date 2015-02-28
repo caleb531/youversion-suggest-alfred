@@ -1,6 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Bible",
+  "description": "Bible information for a specific language",
+  "type": "object",
   "properties": {
     "versions": {
       "title": "Versions",
@@ -19,9 +21,9 @@
             "description": "The ID used by YouVersion to uniquely identify this version.",
             "type": "integer"
           }
-        }
-      },
-      "required": ["name", "id"]
+        },
+        "required": ["name", "id"]
+      }
     },
     "default_version": {
       "title": "Default Version",

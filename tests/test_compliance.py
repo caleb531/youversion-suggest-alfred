@@ -21,7 +21,7 @@ def test_pep8():
 
 def test_json():
     schemas = {
-        'schema_language': 'yv_suggest/data/language.json',
+        'schema_language': 'yv_suggest/data/languages.json',
         'schema_defaults': 'yv_suggest/data/defaults.json',
         'schema_bible': 'yv_suggest/data/bible/*.json'
     }
@@ -31,6 +31,8 @@ def test_json():
             schema = json.load(schema_file)
             data_paths = glob.iglob(data_path_pattern)
             for data_path in data_paths:
+                test_json.__doc__ = '{} should be schema-compliant'.format(
+                    data_path)
                 with open(data_path) as data_file:
                     data = json.load(data_file)
                     try:
