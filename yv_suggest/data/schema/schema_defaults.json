@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Defaults",
+  "description": "The base set of key/values for workflow preferences",
+  "properties": {
+    "language:": {
+      "description": "The preferred language to use for Bible data",
+      "type": "string",
+      "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
+    },
+    "version": {
+      "description": "The preferred version (in the current preferred language) to use as the default for Bible references",
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

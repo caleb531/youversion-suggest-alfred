@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Bible",
+  "properties": {
+    "versions": {
+      "title": "Versions",
+      "description": "A list of Bible versions for this language",
+      "type": "array",
+      "items": {
+        "title": "Version",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The acronym for this version",
+            "type": "string",
+            "pattern": "^[^\\W\\d_]+\\d*$"
+          },
+          "id": {
+            "description": "The ID used by YouVersion to uniquely identify this version.",
+            "type": "integer"
+          }
+        }
+      },
+      "required": ["name", "id"]
+    },
+    "default_version": {
+      "title": "Default Version",
+      "description": "The default version for this language",
+      "type": "integer"
+    },
+    "books": {
+      "title": "Books",
+      "description": "A list of Bible books available in this language",
+      "type": "array",
+      "items": {
+        "title": "Book",
+        "description": "A Bible book as represented in this language",
+        "properties": {
+          "name": {
+            "title": "Book Name",
+            "description": "The name of a Bible book in the respective language",
+            "type": "string"
+          },
+          "id": {
+            "title": "Book ID",
+            "description": "The ID used by YouVersion to uniquely identify this book",
+            "type": "string",
+            "pattern": "^\\d?[a-z]+$"
+          },
+          "chapters": {
+            "title": "Number of Chapters",
+            "description": "The number of chapters in each book",
+            "type": "integer",
+            "mimimum": 1
+          }
+        },
+        "required": ["name", "id", "chapters"]
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ import yv_suggest.set_pref as yvs
 
 
 def test_set_language():
+    """should set preferred language"""
     original_prefs = yvs.shared.get_prefs()
     languages = yvs.shared.get_languages()
     for language in languages:
@@ -25,6 +26,7 @@ def test_set_language():
 
 
 def test_set_version():
+    """should set preferred version"""
     original_prefs = yvs.shared.get_prefs()
     prefs = original_prefs.copy()
     bible = yvs.shared.get_bible_data(prefs['language'])
