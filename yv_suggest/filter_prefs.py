@@ -19,8 +19,7 @@ def get_language_result_list(query_str, ignore_prefs=True):
             'title': language['name']
         }
         if language['id'] == prefs['language']:
-            result['subtitle'] = ('{} is already your preferred language'
-                                  .format(result['title']))
+            result['subtitle'] = 'This is already your preferred language'
             result['valid'] = 'no'
         else:
             result['subtitle'] = 'Set this as your preferred language'
@@ -34,7 +33,7 @@ def get_language_result_list(query_str, ignore_prefs=True):
 def get_version_result_list(query_str, ignore_prefs=True):
 
     prefs = shared.get_prefs(ignore_prefs)
-    versions = shared.get_bible_data(prefs['language'])['versions']
+    versions = shared.get_versions(prefs['language'])
     results = []
 
     for version in versions:
@@ -45,12 +44,10 @@ def get_version_result_list(query_str, ignore_prefs=True):
             'title': version['name']
         }
         if version['id'] == prefs['version']:
-            result['subtitle'] = ('{} is already your preferred version'
-                                  .format(result['title']))
+            result['subtitle'] = 'This is already your preferred version'
             result['valid'] = 'no'
         else:
-            result['subtitle'] = 'Set {} as your preferred version'.format(
-                result['title'])
+            result['subtitle'] = 'Set this as your preferred version'
 
         if not query_str or result['title'].lower().startswith(query_str):
             results.append(result)
@@ -89,6 +86,14 @@ def get_result_list(query_str, ignore_prefs=True):
 def main(query_str='{query}', ignore_prefs=True):
 
     results = get_result_list(query_str, ignore_prefs)
+
+    if not results:
+        results = [{
+            'uid': 'yvs-noprefs',
+            'title': 'Cannot determine preference to set',
+            'subtitle': 'Please enter a valid preference name',
+            'valid': 'no'
+        }]
 
     print(shared.get_result_list_xml(results))
 

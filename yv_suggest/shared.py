@@ -49,27 +49,20 @@ def get_version(versions, version_id):
             return version
 
 
-# Constructs an Alfred XML string from the given results list
-def get_result_list_xml(results):
+def get_versions(language):
 
-    root = ET.Element('items')
+    bible = get_bible_data(language)
+    return bible['versions']
 
-    for result in results:
-        # Create <item> element for result with appropriate attributes
-        item = ET.SubElement(root, 'item', {
-            'uid': result['uid'],
-            'arg': result.get('arg', ''),
-            'valid': result.get('valid', 'yes')
-        })
-        # Create appropriate child elements of <item> element
-        title = ET.SubElement(item, 'title')
-        title.text = result['title']
-        subtitle = ET.SubElement(item, 'subtitle')
-        subtitle.text = result['subtitle']
-        icon = ET.SubElement(item, 'icon')
-        icon.text = 'icon.png'
 
-    return ET.tostring(root)
+def get_languages():
+
+    languages_path = os.path.join(get_package_path(),
+                                  'data', 'languages.json')
+    with open(languages_path, 'r') as languages_file:
+        languages = json.load(languages_file)
+
+    return languages
 
 
 def get_defaults():
@@ -124,6 +117,23 @@ def delete_prefs():
         pass
 
 
+# Simplifies the format of the query string
+def format_query_str(query_str):
+
+    query_str = query_str.lower()
+    # Normalize all Unicode characters
+    query_str = unicodedata.normalize('NFC', query_str)
+    # Remove all non-alphanumeric characters
+    query_str = re.sub('[\W_]', ' ', query_str, flags=re.UNICODE)
+    # Remove extra whitespace
+    query_str = query_str.strip()
+    query_str = re.sub('\s+', ' ', query_str)
+    # Parse shorthand reference notation
+    query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
+
+    return query_str
+
+
 # Parse query string into components of a Bible reference
 def get_ref_matches(query_str):
 
@@ -142,28 +152,24 @@ def get_ref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
-# Simplifies the format of the query string
-def format_query_str(query_str):
+# Constructs an Alfred XML string from the given results list
+def get_result_list_xml(results):
 
-    query_str = query_str.lower()
-    # Normalize all Unicode characters
-    query_str = unicodedata.normalize('NFC', query_str)
-    # Remove all non-alphanumeric characters
-    query_str = re.sub('[\W_]', ' ', query_str, flags=re.UNICODE)
-    # Remove extra whitespace
-    query_str = query_str.strip()
-    query_str = re.sub('\s+', ' ', query_str)
-    # Parse shorthand reference notation
-    query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
+    root = ET.Element('items')
 
-    return query_str
+    for result in results:
+        # Create <item> element for result with appropriate attributes
+        item = ET.SubElement(root, 'item', {
+            'uid': result['uid'],
+            'arg': result.get('arg', ''),
+            'valid': result.get('valid', 'yes')
+        })
+        # Create appropriate child elements of <item> element
+        title = ET.SubElement(item, 'title')
+        title.text = result['title']
+        subtitle = ET.SubElement(item, 'subtitle')
+        subtitle.text = result['subtitle']
+        icon = ET.SubElement(item, 'icon')
+        icon.text = 'icon.png'
 
-
-def get_languages():
-
-    languages_path = os.path.join(get_package_path(),
-                                  'data', 'languages.json')
-    with open(languages_path, 'r') as languages_file:
-        languages = json.load(languages_file)
-
-    return languages
+    return ET.tostring(root)
