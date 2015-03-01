@@ -73,333 +73,267 @@
   "books": [
     {
       "name": "Genesis",
-      "id": "gen",
-      "chapters": 50
+      "id": "gen"
     },
     {
       "name": "Exodus",
-      "id": "exo",
-      "chapters": 40
+      "id": "exo"
     },
     {
       "name": "Leviticus",
-      "id": "lev",
-      "chapters": 27
+      "id": "lev"
     },
     {
       "name": "Numbers",
-      "id": "num",
-      "chapters": 36
+      "id": "num"
     },
     {
       "name": "Deuteronomy",
-      "id": "deu",
-      "chapters": 34
+      "id": "deu"
     },
     {
       "name": "Joshua",
-      "id": "jos",
-      "chapters": 24
+      "id": "jos"
     },
     {
       "name": "Judges",
-      "id": "jdg",
-      "chapters": 21
+      "id": "jdg"
     },
     {
       "name": "Ruth",
-      "id": "rut",
-      "chapters": 4
+      "id": "rut"
     },
     {
       "name": "1 Samuel",
-      "id": "1sa",
-      "chapters": 31
+      "id": "1sa"
     },
     {
       "name": "2 Samuel",
-      "id": "2sa",
-      "chapters": 24
+      "id": "2sa"
     },
     {
       "name": "1 Kings",
-      "id": "1ki",
-      "chapters": 22
+      "id": "1ki"
     },
     {
       "name": "2 Kings",
-      "id": "2ki",
-      "chapters": 25
+      "id": "2ki"
     },
     {
       "name": "1 Chronicles",
-      "id": "1ch",
-      "chapters": 29
+      "id": "1ch"
     },
     {
       "name": "2 Chronicles",
-      "id": "2ch",
-      "chapters": 36
+      "id": "2ch"
     },
     {
       "name": "Ezra",
-      "id": "ezr",
-      "chapters": 10
+      "id": "ezr"
     },
     {
       "name": "Nehemiah",
-      "id": "neh",
-      "chapters": 13
+      "id": "neh"
     },
     {
       "name": "Esther",
-      "id": "est",
-      "chapters": 10
+      "id": "est"
     },
     {
       "name": "Job",
-      "id": "job",
-      "chapters": 42
+      "id": "job"
     },
     {
       "name": "Psalm",
-      "id": "psa",
-      "chapters": 150
+      "id": "psa"
     },
     {
       "name": "Proverbs",
-      "id": "pro",
-      "chapters": 31
+      "id": "pro"
     },
     {
       "name": "Ecclesiastes",
-      "id": "ecc",
-      "chapters": 12
+      "id": "ecc"
     },
     {
       "name": "Song of Songs",
-      "id": "sng",
-      "chapters": 8
+      "id": "sng"
     },
     {
       "name": "Isaiah",
-      "id": "isa",
-      "chapters": 66
+      "id": "isa"
     },
     {
       "name": "Jeremiah",
-      "id": "jer",
-      "chapters": 52
+      "id": "jer"
     },
     {
       "name": "Lamentations",
-      "id": "lam",
-      "chapters": 5
+      "id": "lam"
     },
     {
       "name": "Ezekiel",
-      "id": "ezk",
-      "chapters": 48
+      "id": "ezk"
     },
     {
       "name": "Daniel",
-      "id": "dan",
-      "chapters": 12
+      "id": "dan"
     },
     {
       "name": "Hosea",
-      "id": "hos",
-      "chapters": 14
+      "id": "hos"
     },
     {
       "name": "Joel",
-      "id": "jol",
-      "chapters": 3
+      "id": "jol"
     },
     {
       "name": "Amos",
-      "id": "amo",
-      "chapters": 9
+      "id": "amo"
     },
     {
       "name": "Obadiah",
-      "id": "oba",
-      "chapters": 1
+      "id": "oba"
     },
     {
       "name": "Jonah",
-      "id": "jon",
-      "chapters": 4
+      "id": "jon"
     },
     {
       "name": "Micah",
-      "id": "mic",
-      "chapters": 7
+      "id": "mic"
     },
     {
       "name": "Nahum",
-      "id": "nah",
-      "chapters": 3
+      "id": "nah"
     },
     {
       "name": "Habakkuk",
-      "id": "hab",
-      "chapters": 3
+      "id": "hab"
     },
     {
       "name": "Zephaniah",
-      "id": "zep",
-      "chapters": 3
+      "id": "zep"
     },
     {
       "name": "Haggai",
-      "id": "hag",
-      "chapters": 2
+      "id": "hag"
     },
     {
       "name": "Zechariah",
-      "id": "zec",
-      "chapters": 14
+      "id": "zec"
     },
     {
       "name": "Malachi",
-      "id": "mal",
-      "chapters": 4
+      "id": "mal"
     },
     {
       "name": "Matthew",
-      "id": "mat",
-      "chapters": 28
+      "id": "mat"
     },
     {
       "name": "Mark",
-      "id": "mrk",
-      "chapters": 16
+      "id": "mrk"
     },
     {
       "name": "Luke",
-      "id": "luk",
-      "chapters": 24
+      "id": "luk"
     },
     {
       "name": "John",
-      "id": "jhn",
-      "chapters": 21
+      "id": "jhn"
     },
     {
       "name": "Acts",
-      "id": "act",
-      "chapters": 28
+      "id": "act"
     },
     {
       "name": "Romans",
-      "id": "rom",
-      "chapters": 16
+      "id": "rom"
     },
     {
       "name": "1 Corinthians",
-      "id": "1co",
-      "chapters": 16
+      "id": "1co"
     },
     {
       "name": "2 Corinthians",
-      "id": "2co",
-      "chapters": 13
+      "id": "2co"
     },
     {
       "name": "Galatians",
-      "id": "gal",
-      "chapters": 6
+      "id": "gal"
     },
     {
       "name": "Ephesians",
-      "id": "eph",
-      "chapters": 6
+      "id": "eph"
     },
     {
       "name": "Philippians",
-      "id": "php",
-      "chapters": 4
+      "id": "php"
     },
     {
       "name": "Colossians",
-      "id": "col",
-      "chapters": 4
+      "id": "col"
     },
     {
       "name": "1 Thessalonians",
-      "id": "1th",
-      "chapters": 5
+      "id": "1th"
     },
     {
       "name": "2 Thessalonians",
-      "id": "2th",
-      "chapters": 3
+      "id": "2th"
     },
     {
       "name": "1 Timothy",
-      "id": "1ti",
-      "chapters": 6
+      "id": "1ti"
     },
     {
       "name": "2 Timothy",
-      "id": "2ti",
-      "chapters": 4
+      "id": "2ti"
     },
     {
       "name": "Titus",
-      "id": "tit",
-      "chapters": 3
+      "id": "tit"
     },
     {
       "name": "Philemon",
-      "id": "phm",
-      "chapters": 1
+      "id": "phm"
     },
     {
       "name": "Hebrews",
-      "id": "heb",
-      "chapters": 13
+      "id": "heb"
     },
     {
       "name": "James",
-      "id": "jas",
-      "chapters": 5
+      "id": "jas"
     },
     {
       "name": "1 Peter",
-      "id": "1pe",
-      "chapters": 5
+      "id": "1pe"
     },
     {
       "name": "2 Peter",
-      "id": "2pe",
-      "chapters": 3
+      "id": "2pe"
     },
     {
       "name": "1 John",
-      "id": "1jn",
-      "chapters": 5
+      "id": "1jn"
     },
     {
       "name": "2 John",
-      "id": "2jn",
-      "chapters": 1
+      "id": "2jn"
     },
     {
       "name": "3 John",
-      "id": "3jn",
-      "chapters": 1
+      "id": "3jn"
     },
     {
       "name": "Jude",
-      "id": "jud",
-      "chapters": 1
+      "id": "jud"
     },
     {
       "name": "Revelation",
-      "id": "rev",
-      "chapters": 22
+      "id": "rev"
     }
   ]
 }

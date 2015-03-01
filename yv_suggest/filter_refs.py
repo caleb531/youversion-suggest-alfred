@@ -86,6 +86,7 @@ def get_result_list(query_str, ignore_prefs=True):
 
     prefs = shared.get_prefs(ignore_prefs)
     bible = shared.get_bible_data(prefs['language'])
+    chapters = shared.get_chapter_data()
     matching_books = get_matching_books(bible['books'], query)
     chosen_version = None
 
@@ -110,7 +111,8 @@ def get_result_list(query_str, ignore_prefs=True):
         result = {}
 
         # If chapter exists within the book
-        if query['chapter'] >= 1 and query['chapter'] <= book['chapters']:
+        if book['id'] not in chapters or (query['chapter'] >= 1 and
+           query['chapter'] <= chapters[book['id']]):
 
             # Find chapter if given
             result['uid'] = '{book}.{chapter}'.format(

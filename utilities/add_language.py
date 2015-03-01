@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 from pyquery import PyQuery as pq
 import re
+import io
 import json
 import urllib2
 
@@ -125,7 +126,7 @@ def get_bible_data(params):
 def save_bible_data(params):
 
     bible = get_bible_data(params)
-    bible_path = 'yv_suggest/data/bible/{}.json'.format(
+    bible_path = 'yv_suggest/data/bible/language-{}.json'.format(
         params['language']['id'])
     with open(bible_path, 'w') as bible_file:
         json.dump(bible, bible_file, **json_params)
@@ -133,18 +134,20 @@ def save_bible_data(params):
 
 def update_language_list(params):
 
-    with open('yv_suggest/data/languages.json', 'r+') as language_file:
-        languages = json.load(language_file)
-        languages.append(params['language'])
-        languages.sort(key=get_item_id)
-        language_file.seek(0)
-        language_file.truncate(0)
-        json.dump(languages, language_file, **json_params)
+    langs_path = 'yv_suggest/data/languages.json'
+    with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
+        langs = json.load(langs_file)
+        if not any(lang['id'] == params['language']['id'] for lang in langs):
+            langs.append(params['language'])
+            langs.sort(key=get_item_id)
+            langs_file.truncate(0)
+            langs_file.seek(0)
+            langs_file.write(unicode(json.dumps(langs, **json_params)))
 
 
 def add_language(params):
 
-    # update_language_list(params)
+    update_language_list(params)
     save_bible_data(params)
 
 
