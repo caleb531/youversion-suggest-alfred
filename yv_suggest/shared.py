@@ -30,11 +30,21 @@ def get_package_path():
 def get_bible_data(language):
 
     bible_data_path = os.path.join(get_package_path(), 'data', 'bible',
-                                   '{}.json'.format(language))
+                                   'language-{}.json'.format(language))
     with open(bible_data_path, 'r') as bible_data_file:
         bible_data = json.load(bible_data_file)
 
     return bible_data
+
+
+def get_chapter_data():
+
+    chapter_data_path = os.path.join(get_package_path(), 'data', 'bible',
+                                     'chapters.json')
+    with open(chapter_data_path, 'r') as chapter_data_file:
+        chapter_data = json.load(chapter_data_file)
+
+    return chapter_data
 
 
 def get_book(books, book_id):

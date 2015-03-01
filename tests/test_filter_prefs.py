@@ -11,7 +11,7 @@ from context_managers import redirect_stdout
 def test_show_languages():
     """should show all languages if no value is given"""
     results = yvs.get_result_list('language')
-    nose.assert_equal(len(results), 2)
+    nose.assert_not_equal(len(results), 0)
 
 
 def test_filter_languages():

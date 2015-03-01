@@ -21,9 +21,10 @@ def test_pep8():
 
 def test_json():
     schemas = {
-        'schema_language': 'yv_suggest/data/languages.json',
-        'schema_defaults': 'yv_suggest/data/defaults.json',
-        'schema_bible': 'yv_suggest/data/bible/*.json'
+        'schema-languages': 'yv_suggest/data/languages.json',
+        'schema-defaults': 'yv_suggest/data/defaults.json',
+        'schema-chapters': 'yv_suggest/data/bible/chapters.json',
+        'schema-bible': 'yv_suggest/data/bible/language-*.json'
     }
     for schema_name, data_path_pattern in schemas.iteritems():
         schema_path = 'yv_suggest/data/schema/{}.json'.format(schema_name)

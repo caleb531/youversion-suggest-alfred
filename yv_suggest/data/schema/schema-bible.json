@@ -49,15 +49,9 @@
             "description": "The ID used by YouVersion to uniquely identify this book",
             "type": "string",
             "pattern": "^\\d?[a-z]+$"
-          },
-          "chapters": {
-            "title": "Number of Chapters",
-            "description": "The number of chapters in each book",
-            "type": "integer",
-            "mimimum": 1
           }
         },
-        "required": ["name", "id", "chapters"],
+        "required": ["name", "id"],
         "additionalProperties": false
       }
     }
