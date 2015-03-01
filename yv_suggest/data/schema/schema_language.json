@@ -17,6 +17,7 @@
         "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
       }
     },
-    "required": ["name", "id"]
+    "required": ["name", "id"],
+    "additionalProperties": false
   }
 }

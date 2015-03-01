@@ -22,7 +22,8 @@
             "type": "integer"
           }
         },
-        "required": ["name", "id"]
+        "required": ["name", "id"],
+        "additionalProperties": false
       }
     },
     "default_version": {
@@ -56,8 +57,11 @@
             "mimimum": 1
           }
         },
-        "required": ["name", "id", "chapters"]
+        "required": ["name", "id", "chapters"],
+        "additionalProperties": false
       }
     }
-  }
+  },
+  "required": ["versions", "default_version", "books"],
+  "additionalProperties": false
 }

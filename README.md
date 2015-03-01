@@ -6,13 +6,13 @@
 YouVersion Suggest is an Alfred workflow which allows you to search the online
 [YouVersion](https://www.youversion.com/) bible quickly and conveniently.
 
-![YouVersion Suggest in action](screenshots/chapters.png)
+![YouVersion Suggest in action](screenshot.png)
 
 ## Usage
 
 Type the `yv` keyword into Alfred, followed by a space and a phrase representing
 the bible reference you wish to find. The phrase can be part of a book name,
-chapter, verse, or range of verses. You may also include an option version
+chapter, verse, or range of verses. You may also include an optional version
 (translation) at the end of your query. As you type, YouVersion Suggest will
 display a list of suggestions matching your query.
 
@@ -68,8 +68,7 @@ TLAD
 
 ### Requirements for running tests
 
-Running these unit tests requires Python 2.7, as well as the following packages
-to be installed:
+Running these unit tests requires Python 2.7, as well as the following packages:
 
 * nose
 * coverage
@@ -80,13 +79,13 @@ If you do not have these packages installed already, you can install them via
 `pip`:
 
 ```
-sudo pip install nose coverage pep8
+sudo pip install nose coverage pep8 jsonschema
 ```
 
 ### Running tests
 
-To run the included unit tests, run the `nosetests` command within the project
-directory.
+To run all included unit tests, run the `nosetests` command at the root of the
+project directory.
 
 ```
 nosetests
@@ -111,15 +110,32 @@ below.
 #### 1. Define language information
 
 To add a mew language, you must first add information about your language to the
-`languages.json` file under the `yv_suggest/data` directory.
+`languages.json` file under the `yv_suggest/data/` directory. The value for the
+`name` key should be the name of the language as written in said language.
 
 
 #### 2. Define Bible data for language
 
-All bible data files are located in the `yv_suggest/data/bible` directory. The
-filename must be equal to the `id` of the language as defined in
+All bible data files are located in the `yv_suggest/data/bible/` directory. Each
+filename must be equal to the `id` of the corresponding language as defined in
 `languages.json`.
+
+#### 3. Run unit tests
+
+To ensure that your modifications are complete, it is recommended that you run
+all project unit tests (see above). The test runner will raise an error if any
+of the modified data files do not conform to the defined schema.
+
+#### 4. Copy changes into installed workflow
+
+To test your changes within Alfred, you must copy the modified `data/`
+directory to the installed workflow directory. To do so, open Alfred Preferences
+and navigate to the Workflows pane. Right-click YouVersion Suggest in the
+sidebar and choose *Show in Finder* from the contextual menu. You can then drag
+the modified `data/` directory to the installed workflow directory to replace
+it.
 
 #### Schema
 
-Please refer to the included JSON schemas for the structure of each data file.
+Please refer to the included JSON schemas (under the `yv_suggests/data/schema/`
+directory) for the structure of each data file.
