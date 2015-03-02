@@ -15,5 +15,6 @@
       "minimum": 1
     }
   },
+  "required": ["language", "version"],
   "additionalProperties": false
 }

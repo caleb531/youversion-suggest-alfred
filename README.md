@@ -42,10 +42,13 @@ Currently, YouVersion Suggest supports the following languages:
 * Spanish
 * Dutch
 
+If you would like support added for another language, please [submit an issue on
+GitHub](https://github.com/caleb531/youversion-suggest/issues).
+
 ### Setting your preferred version
 
 You may also set your preferred version (translation) used for Bible references
-(where you haven't explicitly specified the version in the query). To do so,
+(where you have not explicitly specified the version in the query). To do so,
 type `yvset version` into Alfred, and the list of supported versions (for the
 currently-set language) will appear.
 
