@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Open Bible reference on YouVersion website
+# -*- coding: utf-8 -*-
 
 import webbrowser
 import shared

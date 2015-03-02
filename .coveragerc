@@ -16,7 +16,9 @@ exclude_lines =
 
 # Only check coverage for source files
 include =
-    yv_suggest/google.py
-    yv_suggest/open.py
-    yv_suggest/search.py
     yv_suggest/shared.py
+    yv_suggest/filter_refs.py
+    yv_suggest/filter_prefs.py
+    yv_suggest/view_ref.py
+    yv_suggest/search_ref.py
+    yv_suggest/set_pref.py

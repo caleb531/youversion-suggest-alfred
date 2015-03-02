@@ -1,42 +1,31 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 import nose.tools as nose
-import yv_suggest.search as yvs
+import yv_suggest.filter_refs as yvs
 from xml.etree import ElementTree as ET
-from contextlib import contextmanager
-from StringIO import StringIO
+from context_managers import redirect_stdout
 import inspect
 import sys
 
 
-@contextmanager
-def redirect_stdout():
-    """temporarily redirect stdout to new output stream"""
-    original_stdout = sys.stdout
-    out = StringIO()
-    try:
-        sys.stdout = out
-        yield out
-    finally:
-        sys.stdout = original_stdout
-
-
 def test_output():
-    """should output result list XML"""
+    """should output ref result list XML"""
     query_str = 'genesis 50:20'
     with redirect_stdout() as out:
-        yvs.main(query_str)
+        yvs.main(query_str, prefs={})
         output = out.getvalue().strip()
-        results = yvs.get_result_list(query_str)
-        xml = yvs.get_result_list_xml(results).strip()
+        results = yvs.get_result_list(query_str, prefs={})
+        xml = yvs.shared.get_result_list_xml(results).strip()
         nose.assert_equal(output, xml)
 
 
 def test_null_result():
-    """should output "No Results" XML item for empty result lists"""
-    query_str = 'nothing'
+    """should output "No Results" XML item for empty ref result lists"""
+    query_str = 'xyz'
     with redirect_stdout() as out:
-        yvs.main(query_str)
+        yvs.main(query_str, prefs={})
         xml = out.getvalue().strip()
         root = ET.fromstring(xml)
         item = root.find('item')
@@ -57,7 +46,6 @@ def test_source_only():
     """should run script assuming script is not a file"""
     yvs.shared.sys.argv[0] = yvs.shared.__file__
     del yvs.shared.__file__
-    yvs.shared.package_path = yvs.shared.get_package_path()
-    results = yvs.get_result_list('e')
+    results = yvs.get_result_list('e', prefs={})
     nose.assert_equal(len(results), 6)
     yvs.shared.__file__ = yvs.shared.sys.argv[0]

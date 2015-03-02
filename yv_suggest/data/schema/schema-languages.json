@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Languages",
+  "description": "Information for all supported languages",
+  "type": "array",
+  "items": {
+    "title": "Language",
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "The name of the language as written in said language",
+        "type": "string"
+      },
+      "id": {
+        "description": "The language's ISO 639-1 code",
+        "type": "string",
+        "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
+      }
+    },
+    "required": ["name", "id"],
+    "additionalProperties": false
+  }
+}

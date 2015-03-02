@@ -1,25 +1,27 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 import nose.tools as nose
-import yv_suggest.search as yvs
+import yv_suggest.filter_refs as yvs
 from xml.etree import ElementTree as ET
 
 
 def test_validity():
     """should return syntactically-valid XML"""
-    results = yvs.get_result_list('john 3:16')
-    xml = yvs.get_result_list_xml(results)
+    results = yvs.get_result_list('john 3:16', prefs={})
+    xml = yvs.shared.get_result_list_xml(results)
     try:
         nose.assert_is_instance(ET.fromstring(xml), ET.Element)
     except ET.ParseError:
-        ().fail('result list XML is not valid')
+        assert False, 'result list XML is not valid'
 
 
 def test_structure():
     """XML should match result list"""
-    results = yvs.get_result_list('matthew 6:34')
+    results = yvs.get_result_list('matthew 6:34', prefs={})
     result = results[0]
-    xml = yvs.get_result_list_xml(results)
+    xml = yvs.shared.get_result_list_xml(results)
     root = ET.fromstring(xml)
     nose.assert_equal(root.tag, 'items',
                       'root element must be named <items>')

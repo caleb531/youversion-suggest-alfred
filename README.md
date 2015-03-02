@@ -6,68 +6,56 @@
 YouVersion Suggest is an Alfred workflow which allows you to search the online
 [YouVersion](https://www.youversion.com/) bible quickly and conveniently.
 
-![YouVersion Suggest in action](screenshots/chapters.png)
+![YouVersion Suggest in action](screenshot.png)
 
 ## Usage
 
-Type the `yv` keyword, followed by a space and a phrase representing the bible
-reference you wish to find. The phrase can be part of a book name, chapter,
-verse, or range of verses. You may also include an option version (translation)
-at the end of your query. As you type, YouVersion Suggest will display a list of
-suggestions matching your query.
+Type the `yv` keyword into Alfred, followed by a space and a phrase representing
+the bible reference you wish to find. The phrase can be part of a book name,
+chapter, verse, or range of verses. You may also include an optional version
+(translation) at the end of your query. As you type, YouVersion Suggest will
+display a list of suggestions matching your query.
 
 Choosing a result will open the selected reference on the YouVersion website.
 Choosing a result while holding down the *ctrl* key will open a Google
 search for the selected reference.
 
-### Query Examples
+### Example queries
 
-* `luke` => Luke
-* `eph 3` => Ephesians 3
-* `1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
-* `mat 6:34 nlt` => Matthew 6:34 (NLT)
-* `1 co 13.4-7` => 1 Corinthians 13:4-7
+* `yv luke` => Luke
+* `yv eph 3` => Ephesians 3
+* `yv 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+* `yv mat 6:34 nlt` => Matthew 6:34 (NLT)
+* `yv 1 co 13.4-7` => 1 Corinthians 13:4-7
+* `yv relevations 7` => Revelation 7
 
-### Supported versions
+### Setting your preferred language
 
-#### English
+YouVersion Suggest allows you to change the languages used for Bible references
+and versions. To do so, type `yvset language` into Alfred, and the list of
+supported languages will then appear. You may then choose another language as
+your preferred language.
 
-AMP, ASV, BOOKS, CEB, CEV, CEV, CEVUK, CPDV, DARBY, DRA, ESV, ERV, GNB, GNBDC, GNBDK, GNT, GNTD, GWT, HCSB, ISR98, KJV, LEB, MSG, NIV, NIVUK, NLT, NET, NKJV, NCV, NASB, NABRE, NIRV, OJB, RV1885, TLV, WEB
+Currently, YouVersion Suggest supports the following languages:
 
-YouVersion Suggest defaults to NIV, however it will always remember the last version you used to look up a reference.
+* English
+* Spanish
+* Dutch
 
-## Testing
+If you would like support added for another language, please [submit an issue on
+GitHub](https://github.com/caleb531/youversion-suggest/issues).
 
-### Requirements for running tests
+### Setting your preferred version
 
-Running these unit tests requires Python 2.7, as well as the following packages
-to be installed:
+You may also set your preferred version (translation) used for Bible references
+(where you have not explicitly specified the version in the query). To do so,
+type `yvset version` into Alfred, and the list of supported versions (for the
+currently-set language) will appear.
 
-* nose
-* coverage
-* pep8
+To select a version from the list of versions more quickly, you may optionally
+type a query after the initial query to filter the list of versions.
 
-If you do not have these packages installed already, you can install them via
-`pip`:
+#### Example queries
 
-```
-sudo pip install nose coverage pep8
-```
-
-### Running tests
-
-To run the included unit tests, run the `nosetests` command within the project
-directory.
-
-```
-nosetests
-```
-
-### Viewing test coverage
-
-To view the test coverage report, run `nosetests` with the `--with-coverage` and
-`--cover-erase` flags.
-
-```
-nosetests --with-coverage --cover-erase
-```
+* `yvset version esv`
+* `yvset version a`
