@@ -68,7 +68,7 @@ def get_matching_books(books, query):
                     (book_name[0].isnumeric() and
                         book_name[2:].startswith(query['book'][:i]))):
                     matching_books.append(book)
-        else:  # pragma: no cover
+        else:
             break
 
     return matching_books
