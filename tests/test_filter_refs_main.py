@@ -11,7 +11,7 @@ import sys
 
 
 def test_output():
-    """should output result list XML"""
+    """should output ref result list XML"""
     query_str = 'genesis 50:20'
     with redirect_stdout() as out:
         yvs.main(query_str, prefs={})
@@ -22,7 +22,7 @@ def test_output():
 
 
 def test_null_result():
-    """should output "No Results" XML item for empty result lists"""
+    """should output "No Results" XML item for empty ref result lists"""
     query_str = 'xyz'
     with redirect_stdout() as out:
         yvs.main(query_str, prefs={})

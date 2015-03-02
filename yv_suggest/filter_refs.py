@@ -84,12 +84,7 @@ def get_result_list(query_str, prefs=None):
     if not query:
         return results
 
-    if prefs is not None:
-        if 'language' not in prefs:
-            prefs = shared.get_defaults()
-    else:
-        prefs = shared.get_prefs()
-
+    prefs = shared.get_prefs(prefs)
     bible = shared.get_bible_data(prefs['language'])
     chapters = shared.get_chapter_data()
     matching_books = get_matching_books(bible['books'], query)

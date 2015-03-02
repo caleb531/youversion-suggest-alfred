@@ -98,18 +98,19 @@ def create_prefs():
     return defaults
 
 
-def get_prefs(ignore_prefs=False):
+def get_prefs(prefs=None):
 
-    if ignore_prefs is True:
-        return get_defaults()
-
-    try:
-        # Update existing preferences file
-        with open(prefs_path, 'r') as prefs_file:
-            prefs = json.load(prefs_file)
-    except IOError:  # pragma: no cover
-        # Otherwise, create preferences file if it doesn't exist
-        prefs = create_prefs()
+    if prefs is not None:
+        if 'language' not in prefs:
+            prefs = get_defaults()
+    else:
+        try:
+            # Update existing preferences file
+            with open(prefs_path, 'r') as prefs_file:
+                prefs = json.load(prefs_file)
+        except IOError:  # pragma: no cover
+            # Otherwise, create preferences file if it doesn't exist
+            prefs = create_prefs()
 
     return prefs
 

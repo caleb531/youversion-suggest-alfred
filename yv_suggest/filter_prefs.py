@@ -6,9 +6,9 @@ import re
 import shared
 
 
-def get_language_result_list(query_str, ignore_prefs=True):
+def get_language_result_list(query_str, prefs=None):
 
-    prefs = shared.get_prefs(ignore_prefs)
+    prefs = shared.get_prefs(prefs)
     languages = shared.get_languages()
     results = []
 
@@ -31,9 +31,9 @@ def get_language_result_list(query_str, ignore_prefs=True):
     return results
 
 
-def get_version_result_list(query_str, ignore_prefs=True):
+def get_version_result_list(query_str, prefs=None):
 
-    prefs = shared.get_prefs(ignore_prefs)
+    prefs = shared.get_prefs(prefs)
     versions = shared.get_versions(prefs['language'])
     results = []
 
@@ -64,7 +64,7 @@ def get_pref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
-def get_result_list(query_str, ignore_prefs=True):
+def get_result_list(query_str, prefs=None):
 
     query_str = shared.format_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
@@ -76,16 +76,16 @@ def get_result_list(query_str, ignore_prefs=True):
         pref_value = pref_matches.group(2)
 
         if pref_name.startswith('l'):
-            results = get_language_result_list(pref_value, ignore_prefs)
+            results = get_language_result_list(pref_value, prefs)
         elif pref_name.startswith('v'):
-            results = get_version_result_list(pref_value, ignore_prefs)
+            results = get_version_result_list(pref_value, prefs)
 
     return results
 
 
-def main(query_str='{query}', ignore_prefs=True):
+def main(query_str='{query}', prefs=None):
 
-    results = get_result_list(query_str, ignore_prefs)
+    results = get_result_list(query_str, prefs)
 
     if not results:
         results = [{
@@ -99,4 +99,4 @@ def main(query_str='{query}', ignore_prefs=True):
 
 
 if __name__ == '__main__':
-    main(ignore_prefs=False)
+    main()
