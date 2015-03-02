@@ -14,7 +14,7 @@ def test_version_persistence():
     prefs['language'] = 'en'
     prefs['version'] = 59
     yvs.shared.update_prefs(prefs)
-    results = yvs.get_result_list('mat 4', ignore_prefs=False)
+    results = yvs.get_result_list('mat 4')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Matthew 4 (ESV)')
     yvs.shared.update_prefs(original_prefs)
@@ -26,7 +26,7 @@ def test_language_persistence():
     prefs = original_prefs.copy()
     prefs['language'] = 'es'
     yvs.shared.update_prefs(prefs)
-    results = yvs.get_result_list('gá 4', ignore_prefs=False)
+    results = yvs.get_result_list('gá 4')
     nose.assert_equal(len(results), 1)
     nose.assert_true(results[0]['title'].startswith('Gálatas 4 '))
     yvs.shared.update_prefs(original_prefs)

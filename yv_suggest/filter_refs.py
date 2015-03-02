@@ -75,7 +75,7 @@ def get_matching_books(books, query):
 
 
 # Retrieves search resylts matching the given query
-def get_result_list(query_str, ignore_prefs=True):
+def get_result_list(query_str, prefs=None):
 
     query_str = shared.format_query_str(query_str)
     query = get_query_object(query_str)
@@ -84,7 +84,12 @@ def get_result_list(query_str, ignore_prefs=True):
     if not query:
         return results
 
-    prefs = shared.get_prefs(ignore_prefs)
+    if prefs is not None:
+        if 'language' not in prefs:
+            prefs = shared.get_defaults()
+    else:
+        prefs = shared.get_prefs()
+
     bible = shared.get_bible_data(prefs['language'])
     chapters = shared.get_chapter_data()
     matching_books = get_matching_books(bible['books'], query)
@@ -93,7 +98,7 @@ def get_result_list(query_str, ignore_prefs=True):
     if 'version' in query:
         chosen_version = guess_version(bible['versions'], query['version'])
 
-    if not chosen_version and not ignore_prefs:
+    if not chosen_version and 'version' in prefs:
         chosen_version = shared.get_version(bible['versions'],
                                             prefs['version'])
 
@@ -153,9 +158,9 @@ def get_result_list(query_str, ignore_prefs=True):
 
 
 # Outputs an Alfred XML string from the given query string
-def main(query_str='{query}', ignore_prefs=True):
+def main(query_str='{query}', prefs=None):
 
-    results = get_result_list(query_str, ignore_prefs)
+    results = get_result_list(query_str, prefs)
 
     if not results:
 
@@ -170,4 +175,4 @@ def main(query_str='{query}', ignore_prefs=True):
     print(shared.get_result_list_xml(results))
 
 if __name__ == '__main__':
-    main(ignore_prefs=False)
+    main()

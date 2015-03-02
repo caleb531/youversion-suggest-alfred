@@ -1,323 +1,319 @@
 {
-  "versions": [
+  "books": [
     {
-      "name": "BLPH",
-      "id": 28
+      "id": "gen",
+      "name": "Génesis"
     },
     {
-      "name": "DHHD",
-      "id": 52
+      "id": "exo",
+      "name": "Éxodo"
     },
     {
-      "name": "LBLA",
-      "id": 89
+      "id": "lev",
+      "name": "Levítico"
     },
     {
-      "name": "NBLH",
-      "id": 103
+      "id": "num",
+      "name": "Números"
     },
     {
-      "name": "NTV",
-      "id": 127
+      "id": "deu",
+      "name": "Deuteronomio"
     },
     {
-      "name": "NVI",
-      "id": 128
+      "id": "jos",
+      "name": "Josué"
     },
     {
-      "name": "PDT",
-      "id": 197
+      "id": "jdg",
+      "name": "Jueces"
     },
     {
-      "name": "RVC",
-      "id": 146
+      "id": "rut",
+      "name": "Rut"
     },
     {
-      "name": "RVES",
-      "id": 147
+      "id": "1sa",
+      "name": "1 Samuel"
     },
     {
-      "name": "RVR1960",
-      "id": 149
+      "id": "2sa",
+      "name": "2 Samuel"
     },
     {
-      "name": "RVR95",
-      "id": 150
+      "id": "1ki",
+      "name": "1 Reyes"
     },
     {
-      "name": "TLA",
-      "id": 176
+      "id": "2ki",
+      "name": "2 Reyes"
     },
     {
-      "name": "TLAD",
-      "id": 178
+      "id": "1ch",
+      "name": "1 Crónicas"
+    },
+    {
+      "id": "2ch",
+      "name": "2 Crónicas"
+    },
+    {
+      "id": "ezr",
+      "name": "Esdras"
+    },
+    {
+      "id": "neh",
+      "name": "Nehemías"
+    },
+    {
+      "id": "est",
+      "name": "Ester"
+    },
+    {
+      "id": "job",
+      "name": "Job"
+    },
+    {
+      "id": "psa",
+      "name": "Salmos"
+    },
+    {
+      "id": "pro",
+      "name": "Proverbios"
+    },
+    {
+      "id": "ecc",
+      "name": "Eclesiastés"
+    },
+    {
+      "id": "sng",
+      "name": "Cantares"
+    },
+    {
+      "id": "isa",
+      "name": "Isaías"
+    },
+    {
+      "id": "jer",
+      "name": "Jeremías"
+    },
+    {
+      "id": "lam",
+      "name": "Lamentaciones"
+    },
+    {
+      "id": "ezk",
+      "name": "Ezequiel"
+    },
+    {
+      "id": "dan",
+      "name": "Daniel"
+    },
+    {
+      "id": "hos",
+      "name": "Oseas"
+    },
+    {
+      "id": "jol",
+      "name": "Joel"
+    },
+    {
+      "id": "amo",
+      "name": "Amós"
+    },
+    {
+      "id": "oba",
+      "name": "Abdías"
+    },
+    {
+      "id": "jon",
+      "name": "Jonás"
+    },
+    {
+      "id": "mic",
+      "name": "Miqueas"
+    },
+    {
+      "id": "hab",
+      "name": "Habacuc"
+    },
+    {
+      "id": "zep",
+      "name": "Sofonías"
+    },
+    {
+      "id": "hag",
+      "name": "Hageo"
+    },
+    {
+      "id": "zec",
+      "name": "Zacarías"
+    },
+    {
+      "id": "mal",
+      "name": "Malaquías"
+    },
+    {
+      "id": "mat",
+      "name": "Mateo"
+    },
+    {
+      "id": "mrk",
+      "name": "Marco"
+    },
+    {
+      "id": "luk",
+      "name": "Lucas"
+    },
+    {
+      "id": "jhn",
+      "name": "Juan"
+    },
+    {
+      "id": "act",
+      "name": "Hechos"
+    },
+    {
+      "id": "rom",
+      "name": "Romanos"
+    },
+    {
+      "id": "1co",
+      "name": "1 Coríntios"
+    },
+    {
+      "id": "2co",
+      "name": "2 Coríntios"
+    },
+    {
+      "id": "gal",
+      "name": "Gálatas"
+    },
+    {
+      "id": "eph",
+      "name": "Efesios"
+    },
+    {
+      "id": "php",
+      "name": "Filipenses"
+    },
+    {
+      "id": "col",
+      "name": "Colosenses"
+    },
+    {
+      "id": "1th",
+      "name": "1 Tesalonicenses"
+    },
+    {
+      "id": "2th",
+      "name": "2 Tesalonicenses"
+    },
+    {
+      "id": "1ti",
+      "name": "1 Timoteo"
+    },
+    {
+      "id": "2ti",
+      "name": "2 Timoteo"
+    },
+    {
+      "id": "tit",
+      "name": "Tito"
+    },
+    {
+      "id": "phm",
+      "name": "Filemón"
+    },
+    {
+      "id": "heb",
+      "name": "Hebreos"
+    },
+    {
+      "id": "jas",
+      "name": "Santiago"
+    },
+    {
+      "id": "1pe",
+      "name": "1 Pedro"
+    },
+    {
+      "id": "2pe",
+      "name": "2 Pedro"
+    },
+    {
+      "id": "1jn",
+      "name": "1 Juan"
+    },
+    {
+      "id": "2jn",
+      "name": "2 Juan"
+    },
+    {
+      "id": "3jn",
+      "name": "3 Juan"
+    },
+    {
+      "id": "jud",
+      "name": "Juda"
+    },
+    {
+      "id": "rev",
+      "name": "Apocalipsis"
     }
   ],
   "default_version": 128,
-  "books": [
+  "versions": [
     {
-      "name": "Génesis",
-      "id": "gen"
+      "id": 28,
+      "name": "BLPH"
     },
     {
-      "name": "Éxodo",
-      "id": "exo"
+      "id": 52,
+      "name": "DHHD"
     },
     {
-      "name": "Levítico",
-      "id": "lev"
+      "id": 89,
+      "name": "LBLA"
     },
     {
-      "name": "Números",
-      "id": "num"
+      "id": 103,
+      "name": "NBLH"
     },
     {
-      "name": "Deuteronomio",
-      "id": "deu"
+      "id": 127,
+      "name": "NTV"
     },
     {
-      "name": "Josué",
-      "id": "jos"
+      "id": 128,
+      "name": "NVI"
     },
     {
-      "name": "Jueces",
-      "id": "jdg"
+      "id": 197,
+      "name": "PDT"
     },
     {
-      "name": "Rut",
-      "id": "rut"
+      "id": 146,
+      "name": "RVC"
     },
     {
-      "name": "1 Samuel",
-      "id": "1sa"
+      "id": 147,
+      "name": "RVES"
     },
     {
-      "name": "2 Samuel",
-      "id": "2sa"
+      "id": 149,
+      "name": "RVR1960"
     },
     {
-      "name": "1 Reyes",
-      "id": "1ki"
+      "id": 150,
+      "name": "RVR95"
     },
     {
-      "name": "2 Reyes",
-      "id": "2ki"
+      "id": 176,
+      "name": "TLA"
     },
     {
-      "name": "1 Crónicas",
-      "id": "1ch"
-    },
-    {
-      "name": "2 Crónicas",
-      "id": "2ch"
-    },
-    {
-      "name": "Esdras",
-      "id": "ezr"
-    },
-    {
-      "name": "Nehemías",
-      "id": "neh"
-    },
-    {
-      "name": "Ester",
-      "id": "est"
-    },
-    {
-      "name": "Job",
-      "id": "job"
-    },
-    {
-      "name": "Salmos",
-      "id": "psa"
-    },
-    {
-      "name": "Proverbios",
-      "id": "pro"
-    },
-    {
-      "name": "Eclesiastés",
-      "id": "ecc"
-    },
-    {
-      "name": "Cantares",
-      "id": "sng"
-    },
-    {
-      "name": "Isaías",
-      "id": "isa"
-    },
-    {
-      "name": "Jeremías",
-      "id": "jer"
-    },
-    {
-      "name": "Lamentaciones",
-      "id": "lam"
-    },
-    {
-      "name": "Ezequiel",
-      "id": "ezk"
-    },
-    {
-      "name": "Daniel",
-      "id": "dan"
-    },
-    {
-      "name": "Oseas",
-      "id": "hos"
-    },
-    {
-      "name": "Joel",
-      "id": "jol"
-    },
-    {
-      "name": "Amós",
-      "id": "amo"
-    },
-    {
-      "name": "Abdías",
-      "id": "oba"
-    },
-    {
-      "name": "Jonás",
-      "id": "jon"
-    },
-    {
-      "name": "Miqueas",
-      "id": "mic"
-    },
-    {
-      "name": "Nahúm",
-      "id": "nah"
-    },
-    {
-      "name": "Habacuc",
-      "id": "hab"
-    },
-    {
-      "name": "Sofonías",
-      "id": "zep"
-    },
-    {
-      "name": "Hageo",
-      "id": "hag"
-    },
-    {
-      "name": "Zacarías",
-      "id": "zec"
-    },
-    {
-      "name": "Malaquías",
-      "id": "mal"
-    },
-    {
-      "name": "Mateo",
-      "id": "mat"
-    },
-    {
-      "name": "Marco",
-      "id": "mrk"
-    },
-    {
-      "name": "Lucas",
-      "id": "luk"
-    },
-    {
-      "name": "Juan",
-      "id": "jhn"
-    },
-    {
-      "name": "Hechos",
-      "id": "act"
-    },
-    {
-      "name": "Romanos",
-      "id": "rom"
-    },
-    {
-      "name": "1 Coríntios",
-      "id": "1co"
-    },
-    {
-      "name": "2 Coríntios",
-      "id": "2co"
-    },
-    {
-      "name": "Gálatas",
-      "id": "gal"
-    },
-    {
-      "name": "Efesios",
-      "id": "eph"
-    },
-    {
-      "name": "Filipenses",
-      "id": "php"
-    },
-    {
-      "name": "Colosenses",
-      "id": "col"
-    },
-    {
-      "name": "1 Tesalonicenses",
-      "id": "1th"
-    },
-    {
-      "name": "2 Tesalonicenses",
-      "id": "2th"
-    },
-    {
-      "name": "1 Timoteo",
-      "id": "1ti"
-    },
-    {
-      "name": "2 Timoteo",
-      "id": "2ti"
-    },
-    {
-      "name": "Tito",
-      "id": "tit"
-    },
-    {
-      "name": "Filemón",
-      "id": "phm"
-    },
-    {
-      "name": "Hebreos",
-      "id": "heb"
-    },
-    {
-      "name": "Santiago",
-      "id": "jas"
-    },
-    {
-      "name": "1 Pedro",
-      "id": "1pe"
-    },
-    {
-      "name": "2 Pedro",
-      "id": "2pe"
-    },
-    {
-      "name": "1 Juan",
-      "id": "1jn"
-    },
-    {
-      "name": "2 Juan",
-      "id": "2jn"
-    },
-    {
-      "name": "3 Juan",
-      "id": "3jn"
-    },
-    {
-      "name": "Juda",
-      "id": "jud"
-    },
-    {
-      "name": "Apocalipsis",
-      "id": "rev"
+      "id": 178,
+      "name": "TLAD"
     }
   ]
 }

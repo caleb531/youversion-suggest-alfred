@@ -1,339 +1,359 @@
 {
-  "versions": [
+  "books": [
     {
-      "name": "AMP",
-      "id": 8
+      "id": "gen",
+      "name": "Genesis"
     },
     {
-      "name": "ASV",
-      "id": 12
+      "id": "exo",
+      "name": "Exodus"
     },
     {
-      "name": "BOOKS",
-      "id": 31
+      "id": "lev",
+      "name": "Leviticus"
     },
     {
-      "name": "CEB",
-      "id": 37
+      "id": "num",
+      "name": "Numbers"
     },
     {
-      "name": "ESV",
-      "id": 59
+      "id": "deu",
+      "name": "Deuteronomy"
     },
     {
-      "name": "GNT",
-      "id": 68
+      "id": "jos",
+      "name": "Joshua"
     },
     {
-      "name": "KJV",
-      "id": 1
+      "id": "jdg",
+      "name": "Judges"
     },
     {
-      "name": "MSG",
-      "id": 97
+      "id": "rut",
+      "name": "Ruth"
     },
     {
-      "name": "NASB",
-      "id": 100
+      "id": "1sa",
+      "name": "1 Samuel"
     },
     {
-      "name": "NCV",
-      "id": 105
+      "id": "2sa",
+      "name": "2 Samuel"
     },
     {
-      "name": "NET",
-      "id": 107
+      "id": "1ki",
+      "name": "1 Kings"
     },
     {
-      "name": "NIRV",
-      "id": 110
+      "id": "2ki",
+      "name": "2 Kings"
     },
     {
-      "name": "NIV",
-      "id": 111
+      "id": "1ch",
+      "name": "1 Chronicles"
     },
     {
-      "name": "NIVUK",
-      "id": 113
+      "id": "2ch",
+      "name": "2 Chronicles"
     },
     {
-      "name": "NKJV",
-      "id": 114
+      "id": "ezr",
+      "name": "Ezra"
     },
     {
-      "name": "NLT",
-      "id": 116
+      "id": "neh",
+      "name": "Nehemiah"
     },
     {
-      "name": "RV1885",
-      "id": 477
+      "id": "est",
+      "name": "Esther"
+    },
+    {
+      "id": "job",
+      "name": "Job"
+    },
+    {
+      "id": "psa",
+      "name": "Psalm"
+    },
+    {
+      "id": "pro",
+      "name": "Proverbs"
+    },
+    {
+      "id": "ecc",
+      "name": "Ecclesiastes"
+    },
+    {
+      "id": "sng",
+      "name": "Song of Solomon"
+    },
+    {
+      "id": "isa",
+      "name": "Isaiah"
+    },
+    {
+      "id": "jer",
+      "name": "Jeremiah"
+    },
+    {
+      "id": "lam",
+      "name": "Lamentations"
+    },
+    {
+      "id": "ezk",
+      "name": "Ezekiel"
+    },
+    {
+      "id": "dan",
+      "name": "Daniel"
+    },
+    {
+      "id": "hos",
+      "name": "Hosea"
+    },
+    {
+      "id": "jol",
+      "name": "Joel"
+    },
+    {
+      "id": "amo",
+      "name": "Amos"
+    },
+    {
+      "id": "oba",
+      "name": "Obadiah"
+    },
+    {
+      "id": "jon",
+      "name": "Jonah"
+    },
+    {
+      "id": "mic",
+      "name": "Micah"
+    },
+    {
+      "id": "hab",
+      "name": "Habakkuk"
+    },
+    {
+      "id": "zep",
+      "name": "Zephaniah"
+    },
+    {
+      "id": "hag",
+      "name": "Haggai"
+    },
+    {
+      "id": "zec",
+      "name": "Zechariah"
+    },
+    {
+      "id": "mal",
+      "name": "Malachi"
+    },
+    {
+      "id": "mat",
+      "name": "Matthew"
+    },
+    {
+      "id": "mrk",
+      "name": "Mark"
+    },
+    {
+      "id": "luk",
+      "name": "Luke"
+    },
+    {
+      "id": "jhn",
+      "name": "John"
+    },
+    {
+      "id": "act",
+      "name": "Acts"
+    },
+    {
+      "id": "rom",
+      "name": "Romans"
+    },
+    {
+      "id": "1co",
+      "name": "1 Corinthians"
+    },
+    {
+      "id": "2co",
+      "name": "2 Corinthians"
+    },
+    {
+      "id": "gal",
+      "name": "Galatians"
+    },
+    {
+      "id": "eph",
+      "name": "Ephesians"
+    },
+    {
+      "id": "php",
+      "name": "Philippians"
+    },
+    {
+      "id": "col",
+      "name": "Colossians"
+    },
+    {
+      "id": "1th",
+      "name": "1 Thessalonians"
+    },
+    {
+      "id": "2th",
+      "name": "2 Thessalonians"
+    },
+    {
+      "id": "1ti",
+      "name": "1 Timothy"
+    },
+    {
+      "id": "2ti",
+      "name": "2 Timothy"
+    },
+    {
+      "id": "tit",
+      "name": "Titus"
+    },
+    {
+      "id": "phm",
+      "name": "Philemon"
+    },
+    {
+      "id": "heb",
+      "name": "Hebrews"
+    },
+    {
+      "id": "jas",
+      "name": "James"
+    },
+    {
+      "id": "1pe",
+      "name": "1 Peter"
+    },
+    {
+      "id": "2pe",
+      "name": "2 Peter"
+    },
+    {
+      "id": "1jn",
+      "name": "1 John"
+    },
+    {
+      "id": "2jn",
+      "name": "2 John"
+    },
+    {
+      "id": "3jn",
+      "name": "3 John"
+    },
+    {
+      "id": "jud",
+      "name": "Jude"
+    },
+    {
+      "id": "rev",
+      "name": "Revelation"
     }
   ],
   "default_version": 111,
-  "books": [
+  "versions": [
     {
-      "name": "Genesis",
-      "id": "gen"
+      "id": 8,
+      "name": "AMP"
     },
     {
-      "name": "Exodus",
-      "id": "exo"
+      "id": 12,
+      "name": "ASV"
     },
     {
-      "name": "Leviticus",
-      "id": "lev"
+      "id": 31,
+      "name": "BOOKS"
     },
     {
-      "name": "Numbers",
-      "id": "num"
+      "id": 37,
+      "name": "CEB"
     },
     {
-      "name": "Deuteronomy",
-      "id": "deu"
+      "id": 42,
+      "name": "CPDV"
     },
     {
-      "name": "Joshua",
-      "id": "jos"
+      "id": 55,
+      "name": "DRC1752"
     },
     {
-      "name": "Judges",
-      "id": "jdg"
+      "id": 59,
+      "name": "ESV"
     },
     {
-      "name": "Ruth",
-      "id": "rut"
+      "id": 68,
+      "name": "GNT"
     },
     {
-      "name": "1 Samuel",
-      "id": "1sa"
+      "id": 69,
+      "name": "GNTD"
     },
     {
-      "name": "2 Samuel",
-      "id": "2sa"
+      "id": 70,
+      "name": "GW"
     },
     {
-      "name": "1 Kings",
-      "id": "1ki"
+      "id": 72,
+      "name": "HCSB"
     },
     {
-      "name": "2 Kings",
-      "id": "2ki"
+      "id": 1,
+      "name": "KJV"
     },
     {
-      "name": "1 Chronicles",
-      "id": "1ch"
+      "id": 90,
+      "name": "LEB"
     },
     {
-      "name": "2 Chronicles",
-      "id": "2ch"
+      "id": 97,
+      "name": "MSG"
     },
     {
-      "name": "Ezra",
-      "id": "ezr"
+      "id": 100,
+      "name": "NASB"
     },
     {
-      "name": "Nehemiah",
-      "id": "neh"
+      "id": 105,
+      "name": "NCV"
     },
     {
-      "name": "Esther",
-      "id": "est"
+      "id": 107,
+      "name": "NET"
     },
     {
-      "name": "Job",
-      "id": "job"
+      "id": 110,
+      "name": "NIRV"
     },
     {
-      "name": "Psalm",
-      "id": "psa"
+      "id": 111,
+      "name": "NIV"
     },
     {
-      "name": "Proverbs",
-      "id": "pro"
+      "id": 113,
+      "name": "NIVUK"
     },
     {
-      "name": "Ecclesiastes",
-      "id": "ecc"
+      "id": 114,
+      "name": "NKJV"
     },
     {
-      "name": "Song of Songs",
-      "id": "sng"
+      "id": 116,
+      "name": "NLT"
     },
     {
-      "name": "Isaiah",
-      "id": "isa"
-    },
-    {
-      "name": "Jeremiah",
-      "id": "jer"
-    },
-    {
-      "name": "Lamentations",
-      "id": "lam"
-    },
-    {
-      "name": "Ezekiel",
-      "id": "ezk"
-    },
-    {
-      "name": "Daniel",
-      "id": "dan"
-    },
-    {
-      "name": "Hosea",
-      "id": "hos"
-    },
-    {
-      "name": "Joel",
-      "id": "jol"
-    },
-    {
-      "name": "Amos",
-      "id": "amo"
-    },
-    {
-      "name": "Obadiah",
-      "id": "oba"
-    },
-    {
-      "name": "Jonah",
-      "id": "jon"
-    },
-    {
-      "name": "Micah",
-      "id": "mic"
-    },
-    {
-      "name": "Nahum",
-      "id": "nah"
-    },
-    {
-      "name": "Habakkuk",
-      "id": "hab"
-    },
-    {
-      "name": "Zephaniah",
-      "id": "zep"
-    },
-    {
-      "name": "Haggai",
-      "id": "hag"
-    },
-    {
-      "name": "Zechariah",
-      "id": "zec"
-    },
-    {
-      "name": "Malachi",
-      "id": "mal"
-    },
-    {
-      "name": "Matthew",
-      "id": "mat"
-    },
-    {
-      "name": "Mark",
-      "id": "mrk"
-    },
-    {
-      "name": "Luke",
-      "id": "luk"
-    },
-    {
-      "name": "John",
-      "id": "jhn"
-    },
-    {
-      "name": "Acts",
-      "id": "act"
-    },
-    {
-      "name": "Romans",
-      "id": "rom"
-    },
-    {
-      "name": "1 Corinthians",
-      "id": "1co"
-    },
-    {
-      "name": "2 Corinthians",
-      "id": "2co"
-    },
-    {
-      "name": "Galatians",
-      "id": "gal"
-    },
-    {
-      "name": "Ephesians",
-      "id": "eph"
-    },
-    {
-      "name": "Philippians",
-      "id": "php"
-    },
-    {
-      "name": "Colossians",
-      "id": "col"
-    },
-    {
-      "name": "1 Thessalonians",
-      "id": "1th"
-    },
-    {
-      "name": "2 Thessalonians",
-      "id": "2th"
-    },
-    {
-      "name": "1 Timothy",
-      "id": "1ti"
-    },
-    {
-      "name": "2 Timothy",
-      "id": "2ti"
-    },
-    {
-      "name": "Titus",
-      "id": "tit"
-    },
-    {
-      "name": "Philemon",
-      "id": "phm"
-    },
-    {
-      "name": "Hebrews",
-      "id": "heb"
-    },
-    {
-      "name": "James",
-      "id": "jas"
-    },
-    {
-      "name": "1 Peter",
-      "id": "1pe"
-    },
-    {
-      "name": "2 Peter",
-      "id": "2pe"
-    },
-    {
-      "name": "1 John",
-      "id": "1jn"
-    },
-    {
-      "name": "2 John",
-      "id": "2jn"
-    },
-    {
-      "name": "3 John",
-      "id": "3jn"
-    },
-    {
-      "name": "Jude",
-      "id": "jud"
-    },
-    {
-      "name": "Revelation",
-      "id": "rev"
+      "id": 130,
+      "name": "OJB"
     }
   ]
 }

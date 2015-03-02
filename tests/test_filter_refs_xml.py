@@ -9,7 +9,7 @@ from xml.etree import ElementTree as ET
 
 def test_validity():
     """should return syntactically-valid XML"""
-    results = yvs.get_result_list('john 3:16')
+    results = yvs.get_result_list('john 3:16', prefs={})
     xml = yvs.shared.get_result_list_xml(results)
     try:
         nose.assert_is_instance(ET.fromstring(xml), ET.Element)
@@ -19,7 +19,7 @@ def test_validity():
 
 def test_structure():
     """XML should match result list"""
-    results = yvs.get_result_list('matthew 6:34')
+    results = yvs.get_result_list('matthew 6:34', prefs={})
     result = results[0]
     xml = yvs.shared.get_result_list_xml(results)
     root = ET.fromstring(xml)

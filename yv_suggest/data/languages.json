@@ -1,10 +1,14 @@
 [
   {
-    "name": "English",
-    "id": "en"
+    "id": "en",
+    "name": "English"
   },
   {
-    "name": "Español",
-    "id": "es"
+    "id": "es",
+    "name": "Español"
+  },
+  {
+    "id": "nl",
+    "name": "Nederlands"
   }
 ]

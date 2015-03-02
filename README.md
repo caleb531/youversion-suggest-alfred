@@ -36,6 +36,11 @@ and versions. To do so, type `yvset language` into Alfred, and the list of
 supported languages will then appear. You may then choose another language as
 your preferred language.
 
+Currently, YouVersion Suggest supports the following languages:
+
+* English
+* Spanish
+* Dutch
 
 ### Setting your preferred version
 
@@ -51,91 +56,3 @@ type a query after the initial query to filter the list of versions.
 
 * `yvset version esv`
 * `yvset version a`
-
-### Supported versions
-
-#### English
-
-AMP, ASV, BOOKS, CEB, ESV, GNT, KJV, MSG, NASB, NCV, NET, NIRV, NIV (default),
-NIVUK, NKJV, NLT
-
-#### Spanish (Español)
-
-BLPH, DHHD, LBLA, NBLH, NTV, NVI (default), PDT, RVC, RVES, RVR1960, RVR95, TLA,
-TLAD
-
-## Testing
-
-### Requirements for running tests
-
-Running these unit tests requires Python 2.7, as well as the following packages:
-
-* nose
-* coverage
-* pep8
-* jsonschema
-
-If you do not have these packages installed already, you can install them via
-`pip`:
-
-```
-sudo pip install nose coverage pep8 jsonschema
-```
-
-### Running tests
-
-To run all included unit tests, run the `nosetests` command at the root of the
-project directory.
-
-```
-nosetests
-```
-
-### Viewing test coverage
-
-To view the test coverage report, run `nosetests` with the `--with-coverage` and
-`--cover-erase` flags.
-
-```
-nosetests --with-coverage --cover-erase
-```
-
-### Adding new languages
-
-Currently, YouVersion Suggest only supports English and Spanish, with English as
-the default. However, YouVersion Suggest v2 enables developers to add support
-for *any* language via the workflow's public API. To do so, follow the steps
-below.
-
-#### 1. Define language information
-
-To add a mew language, you must first add information about your language to the
-`languages.json` file under the `yv_suggest/data/` directory. The value for the
-`name` key should be the name of the language as written in said language.
-
-
-#### 2. Define Bible data for language
-
-All bible data files are located in the `yv_suggest/data/bible/` directory. Each
-filename must be equal to the `id` of the corresponding language as defined in
-`languages.json`.
-
-#### 3. Run unit tests
-
-To ensure that your modifications are complete, it is recommended that you run
-all project unit tests (see above). The test runner will raise an error if any
-of the modified data files do not conform to the defined schema.
-
-#### 4. Copy changes into installed workflow
-
-To test your changes within Alfred, you must copy the modified `data/`
-directory to the installed workflow directory. To do so, open Alfred Preferences
-and navigate to the Workflows pane. Right-click YouVersion Suggest in the
-sidebar and choose *Show in Finder* from the contextual menu. You can then drag
-the modified `data/` directory to the installed workflow directory to replace
-it.
-
-#### Schema
-
-Please refer to the included JSON schemas (under the `yv_suggests/data/schema/`
-directory) for the structure of each data file.
