@@ -15,7 +15,7 @@
           "name": {
             "description": "The acronym for this version",
             "type": "string",
-            "pattern": "^[^\\W\\d_]+\\d*$"
+            "pattern": "^[A-Z]+[0-9]*$"
           },
           "id": {
             "description": "The ID used by YouVersion to uniquely identify this version.",
@@ -48,7 +48,7 @@
             "title": "Book ID",
             "description": "The ID used by YouVersion to uniquely identify this book",
             "type": "string",
-            "pattern": "^\\d?[a-z]+$"
+            "pattern": "^[1-9]?[a-z]+$"
           }
         },
         "required": ["name", "id"],

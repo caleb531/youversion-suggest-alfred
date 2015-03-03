@@ -14,7 +14,7 @@
       "id": {
         "description": "The language's ISO 639-1 code",
         "type": "string",
-        "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
+        "pattern": "^[a-z]{2}$"
       }
     },
     "required": ["name", "id"],

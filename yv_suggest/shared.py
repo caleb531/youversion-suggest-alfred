@@ -146,24 +146,6 @@ def format_query_str(query_str):
     return query_str
 
 
-# Parse query string into components of a Bible reference
-def get_ref_matches(query_str):
-
-    # Pattern for parsing any bible reference
-    patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
-        # Book name (including preceding number, if any)
-        book='(\d?(?:[^\W\d_]|\s)+|\d)\s?',
-        # Chapter number
-        chapter='(\d+)\s?',
-        # Verse number
-        verse='(\d+)\s?',
-        #  End verse for a verse range
-        endverse='(\d+)?\s?',
-        # Version (translation) used to view reference
-        version='([^\W\d_]+\d*)?.*?')
-    return re.search(patt, query_str, flags=re.UNICODE)
-
-
 # Constructs an Alfred XML string from the given results list
 def get_result_list_xml(results):
 
