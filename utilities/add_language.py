@@ -63,6 +63,9 @@ def get_version_elems(params):
         version_elems = d(category_elem).find('li')
         params['language']['name'] = get_language_name(text)
 
+        if not params['language']['name']:
+            raise RuntimeError('Language name cannot be determined. Aborting.')
+
     return version_elems
 
 
@@ -144,10 +147,11 @@ def get_bible_data(params):
 
     bible['versions'] = get_versions(params)
 
-    if not any(version['id'] == params['default_version']
-               for version in bible['versions']):
+    if (params['default_version'] and
+        not any(version['id'] == params['default_version'] for version in
+                bible['versions'])):
         raise RuntimeError(
-            'Given default version does not exist in given language')
+         'Given default version does not exist in given language. Aborting.')
 
     if not params['default_version']:
         params['default_version'] = min(bible['versions'],
@@ -165,7 +169,8 @@ def save_bible_data(params):
     language = params['language']
     bible = get_bible_data(params)
     bible_path = os.path.join('yv_suggest', 'data', 'bible',
-                              'language-{}.json'.format(language['id']))
+                              'language-{}.json'
+                              .format(language['id'].replace('-', '_')))
     with open(bible_path, 'w') as bible_file:
         json.dump(bible, bible_file, **json_params)
         bible_file.write('\n')
@@ -206,6 +211,10 @@ def parse_args():
         type=int)
 
     args = parser.parse_args()
+
+    if '-' in args.code or '_' in args.code:
+        raise RuntimeError(
+            'Only two-letter language codes are supported. Aborting.')
 
     return args
 
