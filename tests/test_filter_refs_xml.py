@@ -14,7 +14,7 @@ def test_validity():
     try:
         nose.assert_is_instance(ET.fromstring(xml), ET.Element)
     except ET.ParseError:
-        assert False, 'result list XML is not valid'
+        nose.assert_true(False, 'result list XML is not valid')
 
 
 def test_structure():

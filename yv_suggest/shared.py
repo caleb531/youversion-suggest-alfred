@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 import sys
 import os
 import os.path
@@ -151,7 +152,7 @@ def get_ref_matches(query_str):
     # Pattern for parsing any bible reference
     patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
         # Book name (including preceding number, if any)
-        book='(\d?(?:[^\W\d_]|\s)+)\s?',
+        book='(\d?(?:[^\W\d_]|\s)+|\d)\s?',
         # Chapter number
         chapter='(\d+)\s?',
         # Verse number
@@ -159,7 +160,7 @@ def get_ref_matches(query_str):
         #  End verse for a verse range
         endverse='(\d+)?\s?',
         # Version (translation) used to view reference
-        version='([^\W\d_]+\d*)?')
+        version='([^\W\d_]+\d*)?.*?')
     return re.search(patt, query_str, flags=re.UNICODE)
 
 

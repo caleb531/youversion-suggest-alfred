@@ -40,4 +40,4 @@ def test_json():
                         validator = jsonschema.validate(data, schema)
                         yield nose.assert_is_none, validator
                     except jsonschema.exceptions.ValidationError as error:
-                        assert False, error
+                        yield nose.assert_true, False, error
