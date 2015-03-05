@@ -30,10 +30,12 @@ def test_id():
 def test_nonexistent():
     """should not match nonexistent chapters"""
     results = yvs.get_result_list('psalm 160', prefs={})
-    nose.assert_equal(len(results), 0)
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Psalm 150 (NIV)')
 
 
 def test_zero_chapter():
-    """should not match chapter zero"""
+    """should interpret chapter zero as chapter one"""
     results = yvs.get_result_list('psalm 0', prefs={})
-    nose.assert_equal(len(results), 0)
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Psalm 1 (NIV)')

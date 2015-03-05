@@ -12,7 +12,7 @@ import re
 import io
 import json
 import urllib2
-
+import argparse
 
 json_params = {
     'indent': 2,
@@ -26,11 +26,13 @@ def get_url_content(url, **kw):
     return urllib2.urlopen(url).read().decode('utf-8')
 
 
-def language_matches(text, language):
-    patt = '^({language}) \((\d+)\)$'.format(
-        language=language.lower())
-    matches = re.search(patt, text.lower(), flags=re.UNICODE)
-    return matches is not None
+def get_language_name(text):
+    patt = '^\s*([^\W\d_]+)(?:\s*\((\d+)\))\s*$'
+    matches = re.search(patt, text, flags=re.UNICODE)
+    if matches:
+        return matches.group(1)
+    else:
+        return None
 
 
 def get_version(version_elem):
@@ -46,17 +48,23 @@ def get_version(version_elem):
 
 def get_version_elems(params):
 
-    d = pq(url='https://www.bible.com/versions',
+    d = pq(url='https://www.bible.com/{}/versions'
+           .format(params['language']['id']),
            opener=get_url_content)
 
     category_elems = d('#main > article > ul > li')
     version_elems = None
 
-    for category_elem in category_elems:
+    if category_elems:
+
+        category_elem = category_elems[0]
+
         text = category_elem.text.strip()
-        if language_matches(text, params['language']['name']):
-            version_elems = d(category_elem).find('li')
-            break
+        version_elems = d(category_elem).find('li')
+        params['language']['name'] = get_language_name(text)
+
+        if not params['language']['name']:
+            raise RuntimeError('Language name cannot be determined. Aborting.')
 
     return version_elems
 
@@ -82,9 +90,9 @@ def get_versions(params):
 
     for version_elem in version_elems:
         version = get_version(version_elem)
-        if ('max_version_id' in params and
+        if (params['max_version_id'] and
            (version['id'] <= params['max_version_id']) or
-           ('max_version_id' not in params)):
+           (not params['max_version_id'])):
             versions.append(version)
 
     versions.sort(key=get_item_name)
@@ -139,7 +147,13 @@ def get_bible_data(params):
 
     bible['versions'] = get_versions(params)
 
-    if 'default_version' not in params:
+    if (params['default_version'] and
+        not any(version['id'] == params['default_version'] for version in
+                bible['versions'])):
+        raise RuntimeError(
+         'Given default version does not exist in given language. Aborting.')
+
+    if not params['default_version']:
         params['default_version'] = min(bible['versions'],
                                         key=get_item_id)['id']
 
@@ -155,9 +169,11 @@ def save_bible_data(params):
     language = params['language']
     bible = get_bible_data(params)
     bible_path = os.path.join('yv_suggest', 'data', 'bible',
-                              'language-{}.json'.format(language['id']))
+                              'language-{}.json'
+                              .format(language['id'].replace('-', '_')))
     with open(bible_path, 'w') as bible_file:
         json.dump(bible, bible_file, **json_params)
+        bible_file.write('\n')
 
 
 def update_language_list(params):
@@ -179,24 +195,51 @@ def update_language_list(params):
 
 def add_language(params):
 
-    print('Adding support for {}...'
-          .format(params['language']['name']))
     save_bible_data(params)
     update_language_list(params)
+
+
+def parse_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('code')
+    parser.add_argument(
+        '--max-version-id',
+        type=int)
+    parser.add_argument(
+        '--default-version',
+        type=int)
+
+    args = parser.parse_args()
+
+    if '-' in args.code or '_' in args.code:
+        raise RuntimeError(
+            'Only two-letter language codes are supported. Aborting.')
+
+    return args
+
+
+def get_params(args):
+
+    params = {
+        'language': {
+            'id': args.code,
+            'name': None
+        },
+        'max_version_id': args.max_version_id,
+        'default_version': args.default_version
+    }
+    return params
+
+
+def main():
+
+    args = parse_args()
+    params = get_params(args)
+    print('Adding language support...')
+    add_language(params)
     print('Support for {} has been successfully added.'
           .format(params['language']['name']))
 
-
-# Example usage
-# add_language({
-#     'language': {
-#         # Name of language must be written in said language
-#         'name': 'Español',
-#         # ISO language code
-#         'id': 'es'
-#     },
-#     # Versions with lower IDs tend to be more popular and less obscure
-#     'max_version_id': 200,
-#     # If you know the default version you want to use, specify its ID
-#     'default_version': 128
-# })
+if __name__ == '__main__':
+    main()

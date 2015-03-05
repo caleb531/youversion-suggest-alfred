@@ -47,11 +47,10 @@ def test_numbered_partial():
     nose.assert_equal(results[0]['title'], '1 Corinthians 1 (NIV)')
 
 
-def test_numbered_whitespace():
-    """should match numbered books irrespective of extra whitespace"""
-    results = yvs.get_result_list('1    cor', prefs={})
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], '1 Corinthians 1 (NIV)')
+def test_number_only():
+    """should match single number query"""
+    results = yvs.get_result_list('2', prefs={})
+    nose.assert_equal(len(results), 8)
 
 
 def test_nonnumbered_partial():

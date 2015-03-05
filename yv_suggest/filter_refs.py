@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import shared
+import re
 
 
 # Find a version which best matches the given version query
@@ -20,11 +21,29 @@ def guess_version(versions, version_query):
     return None
 
 
+# Parses query string into components of a Bible reference
+def get_ref_matches(query_str):
+
+    # Pattern for parsing any bible reference
+    patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
+        # Book name (including preceding number, if any)
+        book='(\d?(?:[^\W\d_]|\s)+|\d)\s?',
+        # Chapter number
+        chapter='(\d+)\s?',
+        # Verse number
+        verse='(\d+)\s?',
+        #  End verse for a verse range
+        endverse='(\d+)?\s?',
+        # Version (translation) used to view reference
+        version='([a-z]+\d*)?.*?')
+    return re.search(patt, query_str, flags=re.UNICODE)
+
+
 # Builds the query object from the given query string
 def get_query_object(query_str):
 
     # Match section of the bible based on query
-    ref_matches = shared.get_ref_matches(query_str)
+    ref_matches = get_ref_matches(query_str)
 
     if not ref_matches:
         return None
@@ -101,7 +120,7 @@ def get_result_list(query_str, prefs=None):
         chosen_version = shared.get_version(bible['versions'],
                                             bible['default_version'])
 
-    if 'chapter' not in query:
+    if 'chapter' not in query or query['chapter'] == 0:
         query['chapter'] = 1
 
     # Build results list from books that matched the query
@@ -110,32 +129,31 @@ def get_result_list(query_str, prefs=None):
         # Result information
         result = {}
 
-        # If chapter exists within the book
-        if book['id'] not in chapters or (query['chapter'] >= 1 and
-           query['chapter'] <= chapters[book['id']]):
+        if query['chapter'] > chapters[book['id']]:
+            query['chapter'] = chapters[book['id']]
 
-            # Find chapter if given
-            result['uid'] = '{book}.{chapter}'.format(
-                book=book['id'],
-                chapter=query['chapter'])
-            result['title'] = '{book} {chapter}'.format(
-                book=book['name'],
-                chapter=query['chapter'])
+        # Find chapter if given
+        result['uid'] = '{book}.{chapter}'.format(
+            book=book['id'],
+            chapter=query['chapter'])
+        result['title'] = '{book} {chapter}'.format(
+            book=book['name'],
+            chapter=query['chapter'])
 
-            if 'verse' in query:
+        if 'verse' in query:
 
-                # Find verse if given
-                result['uid'] += '.{verse}'.format(
-                    verse=query['verse'])
-                result['title'] += ':{verse}'.format(
-                    verse=query['verse'])
+            # Find verse if given
+            result['uid'] += '.{verse}'.format(
+                verse=query['verse'])
+            result['title'] += ':{verse}'.format(
+                verse=query['verse'])
 
-                if 'endverse' in query and query['endverse'] > query['verse']:
+            if 'endverse' in query and query['endverse'] > query['verse']:
 
-                    result['uid'] += '-{verse}'.format(
-                        verse=query['endverse'])
-                    result['title'] += '-{verse}'.format(
-                        verse=query['endverse'])
+                result['uid'] += '-{verse}'.format(
+                    verse=query['endverse'])
+                result['title'] += '-{verse}'.format(
+                    verse=query['endverse'])
 
         # Create result data using the given information
         if 'uid' in result:
