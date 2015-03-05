@@ -4,6 +4,7 @@
 from contextlib import contextmanager
 from io import BytesIO
 import sys
+import yv_suggest.shared as yvs
 
 
 @contextmanager
@@ -16,3 +17,11 @@ def redirect_stdout():
         yield out
     finally:
         sys.stdout = original_stdout
+
+
+@contextmanager
+def get_prefs():
+    """safely retrieve and restore preferences"""
+    original_prefs = yvs.get_prefs()
+    yield original_prefs.copy()
+    yvs.update_prefs(original_prefs)

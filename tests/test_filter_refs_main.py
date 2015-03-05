@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.filter_refs as yvs
 from xml.etree import ElementTree as ET
-from context_managers import redirect_stdout
+import context_managers as ctx
 import inspect
 import sys
 
@@ -13,7 +13,7 @@ import sys
 def test_output():
     """should output ref result list XML"""
     query_str = 'genesis 50:20'
-    with redirect_stdout() as out:
+    with ctx.redirect_stdout() as out:
         yvs.main(query_str, prefs={})
         output = out.getvalue().strip()
         results = yvs.get_result_list(query_str, prefs={})
@@ -24,7 +24,7 @@ def test_output():
 def test_null_result():
     """should output "No Results" XML item for empty ref result lists"""
     query_str = 'xyz'
-    with redirect_stdout() as out:
+    with ctx.redirect_stdout() as out:
         yvs.main(query_str, prefs={})
         xml = out.getvalue().strip()
         root = ET.fromstring(xml)
