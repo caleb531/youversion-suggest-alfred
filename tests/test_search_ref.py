@@ -19,7 +19,7 @@ def test_url_open_chapter():
     """should attempt to open URL using webbrowser module"""
     mock = WebbrowserMock()
     yvs.webbrowser = mock
-    yvs.main('59/jhn.3')
+    yvs.main('59/jhn.3', prefs={})
     nose.assert_equal(mock.url,
                       'https://www.google.com/search?q=John+3+%28ESV%29')
 
@@ -28,6 +28,6 @@ def test_url_open_verse():
     """should attempt to open URL using webbrowser module"""
     mock = WebbrowserMock()
     yvs.webbrowser = mock
-    yvs.main('59/jhn.3.17')
+    yvs.main('59/jhn.3.17', prefs={})
     nose.assert_equal(mock.url,
                       'https://www.google.com/search?q=John+3%3A17+%28ESV%29')

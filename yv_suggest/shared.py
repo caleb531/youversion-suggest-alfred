@@ -167,3 +167,36 @@ def get_result_list_xml(results):
         icon.text = 'icon.png'
 
     return ET.tostring(root)
+
+
+# Retrieve the full reference identifier from the shorthand reference UID
+def get_full_ref(ref_uid, prefs=None):
+
+    patt = '{version}/{book_id}\.{chapter}(?:\.{verses})?'.format(
+        version='(\d+)',
+        book_id='(\d?[a-z]+)',
+        chapter='(\d+)',
+        verses='(\d+(?:-\d+)?)')
+
+    ref_uid_matches = re.match(patt, ref_uid)
+    book_id = ref_uid_matches.group(2)
+    chapter = ref_uid_matches.group(3)
+
+    prefs = get_prefs(prefs)
+    bible = get_bible_data(prefs['language'])
+    book_name = get_book(bible['books'], book_id)
+    ref = '{book} {chapter}'.format(
+        book=book_name,
+        chapter=chapter)
+
+    verses_match = ref_uid_matches.group(4)
+    if verses_match:
+        ref += ":{verses}".format(verses=verses_match)
+
+    version_id = int(ref_uid_matches.group(1))
+    version_name = get_version(bible['versions'],
+                               version_id)['name']
+
+    ref += " ({version})".format(version=version_name)
+
+    return ref

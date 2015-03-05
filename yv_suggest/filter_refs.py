@@ -155,17 +155,14 @@ def get_result_list(query_str, prefs=None):
                 result['title'] += '-{verse}'.format(
                     verse=query['endverse'])
 
-        # Create result data using the given information
-        if 'uid' in result:
-
-            result['arg'] = '{version}/{uid}'.format(
-                version=chosen_version['id'],
-                uid=result['uid'])
-            result['uid'] = 'yvs-{}'.format(result['arg'])
-            result['title'] += ' ({version})'.format(
-                version=chosen_version['name'])
-            result['subtitle'] = "View on YouVersion"
-            results.append(result)
+        result['arg'] = '{version}/{uid}'.format(
+            version=chosen_version['id'],
+            uid=result['uid'])
+        result['uid'] = 'yvs-{}'.format(result['arg'])
+        result['title'] += ' ({version})'.format(
+            version=chosen_version['name'])
+        result['subtitle'] = 'View on YouVersion'
+        results.append(result)
 
     return results
 
