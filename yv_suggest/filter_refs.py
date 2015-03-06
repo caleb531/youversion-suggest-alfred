@@ -9,8 +9,6 @@ import re
 # Find a version which best matches the given version query
 def guess_version(versions, version_query):
 
-    version_query = version_query.upper()
-
     # Chop off character from version query until matching version can be
     # found (if a matching version even exists)
     for i in xrange(len(version_query), 0, -1):

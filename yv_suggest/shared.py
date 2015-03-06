@@ -268,7 +268,7 @@ def get_query_object(query_str):
 
         version_match = ref_matches.group(5)
         if version_match:
-            query['version'] = version_match.lstrip()
+            query['version'] = version_match.lstrip().upper()
 
     return query
 

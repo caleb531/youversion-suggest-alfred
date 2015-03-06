@@ -43,7 +43,6 @@ def query_matches_ref(query, ref):
         if 'version' in query:
 
             conditions += 1
-            query['version'] = query['version'].upper()
             for i in xrange(len(query['version']), 0, -1):
                 if ref['version'].startswith(query['version'][:i]):
                     true_conditions += 1
