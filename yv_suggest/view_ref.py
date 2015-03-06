@@ -16,6 +16,7 @@ def open_ref_url(ref_uid):
 
 
 def main(ref_uid='{query}'):
+    shared.push_recent_ref(ref_uid)
     open_ref_url(ref_uid)
 
 if __name__ == '__main__':

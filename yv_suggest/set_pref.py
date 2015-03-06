@@ -32,6 +32,7 @@ def set_pref(key, value):
     prefs[key] = value
 
     if key == 'language':
+        shared.clear_recent_refs()
         bible = shared.get_bible_data(language=value)
         # Set version to default version of new language
         prefs['version'] = bible['default_version']

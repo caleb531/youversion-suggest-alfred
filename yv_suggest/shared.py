@@ -18,6 +18,8 @@ alfred_data_dir = os.path.join(os.path.expanduser('~'),
 prefs_path = os.path.join(alfred_data_dir, 'preferences.json')
 recent_refs_path = os.path.join(alfred_data_dir, 'recent.json')
 
+max_recent_refs = 10
+
 
 def get_package_path():
 
@@ -30,6 +32,7 @@ def get_package_path():
 
 
 def create_alfred_data_dir():
+
     try:
         os.makedirs(alfred_data_dir, 0o755)
     except OSError:
@@ -77,13 +80,37 @@ def get_recent_refs():
     return recent_refs
 
 
+def update_recent_refs(recent_refs):
+
+    with open(recent_refs_path, 'w') as recent_refs_file:
+        json.dump(recent_refs, recent_refs_file)
+
+
+def push_recent_ref(ref_uid):
+
+    recent_refs = get_recent_refs()
+    if ref_uid in recent_refs:
+        recent_refs.remove(ref_uid)
+    recent_refs.insert(0, ref_uid)
+    if len(recent_refs) > max_recent_refs:
+        recent_refs.pop()
+    update_recent_refs(recent_refs)
+
+
+def clear_recent_refs():
+
+    update_recent_refs([])
+
+
 def get_book(books, book_id):
+
     for book in books:
         if book['id'] == book_id:  # pragma: no cover
             return book['name']
 
 
 def get_version(versions, version_id):
+
     for version in versions:
         if version['id'] == version_id:
             return version
@@ -147,6 +174,7 @@ def update_prefs(prefs):
 
 
 def delete_prefs():
+
     try:
         os.remove(prefs_path)
     except OSError:
