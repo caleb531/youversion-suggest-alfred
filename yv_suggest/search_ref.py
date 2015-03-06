@@ -9,8 +9,9 @@ base_url = 'https://www.google.com/search'
 
 
 def get_search_url(ref_uid, prefs=None):
-    ref = shared.get_full_ref(ref_uid, prefs)
-    encoded_ref = urllib.quote_plus(ref)
+    ref = shared.get_ref_object(ref_uid, prefs)
+    full_ref = shared.get_full_ref(ref)
+    encoded_ref = urllib.quote_plus(full_ref)
     return '{base}?q={query_str}'.format(base=base_url, query_str=encoded_ref)
 
 

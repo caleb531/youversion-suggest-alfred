@@ -60,7 +60,7 @@ def create_recent_refs():
 
     create_alfred_data_dir()
     recent_refs = []
-    with open(prefs_path, 'w') as recent_refs_file:
+    with open(recent_refs_path, 'w') as recent_refs_file:
         json.dump(recent_refs, recent_refs_file)
 
     return recent_refs
@@ -193,6 +193,58 @@ def get_result_list_xml(results):
     return ET.tostring(root)
 
 
+# Parses query string into components of a Bible reference
+def get_ref_matches(query_str):
+
+    # Pattern for parsing any bible reference
+    patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
+        # Book name (including preceding number, if any)
+        book='(\d?(?:[^\W\d_]|\s)+|\d)\s?',
+        # Chapter number
+        chapter='(\d+)\s?',
+        # Verse number
+        verse='(\d+)\s?',
+        #  End verse for a verse range
+        endverse='(\d+)?\s?',
+        # Version (translation) used to view reference
+        version='([a-z]+\d*)?.*?')
+    return re.search(patt, query_str, flags=re.UNICODE)
+
+
+# Builds the query object from the given query string
+def get_query_object(query_str):
+
+    # Match section of the bible based on query
+    ref_matches = get_ref_matches(query_str)
+
+    if not ref_matches:
+        return None
+
+    # Create query object for storing query data
+    query = {}
+
+    book_match = ref_matches.group(1)
+    query['book'] = book_match.rstrip()
+
+    chapter_match = ref_matches.group(2)
+    if chapter_match:
+        query['chapter'] = int(chapter_match)
+
+        verse_match = ref_matches.group(3)
+        if verse_match:
+            query['verse'] = int(verse_match)
+
+            verse_range_match = ref_matches.group(4)
+            if verse_range_match:
+                query['endverse'] = int(verse_range_match)
+
+        version_match = ref_matches.group(5)
+        if version_match:
+            query['version'] = version_match.lstrip()
+
+    return query
+
+
 # Parse the given reference UID into a dictionary
 def get_ref_object(ref_uid, prefs=None):
 
@@ -226,15 +278,12 @@ def get_ref_object(ref_uid, prefs=None):
     version_name = get_version(bible['versions'],
                                version_id)['name']
     ref['version'] = version_name
-    ref['language'] = prefs['language']
 
     return ref
 
 
 # Retrieve the full reference identifier from the shorthand reference UID
-def get_full_ref(ref_uid, prefs=None):
-
-    ref = get_ref_object(ref_uid)
+def get_full_ref(ref):
 
     full_ref = '{book} {chapter}'.format(
         book=ref['book'],
