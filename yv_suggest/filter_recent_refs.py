@@ -8,14 +8,48 @@ import shared
 
 def query_matches_ref(query, ref):
 
-    for i in xrange(len(query['book']), 0, -1):
-        book_name = ref['book'].lower()
-        if (book_name.startswith(query['book'][:i]) or
-            (book_name[0].isnumeric() and
-                book_name[2:].startswith(query['book'][:i]))):
-            return True
+    conditions = 0
+    true_conditions = 0
 
-    return False
+    if 'book' in query:
+
+        conditions += 1
+        for i in xrange(len(query['book']), 0, -1):
+            book_name = ref['book'].lower()
+            if (book_name.startswith(query['book'][:i]) or
+                (book_name[0].isnumeric() and
+                    book_name[2:].startswith(query['book'][:i]))):
+                true_conditions += 1
+                break
+
+    if 'chapter' in query:
+
+        conditions += 1
+        true_conditions += str(ref['chapter']).startswith(
+            str(query['chapter']))
+
+        if 'verse' in query:
+
+            conditions += 1
+            true_conditions += str(ref['verse']).startswith(
+                str(query['verse']))
+
+            if 'endverse' in query:
+
+                conditions += 1
+                true_conditions += str(ref['endverse']).startswith(
+                    str(query['endverse']))
+
+        if 'version' in query:
+
+            conditions += 1
+            query['version'] = query['version'].upper()
+            for i in xrange(len(query['version']), 0, -1):
+                if ref['version'].startswith(query['version'][:i]):
+                    true_conditions += 1
+                    break
+
+    return conditions == true_conditions
 
 
 def get_result_list(query_str, prefs=None):
@@ -28,7 +62,7 @@ def get_result_list(query_str, prefs=None):
     for ref_uid in recent_refs:
 
         ref = shared.get_ref_object(ref_uid, prefs)
-        if not query_str or query_matches_ref(query, ref):
+        if not query or query_matches_ref(query, ref):
             full_ref = shared.get_full_ref(ref)
             result = {
                 'uid': 'yvs-{}-{}'.format(ref_uid, time.time()),
