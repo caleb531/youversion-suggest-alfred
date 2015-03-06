@@ -16,6 +16,7 @@ alfred_data_dir = os.path.join(os.path.expanduser('~'),
                                'com.calebevans.youversionsuggest')
 
 prefs_path = os.path.join(alfred_data_dir, 'preferences.json')
+recent_refs_path = os.path.join(alfred_data_dir, 'recent.json')
 
 
 def get_package_path():
@@ -26,6 +27,13 @@ def get_package_path():
         package_path = os.path.dirname(os.path.realpath(sys.argv[0]))
 
     return package_path
+
+
+def create_alfred_data_dir():
+    try:
+        os.makedirs(alfred_data_dir, 0o755)
+    except OSError:
+        pass
 
 
 def get_bible_data(language):
@@ -46,6 +54,27 @@ def get_chapter_data():
         chapter_data = json.load(chapter_data_file)
 
     return chapter_data
+
+
+def create_recent_refs():
+
+    create_alfred_data_dir()
+    recent_refs = []
+    with open(prefs_path, 'w') as recent_refs_file:
+        json.dump(recent_refs, recent_refs_file)
+
+    return recent_refs
+
+
+def get_recent_refs():
+
+    try:
+        with open(recent_refs_path, 'r') as recent_refs_file:
+            recent_refs = json.load(recent_refs_file)
+    except IOError:  # pragma: no cover
+        recent_refs = create_recent_refs()
+
+    return recent_refs
 
 
 def get_book(books, book_id):
@@ -88,10 +117,7 @@ def get_defaults():
 
 def create_prefs():
 
-    try:
-        os.makedirs(alfred_data_dir, 0o755)
-    except OSError:
-        pass
+    create_alfred_data_dir()
     defaults = get_defaults()
     with open(prefs_path, 'w') as prefs_file:
         json.dump(defaults, prefs_file)
@@ -106,11 +132,9 @@ def get_prefs(prefs=None):
             prefs = get_defaults()
     else:
         try:
-            # Update existing preferences file
             with open(prefs_path, 'r') as prefs_file:
                 prefs = json.load(prefs_file)
         except IOError:  # pragma: no cover
-            # Otherwise, create preferences file if it doesn't exist
             prefs = create_prefs()
 
     return prefs
@@ -169,34 +193,60 @@ def get_result_list_xml(results):
     return ET.tostring(root)
 
 
-# Retrieve the full reference identifier from the shorthand reference UID
-def get_full_ref(ref_uid, prefs=None):
+# Parse the given reference UID into a dictionary
+def get_ref_object(ref_uid, prefs=None):
 
     patt = '{version}/{book_id}\.{chapter}(?:\.{verses})?'.format(
         version='(\d+)',
         book_id='(\d?[a-z]+)',
         chapter='(\d+)',
-        verses='(\d+(?:-\d+)?)')
+        verses='(\d+(-\d+)?)')
 
     ref_uid_matches = re.match(patt, ref_uid)
-    book_id = ref_uid_matches.group(2)
-    chapter = ref_uid_matches.group(3)
+    ref = {}
 
+    book_id = ref_uid_matches.group(2)
     prefs = get_prefs(prefs)
     bible = get_bible_data(prefs['language'])
     book_name = get_book(bible['books'], book_id)
-    ref = '{book} {chapter}'.format(
-        book=book_name,
-        chapter=chapter)
+    ref['book'] = book_name
 
-    verses_match = ref_uid_matches.group(4)
-    if verses_match:
-        ref += ":{verses}".format(verses=verses_match)
+    chapter = ref_uid_matches.group(3)
+    ref['chapter'] = chapter
+
+    verse_match = ref_uid_matches.group(4)
+    if verse_match:
+        ref['verse'] = int(verse_match)
+
+    endverse_match = ref_uid_matches.group(5)
+    if endverse_match:
+        ref['endverse'] = int(endverse_match)
 
     version_id = int(ref_uid_matches.group(1))
     version_name = get_version(bible['versions'],
                                version_id)['name']
-
-    ref += " ({version})".format(version=version_name)
+    ref['version'] = version_name
+    ref['language'] = prefs['language']
 
     return ref
+
+
+# Retrieve the full reference identifier from the shorthand reference UID
+def get_full_ref(ref_uid, prefs=None):
+
+    ref = get_ref_object(ref_uid)
+
+    full_ref = '{book} {chapter}'.format(
+        book=ref['book'],
+        chapter=ref['chapter'])
+
+    if 'verse' in ref:
+        full_ref += ':{verse}'.format(verse=ref['verse'])
+
+    if 'endverse' in ref:
+        full_ref += '-{endverse}'.format(endverse=ref['endverse'])
+
+    if 'version' in ref:
+        full_ref += ' ({version})'.format(version=ref['version'])
+
+    return full_ref
