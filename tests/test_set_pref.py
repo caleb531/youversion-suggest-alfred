@@ -10,18 +10,19 @@ import context_managers as ctx
 def test_set_language():
     """should set preferred language"""
     with ctx.preserve_prefs() as prefs:
-        with ctx.preserve_recent_refs() as recent_refs:
+        with ctx.preserve_recent_refs():
+            yvs.shared.update_recent_refs(['8/mat.5'])
             languages = yvs.shared.get_languages()
             for language in languages:
                 if language['id'] != prefs['language']:
                     new_language = language['id']
                     break
             yvs.main('language:{}'.format(new_language))
-            # Check if new values have been saved to preferences
             prefs = yvs.shared.get_prefs()
             bible = yvs.shared.get_bible_data(prefs['language'])
             nose.assert_equal(prefs['language'], new_language)
             nose.assert_equal(prefs['version'], bible['default_version'])
+            nose.assert_equal(len(yvs.shared.get_recent_refs()), 0)
 
 
 def test_set_version():
@@ -34,6 +35,5 @@ def test_set_version():
                 new_version = version['id']
                 break
         yvs.main('version:{}'.format(new_version))
-        # Check if new values have been saved to preferences
         prefs = yvs.shared.get_prefs()
         nose.assert_equal(prefs['version'], new_version)
