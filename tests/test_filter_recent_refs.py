@@ -95,8 +95,21 @@ def test_filter_empty():
         nose.assert_equal(len(results), 0)
 
 
+def test_main_output():
+    """should output recent list XML"""
+    with ctx.preserve_recent_refs():
+        with ctx.redirect_stdout() as out:
+            yvs.shared.update_recent_refs(recent_refs)
+            yvs.main('p22', prefs={})
+            xml = out.getvalue().strip()
+            try:
+                nose.assert_is_instance(ET.fromstring(xml), ET.Element)
+            except ET.ParseError:
+                nose.assert_true(False, 'result list XML is not valid')
+
+
 def test_null_result():
-    """should output "No Results" XML item for empty pref result lists"""
+    """should output "No Results" XML item for empty recent recent list"""
     with ctx.preserve_recent_refs():
         yvs.shared.update_recent_refs(recent_refs)
         with ctx.redirect_stdout() as out:

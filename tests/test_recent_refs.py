@@ -22,7 +22,7 @@ def test_dup_ref():
     """should not add reference already present in recent list"""
     with ctx.preserve_recent_refs():
         yvs.update_recent_refs([])
-        dup_ref = '59/ps.23'
+        dup_ref = '59/psa.73.26'
         for i in range(2):
             yvs.push_recent_ref(dup_ref)
         recent_refs = yvs.get_recent_refs()

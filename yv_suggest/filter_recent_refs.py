@@ -78,7 +78,7 @@ def main(query_str='{query}', prefs=None):
     if not results:
         results = [{
             'uid': 'yvs-norecent',
-            'title': 'No Recent References',
+            'title': 'No Results',
             'subtitle': 'No recent references matching \'{}\''
             .format(query_str),
             'valid': 'no'

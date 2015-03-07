@@ -37,13 +37,13 @@ def test_filter_versions():
 
 
 def test_nonexistent():
-    """should not match nonexistent preferences"""
+    """should not match nonexistent preference"""
     results = yvs.get_result_list('xyz', prefs={})
     nose.assert_equal(len(results), 0)
 
 
 def test_invalid():
-    """should not match nonexistent preferences"""
+    """should not match nonexistent preference"""
     results = yvs.get_result_list('!@#', prefs={})
     nose.assert_equal(len(results), 0)
 
@@ -60,7 +60,7 @@ def test_main_output():
 
 
 def test_null_result():
-    """should output "No Results" XML item for empty pref result lists"""
+    """should output "No Results" XML item for empty pref result list"""
     query_str = 'xyz'
     with ctx.redirect_stdout() as out:
         yvs.main(query_str, prefs={})

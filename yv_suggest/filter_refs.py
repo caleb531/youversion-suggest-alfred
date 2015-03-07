@@ -116,8 +116,6 @@ def main(query_str='{query}', prefs=None):
     results = get_result_list(query_str, prefs)
 
     if not results:
-
-        # If no matching results were found, indicate such
         results = [{
             'uid': 'yvs-no-results',
             'valid': 'no',

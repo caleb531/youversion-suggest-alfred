@@ -22,7 +22,7 @@ def test_output():
 
 
 def test_null_result():
-    """should output "No Results" XML item for empty ref result lists"""
+    """should output "No Results" XML item for empty ref result list"""
     query_str = 'xyz'
     with ctx.redirect_stdout() as out:
         yvs.main(query_str, prefs={})

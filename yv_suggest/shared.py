@@ -82,7 +82,7 @@ def get_recent_refs():
 
 def update_recent_refs(recent_refs):
     with open(recent_refs_path, 'w') as recent_refs_file:
-        json.dump(recent_refs[:max_recent_refs], recent_refs_file)
+        json.dump(recent_refs, recent_refs_file)
 
 
 def push_recent_ref(ref_uid, save=True):
@@ -90,8 +90,9 @@ def push_recent_ref(ref_uid, save=True):
     recent_refs = get_recent_refs()
     if ref_uid in recent_refs:
         recent_refs.remove(ref_uid)
-    if len(recent_refs) < max_recent_refs:
-        recent_refs.insert(0, ref_uid)
+    recent_refs.insert(0, ref_uid)
+    if len(recent_refs) > max_recent_refs:
+        recent_refs.pop()
     update_recent_refs(recent_refs)
 
 
