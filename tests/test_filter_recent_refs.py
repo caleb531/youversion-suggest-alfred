@@ -23,16 +23,14 @@ def test_query_param():
 
 def test_show_all():
     """should show all recent references when given empty query"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         results = yvs.get_result_list('', prefs={})
         nose.assert_equal(len(results), len(recent_refs))
 
 
 def test_filter_book():
     """should filter recent references by book name"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         results = yvs.get_result_list('ps', prefs={})
         nose.assert_equal(len(results), 5)
         nose.assert_equal(results[0]['title'], 'Psalm 23 (ESV)')
@@ -44,8 +42,7 @@ def test_filter_book():
 
 def test_filter_book_numbered():
     """should filter recent references by numbered book name"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         results = yvs.get_result_list('1c', prefs={})
         nose.assert_equal(len(results), 1)
         nose.assert_equal(results[0]['title'], '1 Corinthians 13 (NLT)')
@@ -53,8 +50,7 @@ def test_filter_book_numbered():
 
 def test_filter_chapter():
     """should filter recent references by chapter"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         results = yvs.get_result_list('re1', prefs={})
         nose.assert_equal(len(results), 1)
         nose.assert_equal(results[0]['title'], 'Revelation 19:16 (AMP)')
@@ -62,8 +58,7 @@ def test_filter_chapter():
 
 def test_filter_verse():
     """should filter recent references by verse"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         results = yvs.get_result_list('re5.1', prefs={})
         nose.assert_equal(len(results), 1)
         nose.assert_equal(results[0]['title'], 'Revelation 5:13 (ESV)')
@@ -71,8 +66,7 @@ def test_filter_verse():
 
 def test_filter_verse_range():
     """should filter recent references by verse range"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         results = yvs.get_result_list('m5:3-1', prefs={})
         nose.assert_equal(len(results), 1)
         nose.assert_equal(results[0]['title'], 'Matthew 5:3-12 (NIV)')
@@ -80,8 +74,7 @@ def test_filter_verse_range():
 
 def test_filter_version():
     """should filter recent references by version"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         results = yvs.get_result_list('ps2k', prefs={})
         nose.assert_equal(len(results), 1)
         nose.assert_equal(results[0]['title'], 'Psalm 23 (KJV)')
@@ -89,17 +82,15 @@ def test_filter_version():
 
 def test_filter_empty():
     """should return empty list for nonexistent references"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         results = yvs.get_result_list('xyz', prefs={})
         nose.assert_equal(len(results), 0)
 
 
 def test_main_output():
     """should output recent list XML"""
-    with ctx.preserve_recent_refs():
+    with ctx.use_recent_refs(recent_refs):
         with ctx.redirect_stdout() as out:
-            yvs.shared.update_recent_refs(recent_refs)
             yvs.main('p22', prefs={})
             xml = out.getvalue().strip()
             try:
@@ -110,8 +101,7 @@ def test_main_output():
 
 def test_null_result():
     """should output "No Results" XML item for empty recent recent list"""
-    with ctx.preserve_recent_refs():
-        yvs.shared.update_recent_refs(recent_refs)
+    with ctx.use_recent_refs(recent_refs):
         with ctx.redirect_stdout() as out:
             yvs.main('xyz', prefs={})
             xml = out.getvalue().strip()

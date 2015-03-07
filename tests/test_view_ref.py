@@ -24,7 +24,7 @@ def test_url_open():
 
 def test_save_recent():
     """should save reference to list of recent references"""
-    with ctx.preserve_recent_refs():
+    with ctx.use_recent_refs([]):
         with ctx.mock_webbrowser(yvs) as mock:
             ref_uid = '59/jhn.3.17'
             yvs.main(ref_uid)

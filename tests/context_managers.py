@@ -4,7 +4,7 @@
 from contextlib import contextmanager
 from io import BytesIO
 import sys
-import mock_modules
+import module_mocks
 import yv_suggest.shared as yvs
 
 
@@ -21,28 +21,33 @@ def redirect_stdout():
 
 
 @contextmanager
-def preserve_prefs():
+def use_prefs(prefs):
     """safely retrieve and restore preferences"""
     original_prefs = yvs.get_prefs()
     try:
-        yield original_prefs.copy()
+        if prefs == {}:
+            prefs = yvs.get_defaults()
+        yvs.update_prefs(prefs)
+        yield
     finally:
         yvs.update_prefs(original_prefs)
 
 
 @contextmanager
-def preserve_recent_refs():
+def use_recent_refs(recent_refs):
     """safely retrieve and restore list of recent references"""
     original_recent_refs = yvs.get_recent_refs()
     try:
-        yield original_recent_refs[:]
+        yvs.update_recent_refs(recent_refs)
+        yield
     finally:
         yvs.update_recent_refs(original_recent_refs)
 
 
 @contextmanager
 def mock_webbrowser(yvs):
-    mock = mock_modules.WebbrowserMock()
+    """mock the webbrowser module for testing purposes"""
+    mock = module_mocks.WebbrowserMock()
     original_webbrowser = yvs.webbrowser
     yvs.webbrowser = mock
     try:
