@@ -57,7 +57,7 @@ def get_result_list(query_str, prefs=None):
     for ref_uid in recent_refs:
 
         ref = shared.get_ref_object(ref_uid, prefs)
-        if query and query_matches_ref(query, ref):
+        if not query or query_matches_ref(query, ref):
             full_ref = shared.get_full_ref(ref)
             result = {
                 'uid': 'yvs-{}-{}'.format(ref_uid, time.time()),

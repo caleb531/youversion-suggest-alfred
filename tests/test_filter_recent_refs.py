@@ -26,7 +26,7 @@ def test_show_all():
     with ctx.preserve_recent_refs():
         yvs.shared.update_recent_refs(recent_refs)
         results = yvs.get_result_list('', prefs={})
-        nose.assert_list_equal(yvs.shared.get_recent_refs(), recent_refs)
+        nose.assert_equal(len(results), len(recent_refs))
 
 
 def test_filter_book():
