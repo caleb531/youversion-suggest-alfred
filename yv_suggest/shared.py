@@ -81,9 +81,8 @@ def get_recent_refs():
 
 
 def update_recent_refs(recent_refs):
-
     with open(recent_refs_path, 'w') as recent_refs_file:
-        json.dump(recent_refs, recent_refs_file)
+        json.dump(recent_refs[:max_recent_refs], recent_refs_file)
 
 
 def push_recent_ref(ref_uid, save=True):
@@ -91,9 +90,8 @@ def push_recent_ref(ref_uid, save=True):
     recent_refs = get_recent_refs()
     if ref_uid in recent_refs:
         recent_refs.remove(ref_uid)
-    recent_refs.insert(0, ref_uid)
-    if len(recent_refs) > max_recent_refs:
-        recent_refs.pop()
+    if len(recent_refs) < max_recent_refs:
+        recent_refs.insert(0, ref_uid)
     update_recent_refs(recent_refs)
 
 
@@ -110,6 +108,12 @@ def get_book(books, book_id):
     for book in books:
         if book['id'] == book_id:  # pragma: no cover
             return book['name']
+
+
+def query_matches_book(query_book, book_name):
+    return (book_name.startswith(query_book) or
+            (book_name[0].isnumeric() and
+             book_name[2:].startswith(query_book)))
 
 
 def get_version(versions, version_id):

@@ -11,16 +11,12 @@ def query_matches_ref(query, ref):
     conditions = 0
     true_conditions = 0
 
-    if 'book' in query:
-
-        conditions += 1
-        for i in xrange(len(query['book']), 0, -1):
-            book_name = ref['book'].lower()
-            if (book_name.startswith(query['book'][:i]) or
-                (book_name[0].isnumeric() and
-                    book_name[2:].startswith(query['book'][:i]))):
-                true_conditions += 1
-                break
+    conditions += 1
+    for i in xrange(len(query['book']), 0, -1):
+        if shared.query_matches_book(query['book'][:i],
+                                     ref['book'].lower()):
+            true_conditions += 1
+            break
 
     if 'chapter' in query:
 
@@ -28,13 +24,13 @@ def query_matches_ref(query, ref):
         true_conditions += str(ref['chapter']).startswith(
             str(query['chapter']))
 
-        if 'verse' in query:
+        if 'verse' in query and 'verse' in ref:
 
             conditions += 1
             true_conditions += str(ref['verse']).startswith(
                 str(query['verse']))
 
-            if 'endverse' in query:
+            if 'endverse' in query and 'endverse' in ref:
 
                 conditions += 1
                 true_conditions += str(ref['endverse']).startswith(
@@ -61,7 +57,7 @@ def get_result_list(query_str, prefs=None):
     for ref_uid in recent_refs:
 
         ref = shared.get_ref_object(ref_uid, prefs)
-        if not query or query_matches_ref(query, ref):
+        if query and query_matches_ref(query, ref):
             full_ref = shared.get_full_ref(ref)
             result = {
                 'uid': 'yvs-{}-{}'.format(ref_uid, time.time()),

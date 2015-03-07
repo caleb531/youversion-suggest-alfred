@@ -18,6 +18,7 @@ exclude_lines =
 include =
     yv_suggest/shared.py
     yv_suggest/filter_refs.py
+    yv_suggest/filter_recent_refs.py
     yv_suggest/filter_prefs.py
     yv_suggest/view_ref.py
     yv_suggest/search_ref.py

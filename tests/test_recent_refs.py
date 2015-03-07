@@ -4,14 +4,15 @@
 from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.shared as yvs
-import os
+import os.path
 import context_managers as ctx
 
 
 def test_max_len():
     """should cap length of recent list to defined length"""
     with ctx.preserve_recent_refs():
-        for verse in range(1, yvs.max_recent_refs + 2):
+        yvs.update_recent_refs([])
+        for verse in range(1, yvs.max_recent_refs + 5):
             yvs.push_recent_ref('59/jhn.3.{}'.format(verse))
         recent_refs = yvs.get_recent_refs()
         nose.assert_equal(len(recent_refs), yvs.max_recent_refs)
@@ -20,6 +21,7 @@ def test_max_len():
 def test_dup_ref():
     """should not add reference already present in recent list"""
     with ctx.preserve_recent_refs():
+        yvs.update_recent_refs([])
         dup_ref = '59/ps.23'
         for i in range(2):
             yvs.push_recent_ref(dup_ref)

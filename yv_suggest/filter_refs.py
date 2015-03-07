@@ -28,10 +28,7 @@ def get_matching_books(books, query):
         if not matching_books:
             for book in books:
                 book_name = book['name'].lower()
-                # Check if book name begins with the typed book name
-                if (book_name.startswith(query['book'][:i]) or
-                    (book_name[0].isnumeric() and
-                        book_name[2:].startswith(query['book'][:i]))):
+                if shared.query_matches_book(query['book'][:i], book_name):
                     matching_books.append(book)
         else:
             break
