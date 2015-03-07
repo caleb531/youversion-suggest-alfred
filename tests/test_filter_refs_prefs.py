@@ -10,7 +10,7 @@ import context_managers as ctx
 
 def test_version_persistence():
     """should remember version preferences"""
-    with ctx.get_prefs() as prefs:
+    with ctx.preserve_prefs() as prefs:
         prefs['language'] = 'en'
         prefs['version'] = 59
         yvs.shared.update_prefs(prefs)
@@ -21,7 +21,7 @@ def test_version_persistence():
 
 def test_language_persistence():
     """should remember language preferences"""
-    with ctx.get_prefs() as prefs:
+    with ctx.preserve_prefs() as prefs:
         prefs['language'] = 'es'
         yvs.shared.update_prefs(prefs)
         results = yvs.get_result_list('gá 4')
@@ -31,7 +31,7 @@ def test_language_persistence():
 
 def test_creation():
     """should create preferences if nonexistent"""
-    with ctx.get_prefs() as prefs:
+    with ctx.preserve_prefs():
         yvs.shared.delete_prefs()
         nose.assert_false(os.path.exists(yvs.shared.prefs_path))
         defaults = yvs.shared.get_defaults()
@@ -42,7 +42,7 @@ def test_creation():
 
 def test_delete_nonexistent():
     """should attempt to delete nonexistent preferences without error"""
-    with ctx.get_prefs() as prefs:
+    with ctx.preserve_prefs():
         try:
             yvs.shared.delete_prefs()
             yvs.shared.delete_prefs()

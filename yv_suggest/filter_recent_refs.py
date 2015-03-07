@@ -53,7 +53,7 @@ def query_matches_ref(query, ref):
 
 def get_result_list(query_str, prefs=None):
 
-    # query_str = shared.format_query_str(query_str)
+    query_str = shared.format_query_str(query_str)
     query = shared.get_query_object(query_str)
     results = []
     recent_refs = shared.get_recent_refs()
@@ -89,7 +89,6 @@ def main(query_str='{query}', prefs=None):
         }]
 
     print(shared.get_result_list_xml(results))
-
 
 if __name__ == '__main__':
     main()

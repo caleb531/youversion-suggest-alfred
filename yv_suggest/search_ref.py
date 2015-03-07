@@ -19,7 +19,9 @@ def open_search_url(ref_uid, prefs=None):
     webbrowser.open(get_search_url(ref_uid, prefs))
 
 
-def main(ref_uid='{query}', prefs=None):
+def main(ref_uid='{query}', prefs=None, save=True):
+    if save:
+        shared.push_recent_ref(ref_uid)
     open_search_url(ref_uid, prefs)
 
 if __name__ == '__main__':

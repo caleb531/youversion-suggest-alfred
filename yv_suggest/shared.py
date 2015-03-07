@@ -86,7 +86,7 @@ def update_recent_refs(recent_refs):
         json.dump(recent_refs, recent_refs_file)
 
 
-def push_recent_ref(ref_uid):
+def push_recent_ref(ref_uid, save=True):
 
     recent_refs = get_recent_refs()
     if ref_uid in recent_refs:
@@ -97,9 +97,12 @@ def push_recent_ref(ref_uid):
     update_recent_refs(recent_refs)
 
 
-def clear_recent_refs():
+def delete_recent_refs():
 
-    update_recent_refs([])
+    try:
+        os.remove(recent_refs_path)
+    except OSError:
+        pass
 
 
 def get_book(books, book_id):
@@ -226,15 +229,10 @@ def get_ref_matches(query_str):
 
     # Pattern for parsing any bible reference
     patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
-        # Book name (including preceding number, if any)
         book='(\d?(?:[^\W\d_]|\s)+|\d)\s?',
-        # Chapter number
         chapter='(\d+)\s?',
-        # Verse number
         verse='(\d+)\s?',
-        #  End verse for a verse range
         endverse='(\d+)?\s?',
-        # Version (translation) used to view reference
         version='([a-z]+\d*)?.*?')
     return re.search(patt, query_str, flags=re.UNICODE)
 
@@ -276,11 +274,12 @@ def get_query_object(query_str):
 # Parse the given reference UID into a dictionary
 def get_ref_object(ref_uid, prefs=None):
 
-    patt = '{version}/{book_id}\.{chapter}(?:\.{verses})?'.format(
+    patt = '{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?'.format(
         version='(\d+)',
         book_id='(\d?[a-z]+)',
         chapter='(\d+)',
-        verses='(\d+(-\d+)?)')
+        verse='(\d+)',
+        endverse='(?:-(\d+))?')
 
     ref_uid_matches = re.match(patt, ref_uid)
     ref = {}
@@ -323,7 +322,6 @@ def get_full_ref(ref):
     if 'endverse' in ref:
         full_ref += '-{endverse}'.format(endverse=ref['endverse'])
 
-    if 'version' in ref:
-        full_ref += ' ({version})'.format(version=ref['version'])
+    full_ref += ' ({version})'.format(version=ref['version'])
 
     return full_ref
