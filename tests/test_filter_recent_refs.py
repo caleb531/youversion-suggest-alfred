@@ -91,12 +91,12 @@ def test_main_output():
     """should output recent list XML"""
     with ctx.use_recent_refs(recent_refs):
         with ctx.redirect_stdout() as out:
-            yvs.main('p22', prefs={})
-            xml = out.getvalue().strip()
-            try:
-                nose.assert_is_instance(ET.fromstring(xml), ET.Element)
-            except ET.ParseError:
-                nose.assert_true(False, 'result list XML is not valid')
+            query_str = 'p22'
+            yvs.main(query_str, prefs={})
+            output = out.getvalue().strip()
+            results = yvs.get_result_list(query_str, prefs={})
+            xml = yvs.shared.get_result_list_xml(results).strip()
+            nose.assert_equal(output, xml)
 
 
 def test_null_result():

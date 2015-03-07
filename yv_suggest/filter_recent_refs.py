@@ -58,7 +58,6 @@ def get_result_list(query_str, prefs=None):
         if not query or query_matches_ref(query, ref):
             full_ref = shared.get_full_ref(ref)
             result = {
-                'uid': 'yvs-{}-{}'.format(ref_uid, time.time()),
                 'arg': ref_uid,
                 'title': full_ref,
                 'subtitle': 'View on YouVersion',
