@@ -8,33 +8,31 @@ import shared
 
 def query_matches_ref(query, ref):
 
-    conditions = 0
+    conditions = 1
     true_conditions = 0
 
-    conditions += 1
     for i in xrange(len(query['book']), 0, -1):
-        if shared.query_matches_book(query['book'][:i],
-                                     ref['book'].lower()):
+        if shared.query_matches_book(query['book'][:i], ref['book'].lower()):
             true_conditions += 1
             break
 
     if 'chapter' in query:
 
         conditions += 1
-        true_conditions += str(ref['chapter']).startswith(
-            str(query['chapter']))
+        if str(ref['chapter']).startswith(str(query['chapter'])):
+            true_conditions += 1
 
         if 'verse' in query and 'verse' in ref:
 
             conditions += 1
-            true_conditions += str(ref['verse']).startswith(
-                str(query['verse']))
+            if str(ref['verse']).startswith(str(query['verse'])):
+                true_conditions += 1
 
             if 'endverse' in query and 'endverse' in ref:
 
                 conditions += 1
-                true_conditions += str(ref['endverse']).startswith(
-                    str(query['endverse']))
+                if str(ref['endverse']).startswith(str(query['endverse'])):
+                    true_conditions += 1
 
         if 'version' in query:
 
