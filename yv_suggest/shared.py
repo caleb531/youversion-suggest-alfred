@@ -106,8 +106,8 @@ def delete_recent_refs():
 
 def get_book(books, book_id):
 
-    for book in books:
-        if book['id'] == book_id:  # pragma: no cover
+    for book in books:  # pragma: no cover
+        if book['id'] == book_id:
             return book['name']
 
 
@@ -119,7 +119,7 @@ def query_matches_book(query_book, book_name):
 
 def get_version(versions, version_id):
 
-    for version in versions:
+    for version in versions:  # pragma: no cover
         if version['id'] == version_id:
             return version
 

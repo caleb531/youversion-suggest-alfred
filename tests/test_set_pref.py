@@ -9,7 +9,7 @@ import context_managers as ctx
 
 def test_set_language():
     """should set preferred language"""
-    with ctx.use_prefs({}):
+    with ctx.use_default_prefs():
         with ctx.use_recent_refs(['8/mat.5']):
             new_language = 'es'
             yvs.main('language:{}'.format(new_language))
@@ -22,7 +22,7 @@ def test_set_language():
 
 def test_set_version():
     """should set preferred version"""
-    with ctx.use_prefs({}):
+    with ctx.use_default_prefs():
         bible = yvs.shared.get_bible_data('en')
         new_version = 59
         yvs.main('version:{}'.format(new_version))

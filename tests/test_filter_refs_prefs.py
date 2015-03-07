@@ -33,7 +33,7 @@ def test_language_persistence():
 
 def test_creation():
     """should create preferences if nonexistent"""
-    with ctx.use_prefs({}):
+    with ctx.use_default_prefs():
         yvs.shared.delete_prefs()
         nose.assert_false(os.path.exists(yvs.shared.prefs_path))
         defaults = yvs.shared.get_defaults()
@@ -44,7 +44,7 @@ def test_creation():
 
 def test_delete_nonexistent():
     """should attempt to delete nonexistent preferences without error"""
-    with ctx.use_prefs({}):
+    with ctx.use_default_prefs():
         try:
             yvs.shared.delete_prefs()
             yvs.shared.delete_prefs()

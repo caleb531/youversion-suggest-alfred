@@ -22,11 +22,9 @@ def redirect_stdout():
 
 @contextmanager
 def use_prefs(prefs):
-    """safely retrieve and restore preferences"""
+    """temporarily use the given preferences"""
     original_prefs = yvs.get_prefs()
     try:
-        if prefs == {}:
-            prefs = yvs.get_defaults()
         yvs.update_prefs(prefs)
         yield
     finally:
@@ -34,8 +32,19 @@ def use_prefs(prefs):
 
 
 @contextmanager
+def use_default_prefs():
+    """temporarily use the default values for all preferences"""
+    original_prefs = yvs.get_prefs()
+    try:
+        yvs.update_prefs(yvs.get_defaults())
+        yield
+    finally:
+        yvs.update_prefs(original_prefs)
+
+
+@contextmanager
 def use_recent_refs(recent_refs):
-    """safely retrieve and restore list of recent references"""
+    """temporarily use the given list of recent references"""
     original_recent_refs = yvs.get_recent_refs()
     try:
         yvs.update_recent_refs(recent_refs)
