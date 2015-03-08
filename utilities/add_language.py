@@ -14,6 +14,7 @@ import json
 import urllib2
 import argparse
 
+
 json_params = {
     'indent': 2,
     'separators': (',', ': '),
@@ -23,10 +24,12 @@ json_params = {
 
 
 def get_url_content(url, **kw):
+
     return urllib2.urlopen(url).read().decode('utf-8')
 
 
 def get_language_name(text):
+
     patt = '^\s*(.+?)(?:\s*\((\d+)\)\s*)$'
     matches = re.search(patt, text, flags=re.UNICODE)
     if matches:
@@ -36,6 +39,7 @@ def get_language_name(text):
 
 
 def get_version(version_elem):
+
     link_elem = version_elem.find('a')
     url = link_elem.get('href')
     patt = '(?<=/versions/)(\d+)-([a-z]+\d*)'
@@ -70,10 +74,12 @@ def get_version_elems(params):
 
 
 def get_item_name(item):
+
     return item['name']
 
 
 def get_item_id(item):
+
     return item['id']
 
 
@@ -101,6 +107,7 @@ def get_versions(params):
 
 
 def get_book(book_elem):
+
     return {
         'name': book_elem.text.strip().encode('utf-8'),
         'id': book_elem.get('data-book')
