@@ -81,6 +81,8 @@ def get_recent_refs():
 
 
 def update_recent_refs(recent_refs):
+    while len(recent_refs) > max_recent_refs:
+        recent_refs.pop()
     with open(recent_refs_path, 'w') as recent_refs_file:
         json.dump(recent_refs, recent_refs_file)
 
@@ -91,8 +93,6 @@ def push_recent_ref(ref_uid, save=True):
     if ref_uid in recent_refs:
         recent_refs.remove(ref_uid)
     recent_refs.insert(0, ref_uid)
-    if len(recent_refs) > max_recent_refs:
-        recent_refs.pop()
     update_recent_refs(recent_refs)
 
 
@@ -266,9 +266,9 @@ def get_query_object(query_str):
         if verse_match:
             query['verse'] = int(verse_match)
 
-            verse_range_match = ref_matches.group(4)
-            if verse_range_match:
-                query['endverse'] = int(verse_range_match)
+            endverse_match = ref_matches.group(4)
+            if endverse_match:
+                query['endverse'] = int(endverse_match)
 
         version_match = ref_matches.group(5)
         if version_match:

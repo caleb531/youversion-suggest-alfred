@@ -72,6 +72,13 @@ def test_filter_verse_range():
         nose.assert_equal(results[0]['title'], 'Matthew 5:3-12 (NIV)')
 
 
+def test_filter_verse_range_nonexistent():
+    """should not match verse range not apart of recent reference"""
+    with ctx.use_recent_refs(recent_refs):
+        results = yvs.get_result_list('m5:3-4', prefs={})
+        nose.assert_equal(len(results), 0)
+
+
 def test_filter_version():
     """should filter recent references by version"""
     with ctx.use_recent_refs(recent_refs):
