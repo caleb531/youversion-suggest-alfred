@@ -21,6 +21,14 @@ recent_refs_path = os.path.join(alfred_data_dir, 'recent.json')
 max_recent_refs = 10
 
 
+def merge_dictionaries(*dictionaries):
+
+    result = {}
+    for dictionary in dictionaries:
+        result.update(dictionary)
+    return result
+
+
 def get_package_path():
 
     if '__file__' in globals():
@@ -57,6 +65,39 @@ def get_chapter_data():
         chapter_data = json.load(chapter_data_file)
 
     return chapter_data
+
+
+def get_book(books, book_id):
+
+    for book in books:  # pragma: no cover
+        if book['id'] == book_id:
+            return book['name']
+
+
+def get_version(versions, version_id):
+
+    for version in versions:  # pragma: no cover
+        if version['id'] == version_id:
+            return version
+
+
+def get_versions(language):
+
+    bible = get_bible_data(language)
+    return bible['versions']
+
+
+def get_languages():
+
+    languages_path = os.path.join(get_package_path(),
+                                  'data', 'languages.json')
+    with open(languages_path, 'r') as languages_file:
+        languages = json.load(languages_file)
+
+    return languages
+
+
+# Functions for accessing/manipulating list of recent references
 
 
 def create_recent_refs():
@@ -104,40 +145,7 @@ def delete_recent_refs():
         pass
 
 
-def get_book(books, book_id):
-
-    for book in books:  # pragma: no cover
-        if book['id'] == book_id:
-            return book['name']
-
-
-def query_matches_book(query_book, book_name):
-    return (book_name.startswith(query_book) or
-            (book_name[0].isnumeric() and
-             book_name[2:].startswith(query_book)))
-
-
-def get_version(versions, version_id):
-
-    for version in versions:  # pragma: no cover
-        if version['id'] == version_id:
-            return version
-
-
-def get_versions(language):
-
-    bible = get_bible_data(language)
-    return bible['versions']
-
-
-def get_languages():
-
-    languages_path = os.path.join(get_package_path(),
-                                  'data', 'languages.json')
-    with open(languages_path, 'r') as languages_file:
-        languages = json.load(languages_file)
-
-    return languages
+# Functions for accessing/manipulating mutable preferences
 
 
 def get_defaults():
@@ -163,8 +171,7 @@ def create_prefs():
 def get_prefs(prefs=None):
 
     if prefs is not None:
-        if 'language' not in prefs:
-            prefs = get_defaults()
+        prefs = merge_dictionaries(get_defaults(), prefs)
     else:
         try:
             with open(prefs_path, 'r') as prefs_file:
@@ -187,23 +194,6 @@ def delete_prefs():
         os.remove(prefs_path)
     except OSError:
         pass
-
-
-# Simplifies the format of the query string
-def format_query_str(query_str):
-
-    query_str = query_str.lower()
-    # Normalize all Unicode characters
-    query_str = unicodedata.normalize('NFC', query_str)
-    # Remove all non-alphanumeric characters
-    query_str = re.sub('[\W_]', ' ', query_str, flags=re.UNICODE)
-    # Remove extra whitespace
-    query_str = query_str.strip()
-    query_str = re.sub('\s+', ' ', query_str)
-    # Parse shorthand reference notation
-    query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
-
-    return query_str
 
 
 # Constructs an Alfred XML string from the given results list
@@ -230,7 +220,34 @@ def get_result_list_xml(results):
     return ET.tostring(root)
 
 
-# Parses query string into components of a Bible reference
+# Query-related functions
+
+
+# Determines if the given query string matches the given book name
+def query_matches_book(query_book, book_name):
+    return (book_name.startswith(query_book) or
+            (book_name[0].isnumeric() and
+             book_name[2:].startswith(query_book)))
+
+
+# Simplifies the format of the query string
+def format_query_str(query_str):
+
+    query_str = query_str.lower()
+    # Normalize all Unicode characters
+    query_str = unicodedata.normalize('NFC', query_str)
+    # Remove all non-alphanumeric characters
+    query_str = re.sub('[\W_]', ' ', query_str, flags=re.UNICODE)
+    # Remove extra whitespace
+    query_str = query_str.strip()
+    query_str = re.sub('\s+', ' ', query_str)
+    # Parse shorthand reference notation
+    query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
+
+    return query_str
+
+
+# Parses the given query string into components of a Bible reference
 def get_ref_matches(query_str):
 
     # Pattern for parsing any bible reference
@@ -277,7 +294,7 @@ def get_query_object(query_str):
     return query
 
 
-# Parse the given reference UID into a dictionary
+# Parses the given reference UID into a dictionary representing that reference
 def get_ref_object(ref_uid, prefs=None):
 
     patt = '{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?'.format(
@@ -315,7 +332,7 @@ def get_ref_object(ref_uid, prefs=None):
     return ref
 
 
-# Retrieve the full reference identifier from the shorthand reference UID
+# Retrieves the full reference identifier from the shorthand reference UID
 def get_full_ref(ref):
 
     full_ref = '{book} {chapter}'.format(
