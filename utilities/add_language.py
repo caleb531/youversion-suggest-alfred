@@ -14,6 +14,7 @@ import json
 import urllib2
 import argparse
 
+
 json_params = {
     'indent': 2,
     'separators': (',', ': '),
@@ -23,11 +24,13 @@ json_params = {
 
 
 def get_url_content(url, **kw):
+
     return urllib2.urlopen(url).read().decode('utf-8')
 
 
 def get_language_name(text):
-    patt = '^\s*([^\W\d_]+)(?:\s*\((\d+)\))\s*$'
+
+    patt = '^\s*(.+?)(?:\s*\((\d+)\)\s*)$'
     matches = re.search(patt, text, flags=re.UNICODE)
     if matches:
         return matches.group(1)
@@ -36,6 +39,7 @@ def get_language_name(text):
 
 
 def get_version(version_elem):
+
     link_elem = version_elem.find('a')
     url = link_elem.get('href')
     patt = '(?<=/versions/)(\d+)-([a-z]+\d*)'
@@ -49,7 +53,7 @@ def get_version(version_elem):
 def get_version_elems(params):
 
     d = pq(url='https://www.bible.com/{}/versions'
-           .format(params['language']['id']),
+           .format(params['language']['id'].replace('_', '-')),
            opener=get_url_content)
 
     category_elems = d('#main > article > ul > li')
@@ -70,10 +74,12 @@ def get_version_elems(params):
 
 
 def get_item_name(item):
+
     return item['name']
 
 
 def get_item_id(item):
+
     return item['id']
 
 
@@ -101,6 +107,7 @@ def get_versions(params):
 
 
 def get_book(book_elem):
+
     return {
         'name': book_elem.text.strip().encode('utf-8'),
         'id': book_elem.get('data-book')
@@ -170,7 +177,7 @@ def save_bible_data(params):
     bible = get_bible_data(params)
     bible_path = os.path.join('yv_suggest', 'data', 'bible',
                               'language-{}.json'
-                              .format(language['id'].replace('-', '_')))
+                              .format(language['id']))
     with open(bible_path, 'w') as bible_file:
         json.dump(bible, bible_file, **json_params)
         bible_file.write('\n')
@@ -212,10 +219,6 @@ def parse_args():
 
     args = parser.parse_args()
 
-    if '-' in args.code or '_' in args.code:
-        raise RuntimeError(
-            'Only two-letter language codes are supported. Aborting.')
-
     return args
 
 
@@ -223,7 +226,7 @@ def get_params(args):
 
     params = {
         'language': {
-            'id': args.code,
+            'id': args.code.replace('-', '_'),
             'name': None
         },
         'max_version_id': args.max_version_id,

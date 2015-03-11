@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.filter_prefs as yvs
 from xml.etree import ElementTree as ET
-from context_managers import redirect_stdout
+import context_managers as ctx
 
 
 def test_show_languages():
@@ -37,13 +37,13 @@ def test_filter_versions():
 
 
 def test_nonexistent():
-    """should not match nonexistent preferences"""
+    """should not match nonexistent preference"""
     results = yvs.get_result_list('xyz', prefs={})
     nose.assert_equal(len(results), 0)
 
 
 def test_invalid():
-    """should not match nonexistent preferences"""
+    """should not match nonexistent preference"""
     results = yvs.get_result_list('!@#', prefs={})
     nose.assert_equal(len(results), 0)
 
@@ -51,7 +51,7 @@ def test_invalid():
 def test_main_output():
     """should output pref result list XML"""
     query_str = 'language'
-    with redirect_stdout() as out:
+    with ctx.redirect_stdout() as out:
         yvs.main(query_str, prefs={})
         output = out.getvalue().strip()
         results = yvs.get_result_list(query_str, prefs={})
@@ -60,9 +60,9 @@ def test_main_output():
 
 
 def test_null_result():
-    """should output "No Results" XML item for empty pref result lists"""
+    """should output "No Results" XML item for empty pref result list"""
     query_str = 'xyz'
-    with redirect_stdout() as out:
+    with ctx.redirect_stdout() as out:
         yvs.main(query_str, prefs={})
         xml = out.getvalue().strip()
         root = ET.fromstring(xml)
