@@ -10,16 +10,17 @@ import jsonschema
 
 
 def test_pep8():
+    '''all Python files should comply with PEP 8'''
     files = glob.iglob('*/*.py')
     for file in files:
-        test_pep8.__doc__ = '{} should comply with pep8'.format(file)
         style_guide = pep8.StyleGuide(quiet=True)
         total_errors = style_guide.input_file(file)
-        msg = '{} is not pep8-compliant'.format(file)
+        msg = '{} does not comply with PEP 8'.format(file)
         yield nose.assert_equal, total_errors, 0, msg
 
 
 def test_json():
+    '''all JSON files should comply with respective schemas'''
     schemas = {
         'schema-languages': 'yv_suggest/data/languages.json',
         'schema-defaults': 'yv_suggest/data/defaults.json',
@@ -32,8 +33,6 @@ def test_json():
             schema = json.load(schema_file)
             data_paths = glob.iglob(data_path_pattern)
             for data_path in data_paths:
-                test_json.__doc__ = '{} should be schema-compliant'.format(
-                    data_path)
                 with open(data_path) as data_file:
                     data = json.load(data_file)
                     try:

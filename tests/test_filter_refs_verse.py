@@ -35,17 +35,24 @@ def test_space_separator():
     nose.assert_equal(results[0]['title'], 'Luke 4:8 (NIV)')
 
 
-def test_range():
-    """should match verse ranges"""
-    results = yvs.get_result_list('1 cor 13.4-7', prefs={})
+def test_zero_verse():
+    """should interpret ignore zeroth verse if given"""
+    results = yvs.get_result_list('ps 23:0', prefs={})
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], '1 Corinthians 13:4-7 (NIV)')
+    nose.assert_equal(results[0]['title'], 'Psalm 23 (NIV)')
 
 
 def test_id():
     """should use correct ID for verses"""
     results = yvs.get_result_list('luke 4:8', prefs={})
     nose.assert_equal(results[0]['uid'], 'yvs-111/luk.4.8')
+
+
+def test_range():
+    """should match verse ranges"""
+    results = yvs.get_result_list('1 cor 13.4-7', prefs={})
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], '1 Corinthians 13:4-7 (NIV)')
 
 
 def test_range_id():

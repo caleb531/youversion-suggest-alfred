@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # This script is a handy (albeit imperfect) tool for automatically adding
-# support for any language to YouVersion Suggest. Please see the example
-# function calls below for details on using it.
+# support for any language to YouVersion Suggest.
 
 from __future__ import unicode_literals
 from pyquery import PyQuery as pq
@@ -96,9 +95,8 @@ def get_versions(params):
 
     for version_elem in version_elems:
         version = get_version(version_elem)
-        if (params['max_version_id'] and
-           (version['id'] <= params['max_version_id']) or
-           (not params['max_version_id'])):
+        if not params['max_version_id'] or (params['max_version_id'] and
+           version['id'] <= params['max_version_id']):
             versions.append(version)
 
     versions.sort(key=get_item_name)

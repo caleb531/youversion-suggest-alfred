@@ -52,6 +52,12 @@ def get_result_list(query_str, prefs=None):
     matching_books = get_matching_books(bible['books'], query)
     chosen_version = None
 
+    if 'chapter' not in query or query['chapter'] == 0:
+        query['chapter'] = 1
+
+    if 'verse' in query and query['verse'] == 0:
+        del query['verse']
+
     if 'version' in query:
         chosen_version = guess_version(bible['versions'], query['version'])
 
@@ -62,9 +68,6 @@ def get_result_list(query_str, prefs=None):
     if not chosen_version:
         chosen_version = shared.get_version(bible['versions'],
                                             bible['default_version'])
-
-    if 'chapter' not in query or query['chapter'] == 0:
-        query['chapter'] = 1
 
     # Build results list from books that matched the query
     for book in matching_books:
