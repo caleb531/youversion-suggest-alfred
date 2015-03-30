@@ -75,16 +75,17 @@ def get_result_list(query_str, prefs=None):
         # Result information
         result = {}
 
-        if query['chapter'] > chapters[book['id']]:
-            query['chapter'] = chapters[book['id']]
+        chosen_chapter = query['chapter']
+        if chosen_chapter > chapters[book['id']]:
+            chosen_chapter = chapters[book['id']]
 
         # Find chapter if given
         result['uid'] = '{book}.{chapter}'.format(
             book=book['id'],
-            chapter=query['chapter'])
+            chapter=chosen_chapter)
         result['title'] = '{book} {chapter}'.format(
             book=book['name'],
-            chapter=query['chapter'])
+            chapter=chosen_chapter)
 
         if 'verse' in query:
 
