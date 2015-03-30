@@ -68,7 +68,7 @@ def get_result_list(query_str, prefs=None):
     return results
 
 
-def main(query_str='{query}', prefs=None):
+def main(query_str, prefs=None):
 
     results = get_result_list(query_str, prefs)
 
@@ -84,4 +84,4 @@ def main(query_str='{query}', prefs=None):
     print(shared.get_result_list_xml(results))
 
 if __name__ == '__main__':
-    main()
+    main('{query}')

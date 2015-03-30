@@ -14,13 +14,6 @@ recent_refs = ['59/psa.23', '116/1co.13', '107/psa.139', '111/psa.22',
                '8/rev.19.16', '111/rev.22', '8/psa.23']
 
 
-def test_query_param():
-    """should use received query parameter as default filter query"""
-    spec = inspect.getargspec(yvs.main)
-    default_query_str = spec.defaults[0]
-    nose.assert_equal(default_query_str, '{query}')
-
-
 def test_show_all():
     """should show all recent references when given empty query"""
     with ctx.use_recent_refs(recent_refs):

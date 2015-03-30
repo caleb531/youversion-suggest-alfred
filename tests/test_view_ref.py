@@ -8,13 +8,6 @@ import context_managers as ctx
 import inspect
 
 
-def test_query_param():
-    """should use received query parameter as default ref ID"""
-    spec = inspect.getargspec(yvs.main)
-    default_query_str = spec.defaults[0]
-    nose.assert_equal(default_query_str, '{query}')
-
-
 def test_url_open():
     """should attempt to open URL using webbrowser module"""
     with ctx.mock_webbrowser(yvs) as mock:

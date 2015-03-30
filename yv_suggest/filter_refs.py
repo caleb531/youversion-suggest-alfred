@@ -114,20 +114,20 @@ def get_result_list(query_str, prefs=None):
     return results
 
 
-# Outputs an Alfred XML string from the given query string
-def main(query_str='{query}', prefs=None):
+def main(query_str, prefs=None):
 
     results = get_result_list(query_str, prefs)
 
     if not results:
         results = [{
             'uid': 'yvs-no-results',
-            'valid': 'no',
             'title': 'No Results',
-            'subtitle': 'No bible references matching \'{}\''.format(query_str)
+            'subtitle': 'No bible references matching \'{}\''
+            .format(query_str),
+            'valid': 'no'
         }]
 
     print(shared.get_result_list_xml(results))
 
 if __name__ == '__main__':
-    main()
+    main('{query}')
