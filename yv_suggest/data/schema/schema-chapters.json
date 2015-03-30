@@ -4,10 +4,11 @@
   "description": "A list of chapter counts for each book of the Bible",
   "type": "object",
   "patternProperties": {
-    "^[1-9]?[a-z]+$": {
+    "^([a-z]{3}|[1-9][a-z]{2})$": {
       "title": "Chapter Count",
       "type": "integer",
       "minimum": 1
     }
-  }
+  },
+  "additionalProperties": false
 }

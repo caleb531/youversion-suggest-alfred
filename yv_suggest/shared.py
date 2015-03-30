@@ -18,7 +18,7 @@ alfred_data_dir = os.path.join(os.path.expanduser('~'),
 prefs_path = os.path.join(alfred_data_dir, 'preferences.json')
 recent_refs_path = os.path.join(alfred_data_dir, 'recent.json')
 
-max_recent_refs = 10
+max_recent_refs = 20
 
 
 def merge_dictionaries(*dictionaries):

@@ -52,6 +52,12 @@ def get_result_list(query_str, prefs=None):
     matching_books = get_matching_books(bible['books'], query)
     chosen_version = None
 
+    if 'chapter' not in query or query['chapter'] == 0:
+        query['chapter'] = 1
+
+    if 'verse' in query and query['verse'] == 0:
+        del query['verse']
+
     if 'version' in query:
         chosen_version = guess_version(bible['versions'], query['version'])
 
@@ -63,25 +69,23 @@ def get_result_list(query_str, prefs=None):
         chosen_version = shared.get_version(bible['versions'],
                                             bible['default_version'])
 
-    if 'chapter' not in query or query['chapter'] == 0:
-        query['chapter'] = 1
-
     # Build results list from books that matched the query
     for book in matching_books:
 
         # Result information
         result = {}
 
-        if query['chapter'] > chapters[book['id']]:
-            query['chapter'] = chapters[book['id']]
+        chosen_chapter = query['chapter']
+        if chosen_chapter > chapters[book['id']]:
+            chosen_chapter = chapters[book['id']]
 
         # Find chapter if given
         result['uid'] = '{book}.{chapter}'.format(
             book=book['id'],
-            chapter=query['chapter'])
+            chapter=chosen_chapter)
         result['title'] = '{book} {chapter}'.format(
             book=book['name'],
-            chapter=query['chapter'])
+            chapter=chosen_chapter)
 
         if 'verse' in query:
 
@@ -110,20 +114,20 @@ def get_result_list(query_str, prefs=None):
     return results
 
 
-# Outputs an Alfred XML string from the given query string
-def main(query_str='{query}', prefs=None):
+def main(query_str, prefs=None):
 
     results = get_result_list(query_str, prefs)
 
     if not results:
         results = [{
             'uid': 'yvs-no-results',
-            'valid': 'no',
             'title': 'No Results',
-            'subtitle': 'No bible references matching \'{}\''.format(query_str)
+            'subtitle': 'No bible references matching \'{}\''
+            .format(query_str),
+            'valid': 'no'
         }]
 
     print(shared.get_result_list_xml(results))
 
 if __name__ == '__main__':
-    main()
+    main('{query}')

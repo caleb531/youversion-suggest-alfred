@@ -83,7 +83,7 @@ def get_result_list(query_str, prefs=None):
     return results
 
 
-def main(query_str='{query}', prefs=None):
+def main(query_str, prefs=None):
 
     results = get_result_list(query_str, prefs)
 
@@ -99,4 +99,4 @@ def main(query_str='{query}', prefs=None):
 
 
 if __name__ == '__main__':
-    main()
+    main('{query}')

@@ -48,7 +48,7 @@
             "title": "Book ID",
             "description": "The ID used by YouVersion to uniquely identify this book",
             "type": "string",
-            "pattern": "^[1-9]?[a-z]+$"
+            "pattern": "^([a-z]{3}|[1-9][a-z]{2})$"
           }
         },
         "required": ["name", "id"],

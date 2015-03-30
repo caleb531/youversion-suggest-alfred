@@ -35,13 +35,6 @@ def test_null_result():
         nose.assert_equal(title.text, 'No Results')
 
 
-def test_query_param():
-    """should use typed Alfred query as default query string"""
-    spec = inspect.getargspec(yvs.main)
-    default_query_str = spec.defaults[0]
-    nose.assert_equal(default_query_str, '{query}')
-
-
 def test_source_only():
     """should run script assuming script is not a file"""
     yvs.shared.sys.argv[0] = yvs.shared.__file__
