@@ -11,15 +11,5 @@ import inspect
 def test_url_open():
     """should attempt to open URL using webbrowser module"""
     with ctx.mock_webbrowser(yvs) as mock:
-        yvs.main('59/jhn.3.17', save=False)
+        yvs.main('59/jhn.3.17')
         nose.assert_equal(mock.url, 'https://www.bible.com/bible/59/jhn.3.17')
-
-
-def test_save_recent():
-    """should save reference to list of recent references"""
-    with ctx.use_recent_refs([]):
-        with ctx.mock_webbrowser(yvs) as mock:
-            ref_uid = '59/jhn.3.17'
-            yvs.main(ref_uid)
-            recent_refs = yvs.shared.get_recent_refs()
-            nose.assert_equal(recent_refs[0], ref_uid)
