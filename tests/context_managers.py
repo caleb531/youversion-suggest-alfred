@@ -43,17 +43,6 @@ def use_default_prefs():
 
 
 @contextmanager
-def use_recent_refs(recent_refs):
-    """temporarily use the given list of recent references"""
-    original_recent_refs = yvs.get_recent_refs()
-    try:
-        yvs.update_recent_refs(recent_refs)
-        yield
-    finally:
-        yvs.update_recent_refs(original_recent_refs)
-
-
-@contextmanager
 def mock_webbrowser(yvs):
     """mock the webbrowser module for testing purposes"""
     mock = module_mocks.WebbrowserMock()
