@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-import shared
 import re
+import shared
 
 
 # Find a version which best matches the given version query

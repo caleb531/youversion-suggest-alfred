@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-import sys
 import os
 import os.path
 import json
 import re
+import sys
 import unicodedata
 from xml.etree import ElementTree as ET
 
@@ -16,9 +16,6 @@ alfred_data_dir = os.path.join(os.path.expanduser('~'),
                                'com.calebevans.youversionsuggest')
 
 prefs_path = os.path.join(alfred_data_dir, 'preferences.json')
-recent_refs_path = os.path.join(alfred_data_dir, 'recent.json')
-
-max_recent_refs = 20
 
 
 def merge_dictionaries(*dictionaries):
@@ -95,54 +92,6 @@ def get_languages():
         languages = json.load(languages_file)
 
     return languages
-
-
-# Functions for accessing/manipulating list of recent references
-
-
-def create_recent_refs():
-
-    create_alfred_data_dir()
-    recent_refs = []
-    with open(recent_refs_path, 'w') as recent_refs_file:
-        json.dump(recent_refs, recent_refs_file)
-
-    return recent_refs
-
-
-def get_recent_refs():
-
-    try:
-        with open(recent_refs_path, 'r') as recent_refs_file:
-            recent_refs = json.load(recent_refs_file)
-    except IOError:  # pragma: no cover
-        recent_refs = create_recent_refs()
-
-    return recent_refs
-
-
-def update_recent_refs(recent_refs):
-    while len(recent_refs) > max_recent_refs:
-        recent_refs.pop()
-    with open(recent_refs_path, 'w') as recent_refs_file:
-        json.dump(recent_refs, recent_refs_file)
-
-
-def push_recent_ref(ref_uid, save=True):
-
-    recent_refs = get_recent_refs()
-    if ref_uid in recent_refs:
-        recent_refs.remove(ref_uid)
-    recent_refs.insert(0, ref_uid)
-    update_recent_refs(recent_refs)
-
-
-def delete_recent_refs():
-
-    try:
-        os.remove(recent_refs_path)
-    except OSError:
-        pass
 
 
 # Functions for accessing/manipulating mutable preferences

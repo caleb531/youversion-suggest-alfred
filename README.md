@@ -29,12 +29,6 @@ search for the selected reference.
 * `yv 1 co 13.4-7` => 1 Corinthians 13:4-7
 * `yv relevations 7` => Revelation 7
 
-### Viewing recently-opened references
-
-Type the `yvrecent` keyword (or `yvr`, followed by the *tab* key) to view
-recently-opened Bible references. You can also provide an optional query by
-which to filter the list. All forms above are acceptable for the query format.
-
 ### Setting your preferred language
 
 YouVersion Suggest allows you to change the languages used for Bible references
@@ -44,9 +38,10 @@ your preferred language.
 
 Currently, YouVersion Suggest supports the following languages:
 
-* English
-* Spanish
-* Dutch
+* English (en)
+* Spanish (es)
+* Dutch (nl)
+* Simplified Chinese (zh-CN)
 
 If you would like support added for another language, please [submit an issue on
 GitHub](https://github.com/caleb531/youversion-suggest/issues).
