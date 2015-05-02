@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import webbrowser
 import urllib
+import webbrowser
 import shared
+
 
 base_url = 'https://www.google.com/search'
 

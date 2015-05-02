@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-import sys
 import os
 import os.path
 import json
 import re
+import sys
 import unicodedata
 from xml.etree import ElementTree as ET
 
