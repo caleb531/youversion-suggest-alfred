@@ -156,8 +156,7 @@ def get_result_list_xml(results):
             'arg': result.get('arg', ''),
             'valid': result.get('valid', 'yes')
         })
-        if 'uid' in result:
-            item.set('uid', result['uid'])
+        item.set('uid', result['uid'])
         # Create appropriate child elements of <item> element
         title = ET.SubElement(item, 'title')
         title.text = result['title']
