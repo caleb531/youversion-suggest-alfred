@@ -27,8 +27,7 @@ json_params = {
 # Retrieve HTML contents of the given URL as a Unicode string
 def get_url_content(url, **kw):
 
-    with urllib2.urlopen(url) as request:
-        return request.read().decode('utf-8')
+    return urllib2.urlopen(url).read().decode('utf-8')
 
 
 # Parse the language name from the given category header string
