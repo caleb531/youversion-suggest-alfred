@@ -12,6 +12,10 @@
     "name": "Nederlands"
   },
   {
+    "id": "sv",
+    "name": "Svenska"
+  },
+  {
     "id": "zh_CN",
     "name": "简体中文"
   }
