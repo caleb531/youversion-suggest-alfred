@@ -90,8 +90,8 @@ def main(query_str, prefs=None):
     if not results:
         results = [{
             'uid': 'yvs-noprefs',
-            'title': 'Cannot determine preference to set',
-            'subtitle': 'Please enter a valid preference name',
+            'title': 'Invalid preference name or value',
+            'subtitle': 'Please enter a valid name or value to set',
             'valid': 'no'
         }]
 
