@@ -5,13 +5,14 @@
 # support for any language to YouVersion Suggest.
 
 from __future__ import unicode_literals
-from pyquery import PyQuery as pq
+import argparse
+import io
+import itertools
+import json
 import os
 import re
-import io
-import json
 import urllib2
-import argparse
+from pyquery import PyQuery as pq
 
 
 json_params = {
@@ -87,6 +88,7 @@ def get_versions(params):
     print('Retrieving version data...')
 
     versions = []
+    unique_versions = []
 
     version_elems = get_version_elems(params)
 
@@ -95,13 +97,16 @@ def get_versions(params):
 
     for version_elem in version_elems:
         version = get_version(version_elem)
-        if not params['max_version_id'] or (params['max_version_id'] and
+        if (not params['max_version_id'] or
            version['id'] <= params['max_version_id']):
             versions.append(version)
 
-    versions.sort(key=get_item_name)
+    sorted_versions = sorted(versions, key=get_item_name)
+    for name, group in itertools.groupby(sorted_versions, get_item_name):
+        version = min(group, key=get_item_id)
+        unique_versions.append(version)
 
-    return versions
+    return unique_versions
 
 
 def get_book(book_elem):
