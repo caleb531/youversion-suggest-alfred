@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-# coding=utf-8
 
 # This script is a handy (albeit imperfect) tool for automatically adding
 # support for any language to YouVersion Suggest.
 
-from __future__ import unicode_literals
 import argparse
 import io
 import itertools
