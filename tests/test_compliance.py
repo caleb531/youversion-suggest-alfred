@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 import nose.tools as nose
 import glob
 import json
