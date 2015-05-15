@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.view_ref as yvs
 import context_managers as ctx
