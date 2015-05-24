@@ -2,8 +2,41 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import re
 import shared
+
+
+# Builds the query object from the given query string
+def get_query_object(query_str):
+
+    # Match section of the bible based on query
+    ref_matches = shared.get_ref_matches(query_str)
+
+    if not ref_matches:
+        return None
+
+    # Create query object for storing query data
+    query = {}
+
+    book_match = ref_matches.group(1)
+    query['book'] = book_match.rstrip()
+
+    chapter_match = ref_matches.group(2)
+    if chapter_match:
+        query['chapter'] = int(chapter_match)
+
+        verse_match = ref_matches.group(3)
+        if verse_match:
+            query['verse'] = int(verse_match)
+
+            endverse_match = ref_matches.group(4)
+            if endverse_match:
+                query['endverse'] = int(endverse_match)
+
+        version_match = ref_matches.group(5)
+        if version_match:
+            query['version'] = version_match.lstrip().upper()
+
+    return query
 
 
 # Find a version which best matches the given version query
@@ -40,7 +73,7 @@ def get_matching_books(books, query):
 def get_result_list(query_str, prefs=None):
 
     query_str = shared.format_query_str(query_str)
-    query = shared.get_query_object(query_str)
+    query = get_query_object(query_str)
     results = []
 
     if not query:
