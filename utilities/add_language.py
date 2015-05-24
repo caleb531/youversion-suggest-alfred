@@ -1,19 +1,20 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 # This script is a handy (albeit imperfect) tool for automatically adding
 # support for any language to YouVersion Suggest.
 
 from __future__ import unicode_literals
-from pyquery import PyQuery as pq
+import argparse
+import io
+import itertools
+import json
 import os
 import re
-import io
-import json
 import urllib2
-import argparse
+from pyquery import PyQuery as pq
 
 
+# Parameters for structuring JSON data
 json_params = {
     'indent': 2,
     'separators': (',', ': '),
@@ -22,11 +23,13 @@ json_params = {
 }
 
 
+# Retrieve HTML contents of the given URL as a Unicode string
 def get_url_content(url, **kw):
 
     return urllib2.urlopen(url).read().decode('utf-8')
 
 
+# Parse the language name from the given category header string
 def get_language_name(text):
 
     patt = '^\s*(.+?)(?:\s*\((\d+)\)\s*)$'
@@ -37,6 +40,7 @@ def get_language_name(text):
         return None
 
 
+# Construct an object representing a Bible version
 def get_version(version_elem):
 
     link_elem = version_elem.find('a')
@@ -49,6 +53,7 @@ def get_version(version_elem):
     }
 
 
+# Retrieve list of HTML elements, each corresponding to a Bible version
 def get_version_elems(params):
 
     d = pq(url='https://www.bible.com/{}/versions'
@@ -61,9 +66,9 @@ def get_version_elems(params):
     if category_elems:
 
         category_elem = category_elems[0]
-
-        text = category_elem.text.strip()
         version_elems = d(category_elem).find('li')
+
+        text = category_elem.text
         params['language']['name'] = get_language_name(text)
 
         if not params['language']['name']:
@@ -82,11 +87,13 @@ def get_item_id(item):
     return item['id']
 
 
+# Retrieve a list of dictionaries representing Bible versions
 def get_versions(params):
 
     print('Retrieving version data...')
 
     versions = []
+    unique_versions = []
 
     version_elems = get_version_elems(params)
 
@@ -95,15 +102,22 @@ def get_versions(params):
 
     for version_elem in version_elems:
         version = get_version(version_elem)
-        if not params['max_version_id'] or (params['max_version_id'] and
+        # Only add version if ID does not exceed a certain limit (if defined)
+        if (not params['max_version_id'] or
            version['id'] <= params['max_version_id']):
             versions.append(version)
 
-    versions.sort(key=get_item_name)
+    # Sort and remove duplicates from list of versions
+    sorted_versions = sorted(versions, key=get_item_name)
+    for name, group in itertools.groupby(sorted_versions, get_item_name):
+        # When duplicates are encountered, favor the version with the lowest ID
+        version = min(group, key=get_item_id)
+        unique_versions.append(version)
 
-    return versions
+    return unique_versions
 
 
+# Construct an object representing a book of the Bible
 def get_book(book_elem):
 
     return {
@@ -112,6 +126,7 @@ def get_book(book_elem):
     }
 
 
+# Retrieve list of chapter counts for each book of the Bible
 def get_chapter_data():
 
     chapter_data_path = os.path.join('yv_suggest', 'data', 'bible',
@@ -122,6 +137,7 @@ def get_chapter_data():
     return chapter_data
 
 
+# Retrieve list of dictionaries, each representing a book of the Bible
 def get_books(params):
 
     print('Retrieving book data...')
@@ -140,47 +156,47 @@ def get_books(params):
 
     for book_elem in book_elems:
         book = get_book(book_elem)
+        # Only add book to list if a chapter count exists for that book
         if book['id'] in chapter_data:
             books.append(book)
 
     return books
 
 
+# Construct object representing all Bible data for a particular version
+# This data includes the list of books, list of versions, and default version
 def get_bible_data(params):
 
     bible = {}
-
     bible['versions'] = get_versions(params)
 
-    if (params['default_version'] and
-        not any(version['id'] == params['default_version'] for version in
-                bible['versions'])):
-        raise RuntimeError(
-         'Given default version does not exist in given language. Aborting.')
-
+    # If no explicit default version is given, use version with lowest ID
     if not params['default_version']:
         params['default_version'] = min(bible['versions'],
                                         key=get_item_id)['id']
+    elif not any(version['id'] == params['default_version'] for version in
+                 bible['versions']):
+        raise RuntimeError(
+         'Given default version does not exist in given language. Aborting.')
 
     bible['default_version'] = params['default_version']
-
     bible['books'] = get_books(params)
-
     return bible
 
 
+# Construct the Bible data object and save it to a JSON file
 def save_bible_data(params):
 
     language = params['language']
     bible = get_bible_data(params)
     bible_path = os.path.join('yv_suggest', 'data', 'bible',
-                              'language-{}.json'
-                              .format(language['id']))
+                              'language-{}.json'.format(language['id']))
     with open(bible_path, 'w') as bible_file:
         json.dump(bible, bible_file, **json_params)
         bible_file.write('\n')
 
 
+# Add the given language parameters to the list of supported languages
 def update_language_list(params):
 
     print('Updating language list...')
@@ -188,6 +204,7 @@ def update_language_list(params):
     langs_path = os.path.join('yv_suggest', 'data', 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
         langs = json.load(langs_file)
+        # If language does not already exist in list of supported languages
         if not any(lang['id'] == params['language']['id'] for lang in langs):
             langs.append(params['language'])
             langs.sort(key=get_item_id)
@@ -198,28 +215,33 @@ def update_language_list(params):
             langs_file.write('\n')
 
 
+# Add support for the language with the given parameters to the workflow
 def add_language(params):
 
     save_bible_data(params)
     update_language_list(params)
 
 
+# Parse command-line arguments
 def parse_args():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('code')
+    parser.add_argument(
+        'code',
+        help='the language\'s ISO 639-1 code')
     parser.add_argument(
         '--max-version-id',
-        type=int)
+        type=int,
+        help='the upper limit to which Bible version IDs are constrained')
     parser.add_argument(
         '--default-version',
         type=int)
 
     args = parser.parse_args()
-
     return args
 
 
+# The params object is a more structured representation of the CLI arguments
 def get_params(args):
 
     params = {

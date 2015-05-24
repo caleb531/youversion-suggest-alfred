@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
 import re
@@ -90,8 +89,8 @@ def main(query_str, prefs=None):
     if not results:
         results = [{
             'uid': 'yvs-noprefs',
-            'title': 'Cannot determine preference to set',
-            'subtitle': 'Please enter a valid preference name',
+            'title': 'Invalid preference name or value',
+            'subtitle': 'Please enter a valid name or value to set',
             'valid': 'no'
         }]
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# coding=utf-8
 
 from __future__ import unicode_literals
 import os
@@ -156,8 +156,7 @@ def get_result_list_xml(results):
             'arg': result.get('arg', ''),
             'valid': result.get('valid', 'yes')
         })
-        if 'uid' in result:
-            item.set('uid', result['uid'])
+        item.set('uid', result['uid'])
         # Create appropriate child elements of <item> element
         title = ET.SubElement(item, 'title')
         title.text = result['title']
@@ -207,40 +206,6 @@ def get_ref_matches(query_str):
         endverse='(\d+)?\s?',
         version='([a-z]+\d*)?.*?')
     return re.search(patt, query_str, flags=re.UNICODE)
-
-
-# Builds the query object from the given query string
-def get_query_object(query_str):
-
-    # Match section of the bible based on query
-    ref_matches = get_ref_matches(query_str)
-
-    if not ref_matches:
-        return None
-
-    # Create query object for storing query data
-    query = {}
-
-    book_match = ref_matches.group(1)
-    query['book'] = book_match.rstrip()
-
-    chapter_match = ref_matches.group(2)
-    if chapter_match:
-        query['chapter'] = int(chapter_match)
-
-        verse_match = ref_matches.group(3)
-        if verse_match:
-            query['verse'] = int(verse_match)
-
-            endverse_match = ref_matches.group(4)
-            if endverse_match:
-                query['endverse'] = int(endverse_match)
-
-        version_match = ref_matches.group(5)
-        if version_match:
-            query['version'] = version_match.lstrip().upper()
-
-    return query
 
 
 # Parses the given reference UID into a dictionary representing that reference
