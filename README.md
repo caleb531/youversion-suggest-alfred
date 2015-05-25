@@ -42,6 +42,7 @@ Currently, YouVersion Suggest supports the following languages:
 * Spanish (es)
 * Dutch (nl)
 * Simplified Chinese (zh-CN)
+* Swedish (sv)
 
 If you would like support added for another language, please [submit an issue on
 GitHub](https://github.com/caleb531/youversion-suggest/issues).
