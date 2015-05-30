@@ -1,5 +1,7 @@
 nose
+rednose
 coverage
 pep8
 jsonschema
 pyquery
+invoke
