@@ -64,18 +64,18 @@ def get_chapter_data():
     return chapter_data
 
 
+# Get name of first book whose id matches the given id
 def get_book(books, book_id):
 
-    for book in books:  # pragma: no cover
-        if book['id'] == book_id:
-            return book['name']
+    return next((book['name'] for book in books
+                 if book['id'] == book_id), None)
 
 
+# Get first version object whose id matches the given id
 def get_version(versions, version_id):
 
-    for version in versions:  # pragma: no cover
-        if version['id'] == version_id:
-            return version
+    return next((version for version in versions
+                 if version['id'] == version_id), None)
 
 
 def get_versions(language):
@@ -120,15 +120,13 @@ def create_prefs():
 def get_prefs(prefs=None):
 
     if prefs is not None:
-        prefs = merge_dictionaries(get_defaults(), prefs)
+        return merge_dictionaries(get_defaults(), prefs)
     else:
         try:
             with open(prefs_path, 'r') as prefs_file:
-                prefs = json.load(prefs_file)
-        except IOError:  # pragma: no cover
-            prefs = create_prefs()
-
-    return prefs
+                return json.load(prefs_file)
+        except IOError:
+            return create_prefs()
 
 
 def update_prefs(prefs):
