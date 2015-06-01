@@ -11,6 +11,7 @@ import json
 import os
 import re
 import urllib2
+from operator import itemgetter
 from pyquery import PyQuery as pq
 
 
@@ -77,16 +78,6 @@ def get_version_elems(params):
     return version_elems
 
 
-def get_item_name(item):
-
-    return item['name']
-
-
-def get_item_id(item):
-
-    return item['id']
-
-
 # Retrieve a list of dictionaries representing Bible versions
 def get_versions(params):
 
@@ -108,10 +99,10 @@ def get_versions(params):
             versions.append(version)
 
     # Sort and remove duplicates from list of versions
-    sorted_versions = sorted(versions, key=get_item_name)
-    for name, group in itertools.groupby(sorted_versions, get_item_name):
+    versions.sort(key=itemgetter('name'))
+    for name, group in itertools.groupby(versions, key=itemgetter('name')):
         # When duplicates are encountered, favor the version with the lowest ID
-        version = min(group, key=get_item_id)
+        version = min(group, key=itemgetter('id'))
         unique_versions.append(version)
 
     return unique_versions
@@ -173,7 +164,7 @@ def get_bible_data(params):
     # If no explicit default version is given, use version with lowest ID
     if not params['default_version']:
         params['default_version'] = min(bible['versions'],
-                                        key=get_item_id)['id']
+                                        key=itemgetter('id'))['id']
     elif not any(version['id'] == params['default_version'] for version in
                  bible['versions']):
         raise RuntimeError(
@@ -207,7 +198,7 @@ def update_language_list(params):
         # If language does not already exist in list of supported languages
         if not any(lang['id'] == params['language']['id'] for lang in langs):
             langs.append(params['language'])
-            langs.sort(key=get_item_id)
+            langs.sort(key=itemgetter('id'))
             json_str = unicode(json.dumps(langs, **json_params))
             langs_file.truncate(0)
             langs_file.seek(0)
