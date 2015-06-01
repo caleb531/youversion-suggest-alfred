@@ -3,7 +3,6 @@
 from contextlib import contextmanager
 from io import BytesIO
 import sys
-import module_mocks
 import yv_suggest.shared as yvs
 
 
@@ -39,15 +38,3 @@ def use_default_prefs():
         yield
     finally:
         yvs.update_prefs(original_prefs)
-
-
-@contextmanager
-def mock_webbrowser(yvs):
-    """mock the webbrowser module for testing purposes"""
-    mock = module_mocks.WebbrowserMock()
-    original_webbrowser = yvs.webbrowser
-    yvs.webbrowser = mock
-    try:
-        yield mock
-    finally:
-        yvs.webbrowser = original_webbrowser

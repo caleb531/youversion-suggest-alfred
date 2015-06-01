@@ -1,6 +1,7 @@
 nose
 rednose
 coverage
+mock
 pep8
 jsonschema
 pyquery
