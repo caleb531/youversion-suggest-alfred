@@ -45,7 +45,7 @@ class ReferenceParser(HTMLParser):
                 self.content_depth = self.level
 
     def handle_endtag(self, tag):
-        #
+        # Determine when certain classes of elements end
         if self.level == self.block_depth:
             self.in_block = False
         if self.level == self.verse_depth:
@@ -57,12 +57,12 @@ class ReferenceParser(HTMLParser):
         if tag == 'div' or tag == 'span':
             self.level -= 1
 
-    def handle_data(self, data):
-        if self.in_content and data.strip() != '':
-            self.ref_text += data
+    def handle_data(self, content):
+        if self.in_verse and self.in_content and content.strip() != '':
+            self.ref_text += content
 
     def handle_charref(self, name):
-        if self.in_content:
+        if self.in_verse and self.in_content:
             if name[0] == 'x':
                 # Handle hexadecimal character references
                 self.ref_text += unichr(int(name[1:], 16))
