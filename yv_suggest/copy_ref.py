@@ -87,8 +87,12 @@ class ReferenceParser(HTMLParser):
     # Handle all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.is_in_verse_content():
-            # Handle decimal character references only
-            self.ref_parts.append(unichr(int(name)))
+            if name[0] == 'x':
+                # Handle hexadecimal character references
+                self.ref_parts.append(unichr(int(name[1:], 16)))
+            else:
+                # Handle decimal character references
+                self.ref_parts.append(unichr(int(name)))
 
 
 # Parse actual reference content from reference HTML
