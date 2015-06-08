@@ -26,6 +26,7 @@ class ReferenceParser(HTMLParser):
     verse_num = None
     ref_parts = []
 
+    # Associates reference object with parser instance
     def set_ref(self, ref):
         if 'verse' in ref:
             self.verse_start = ref['verse']
@@ -37,10 +38,11 @@ class ReferenceParser(HTMLParser):
             self.verse_start = 1
             self.verse_end = None
 
-    def is_in_verse(self):
-        return (self.in_verse and self.in_content and (not self.verse_num or
-                (self.verse_start <= self.verse_num) and (not self.verse_end or
-                 self.verse_num <= self.verse_end)))
+    # Determines if parser is currently within content of verse to include
+    def is_in_verse_content(self):
+        return (self.in_verse and self.in_content and
+                (not self.verse_num or (self.verse_start <= self.verse_num) and
+                 (not self.verse_end or self.verse_num <= self.verse_end)))
 
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
@@ -48,20 +50,24 @@ class ReferenceParser(HTMLParser):
             self.depth += 1
         if 'class' in attr_dict:
             div_class = attr_dict['class']
+            # Detect paragraph breaks between verses
             if div_class == 'p' or div_class == 'b':
                 self.ref_parts.append('\n\n')
+            # Detect line breaks within a single verse
             if re.match('q\d+', div_class):
                 self.ref_parts.append('\n')
+            # Detect beginning of a single verse (may include footnotes)
             if 'verse ' in div_class:
                 self.in_verse = True
                 self.verse_depth = self.depth
                 self.verse_num = int(div_class.split(' ')[1][1:])
+            # Detect beginning of verse content (excludes footnotes)
             if div_class == 'content':
                 self.in_content = True
                 self.content_depth = self.depth
 
     def handle_endtag(self, tag):
-        # Determine when certain classes of elements end
+        # Determine the end of a verse or its content
         if self.depth == self.verse_depth:
             self.in_verse = False
             # Ensure that a space separates consecutive sentences
@@ -71,12 +77,14 @@ class ReferenceParser(HTMLParser):
         if tag == 'div' or tag == 'span':
             self.depth -= 1
 
+    # Handle verse content
     def handle_data(self, content):
-        if self.is_in_verse() and content.strip() != '':
+        if self.is_in_verse_content() and content.strip() != '':
             self.ref_parts.append(content)
 
+    # Handle all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
-        if self.is_in_verse():
+        if self.is_in_verse_content():
             if name[0] == 'x':
                 # Handle hexadecimal character references
                 self.ref_parts.append(unichr(int(name[1:], 16)))
