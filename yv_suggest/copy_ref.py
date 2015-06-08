@@ -18,13 +18,15 @@ def get_ref_html(ref):
 # Parser for reference HTML
 class ReferenceParser(HTMLParser):
 
-    depth = 0
-    in_verse = None
-    in_content = None
-    verse_depth = None
-    content_depth = None
-    verse_num = None
-    ref_parts = []
+    def reset(self):
+        HTMLParser.reset(self)
+        self.depth = 0
+        self.in_verse = None
+        self.in_content = None
+        self.verse_depth = None
+        self.content_depth = None
+        self.verse_num = None
+        self.ref_parts = []
 
     # Associates reference object with parser instance
     def set_ref(self, ref):
@@ -54,7 +56,7 @@ class ReferenceParser(HTMLParser):
             if div_class == 'p' or div_class == 'b':
                 self.ref_parts.append('\n\n')
             # Detect line breaks within a single verse
-            if re.match('q\d+', div_class):
+            if div_class == 'q1' or div_class == 'q2':
                 self.ref_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
             if 'verse ' in div_class:
@@ -85,23 +87,20 @@ class ReferenceParser(HTMLParser):
     # Handle all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.is_in_verse_content():
-            if name[0] == 'x':
-                # Handle hexadecimal character references
-                self.ref_parts.append(unichr(int(name[1:], 16)))
-            else:
-                # Handle decimal character references
-                self.ref_parts.append(unichr(int(name)))
+            # Handle decimal character references only
+            self.ref_parts.append(unichr(int(name)))
 
 
 # Parse actual reference content from reference HTML
 def get_ref_text(ref, html):
     parser = ReferenceParser()
+    parser.reset()
     parser.set_ref(ref)
     parser.feed(html)
     ref_text = format_ref_text(''.join(parser.ref_parts))
     ref_text = '\n\n' + ref_text
     ref_text = shared.get_full_ref(ref) + ref_text
-    return ref_text
+    return ref_text.encode('utf-8')
 
 
 def format_ref_text(ref_text):
