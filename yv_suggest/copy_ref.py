@@ -43,7 +43,7 @@ class ReferenceParser(HTMLParser):
     # Determines if parser is currently within content of verse to include
     def is_in_verse_content(self):
         return (self.in_verse and self.in_content and
-                (not self.verse_num or (self.verse_start <= self.verse_num) and
+                (self.verse_start <= self.verse_num and
                  (not self.verse_end or self.verse_num <= self.verse_end)))
 
     def handle_starttag(self, tag, attrs):
@@ -94,7 +94,6 @@ class ReferenceParser(HTMLParser):
 # Parse actual reference content from reference HTML
 def get_ref_text(ref, html):
     parser = ReferenceParser()
-    parser.reset()
     parser.set_ref(ref)
     parser.feed(html)
     ref_text = format_ref_text(''.join(parser.ref_parts))
