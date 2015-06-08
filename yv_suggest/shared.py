@@ -217,13 +217,16 @@ def get_ref_object(ref_uid, prefs=None):
         endverse='(?:-(\d+))?')
 
     ref_uid_matches = re.match(patt, ref_uid)
-    ref = {}
+    ref = {
+        'uid': ref_uid
+    }
 
     book_id = ref_uid_matches.group(2)
     prefs = get_prefs(prefs)
     bible = get_bible_data(prefs['language'])
     book_name = get_book(bible['books'], book_id)
     ref['book'] = book_name
+    ref['book_id'] = book_id
 
     chapter = ref_uid_matches.group(3)
     ref['chapter'] = chapter
@@ -240,6 +243,7 @@ def get_ref_object(ref_uid, prefs=None):
     version_name = get_version(bible['versions'],
                                version_id)['name']
     ref['version'] = version_name
+    ref['version_id'] = version_id
 
     return ref
 
