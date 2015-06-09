@@ -21,8 +21,10 @@ class ReferenceParser(HTMLParser):
     def reset(self):
         HTMLParser.reset(self)
         self.depth = 0
+        self.in_block = None
         self.in_verse = None
         self.in_content = None
+        self.block_depth = None
         self.verse_depth = None
         self.content_depth = None
         self.verse_num = None
@@ -51,30 +53,35 @@ class ReferenceParser(HTMLParser):
         if tag == 'div' or tag == 'span':
             self.depth += 1
         if 'class' in attr_dict:
-            div_class = attr_dict['class']
+            elem_class = attr_dict['class']
             # Detect paragraph breaks between verses
-            if div_class == 'p' or div_class == 'b':
+            if elem_class == 'p' or elem_class == 'b':
+                self.in_block = True
+                self.block_depth = self.depth
                 self.ref_parts.append('\n\n')
             # Detect line breaks within a single verse
-            if div_class == 'q1' or div_class == 'q2':
+            if elem_class == 'q1' or elem_class == 'q2' or elem_class == 'li1':
                 self.ref_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
-            if 'verse ' in div_class:
+            if 'verse ' in elem_class:
                 self.in_verse = True
                 self.verse_depth = self.depth
-                self.verse_num = int(div_class.split(' ')[1][1:])
+                self.verse_num = int(elem_class.split(' ')[1][1:])
             # Detect beginning of verse content (excludes footnotes)
-            if div_class == 'content':
+            if elem_class == 'content':
                 self.in_content = True
                 self.content_depth = self.depth
 
     def handle_endtag(self, tag):
+        if self.depth == self.block_depth and self.in_block:
+            self.in_block = False
+            self.ref_parts.append('\n')
         # Determine the end of a verse or its content
-        if self.depth == self.verse_depth:
+        if self.depth == self.verse_depth and self.in_verse:
             self.in_verse = False
             # Ensure that a space separates consecutive sentences
             self.ref_parts.append(' ')
-        if self.depth == self.content_depth:
+        if self.depth == self.content_depth and self.in_content:
             self.in_content = False
         if tag == 'div' or tag == 'span':
             self.depth -= 1
