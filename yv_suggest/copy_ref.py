@@ -28,7 +28,7 @@ class ReferenceParser(HTMLParser):
         self.verse_depth = None
         self.content_depth = None
         self.verse_num = None
-        self.ref_parts = []
+        self.content_parts = []
 
     # Associates reference object with parser instance
     def set_ref(self, ref):
@@ -58,10 +58,10 @@ class ReferenceParser(HTMLParser):
             if elem_class == 'p' or elem_class == 'b':
                 self.in_block = True
                 self.block_depth = self.depth
-                self.ref_parts.append('\n\n')
+                self.content_parts.append('\n\n')
             # Detect line breaks within a single verse
             if elem_class == 'q1' or elem_class == 'q2' or elem_class == 'li1':
-                self.ref_parts.append('\n')
+                self.content_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
             if 'verse ' in elem_class:
                 self.in_verse = True
@@ -75,12 +75,12 @@ class ReferenceParser(HTMLParser):
     def handle_endtag(self, tag):
         if self.depth == self.block_depth and self.in_block:
             self.in_block = False
-            self.ref_parts.append('\n')
+            self.content_parts.append('\n')
         # Determine the end of a verse or its content
         if self.depth == self.verse_depth and self.in_verse:
             self.in_verse = False
             # Ensure that a space separates consecutive sentences
-            self.ref_parts.append(' ')
+            self.content_parts.append(' ')
         if self.depth == self.content_depth and self.in_content:
             self.in_content = False
         if tag == 'div' or tag == 'span':
@@ -89,45 +89,45 @@ class ReferenceParser(HTMLParser):
     # Handle verse content
     def handle_data(self, content):
         if self.is_in_verse_content():
-            self.ref_parts.append(content)
+            self.content_parts.append(content)
 
     # Handle all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.is_in_verse_content():
             if name[0] == 'x':
                 # Handle hexadecimal character references
-                self.ref_parts.append(unichr(int(name[1:], 16)))
+                self.content_parts.append(unichr(int(name[1:], 16)))
             else:
                 # Handle decimal character references
-                self.ref_parts.append(unichr(int(name)))
+                self.content_parts.append(unichr(int(name)))
 
 
 # Parse actual reference content from reference HTML
-def get_ref_text(ref, html):
+def get_ref_content(ref, html):
     parser = ReferenceParser()
     parser.set_ref(ref)
     parser.feed(html)
-    ref_text = format_ref_text(''.join(parser.ref_parts))
-    ref_text = '\n\n' + ref_text
-    ref_text = shared.get_full_ref(ref) + ref_text
-    return ref_text.encode('utf-8')
+    ref_content = format_ref_content(''.join(parser.content_parts))
+    ref_content = '\n\n' + ref_content
+    ref_content = shared.get_full_ref(ref) + ref_content
+    return ref_content.encode('utf-8')
 
 
-def format_ref_text(ref_text):
+def format_ref_content(ref_content):
     # Collapse consecutive spaces to single space
-    ref_text = re.sub(' +', ' ', ref_text)
+    ref_content = re.sub(' +', ' ', ref_content)
     # Collapse sequences of three or more newlines into two
-    ref_text = re.sub('\n{2,}', '\n\n', ref_text)
+    ref_content = re.sub('\n{2,}', '\n\n', ref_content)
     # Strip leading/trailing whitespace for entire reference
-    ref_text = re.sub('(^\s+)|(\s+$)', '', ref_text)
+    ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
     # Strip leading/trailing whitespace for each paragraph
-    ref_text = re.sub('(\n +)|( +\n)', '\n', ref_text)
-    return ref_text
+    ref_content = re.sub('(\n +)|( +\n)', '\n', ref_content)
+    return ref_content
 
 
 def main(ref_uid, prefs=None):
     ref = shared.get_ref_object(ref_uid, prefs)
-    print(get_ref_text(ref, get_ref_html(ref)))
+    print(get_ref_content(ref, get_ref_html(ref)))
 
 if __name__ == '__main__':
     main('{query}')
