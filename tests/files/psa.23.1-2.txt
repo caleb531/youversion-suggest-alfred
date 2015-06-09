@@ -1,8 +1,0 @@
-Psalm 23:1-2 (NIV)
-
-» “Lorem ipsum” dolor sit amet,
-consectetur adipiscing elit.
-
-Ut aliquam, neque vel sodales porta,
-nunc nulla dignissim justo,
-ac viverra velit neque finibus erat.
