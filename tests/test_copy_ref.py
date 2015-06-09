@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.copy_ref as yvs
 from decorators import redirect_stdout
-from mock import patch, mock_open, Mock
+from mock import Mock
 
 
 with open('tests/files/psa.23.html') as file:
