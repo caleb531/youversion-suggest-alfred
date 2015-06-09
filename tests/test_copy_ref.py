@@ -93,7 +93,8 @@ def test_whitespace_lines():
         nose.assert_regexp_matches(ref_text, 'amet,\nconsectetur')
         nose.assert_regexp_matches(ref_text, 'elit.\n\nUt')
         nose.assert_regexp_matches(ref_text, 'erat.\n\n\S')
-        nose.assert_regexp_matches(ref_text, 'nec\n\nfermentum')
+        nose.assert_regexp_matches(ref_text, 'leo,\n\nhendrerit')
+        nose.assert_regexp_matches(ref_text, 'nec\nfermentum')
 
 
 def test_url_always_chapter():
