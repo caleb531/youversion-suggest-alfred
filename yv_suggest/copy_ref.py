@@ -118,8 +118,8 @@ def format_ref_text(ref_text):
     return ref_text
 
 
-def main(ref_uid):
-    ref = shared.get_ref_object(ref_uid)
+def main(ref_uid, prefs=None):
+    ref = shared.get_ref_object(ref_uid, prefs)
     print(get_ref_text(ref, get_ref_html(ref)))
 
 if __name__ == '__main__':

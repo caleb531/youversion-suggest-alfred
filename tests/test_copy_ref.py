@@ -44,3 +44,17 @@ def test_copy_verse_range():
             yvs.main('111/psa.23.1-2')
             nose.assert_equal(out.getvalue().strip(),
                               text_file.read().strip())
+
+
+@nose.with_setup(before_each, after_each)
+def test_language():
+    with open('tests/files/psa.23.txt') as text_file:
+        with ctx.redirect_stdout() as out:
+            yvs.main('128/psa.23', prefs={
+                'language': 'es'
+            })
+            ref_text = text_file.read().strip()
+            ref_text = ref_text.replace('Psalm', 'Salmos')
+            ref_text = ref_text.replace('NIV', 'NVI')
+            nose.assert_equal(out.getvalue().strip(),
+                              ref_text)
