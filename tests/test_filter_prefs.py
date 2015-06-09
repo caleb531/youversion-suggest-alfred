@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.filter_prefs as yvs
 from xml.etree import ElementTree as ET
-import context_managers as ctx
+from decorators import redirect_stdout
 
 
 def test_show_languages():
@@ -47,24 +47,24 @@ def test_invalid():
     nose.assert_equal(len(results), 0)
 
 
-def test_main_output():
+@redirect_stdout
+def test_main_output(out):
     """should output pref result list XML"""
     query_str = 'language'
-    with ctx.redirect_stdout() as out:
-        yvs.main(query_str, prefs={})
-        output = out.getvalue().strip()
-        results = yvs.get_result_list(query_str, prefs={})
-        xml = yvs.shared.get_result_list_xml(results).strip()
-        nose.assert_equal(output, xml)
+    yvs.main(query_str, prefs={})
+    output = out.getvalue().strip()
+    results = yvs.get_result_list(query_str, prefs={})
+    xml = yvs.shared.get_result_list_xml(results).strip()
+    nose.assert_equal(output, xml)
 
 
-def test_null_result():
+@redirect_stdout
+def test_null_result(out):
     """should output "No Results" XML item for empty pref result list"""
     query_str = 'xyz'
-    with ctx.redirect_stdout() as out:
-        yvs.main(query_str, prefs={})
-        xml = out.getvalue().strip()
-        root = ET.fromstring(xml)
-        item = root.find('item')
-        nose.assert_is_not_none(item, '<item> element is missing')
-        nose.assert_equal(item.get('valid'), 'no')
+    yvs.main(query_str, prefs={})
+    xml = out.getvalue().strip()
+    root = ET.fromstring(xml)
+    item = root.find('item')
+    nose.assert_is_not_none(item, '<item> element is missing')
+    nose.assert_equal(item.get('valid'), 'no')
