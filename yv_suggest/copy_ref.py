@@ -81,7 +81,7 @@ class ReferenceParser(HTMLParser):
 
     # Handle verse content
     def handle_data(self, content):
-        if self.is_in_verse_content() and content.strip() != '':
+        if self.is_in_verse_content():
             self.ref_parts.append(content)
 
     # Handle all non-ASCII characters encoded as HTML entities
