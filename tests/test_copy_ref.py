@@ -21,6 +21,7 @@ def after_each():
 
 @nose.with_setup(before_each, after_each)
 def test_copy_chapter():
+    '''should copy reference content for chapter'''
     with open('tests/files/psa.23.txt') as text_file:
         with ctx.redirect_stdout() as out:
             yvs.main('111/psa.23')
@@ -30,6 +31,7 @@ def test_copy_chapter():
 
 @nose.with_setup(before_each, after_each)
 def test_copy_verse():
+    '''should copy reference content for verse'''
     with open('tests/files/psa.23.2.txt') as text_file:
         with ctx.redirect_stdout() as out:
             yvs.main('111/psa.23.2')
@@ -39,6 +41,7 @@ def test_copy_verse():
 
 @nose.with_setup(before_each, after_each)
 def test_copy_verse_range():
+    '''should copy reference content for verse range'''
     with open('tests/files/psa.23.1-2.txt') as text_file:
         with ctx.redirect_stdout() as out:
             yvs.main('111/psa.23.1-2')
@@ -48,6 +51,7 @@ def test_copy_verse_range():
 
 @nose.with_setup(before_each, after_each)
 def test_language():
+    '''should copy reference content in another language'''
     with open('tests/files/psa.23.txt') as text_file:
         with ctx.redirect_stdout() as out:
             yvs.main('128/psa.23', prefs={
