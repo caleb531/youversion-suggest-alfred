@@ -21,5 +21,6 @@ include =
     yv_suggest/filter_recent_refs.py
     yv_suggest/filter_prefs.py
     yv_suggest/view_ref.py
+    yv_suggest/copy_ref.py
     yv_suggest/search_ref.py
     yv_suggest/set_pref.py
