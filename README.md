@@ -20,8 +20,9 @@ chapter, verse, or range of verses. You may also include an optional version
 display a list of suggestions matching your query.
 
 Choosing a result will open the selected reference on the YouVersion website.
-Choosing a result while holding down the *ctrl* key will open a Google
-search for the selected reference.
+Choosing a result while holding down the *command* key will copy the contents of
+the selected reference to the clipboard. Choosing a result while holding down
+the *ctrl* key will open a Google search for the selected reference.
 
 ### Example queries
 
