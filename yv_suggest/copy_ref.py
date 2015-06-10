@@ -121,7 +121,7 @@ def format_ref_content(ref_content):
     # Strip leading/trailing whitespace for entire reference
     ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
     # Strip leading/trailing whitespace for each paragraph
-    ref_content = re.sub('(\n +)|( +\n)', '\n', ref_content)
+    ref_content = re.sub(' *\n *', '\n', ref_content)
     return ref_content
 
 
