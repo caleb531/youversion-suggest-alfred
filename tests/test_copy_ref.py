@@ -78,10 +78,13 @@ def test_charref_hex(out):
 
 @redirect_stdout
 def test_whitespace_words(out):
-    '''should preserve whitespace between words'''
+    '''should handle spaces appropriately'''
     yvs.main('111/psa.23')
     ref_content = out.getvalue()
-    nose.assert_regexp_matches(ref_content, 'adipiscing elit.')
+    nose.assert_regexp_matches(ref_content, 'adipiscing elit.',
+                               'should respect content consisting of spaces')
+    nose.assert_regexp_matches(ref_content, 'consectetur adipiscing',
+                               'should collapse consecutive spaces')
 
 
 @redirect_stdout
@@ -89,12 +92,18 @@ def test_whitespace_lines(out):
     '''should add line breaks where appropriate'''
     yvs.main('111/psa.23')
     ref_content = out.getvalue()
-    nose.assert_regexp_matches(ref_content, 'Psalm 23 \(NIV\)\n\n\S')
-    nose.assert_regexp_matches(ref_content, 'amet,\nconsectetur')
-    nose.assert_regexp_matches(ref_content, 'elit.\n\nUt')
-    nose.assert_regexp_matches(ref_content, 'erat.\n\n\S')
-    nose.assert_regexp_matches(ref_content, 'leo,\n\nhendrerit')
-    nose.assert_regexp_matches(ref_content, 'nec\nfermentum')
+    nose.assert_regexp_matches(ref_content, 'Psalm 23 \(NIV\)\n\n\S',
+                               'should add two line breaks after header')
+    nose.assert_regexp_matches(ref_content, 'amet,\nconsectetur',
+                               'should add newline before each p block')
+    nose.assert_regexp_matches(ref_content, 'erat.\n\n\S',
+                               'should add newline after each p block')
+    nose.assert_regexp_matches(ref_content, 'nec\nfermentum',
+                               'should add newline between each q block')
+    nose.assert_regexp_matches(ref_content, 'elit.\n\nUt',
+                               'should add newlines around each li1 block')
+    nose.assert_regexp_matches(ref_content, 'leo,\n\nhendrerit',
+                               'should add two newlines for each b block')
 
 
 @redirect_stdout

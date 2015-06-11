@@ -6,18 +6,23 @@ import shared
 from HTMLParser import HTMLParser
 
 
-# Retrieve HTML for reference with the given ID
-def get_ref_html(ref):
-    url = 'https://www.bible.com/bible/{version}/{book}.{chapter}'.format(
-        version=ref['version_id'],
-        book=ref['book_id'],
-        chapter=ref['chapter'])
-    return urllib2.urlopen(url).read().decode('utf-8')
-
-
 # Parser for reference HTML
 class ReferenceParser(HTMLParser):
 
+    # Associates the given reference object with this parser instance
+    def __init__(self, ref):
+        HTMLParser.__init__(self)
+        if 'verse' in ref:
+            self.verse_start = ref['verse']
+            if 'endverse' in ref:
+                self.verse_end = ref['endverse']
+            else:
+                self.verse_end = self.verse_start
+        else:
+            self.verse_start = 1
+            self.verse_end = None
+
+    # Reset parser variables (implicitly called on instantiation)
     def reset(self):
         HTMLParser.reset(self)
         self.depth = 0
@@ -29,18 +34,6 @@ class ReferenceParser(HTMLParser):
         self.content_depth = None
         self.verse_num = None
         self.content_parts = []
-
-    # Associates reference object with parser instance
-    def set_ref(self, ref):
-        if 'verse' in ref:
-            self.verse_start = ref['verse']
-            if 'endverse' in ref:
-                self.verse_end = ref['endverse']
-            else:
-                self.verse_end = self.verse_start
-        else:
-            self.verse_start = 1
-            self.verse_end = None
 
     # Determines if parser is currently within content of verse to include
     def is_in_verse_content(self):
@@ -102,10 +95,32 @@ class ReferenceParser(HTMLParser):
                 self.content_parts.append(unichr(int(name)))
 
 
+# Retrieve HTML for reference with the given ID
+def get_ref_html(ref):
+    url = 'https://www.bible.com/bible/{version}/{book}.{chapter}'.format(
+        version=ref['version_id'],
+        book=ref['book_id'],
+        chapter=ref['chapter'])
+    return urllib2.urlopen(url).read().decode('utf-8')
+
+
+# Simplify format of reference content by removing unnecessary whitespace
+def format_ref_content(ref_content):
+    # Collapse consecutive spaces to single space
+    ref_content = re.sub(' {2,}', ' ', ref_content)
+    # Collapse sequences of three or more newlines into two
+    ref_content = re.sub('\n{2,}', '\n\n', ref_content)
+    # Strip leading/trailing whitespace for entire reference
+    ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
+    # Strip leading/trailing whitespace for each paragraph
+    ref_content = re.sub(' ?\n ?', '\n', ref_content)
+    return ref_content
+
+
 # Parse actual reference content from reference HTML
-def get_ref_content(ref, html):
-    parser = ReferenceParser()
-    parser.set_ref(ref)
+def get_ref_content(ref):
+    html = get_ref_html(ref)
+    parser = ReferenceParser(ref)
     parser.feed(html)
     ref_content = format_ref_content(''.join(parser.content_parts))
     ref_content = '\n\n' + ref_content
@@ -113,21 +128,9 @@ def get_ref_content(ref, html):
     return ref_content.encode('utf-8')
 
 
-def format_ref_content(ref_content):
-    # Collapse consecutive spaces to single space
-    ref_content = re.sub(' +', ' ', ref_content)
-    # Collapse sequences of three or more newlines into two
-    ref_content = re.sub('\n{2,}', '\n\n', ref_content)
-    # Strip leading/trailing whitespace for entire reference
-    ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
-    # Strip leading/trailing whitespace for each paragraph
-    ref_content = re.sub(' *\n *', '\n', ref_content)
-    return ref_content
-
-
 def main(ref_uid, prefs=None):
     ref = shared.get_ref_object(ref_uid, prefs)
-    print(get_ref_content(ref, get_ref_html(ref)))
+    print(get_ref_content(ref))
 
 if __name__ == '__main__':
     main('{query}')
