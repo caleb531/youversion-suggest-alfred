@@ -4,12 +4,21 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.copy_ref as yvs
 from decorators import redirect_stdout
-from mock import Mock
+from mock import Mock, patch
 
 
 with open('tests/files/psa.23.html') as file:
-    yvs.urllib2.urlopen = Mock()
-    yvs.urllib2.urlopen.return_value.read = Mock(return_value=file.read())
+    patch_urlopen = patch(
+        'yv_suggest.copy_ref.urllib2.urlopen',
+        return_value=Mock(read=Mock(return_value=file.read())))
+
+
+def setup():
+    patch_urlopen.start()
+
+
+def teardown():
+    patch_urlopen.stop()
 
 
 @redirect_stdout
