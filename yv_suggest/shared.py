@@ -18,14 +18,6 @@ alfred_data_dir = os.path.join(os.path.expanduser('~'),
 prefs_path = os.path.join(alfred_data_dir, 'preferences.json')
 
 
-def merge_dictionaries(*dictionaries):
-
-    result = {}
-    for dictionary in dictionaries:
-        result.update(dictionary)
-    return result
-
-
 def get_package_path():
 
     if '__file__' in globals():
@@ -117,30 +109,19 @@ def create_prefs():
     return defaults
 
 
-def get_prefs(prefs=None):
+def get_prefs():
 
-    if prefs is not None:
-        return merge_dictionaries(get_defaults(), prefs)
-    else:
-        try:
-            with open(prefs_path, 'r') as prefs_file:
-                return json.load(prefs_file)
-        except IOError:
-            return create_prefs()
+    try:
+        with open(prefs_path, 'r') as prefs_file:
+            return json.load(prefs_file)
+    except IOError:
+        return create_prefs()
 
 
 def update_prefs(prefs):
 
     with open(prefs_path, 'w') as prefs_file:
         json.dump(prefs, prefs_file)
-
-
-def delete_prefs():
-
-    try:
-        os.remove(prefs_path)
-    except OSError:
-        pass
 
 
 # Constructs an Alfred XML string from the given results list
@@ -207,7 +188,7 @@ def get_ref_matches(query_str):
 
 
 # Parses the given reference UID into a dictionary representing that reference
-def get_ref_object(ref_uid, prefs=None):
+def get_ref_object(ref_uid):
 
     patt = '{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?'.format(
         version='(\d+)',
@@ -222,7 +203,7 @@ def get_ref_object(ref_uid, prefs=None):
     }
 
     book_id = ref_uid_matches.group(2)
-    prefs = get_prefs(prefs)
+    prefs = get_prefs()
     bible = get_bible_data(prefs['language'])
     book_name = get_book(bible['books'], book_id)
     ref['book'] = book_name

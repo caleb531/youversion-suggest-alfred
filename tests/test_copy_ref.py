@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.copy_ref as yvs
-from decorators import redirect_stdout
+from decorators import redirect_stdout, use_prefs
 from mock import Mock, patch
 
 
@@ -60,11 +60,10 @@ def test_header(out):
 
 
 @redirect_stdout
+@use_prefs({'language': 'es'})
 def test_header_language(out):
     '''reference header should reflect chosen language'''
-    yvs.main('128/psa.23', prefs={
-        'language': 'es'
-    })
+    yvs.main('128/psa.23')
     ref_content = out.getvalue()
     nose.assert_regexp_matches(ref_content, '^Salmos 23 \(NVI\)')
 

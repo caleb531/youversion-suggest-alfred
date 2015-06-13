@@ -13,9 +13,9 @@ import sys
 def test_output(out):
     """should output ref result list XML"""
     query_str = 'genesis 50:20'
-    yvs.main(query_str, prefs={})
+    yvs.main(query_str)
     output = out.getvalue().strip()
-    results = yvs.get_result_list(query_str, prefs={})
+    results = yvs.get_result_list(query_str)
     xml = yvs.shared.get_result_list_xml(results).strip()
     nose.assert_equal(output, xml)
 
@@ -24,7 +24,7 @@ def test_output(out):
 def test_null_result(out):
     """should output "No Results" XML item for empty ref result list"""
     query_str = 'xyz'
-    yvs.main(query_str, prefs={})
+    yvs.main(query_str)
     xml = out.getvalue().strip()
     root = ET.fromstring(xml)
     item = root.find('item')
@@ -38,6 +38,6 @@ def test_source_only():
     """should run script assuming script is not a file"""
     yvs.shared.sys.argv[0] = yvs.shared.__file__
     del yvs.shared.__file__
-    results = yvs.get_result_list('e', prefs={})
+    results = yvs.get_result_list('e')
     nose.assert_equal(len(results), 6)
     yvs.shared.__file__ = yvs.shared.sys.argv[0]
