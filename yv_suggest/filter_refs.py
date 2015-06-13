@@ -70,7 +70,7 @@ def get_matching_books(books, query):
 
 
 # Retrieves search resylts matching the given query
-def get_result_list(query_str, prefs=None):
+def get_result_list(query_str):
 
     query_str = shared.format_query_str(query_str)
     query = get_query_object(query_str)
@@ -79,7 +79,7 @@ def get_result_list(query_str, prefs=None):
     if not query:
         return results
 
-    prefs = shared.get_prefs(prefs)
+    prefs = shared.get_prefs()
     bible = shared.get_bible_data(prefs['language'])
     chapters = shared.get_chapter_data()
     matching_books = get_matching_books(bible['books'], query)
@@ -147,9 +147,9 @@ def get_result_list(query_str, prefs=None):
     return results
 
 
-def main(query_str, prefs=None):
+def main(query_str):
 
-    results = get_result_list(query_str, prefs)
+    results = get_result_list(query_str)
 
     if not results:
         results = [{

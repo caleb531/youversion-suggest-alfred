@@ -128,8 +128,8 @@ def get_ref_content(ref):
     return ref_content.encode('utf-8')
 
 
-def main(ref_uid, prefs=None):
-    ref = shared.get_ref_object(ref_uid, prefs)
+def main(ref_uid):
+    ref = shared.get_ref_object(ref_uid)
     print(get_ref_content(ref))
 
 if __name__ == '__main__':
