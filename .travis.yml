@@ -8,6 +8,6 @@ install:
   - pip install coveralls
 script:
   - nosetests
-  - nosetests --with-coverage
+  - coverage run -m nose
 after_success:
   - coveralls
