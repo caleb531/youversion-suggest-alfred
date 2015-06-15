@@ -5,6 +5,22 @@ import re
 import shared
 
 
+pref_results = [
+    {
+        'title': 'Language',
+        'subtitle': 'Set your preferred language',
+        'autocomplete': 'language ',
+        'valid': 'no'
+    },
+    {
+        'title': 'Version',
+        'subtitle': 'Set your preferred version',
+        'autocomplete': 'version ',
+        'valid': 'no'
+    }
+]
+
+
 def get_language_result_list(query_str):
 
     prefs = shared.get_prefs()
@@ -55,6 +71,13 @@ def get_version_result_list(query_str):
     return results
 
 
+# Associate preference with callback to retrieve its possibly values
+pref_callbacks = {
+    'language': get_language_result_list,
+    'version': get_version_result_list
+}
+
+
 def get_pref_matches(query_str):
 
     patt = '^{name}{value}$'.format(
@@ -69,15 +92,25 @@ def get_result_list(query_str):
     pref_matches = get_pref_matches(query_str)
     results = []
 
+    def filter_by_pref(result):
+        return result['autocomplete'].strip().startswith(query_str.lower())
+
     if pref_matches:
 
         pref_name = pref_matches.group(1)
         pref_value = pref_matches.group(2)
 
-        if pref_name.startswith('l'):
-            results = get_language_result_list(pref_value)
-        elif pref_name.startswith('v'):
-            results = get_version_result_list(pref_value)
+        if pref_name in pref_callbacks:
+
+            results = pref_callbacks[pref_name](pref_value)
+
+        else:
+
+            results = filter(filter_by_pref, pref_results)
+
+    else:
+
+        results = pref_results
 
     return results
 

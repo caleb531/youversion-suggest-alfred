@@ -135,7 +135,10 @@ def get_result_list_xml(results):
             'arg': result.get('arg', ''),
             'valid': result.get('valid', 'yes')
         })
-        item.set('uid', result['uid'])
+        if 'uid' in result:
+            item.set('uid', result['uid'])
+        if 'autocomplete' in result:
+            item.set('autocomplete', result['autocomplete'])
         # Create appropriate child elements of <item> element
         title = ET.SubElement(item, 'title')
         title.text = result['title']
