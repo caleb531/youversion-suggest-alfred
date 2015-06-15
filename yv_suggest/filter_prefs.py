@@ -30,7 +30,6 @@ def get_language_result_list(query_str):
     for language in languages:
 
         result = {
-            'uid': 'yvs-language-{}'.format(language['id']),
             'arg': 'language:{}'.format(language['id']),
             'title': language['name']
         }
@@ -55,7 +54,6 @@ def get_version_result_list(query_str):
     for version in versions:
 
         result = {
-            'uid': 'yvs-version-{}'.format(version['id']),
             'arg': 'version:{}'.format(version['id']),
             'title': version['name']
         }
