@@ -69,7 +69,7 @@ def get_version_result_list(query_str):
     return results
 
 
-# Associate preference with callback to retrieve its possibly values
+# Associate preference with callback to retrieve its possible values
 pref_callbacks = {
     'language': get_language_result_list,
     'version': get_version_result_list
