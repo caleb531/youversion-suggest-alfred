@@ -42,9 +42,19 @@ def test_nonexistent():
 
 
 def test_invalid():
-    """should not match nonexistent preference"""
+    """should show all existing preferences for invalid preference name"""
     results = yvs.get_result_list('!@#')
-    nose.assert_equal(len(results), 0)
+    nose.assert_equal(len(results), 2)
+    nose.assert_equal(results[0]['title'], 'Language')
+    nose.assert_equal(results[1]['title'], 'Version')
+
+
+def test_empty():
+    """should show all existing preferences if query is empty"""
+    results = yvs.get_result_list('')
+    nose.assert_equal(len(results), 2)
+    nose.assert_equal(results[0]['title'], 'Language')
+    nose.assert_equal(results[1]['title'], 'Version')
 
 
 @redirect_stdout
@@ -68,3 +78,13 @@ def test_null_result(out):
     item = root.find('item')
     nose.assert_is_not_none(item, '<item> element is missing')
     nose.assert_equal(item.get('valid'), 'no')
+
+
+@redirect_stdout
+def test_xml_show_all(out):
+    """should output XML for all results if query is empty"""
+    yvs.main('')
+    output = out.getvalue().strip()
+    results = yvs.get_result_list('')
+    xml = yvs.shared.get_result_list_xml(results).strip()
+    nose.assert_equal(output, xml)
