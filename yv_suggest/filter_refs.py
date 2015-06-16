@@ -102,23 +102,23 @@ def get_result_list(query_str):
         chosen_version = shared.get_version(bible['versions'],
                                             bible['default_version'])
 
-    # Build results list from books that matched the query
+    # Build result list from books matching the query
     for book in matching_books:
 
         # Result information
         result = {}
 
-        chosen_chapter = query['chapter']
-        if chosen_chapter > chapters[book['id']]:
-            chosen_chapter = chapters[book['id']]
+        # Skip result if given chapter exceeds number of chapters in book
+        if query['chapter'] > chapters[book['id']]:
+            continue
 
         # Find chapter if given
         result['uid'] = '{book}.{chapter}'.format(
             book=book['id'],
-            chapter=chosen_chapter)
+            chapter=query['chapter'])
         result['title'] = '{book} {chapter}'.format(
             book=book['name'],
-            chapter=chosen_chapter)
+            chapter=query['chapter'])
 
         if 'verse' in query:
 
