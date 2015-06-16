@@ -5,16 +5,31 @@ import re
 import shared
 
 
-def get_language_result_list(query_str, prefs=None):
+pref_results = [
+    {
+        'title': 'Language',
+        'subtitle': 'Set your preferred language',
+        'autocomplete': 'language ',
+        'valid': 'no'
+    },
+    {
+        'title': 'Version',
+        'subtitle': 'Set your preferred version',
+        'autocomplete': 'version ',
+        'valid': 'no'
+    }
+]
 
-    prefs = shared.get_prefs(prefs)
+
+def get_language_result_list(query_str):
+
+    prefs = shared.get_prefs()
     languages = shared.get_languages()
     results = []
 
     for language in languages:
 
         result = {
-            'uid': 'yvs-language-{}'.format(language['id']),
             'arg': 'language:{}'.format(language['id']),
             'title': language['name']
         }
@@ -30,16 +45,15 @@ def get_language_result_list(query_str, prefs=None):
     return results
 
 
-def get_version_result_list(query_str, prefs=None):
+def get_version_result_list(query_str):
 
-    prefs = shared.get_prefs(prefs)
+    prefs = shared.get_prefs()
     versions = shared.get_versions(prefs['language'])
     results = []
 
     for version in versions:
 
         result = {
-            'uid': 'yvs-version-{}'.format(version['id']),
             'arg': 'version:{}'.format(version['id']),
             'title': version['name']
         }
@@ -55,6 +69,13 @@ def get_version_result_list(query_str, prefs=None):
     return results
 
 
+# Associate preference with callback to retrieve its possible values
+pref_callbacks = {
+    'language': get_language_result_list,
+    'version': get_version_result_list
+}
+
+
 def get_pref_matches(query_str):
 
     patt = '^{name}{value}$'.format(
@@ -63,28 +84,38 @@ def get_pref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
-def get_result_list(query_str, prefs=None):
+def get_result_list(query_str):
 
     query_str = shared.format_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
+
+    def filter_by_pref(result):
+        return result['autocomplete'].strip().startswith(query_str.lower())
 
     if pref_matches:
 
         pref_name = pref_matches.group(1)
         pref_value = pref_matches.group(2)
 
-        if pref_name.startswith('l'):
-            results = get_language_result_list(pref_value, prefs)
-        elif pref_name.startswith('v'):
-            results = get_version_result_list(pref_value, prefs)
+        if pref_name in pref_callbacks:
+
+            results = pref_callbacks[pref_name](pref_value)
+
+        else:
+
+            results = filter(filter_by_pref, pref_results)
+
+    else:
+
+        results = pref_results
 
     return results
 
 
-def main(query_str, prefs=None):
+def main(query_str):
 
-    results = get_result_list(query_str, prefs)
+    results = get_result_list(query_str)
 
     if not results:
         results = [{

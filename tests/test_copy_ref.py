@@ -3,13 +3,22 @@
 from __future__ import unicode_literals
 import nose.tools as nose
 import yv_suggest.copy_ref as yvs
-from decorators import redirect_stdout
-from mock import Mock
+from decorators import redirect_stdout, use_prefs
+from mock import Mock, patch
 
 
 with open('tests/files/psa.23.html') as file:
-    yvs.urllib2.urlopen = Mock()
-    yvs.urllib2.urlopen.return_value.read = Mock(return_value=file.read())
+    patch_urlopen = patch(
+        'yv_suggest.copy_ref.urllib2.urlopen',
+        return_value=Mock(read=Mock(return_value=file.read())))
+
+
+def setup():
+    patch_urlopen.start()
+
+
+def teardown():
+    patch_urlopen.stop()
 
 
 @redirect_stdout
@@ -51,11 +60,10 @@ def test_header(out):
 
 
 @redirect_stdout
+@use_prefs({'language': 'es'})
 def test_header_language(out):
     '''reference header should reflect chosen language'''
-    yvs.main('128/psa.23', prefs={
-        'language': 'es'
-    })
+    yvs.main('128/psa.23')
     ref_content = out.getvalue()
     nose.assert_regexp_matches(ref_content, '^Salmos 23 \(NVI\)')
 
@@ -78,10 +86,13 @@ def test_charref_hex(out):
 
 @redirect_stdout
 def test_whitespace_words(out):
-    '''should preserve whitespace between words'''
+    '''should handle spaces appropriately'''
     yvs.main('111/psa.23')
     ref_content = out.getvalue()
-    nose.assert_regexp_matches(ref_content, 'adipiscing elit.')
+    nose.assert_regexp_matches(ref_content, 'adipiscing elit.',
+                               'should respect content consisting of spaces')
+    nose.assert_regexp_matches(ref_content, 'consectetur adipiscing',
+                               'should collapse consecutive spaces')
 
 
 @redirect_stdout
@@ -89,12 +100,18 @@ def test_whitespace_lines(out):
     '''should add line breaks where appropriate'''
     yvs.main('111/psa.23')
     ref_content = out.getvalue()
-    nose.assert_regexp_matches(ref_content, 'Psalm 23 \(NIV\)\n\n\S')
-    nose.assert_regexp_matches(ref_content, 'amet,\nconsectetur')
-    nose.assert_regexp_matches(ref_content, 'elit.\n\nUt')
-    nose.assert_regexp_matches(ref_content, 'erat.\n\n\S')
-    nose.assert_regexp_matches(ref_content, 'leo,\n\nhendrerit')
-    nose.assert_regexp_matches(ref_content, 'nec\nfermentum')
+    nose.assert_regexp_matches(ref_content, 'Psalm 23 \(NIV\)\n\n\S',
+                               'should add two line breaks after header')
+    nose.assert_regexp_matches(ref_content, 'amet,\nconsectetur',
+                               'should add newline before each p block')
+    nose.assert_regexp_matches(ref_content, 'erat.\n\n\S',
+                               'should add newline after each p block')
+    nose.assert_regexp_matches(ref_content, 'nec\nfermentum',
+                               'should add newline between each q block')
+    nose.assert_regexp_matches(ref_content, 'elit.\n\nUt',
+                               'should add newlines around each li1 block')
+    nose.assert_regexp_matches(ref_content, 'leo,\n\nhendrerit',
+                               'should add two newlines for each b block')
 
 
 @redirect_stdout

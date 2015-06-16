@@ -14,7 +14,7 @@ def redirect_stdout(fn):
         out = BytesIO()
         try:
             sys.stdout = out
-            fn(out, *args, **kwargs)
+            return fn(out, *args, **kwargs)
         finally:
             sys.stdout = original_stdout
     return wrapper
@@ -28,7 +28,7 @@ def use_prefs(prefs):
             original_prefs = yvs.get_prefs()
             try:
                 yvs.update_prefs(prefs)
-                fn(*args, **kwargs)
+                return fn(*args, **kwargs)
             finally:
                 yvs.update_prefs(original_prefs)
         return wrapper
@@ -42,7 +42,7 @@ def use_default_prefs(fn):
         original_prefs = yvs.get_prefs()
         try:
             yvs.update_prefs(yvs.get_defaults())
-            fn(*args, **kwargs)
+            return fn(*args, **kwargs)
         finally:
             yvs.update_prefs(original_prefs)
     return wrapper
