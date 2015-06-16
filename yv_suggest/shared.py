@@ -31,7 +31,7 @@ def get_package_path():
 def create_alfred_data_dir():
 
     try:
-        os.makedirs(alfred_data_dir, 0o755)
+        os.makedirs(alfred_data_dir)
     except OSError:
         pass
 
