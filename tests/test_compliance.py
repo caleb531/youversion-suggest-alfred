@@ -3,8 +3,8 @@
 import nose.tools as nose
 import glob
 import json
-import pep8
 import jsonschema
+import pep8
 
 
 def test_pep8():
@@ -33,8 +33,5 @@ def test_json():
             for data_path in data_paths:
                 with open(data_path) as data_file:
                     data = json.load(data_file)
-                    try:
-                        validator = jsonschema.validate(data, schema)
-                        yield nose.assert_is_none, validator
-                    except jsonschema.exceptions.ValidationError as error:
-                        yield nose.assert_true, False, error
+                    validator = jsonschema.validate(data, schema)
+                    yield nose.assert_is_none, validator

@@ -2,10 +2,10 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import os
 import nose.tools as nose
 import yv_suggest.filter_refs as yvs
-import os
-from decorators import use_prefs, use_default_prefs
+from decorators import use_prefs
 
 
 @use_prefs({'language': 'en', 'version': 59})
@@ -21,4 +21,4 @@ def test_language_persistence():
     """should remember language preferences"""
     results = yvs.get_result_list('gá 4')
     nose.assert_equal(len(results), 1)
-    nose.assert_true(results[0]['title'].startswith('Gálatas 4 '))
+    nose.assert_equal(results[0]['title'], 'Gálatas 4 (NVI)')

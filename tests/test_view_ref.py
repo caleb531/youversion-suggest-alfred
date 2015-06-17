@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import nose.tools as nose
-from mock import patch
 import yv_suggest.view_ref as yvs
+from mock import patch
 
 
 @patch('webbrowser.open')

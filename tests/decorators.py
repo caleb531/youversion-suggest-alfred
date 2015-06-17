@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from io import BytesIO
 import sys
 import yv_suggest.shared as yvs
 from functools import wraps
+from io import BytesIO
 
 
 def redirect_stdout(fn):
@@ -33,16 +33,3 @@ def use_prefs(prefs):
                 yvs.update_prefs(original_prefs)
         return wrapper
     return decorator
-
-
-def use_default_prefs(fn):
-    """temporarily use the default values for all preferences"""
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        original_prefs = yvs.get_prefs()
-        try:
-            yvs.update_prefs(yvs.get_defaults())
-            return fn(*args, **kwargs)
-        finally:
-            yvs.update_prefs(original_prefs)
-    return wrapper
