@@ -4,18 +4,9 @@ import re
 import shared
 
 
-def get_pair_matches(key_value_str):
+def get_pair(pair_str):
 
-    patt = '^{key}:{value}$'.format(
-        key='(\w+)',
-        value='(\w+)')
-
-    return re.search(patt, key_value_str, flags=re.UNICODE)
-
-
-def get_pair(key_value_str):
-
-    pair_matches = get_pair_matches(key_value_str)
+    pair_matches = re.search('^(\w+):(\w+)$', pair_str, flags=re.UNICODE)
 
     key = pair_matches.group(1)
     value = pair_matches.group(2)
@@ -38,9 +29,9 @@ def set_pref(key, value):
     shared.update_prefs(prefs)
 
 
-def main(key_value_str='{query}'):
+def main(pair_str='{query}'):
 
-    key, value = get_pair(key_value_str)
+    key, value = get_pair(pair_str)
     set_pref(key, value)
 
 if __name__ == '__main__':
