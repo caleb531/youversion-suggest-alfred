@@ -9,7 +9,7 @@ from mock import Mock, patch
 
 with open('tests/files/psa.23.html') as file:
     patch_urlopen = patch(
-        'yv_suggest.copy_ref.urllib2.urlopen',
+        'urllib2.urlopen',
         return_value=Mock(read=Mock(return_value=file.read())))
 
 
