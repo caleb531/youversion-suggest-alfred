@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import nose.tools as nose
-import yv_suggest.search_ref as yvs
+import yvs.search_ref as yvs
 from mock import patch
 
 

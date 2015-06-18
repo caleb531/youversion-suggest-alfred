@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 import nose.tools as nose
-import yv_suggest.filter_prefs as yvs
+import yvs.filter_prefs as yvs
 from xml.etree import ElementTree as ET
 from decorators import redirect_stdout
 

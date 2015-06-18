@@ -20,13 +20,13 @@ def test_pep8():
 
 def test_json():
     schemas = {
-        'schema-languages': 'yv_suggest/data/languages.json',
-        'schema-defaults': 'yv_suggest/data/defaults.json',
-        'schema-chapters': 'yv_suggest/data/bible/chapters.json',
-        'schema-bible': 'yv_suggest/data/bible/language-*.json'
+        'schema-languages': 'yvs/data/languages.json',
+        'schema-defaults': 'yvs/data/defaults.json',
+        'schema-chapters': 'yvs/data/bible/chapters.json',
+        'schema-bible': 'yvs/data/bible/language-*.json'
     }
     for schema_name, data_path_pattern in schemas.iteritems():
-        schema_path = 'yv_suggest/data/schema/{}.json'.format(schema_name)
+        schema_path = 'yvs/data/schema/{}.json'.format(schema_name)
         with open(schema_path) as schema_file:
             schema = json.load(schema_file)
         data_paths = glob.iglob(data_path_pattern)
@@ -34,6 +34,6 @@ def test_json():
             with open(data_path) as data_file:
                 data = json.load(data_file)
             test_json.__doc__ = '{} should comply with schema'.format(
-                os.path.relpath(data_path, 'yv_suggest/data'))
+                os.path.relpath(data_path, 'yvs/data'))
             validator = jsonschema.validate(data, schema)
             yield nose.assert_is_none, validator

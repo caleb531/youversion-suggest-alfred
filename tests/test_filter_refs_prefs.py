@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import os
 import nose.tools as nose
-import yv_suggest.filter_refs as yvs
+import yvs.filter_refs as yvs
 from decorators import use_prefs
 
 

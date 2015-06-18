@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import nose.tools as nose
-import yv_suggest.set_pref as yvs
+import yvs.set_pref as yvs
 
 
 def test_set_language():

@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 import sys
 import nose.tools as nose
-import yv_suggest.filter_refs as yvs
+import yvs.filter_refs as yvs
 from xml.etree import ElementTree as ET
 from mock import patch
 from decorators import redirect_stdout
@@ -34,8 +34,8 @@ def test_null_result(out):
     nose.assert_equal(title.text, 'No Results')
 
 
-@patch('yv_suggest.shared.sys.argv', [yvs.shared.__file__])
-@patch('yv_suggest.shared.__file__')
+@patch('yvs.shared.sys.argv', [yvs.shared.__file__])
+@patch('yvs.shared.__file__')
 def test_source_only(__file__):
     """should run script assuming script is not a file"""
     del yvs.shared.__file__
