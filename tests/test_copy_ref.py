@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import unicode_literals
-import yv_suggest.copy_ref as yvs
+import yvs.copy_ref as yvs
 from mock import Mock, patch
 from nose.tools import assert_regexp_matches, assert_not_regexp_matches
 from decorators import redirect_stdout, use_prefs

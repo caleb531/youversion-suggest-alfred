@@ -120,7 +120,7 @@ def get_book(book_elem):
 # Retrieve list of chapter counts for each book of the Bible
 def get_chapter_data():
 
-    chapter_data_path = os.path.join('yv_suggest', 'data', 'bible',
+    chapter_data_path = os.path.join('yvs', 'data', 'bible',
                                      'chapters.json')
     with open(chapter_data_path, 'r') as chapter_data_file:
         chapter_data = json.load(chapter_data_file)
@@ -180,7 +180,7 @@ def save_bible_data(params):
 
     language = params['language']
     bible = get_bible_data(params)
-    bible_path = os.path.join('yv_suggest', 'data', 'bible',
+    bible_path = os.path.join('yvs', 'data', 'bible',
                               'language-{}.json'.format(language['id']))
     with open(bible_path, 'w') as bible_file:
         json.dump(bible, bible_file, **json_params)
@@ -192,7 +192,7 @@ def update_language_list(params):
 
     print('Updating language list...')
 
-    langs_path = os.path.join('yv_suggest', 'data', 'languages.json')
+    langs_path = os.path.join('yvs', 'data', 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
         langs = json.load(langs_file)
         # If language does not already exist in list of supported languages

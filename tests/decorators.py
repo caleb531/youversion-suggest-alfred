@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-import yv_suggest.shared as yvs
+import yvs.shared as yvs
 from functools import wraps
 from io import BytesIO
 

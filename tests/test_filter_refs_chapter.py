@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 import nose.tools as nose
-import yv_suggest.filter_refs as yvs
+import yvs.filter_refs as yvs
 
 
 def test_basic():
