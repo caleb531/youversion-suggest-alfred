@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 
 import nose.tools as nose
-import yv_suggest.set_pref as yvs
-from decorators import use_default_prefs
+import yvs.set_pref as yvs
 
 
-@use_default_prefs
 def test_set_language():
     """should set preferred language"""
     new_language = 'es'
@@ -16,7 +14,6 @@ def test_set_language():
     nose.assert_equal(prefs['version'], bible['default_version'])
 
 
-@use_default_prefs
 def test_set_version():
     """should set preferred version"""
     bible = yvs.shared.get_bible_data('en')

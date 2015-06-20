@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 import nose.tools as nose
-import yv_suggest.filter_refs as yvs
+import yvs.filter_refs as yvs
 from xml.etree import ElementTree as ET
 
 
@@ -10,10 +10,7 @@ def test_validity():
     """should return syntactically-valid XML"""
     results = yvs.get_result_list('john 3:16')
     xml = yvs.shared.get_result_list_xml(results)
-    try:
-        nose.assert_is_instance(ET.fromstring(xml), ET.Element)
-    except ET.ParseError:
-        nose.assert_true(False, 'result list XML is not valid')
+    nose.assert_is_instance(ET.fromstring(xml), ET.Element)
 
 
 def test_structure():

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 from __future__ import unicode_literals
-import nose.tools as nose
-import yv_suggest.filter_refs as yvs
-from xml.etree import ElementTree as ET
-from decorators import redirect_stdout
-import inspect
 import sys
+import nose.tools as nose
+import yvs.filter_refs as yvs
+from xml.etree import ElementTree as ET
+from mock import patch
+from decorators import redirect_stdout
 
 
 @redirect_stdout
@@ -34,10 +34,12 @@ def test_null_result(out):
     nose.assert_equal(title.text, 'No Results')
 
 
-def test_source_only():
+@patch('yvs.shared.sys.argv', [yvs.shared.__file__])
+@patch('yvs.shared.__file__')
+def test_source_only(__file__):
     """should run script assuming script is not a file"""
-    yvs.shared.sys.argv[0] = yvs.shared.__file__
     del yvs.shared.__file__
+    nose.assert_false(hasattr(yvs.shared, '__file__'),
+                      'script should not be run as file')
     results = yvs.get_result_list('e')
     nose.assert_equal(len(results), 6)
-    yvs.shared.__file__ = yvs.shared.sys.argv[0]
