@@ -72,8 +72,6 @@ class ReferenceParser(HTMLParser):
         # Determine the end of a verse or its content
         if self.depth == self.verse_depth and self.in_verse:
             self.in_verse = False
-            # Ensure that a space separates consecutive sentences
-            self.content_parts.append(' ')
         if self.depth == self.content_depth and self.in_content:
             self.in_content = False
         if tag == 'div' or tag == 'span':
