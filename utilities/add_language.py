@@ -171,10 +171,6 @@ def get_bible_data(language_id, default_version, max_version_id):
 
     bible['default_version'] = default_version
     bible['books'] = get_books(default_version)
-    bible['language'] = {
-        'id': language_id,
-        'name': language_name
-    }
     return bible, language_name
 
 
@@ -186,11 +182,11 @@ def write_json_unicode(json_object, file):
 
 
 # Construct the Bible data object and save it to a JSON file
-def save_bible_data(bible):
+def save_bible_data(language_id, bible):
 
     bible_path = os.path.join(
         'yvs', 'data', 'bible',
-        'language-{}.json'.format(bible['language']['id']))
+        'language-{}.json'.format(language_id))
     with io.open(bible_path, 'w', encoding='utf-8') as bible_file:
         write_json_unicode(bible, bible_file)
 
@@ -222,7 +218,7 @@ def add_language(language_id, default_version, max_version_id):
         language_id,
         default_version,
         max_version_id)
-    save_bible_data(bible)
+    save_bible_data(language_id, bible)
     update_language_list(language_id, language_name)
 
 
