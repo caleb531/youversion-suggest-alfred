@@ -112,7 +112,7 @@ def get_book(book_elem):
 
     return {
         'id': book_elem.get('data-book'),
-        'name': book_elem.text.strip().encode('utf-8'),
+        'name': book_elem.text.strip()
     }
 
 
@@ -173,9 +173,16 @@ def get_bible_data(language_id, default_version, max_version_id):
     bible['books'] = get_books(default_version)
     bible['language'] = {
         'id': language_id,
-        'name': language_name.encode('utf-8')
+        'name': language_name
     }
     return bible, language_name
+
+
+# Write JSON data to file as Unicode
+def write_json_unicode(json_object, file):
+    json_str = unicode(json.dumps(json_object, **json_params))
+    file.write(json_str)
+    file.write('\n')
 
 
 # Construct the Bible data object and save it to a JSON file
@@ -184,9 +191,8 @@ def save_bible_data(bible):
     bible_path = os.path.join(
         'yvs', 'data', 'bible',
         'language-{}.json'.format(bible['language']['id']))
-    with open(bible_path, 'w') as bible_file:
-        json.dump(bible, bible_file, **json_params)
-        bible_file.write('\n')
+    with io.open(bible_path, 'w', encoding='utf-8') as bible_file:
+        write_json_unicode(bible, bible_file)
 
 
 # Add the given language parameters to the list of supported languages
@@ -204,11 +210,9 @@ def update_language_list(language_id, language_name):
                 'name': language_name
             })
             langs.sort(key=itemgetter('id'))
-            json_str = unicode(json.dumps(langs, **json_params))
             langs_file.truncate(0)
             langs_file.seek(0)
-            langs_file.write(json_str)
-            langs_file.write('\n')
+            write_json_unicode(langs, langs_file)
 
 
 # Add support for the language with the given parameters to the workflow
