@@ -49,8 +49,8 @@ def get_version(version_elem):
     patt = '(?<=/versions/)(\d+)-([a-z]+\d*)'
     matches = re.search(patt, url, flags=re.UNICODE)
     return {
+        'id': int(matches.group(1)),
         'name': matches.group(2).upper(),
-        'id': int(matches.group(1))
     }
 
 
@@ -79,7 +79,7 @@ def get_version_elems(language_id):
 
 
 # Retrieve a list of dictionaries representing Bible versions
-def get_versions(language_id, default_version, max_version_id):
+def get_versions(language_id, max_version_id):
 
     print('Retrieving version data...')
 
@@ -111,16 +111,15 @@ def get_versions(language_id, default_version, max_version_id):
 def get_book(book_elem):
 
     return {
+        'id': book_elem.get('data-book'),
         'name': book_elem.text.strip().encode('utf-8'),
-        'id': book_elem.get('data-book')
     }
 
 
 # Retrieve list of chapter counts for each book of the Bible
 def get_chapter_data():
 
-    chapter_data_path = os.path.join('yvs', 'data', 'bible',
-                                     'chapters.json')
+    chapter_data_path = os.path.join('yvs', 'data', 'bible', 'chapters.json')
     with open(chapter_data_path, 'r') as chapter_data_file:
         chapter_data = json.load(chapter_data_file)
 
@@ -160,7 +159,6 @@ def get_bible_data(language_id, default_version, max_version_id):
     bible = {}
     bible['versions'], language_name = get_versions(
         language_id,
-        default_version,
         max_version_id)
 
     # If no explicit default version is given, use version with lowest ID
@@ -173,23 +171,22 @@ def get_bible_data(language_id, default_version, max_version_id):
 
     bible['default_version'] = default_version
     bible['books'] = get_books(default_version)
+    bible['language'] = {
+        'id': language_id,
+        'name': language_name.encode('utf-8')
+    }
     return bible, language_name
 
 
 # Construct the Bible data object and save it to a JSON file
-def save_bible_data(language_id, default_version, max_version_id):
+def save_bible_data(bible):
 
-    bible, language_name = get_bible_data(
-        language_id,
-        default_version,
-        max_version_id)
-    bible_path = os.path.join('yvs', 'data', 'bible',
-                              'language-{}.json'.format(language_id))
+    bible_path = os.path.join(
+        'yvs', 'data', 'bible',
+        'language-{}.json'.format(bible['language']['id']))
     with open(bible_path, 'w') as bible_file:
         json.dump(bible, bible_file, **json_params)
         bible_file.write('\n')
-
-    return language_name
 
 
 # Add the given language parameters to the list of supported languages
@@ -217,12 +214,12 @@ def update_language_list(language_id, language_name):
 # Add support for the language with the given parameters to the workflow
 def add_language(language_id, default_version, max_version_id):
 
-    language_name = save_bible_data(
+    bible, language_name = get_bible_data(
         language_id,
         default_version,
         max_version_id)
+    save_bible_data(bible)
     update_language_list(language_id, language_name)
-    return language_name
 
 
 # Parse command-line arguments
@@ -249,12 +246,12 @@ def main():
 
     args = parse_cli_args()
     print('Adding language support...')
-    language_name = add_language(
+    add_language(
         args.code.replace('-', '_'),
         args.default_version,
         args.max_version_id)
     print('Support for {} has been successfully added.'
-          .format(language_name))
+          .format(args.code.replace('_', '-')))
 
 if __name__ == '__main__':
     main()
