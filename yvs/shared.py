@@ -142,6 +142,14 @@ def get_result_list_xml(results):
         # Create appropriate child elements of <item> element
         title = ET.SubElement(item, 'title')
         title.text = result['title']
+        copy = ET.SubElement(item, 'text', {
+            'type': 'copy'
+        })
+        copy.text = result['title']
+        largetype = ET.SubElement(item, 'text', {
+            'type': 'largetype'
+        })
+        largetype.text = result['title']
         subtitle = ET.SubElement(item, 'subtitle')
         subtitle.text = result['subtitle']
         icon = ET.SubElement(item, 'icon')
