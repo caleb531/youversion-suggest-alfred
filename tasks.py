@@ -1,17 +1,21 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
-from invoke import task
+import os
 import subprocess
+from invoke import task
 
 
 @task
 def test():
-    nosetests = subprocess.Popen(['nosetests', '--rednose'])
-    nosetests.wait()
+    env = os.environ.copy()
+    # Colorize nose output using rednose if available
+    env.update({
+        'NOSE_REDNOSE': '1'
+    })
+    subprocess.call(['coverage', 'run', '-m', 'nose'], env=env)
 
 
 @task
 def cover():
-    nosetests = subprocess.Popen(['nosetests', '--with-coverage',
-                                  '--cover-erase', '--cover-html'])
-    nosetests.wait()
+    subprocess.call(['coverage', 'report'])
+    subprocess.call(['coverage', 'html'])
