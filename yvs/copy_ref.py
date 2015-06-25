@@ -72,8 +72,6 @@ class ReferenceParser(HTMLParser):
         # Determine the end of a verse or its content
         if self.depth == self.verse_depth and self.in_verse:
             self.in_verse = False
-            # Ensure that a space separates consecutive sentences
-            self.content_parts.append(' ')
         if self.depth == self.content_depth and self.in_content:
             self.in_content = False
         if tag == 'div' or tag == 'span':
@@ -109,7 +107,7 @@ def format_ref_content(ref_content):
     # Collapse consecutive spaces to single space
     ref_content = re.sub(' {2,}', ' ', ref_content)
     # Collapse sequences of three or more newlines into two
-    ref_content = re.sub('\n{2,}', '\n\n', ref_content)
+    ref_content = re.sub('\n{3,}', '\n\n', ref_content)
     # Strip leading/trailing whitespace for entire reference
     ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
     # Strip leading/trailing whitespace for each paragraph
