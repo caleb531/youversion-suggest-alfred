@@ -24,6 +24,11 @@ Choosing a result while holding down the *command* key will copy the contents of
 the selected reference to the clipboard. Choosing a result while holding down
 the *ctrl* key will open a Google search for the selected reference.
 
+Pressing *Command-C* when choosing a result will copy the respective reference
+identifier, such as *1 Corinthians 13:4-7 (ESV)*, to the clipboard. Pressing
+*Command-L* when choosing a result will show the respective reference identifier
+as Alfred Large Type.
+
 ### Example queries
 
 * `yv luke` => Luke
