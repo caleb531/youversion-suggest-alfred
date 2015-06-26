@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 import yvs.copy_ref as yvs
-from mock import Mock, patch
+from mock import ANY, Mock, patch
 from nose.tools import assert_regexp_matches, assert_not_regexp_matches
 from decorators import redirect_stdout, use_prefs
 
@@ -115,10 +115,10 @@ def test_whitespace_lines(out):
 
 
 @redirect_stdout
-def test_url_always_chapter(out):
+@patch('urllib2.Request')
+def test_url_always_chapter(out, Request):
     '''should always fetch HTML from chapter URL'''
-    yvs.urllib2.urlopen.reset_mock()
     yvs.main('59/psa.23.2')
-    ref_content = out.getvalue()
-    yvs.urllib2.urlopen.assert_called_once_with(
-        'https://www.bible.com/bible/59/psa.23')
+    Request.assert_called_once_with(
+        'https://www.bible.com/bible/59/psa.23',
+        headers={'User-Agent': 'YouVersion Suggest'})

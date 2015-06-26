@@ -99,7 +99,10 @@ def get_ref_html(ref):
         version=ref['version_id'],
         book=ref['book_id'],
         chapter=ref['chapter'])
-    return urllib2.urlopen(url).read().decode('utf-8')
+    request = urllib2.Request(
+        url, headers={'User-Agent': 'YouVersion Suggest'})
+    connection = urllib2.urlopen(request)
+    return connection.read().decode('utf-8')
 
 
 # Simplify format of reference content by removing unnecessary whitespace
@@ -123,12 +126,12 @@ def get_ref_content(ref):
     ref_content = format_ref_content(''.join(parser.content_parts))
     ref_content = '\n\n' + ref_content
     ref_content = shared.get_full_ref(ref) + ref_content
-    return ref_content.encode('utf-8')
+    return ref_content
 
 
 def main(ref_uid):
     ref = shared.get_ref_object(ref_uid)
-    print(get_ref_content(ref))
+    print(get_ref_content(ref).encode('utf-8'))
 
 if __name__ == '__main__':
     main('{query}')
