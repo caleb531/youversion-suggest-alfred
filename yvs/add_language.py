@@ -10,7 +10,7 @@ import itertools
 import json
 import os
 import re
-import urllib2
+import yvs.shared as shared
 from operator import itemgetter
 from pyquery import PyQuery as pq
 
@@ -22,15 +22,6 @@ json_params = {
     'ensure_ascii': False,
     'sort_keys': True
 }
-
-
-# Retrieve HTML contents of the given URL as a Unicode string
-def get_url_content(url, **kw):
-
-    request = urllib2.Request(
-        url, headers={'User-Agent': 'YouVersion Suggest'})
-    connection = urllib2.urlopen(request)
-    return connection.read().decode('utf-8')
 
 
 # Parse the language name from the given category header string
@@ -62,7 +53,7 @@ def get_version_elems(language_id):
 
     d = pq(url='https://www.bible.com/{}/versions'
            .format(language_id.replace('_', '-')),
-           opener=get_url_content)
+           opener=shared.get_url_content)
 
     category_elems = d('#main > article > ul > li')
     version_elems = None
@@ -139,7 +130,7 @@ def get_books(default_version):
 
     d = pq(url='https://www.bible.com/bible/{}/jhn.1'
            .format(default_version),
-           opener=get_url_content)
+           opener=shared.get_url_content)
 
     book_elems = d('#menu_book_chapter a[data-book]')
 

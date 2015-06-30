@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import re
-import urllib2
 import yvs.shared as shared
 from HTMLParser import HTMLParser
 
@@ -99,23 +98,7 @@ def get_ref_html(ref):
         version=ref['version_id'],
         book=ref['book_id'],
         chapter=ref['chapter'])
-    request = urllib2.Request(
-        url, headers={'User-Agent': 'YouVersion Suggest'})
-    connection = urllib2.urlopen(request)
-    return connection.read().decode('utf-8')
-
-
-# Simplify format of reference content by removing unnecessary whitespace
-def format_ref_content(ref_content):
-    # Collapse consecutive spaces to single space
-    ref_content = re.sub(' {2,}', ' ', ref_content)
-    # Collapse sequences of three or more newlines into two
-    ref_content = re.sub('\n{3,}', '\n\n', ref_content)
-    # Strip leading/trailing whitespace for entire reference
-    ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
-    # Strip leading/trailing whitespace for each paragraph
-    ref_content = re.sub(' ?\n ?', '\n', ref_content)
-    return ref_content
+    return shared.get_url_content(url)
 
 
 # Parse actual reference content from reference HTML
@@ -123,7 +106,7 @@ def get_ref_content(ref):
     html = get_ref_html(ref)
     parser = ReferenceParser(ref)
     parser.feed(html)
-    ref_content = format_ref_content(''.join(parser.content_parts))
+    ref_content = shared.format_ref_content(''.join(parser.content_parts))
     ref_content = '\n\n' + ref_content
     ref_content = shared.get_full_ref(ref) + ref_content
     return ref_content

@@ -7,6 +7,7 @@ import os.path
 import json
 import re
 import sys
+import urllib2
 import unicodedata
 from xml.etree import ElementTree as ET
 
@@ -16,6 +17,8 @@ alfred_data_dir = os.path.join(
 
 prefs_path = os.path.join(alfred_data_dir, 'preferences.json')
 data_path = os.path.join(os.getcwd(), 'yvs', 'data')
+
+user_agent = 'YouVersion Suggest'
 
 
 def create_alfred_data_dir():
@@ -234,3 +237,24 @@ def get_full_ref(ref):
     full_ref += ' ({version})'.format(version=ref['version'])
 
     return full_ref
+
+
+# Retrieve HTML contents of the given URL as a Unicode string
+def get_url_content(url, **kwargs):
+
+    request = urllib2.Request(url, headers={'User-Agent': user_agent})
+    connection = urllib2.urlopen(request)
+    return connection.read().decode('utf-8')
+
+
+# Simplify format of reference content by removing unnecessary whitespace
+def format_ref_content(ref_content):
+    # Collapse consecutive spaces to single space
+    ref_content = re.sub(' {2,}', ' ', ref_content)
+    # Collapse sequences of three or more newlines into two
+    ref_content = re.sub('\n{3,}', '\n\n', ref_content)
+    # Strip leading/trailing whitespace for entire reference
+    ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
+    # Strip leading/trailing whitespace for each paragraph
+    ref_content = re.sub(' ?\n ?', '\n', ref_content)
+    return ref_content
