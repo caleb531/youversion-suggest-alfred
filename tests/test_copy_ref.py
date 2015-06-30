@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import yvs.copy_ref as yvs
 from mock import ANY, Mock, patch
 from nose.tools import assert_regexp_matches, assert_not_regexp_matches
-from decorators import redirect_stdout, use_prefs
+from tests.decorators import redirect_stdout, use_prefs
 
 
 with open('tests/files/psa.23.html') as file:

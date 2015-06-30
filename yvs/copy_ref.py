@@ -2,7 +2,7 @@
 
 import re
 import urllib2
-import shared
+import yvs.shared as shared
 from HTMLParser import HTMLParser
 
 

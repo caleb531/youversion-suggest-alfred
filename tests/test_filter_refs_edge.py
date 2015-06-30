@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_refs as yvs
-from decorators import use_prefs
+from tests.decorators import use_prefs
 
 
 def test_whitespace():

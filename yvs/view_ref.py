@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import webbrowser
-import shared
+import yvs.shared as shared
 
 base_url = 'https://www.bible.com/bible'
 

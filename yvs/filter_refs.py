@@ -2,7 +2,7 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import shared
+import yvs.shared as shared
 
 
 # Builds the query object from the given query string

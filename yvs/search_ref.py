@@ -2,7 +2,7 @@
 
 import urllib
 import webbrowser
-import shared
+import yvs.shared as shared
 
 
 base_url = 'https://www.google.com/search'

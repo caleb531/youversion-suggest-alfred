@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 import re
-import shared
+import yvs.shared as shared
 
 
 pref_results = [

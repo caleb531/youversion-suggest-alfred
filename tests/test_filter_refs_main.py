@@ -6,7 +6,7 @@ import nose.tools as nose
 import yvs.filter_refs as yvs
 from xml.etree import ElementTree as ET
 from mock import patch
-from decorators import redirect_stdout
+from tests.decorators import redirect_stdout
 
 
 @redirect_stdout
