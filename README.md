@@ -13,6 +13,8 @@ YouVersion Suggest is an Alfred workflow which allows you to search the online
 
 ## Usage
 
+### Searching by reference
+
 Type the `yv` keyword into Alfred, followed by a space and a phrase representing
 the bible reference you wish to find. The phrase can be part of a book name,
 chapter, verse, or range of verses. You may also include an optional version
@@ -29,7 +31,7 @@ identifier, such as *1 Corinthians 13:4-7 (ESV)*, to the clipboard. Pressing
 *Command-L* when choosing a result will show the respective reference identifier
 as Alfred Large Type.
 
-### Example queries
+#### Example queries
 
 * `yv luke` => Luke
 * `yv eph 3` => Ephesians 3
@@ -38,10 +40,25 @@ as Alfred Large Type.
 * `yv 1 co 13.4-7` => 1 Corinthians 13:4-7
 * `yv relevations 7` => Revelation 7
 
+### Searching by keywords
+
+You can also search the YouVersion Bible by keyword using the `yvsearch`
+keyword. As you type, YouVersion Suggest will display Bible verses whose content
+contains your given keywords.
+
+Note that when using the `yvsearch` filter, YouVersion Suggest will only search
+for verses in your preferred version. To learn more about setting your preferred
+version in YouVersion Suggest, see *Setting your preferred version*.
+
+#### Example queries
+
+* `yvsearch without faith` => Hebrews 11:6
+* `yvsearch do not worry` => Matthew 6:34
+
 ### Setting your preferred language
 
 YouVersion Suggest allows you to change the languages used for Bible references
-and versions. To do so, type `yvset language` into Alfred, and the list of
+and versions. To do so, type `yvpref language` into Alfred, and the list of
 supported languages will then appear. You may then choose another language as
 your preferred language.
 
@@ -60,7 +77,7 @@ GitHub](https://github.com/caleb531/youversion-suggest/issues).
 
 You may also set your preferred version (translation) used for Bible references
 (where you have not explicitly specified the version in the query). To do so,
-type `yvset version` into Alfred, and the list of supported versions (for the
+type `yvpref version` into Alfred, and the list of supported versions (for the
 currently-set language) will appear.
 
 To select a version from the list of versions more quickly, you may optionally
@@ -68,5 +85,5 @@ type a query after the initial query to filter the list of versions.
 
 #### Example queries
 
-* `yvset version esv`
-* `yvset version a`
+* `yvpref version esv`
+* `yvpref version a`
