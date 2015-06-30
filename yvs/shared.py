@@ -10,22 +10,12 @@ import sys
 import unicodedata
 from xml.etree import ElementTree as ET
 
-alfred_data_dir = os.path.join(os.path.expanduser('~'),
-                               'Library', 'Application Support',
-                               'Alfred 2', 'Workflow Data',
-                               'com.calebevans.youversionsuggest')
+alfred_data_dir = os.path.join(
+    os.path.expanduser('~'), 'Library', 'Application Support', 'Alfred 2',
+    'Workflow Data', 'com.calebevans.youversionsuggest')
 
 prefs_path = os.path.join(alfred_data_dir, 'preferences.json')
-
-
-def get_package_path():
-
-    if '__file__' in globals():
-        package_path = os.path.dirname(os.path.realpath(__file__))
-    else:
-        package_path = os.path.dirname(os.path.realpath(sys.argv[0]))
-
-    return package_path
+data_path = os.path.join(os.getcwd(), 'yvs', 'data')
 
 
 def create_alfred_data_dir():
@@ -38,36 +28,31 @@ def create_alfred_data_dir():
 
 def get_bible_data(language):
 
-    bible_data_path = os.path.join(get_package_path(), 'data', 'bible',
-                                   'language-{}.json'.format(language))
+    bible_data_path = os.path.join(
+        data_path, 'bible', 'language-{}.json'.format(language))
     with open(bible_data_path, 'r') as bible_data_file:
-        bible_data = json.load(bible_data_file)
-
-    return bible_data
+        return json.load(bible_data_file)
 
 
 def get_chapter_data():
 
-    chapter_data_path = os.path.join(get_package_path(), 'data', 'bible',
-                                     'chapters.json')
+    chapter_data_path = os.path.join(data_path, 'bible', 'chapters.json')
     with open(chapter_data_path, 'r') as chapter_data_file:
-        chapter_data = json.load(chapter_data_file)
-
-    return chapter_data
+        return json.load(chapter_data_file)
 
 
 # Get name of first book whose id matches the given id
 def get_book(books, book_id):
 
-    return next((book['name'] for book in books
-                 if book['id'] == book_id), None)
+    return next(
+        book['name'] for book in books if book['id'] == book_id)
 
 
 # Get first version object whose id matches the given id
 def get_version(versions, version_id):
 
-    return next((version for version in versions
-                 if version['id'] == version_id), None)
+    return next(
+        version for version in versions if version['id'] == version_id)
 
 
 def get_versions(language):
@@ -78,12 +63,9 @@ def get_versions(language):
 
 def get_languages():
 
-    languages_path = os.path.join(get_package_path(),
-                                  'data', 'languages.json')
+    languages_path = os.path.join(data_path, 'languages.json')
     with open(languages_path, 'r') as languages_file:
-        languages = json.load(languages_file)
-
-    return languages
+        return json.load(languages_file)
 
 
 # Functions for accessing/manipulating mutable preferences
@@ -91,12 +73,9 @@ def get_languages():
 
 def get_defaults():
 
-    defaults_path = os.path.join(get_package_path(), 'data',
-                                 'defaults.json')
+    defaults_path = os.path.join(data_path, 'defaults.json')
     with open(defaults_path, 'r') as defaults_file:
-        defaults = json.load(defaults_file)
-
-    return defaults
+        return json.load(defaults_file)
 
 
 def create_prefs():
@@ -232,8 +211,7 @@ def get_ref_object(ref_uid):
         ref['endverse'] = int(endverse_match)
 
     version_id = int(ref_uid_matches.group(1))
-    version_name = get_version(bible['versions'],
-                               version_id)['name']
+    version_name = get_version(bible['versions'], version_id)['name']
     ref['version'] = version_name
     ref['version_id'] = version_id
 
