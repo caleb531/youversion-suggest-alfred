@@ -18,7 +18,7 @@ exclude_lines =
 include =
     yvs/shared.py
     yvs/filter_refs.py
-    yvs/filter_recent_refs.py
+    yvs/filter_refs_kw.py
     yvs/filter_prefs.py
     yvs/view_ref.py
     yvs/copy_ref.py
