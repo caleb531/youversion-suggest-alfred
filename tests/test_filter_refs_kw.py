@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 from __future__ import unicode_literals
 import nose.tools as nose
@@ -26,9 +27,9 @@ def test_result_titles():
     '''should set result titles as full reference identifiers'''
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
-    nose.assert_equal(results[0]['title'], 'Romans 13:8 (NIV)')
-    nose.assert_equal(results[1]['title'], 'John 15:12 (NIV)')
-    nose.assert_equal(results[2]['title'], '1 Peter 4:8 (NIV)')
+    nose.assert_regexp_matches(results[0]['title'], 'Romans 13:8 \(NIV\)')
+    nose.assert_regexp_matches(results[1]['title'], 'John 15:12 \(NIV\)')
+    nose.assert_regexp_matches(results[2]['title'], '1 Peter 4:8 \(NIV\)')
 
 
 def test_result_subtitles():
@@ -40,9 +41,31 @@ def test_result_subtitles():
     nose.assert_regexp_matches(results[2]['subtitle'], 'Ut aliquam')
 
 
+def test_unicode_input():
+    '''should not raise exception when input contains non-ASCII characters'''
+    results = yvs.get_result_list('é')
+    nose.assert_equal(len(results), 3)
+
+
+def test_charref_dec_title():
+    '''should evaluate character references in result titles'''
+    results = yvs.get_result_list('love others')
+    nose.assert_equal(len(results), 3)
+    nose.assert_regexp_matches(
+        results[0]['title'], 'Romans 13:8 \(NIV\) \u2665')
+
+
+def test_charref_dec_subtitle():
+    '''should evaluate character references in result subtitles'''
+    results = yvs.get_result_list('love others')
+    nose.assert_equal(len(results), 3)
+    nose.assert_regexp_matches(
+        results[0]['subtitle'], '\u201cLorem ipsum\u201d')
+
+
 @redirect_stdout
 def test_output(out):
-    """should output ref result list XML"""
+    """should output result list XML"""
     query_str = 'love others'
     yvs.main(query_str)
     output = out.getvalue().strip()

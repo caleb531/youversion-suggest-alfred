@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import absolute_import
+from __future__ import unicode_literals
 import re
 import yvs.shared as shared
 import urllib
@@ -62,10 +62,11 @@ class SearchResultParser(HTMLParser):
 
     # Handle verse content
     def handle_data(self, content):
-        if self.in_heading:
-            self.currentResult['title'] += content
-        elif self.in_content:
-            self.currentResult['subtitle'] += content
+        if self.in_ref:
+            if self.in_heading:
+                self.currentResult['title'] += content
+            elif self.in_content:
+                self.currentResult['subtitle'] += content
 
     # Handle all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
@@ -87,13 +88,14 @@ def get_search_html(query_str):
 
     prefs = shared.get_prefs()
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
-        urllib.quote_plus(query_str), prefs['version'])
+        urllib.quote_plus(query_str.encode('utf-8')), prefs['version'])
     return shared.get_url_content(url)
 
 
 # Parse actual reference content from reference HTML
 def get_result_list(query_str):
 
+    query_str = shared.format_query_str(query_str)
     html = get_search_html(query_str)
     parser = SearchResultParser()
     parser.feed(html)
