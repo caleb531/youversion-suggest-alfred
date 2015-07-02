@@ -1,18 +1,12 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
-import os
 import subprocess
 from invoke import task
 
 
 @task
 def test():
-    env = os.environ.copy()
-    # Colorize nose output using rednose if available
-    env.update({
-        'NOSE_REDNOSE': '1'
-    })
-    subprocess.call(['coverage', 'run', '-m', 'nose'], env=env)
+    subprocess.call(['coverage', 'run', '-m', 'nose', '--rednose'])
 
 
 @task
