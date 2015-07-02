@@ -127,11 +127,11 @@ def get_result_list_xml(results):
         copy = ET.SubElement(item, 'text', {
             'type': 'copy'
         })
-        copy.text = result['title']
+        copy.text = result.get('copy', result['title'])
         largetype = ET.SubElement(item, 'text', {
             'type': 'largetype'
         })
-        largetype.text = result['title']
+        largetype.text = result.get('largetype', result['title'])
         subtitle = ET.SubElement(item, 'subtitle')
         subtitle.text = result['subtitle']
         icon = ET.SubElement(item, 'icon')
