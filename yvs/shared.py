@@ -47,15 +47,13 @@ def get_chapter_data():
 # Get name of first book whose id matches the given id
 def get_book(books, book_id):
 
-    return next(
-        book['name'] for book in books if book['id'] == book_id)
+    return next(book['name'] for book in books if book['id'] == book_id)
 
 
 # Get first version object whose id matches the given id
 def get_version(versions, version_id):
 
-    return next(
-        version for version in versions if version['id'] == version_id)
+    return next(version for version in versions if version['id'] == version_id)
 
 
 def get_versions(language):
@@ -142,14 +140,6 @@ def get_result_list_xml(results):
 
 # Query-related functions
 
-
-# Determines if the given query string matches the given book name
-def query_matches_book(query_book, book_name):
-    return (book_name.startswith(query_book) or
-            (book_name[0].isnumeric() and
-             book_name[2:].startswith(query_book)))
-
-
 # Simplifies the format of the query string
 def format_query_str(query_str):
 
@@ -183,7 +173,7 @@ def get_ref_matches(query_str):
 # Parses the given reference UID into a dictionary representing that reference
 def get_ref_object(ref_uid):
 
-    patt = '{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?'.format(
+    patt = '^{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?$'.format(
         version='(\d+)',
         book_id='(\d?[a-z]+)',
         chapter='(\d+)',
@@ -192,31 +182,31 @@ def get_ref_object(ref_uid):
 
     ref_uid_matches = re.match(patt, ref_uid)
     ref = {
-        'uid': ref_uid
+        'uid': ref_uid,
+        'book_id': ref_uid_matches.group(2),
+        'version_id': int(ref_uid_matches.group(1)),
+        'chapter': ref_uid_matches.group(3)
     }
 
-    book_id = ref_uid_matches.group(2)
+    # Include book name using book ID and currently-set language
     prefs = get_prefs()
     bible = get_bible_data(prefs['language'])
-    book_name = get_book(bible['books'], book_id)
+    book_name = get_book(bible['books'], ref['book_id'])
     ref['book'] = book_name
-    ref['book_id'] = book_id
 
-    chapter = ref_uid_matches.group(3)
-    ref['chapter'] = chapter
-
+    # Include verse number if it exists
     verse_match = ref_uid_matches.group(4)
     if verse_match:
         ref['verse'] = int(verse_match)
 
+    # Include end verse number if it exists
     endverse_match = ref_uid_matches.group(5)
     if endverse_match:
         ref['endverse'] = int(endverse_match)
 
-    version_id = int(ref_uid_matches.group(1))
-    version_name = get_version(bible['versions'], version_id)['name']
+    # Include full version name (acronym) if it exists
+    version_name = get_version(bible['versions'], ref['version_id'])['name']
     ref['version'] = version_name
-    ref['version_id'] = version_id
 
     return ref
 
@@ -239,16 +229,9 @@ def get_full_ref(ref):
     return full_ref
 
 
-# Retrieve HTML contents of the given URL as a Unicode string
-def get_url_content(url, **kwargs):
-
-    request = urllib2.Request(url, headers={'User-Agent': user_agent})
-    connection = urllib2.urlopen(request)
-    return connection.read().decode('utf-8')
-
-
 # Simplify format of reference content by removing unnecessary whitespace
 def format_ref_content(ref_content):
+
     # Collapse consecutive spaces to single space
     ref_content = re.sub(' {2,}', ' ', ref_content)
     # Collapse sequences of three or more newlines into two
@@ -258,3 +241,22 @@ def format_ref_content(ref_content):
     # Strip leading/trailing whitespace for each paragraph
     ref_content = re.sub(' ?\n ?', '\n', ref_content)
     return ref_content
+
+
+# Retrieve HTML contents of the given URL as a Unicode string
+def get_url_content(url, **kwargs):
+
+    request = urllib2.Request(url, headers={'User-Agent': user_agent})
+    connection = urllib2.urlopen(request)
+    return connection.read().decode('utf-8')
+
+
+# Evaluate character reference to its respective Unicode character
+def eval_charref(name):
+
+    if name[0] == 'x':
+        # Handle hexadecimal character references
+        return unichr(int(name[1:], 16))
+    else:
+        # Handle decimal character references
+        return unichr(int(name))

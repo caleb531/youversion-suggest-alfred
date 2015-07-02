@@ -52,6 +52,13 @@ def guess_version(versions, version_query):
     return None
 
 
+# Determines if the given query string matches the given book name
+def query_matches_book(query_book, book_name):
+    return (book_name.startswith(query_book) or
+            (book_name[0].isnumeric() and
+             book_name[2:].startswith(query_book)))
+
+
 # Retrieves list of books matching the given query
 def get_matching_books(books, query):
 
@@ -61,7 +68,7 @@ def get_matching_books(books, query):
         if not matching_books:
             for book in books:
                 book_name = book['name'].lower()
-                if shared.query_matches_book(query['book'][:i], book_name):
+                if query_matches_book(query['book'][:i], book_name):
                     matching_books.append(book)
         else:
             break

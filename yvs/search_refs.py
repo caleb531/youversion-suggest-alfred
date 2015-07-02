@@ -70,16 +70,11 @@ class SearchResultParser(HTMLParser):
     # Handle all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.in_ref:
-            if name[0] == 'x':
-                # Handle hexadecimal character references
-                charref = unichr(int(name[1:], 16))
-            else:
-                # Handle decimal character references
-                charref = unichr(int(name))
+            char = shared.eval_charref(name)
             if self.in_heading:
-                self.currentResult['title'] += charref
+                self.currentResult['title'] += char
             elif self.in_content:
-                self.currentResult['subtitle'] += charref
+                self.currentResult['subtitle'] += char
 
 
 # Retrieve HTML for reference with the given ID
