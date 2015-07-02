@@ -13,11 +13,16 @@ YouVersion Suggest is an Alfred workflow which allows you to search the online
 
 ## Usage
 
-Type the `yv` keyword into Alfred, followed by a space and a phrase representing
-the bible reference you wish to find. The phrase can be part of a book name,
-chapter, verse, or range of verses. You may also include an optional version
-(translation) at the end of your query. As you type, YouVersion Suggest will
-display a list of suggestions matching your query.
+### Searching by reference
+
+Type the `yvfilter` keyword into Alfred, followed by a space and a phrase
+representing the bible reference you wish to find. The phrase can be part of a
+book name, chapter, verse, or range of verses. You may also include an optional
+version (translation) at the end of your query. As you type, YouVersion Suggest
+will display a list of suggestions matching your query.
+
+**Pro Tip:** Type `yvf` and press the *tab* key to quickly filter by reference
+(as this will expand to `yvfilter`).
 
 Choosing a result will open the selected reference on the YouVersion website.
 Choosing a result while holding down the *command* key will copy the contents of
@@ -29,14 +34,29 @@ identifier, such as *1 Corinthians 13:4-7 (ESV)*, to the clipboard. Pressing
 *Command-L* when choosing a result will show the respective reference identifier
 as Alfred Large Type.
 
-### Example queries
+#### Example queries
 
-* `yv luke` => Luke
-* `yv eph 3` => Ephesians 3
-* `yv 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
-* `yv mat 6:34 nlt` => Matthew 6:34 (NLT)
-* `yv 1 co 13.4-7` => 1 Corinthians 13:4-7
-* `yv relevations 7` => Revelation 7
+* `yvfilter luke` => Luke
+* `yvfilter eph 3` => Ephesians 3
+* `yvfilter 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+* `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
+* `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
+* `yvfilter relevations 7` => Revelation 7
+
+### Searching by keywords
+
+You can also search the YouVersion Bible by keyword using the `yvsearch`
+keyword. As you type, YouVersion Suggest will display Bible verses whose content
+contains your given keywords.
+
+Note that when using the `yvsearch` filter, YouVersion Suggest will only search
+for verses in your preferred version. To learn more about setting your preferred
+version in YouVersion Suggest, see *Setting your preferred version*.
+
+#### Example queries
+
+* `yvsearch without faith` => Hebrews 11:6
+* `yvsearch do not worry` => Matthew 6:34
 
 ### Setting your preferred language
 
