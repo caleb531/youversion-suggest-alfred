@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 import nose.tools as nose
-import yvs.filter_refs_kw as yvs
+import yvs.search_refs as yvs
 from mock import ANY, Mock, patch
 from xml.etree import ElementTree as ET
 from tests.decorators import redirect_stdout, use_prefs
@@ -75,7 +75,7 @@ def test_output(out):
 
 
 @redirect_stdout
-@patch('yvs.filter_refs_kw.get_result_list', return_value=[])
+@patch('yvs.search_refs.get_result_list', return_value=[])
 def test_null_result(out, get_result_list):
     """should output "No Results" XML item for empty result list"""
     query_str = 'xyz'
