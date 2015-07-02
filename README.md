@@ -15,11 +15,14 @@ YouVersion Suggest is an Alfred workflow which allows you to search the online
 
 ### Searching by reference
 
-Type the `yv` keyword into Alfred, followed by a space and a phrase representing
-the bible reference you wish to find. The phrase can be part of a book name,
-chapter, verse, or range of verses. You may also include an optional version
-(translation) at the end of your query. As you type, YouVersion Suggest will
-display a list of suggestions matching your query.
+Type the `yvfilter` keyword into Alfred, followed by a space and a phrase
+representing the bible reference you wish to find. The phrase can be part of a
+book name, chapter, verse, or range of verses. You may also include an optional
+version (translation) at the end of your query. As you type, YouVersion Suggest
+will display a list of suggestions matching your query.
+
+**Pro Tip:** Type `yvf` and press the *tab* key to quickly filter by reference
+(as this will expand to `yvfilter`).
 
 Choosing a result will open the selected reference on the YouVersion website.
 Choosing a result while holding down the *command* key will copy the contents of
@@ -33,12 +36,12 @@ as Alfred Large Type.
 
 #### Example queries
 
-* `yv luke` => Luke
-* `yv eph 3` => Ephesians 3
-* `yv 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
-* `yv mat 6:34 nlt` => Matthew 6:34 (NLT)
-* `yv 1 co 13.4-7` => 1 Corinthians 13:4-7
-* `yv relevations 7` => Revelation 7
+* `yvfilter luke` => Luke
+* `yvfilter eph 3` => Ephesians 3
+* `yvfilter 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+* `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
+* `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
+* `yvfilter relevations 7` => Revelation 7
 
 ### Searching by keywords
 
@@ -58,7 +61,7 @@ version in YouVersion Suggest, see *Setting your preferred version*.
 ### Setting your preferred language
 
 YouVersion Suggest allows you to change the languages used for Bible references
-and versions. To do so, type `yvpref language` into Alfred, and the list of
+and versions. To do so, type `yvset language` into Alfred, and the list of
 supported languages will then appear. You may then choose another language as
 your preferred language.
 
@@ -77,7 +80,7 @@ GitHub](https://github.com/caleb531/youversion-suggest/issues).
 
 You may also set your preferred version (translation) used for Bible references
 (where you have not explicitly specified the version in the query). To do so,
-type `yvpref version` into Alfred, and the list of supported versions (for the
+type `yvset version` into Alfred, and the list of supported versions (for the
 currently-set language) will appear.
 
 To select a version from the list of versions more quickly, you may optionally
@@ -85,5 +88,5 @@ type a query after the initial query to filter the list of versions.
 
 #### Example queries
 
-* `yvpref version esv`
-* `yvpref version a`
+* `yvset version esv`
+* `yvset version a`
