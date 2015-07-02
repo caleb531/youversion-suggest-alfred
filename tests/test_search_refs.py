@@ -2,6 +2,7 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import urllib2
 import nose.tools as nose
 import yvs.search_refs as yvs
 from mock import ANY, Mock, patch
@@ -41,9 +42,13 @@ def test_result_subtitles():
     nose.assert_regexp_matches(results[2]['subtitle'], 'Ut aliquam')
 
 
-def test_unicode_input():
+@patch('urllib2.Request')
+def test_unicode_input(Request):
     '''should not raise exception when input contains non-ASCII characters'''
     results = yvs.get_result_list('é')
+    Request.assert_called_once_with(
+        'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
+        headers=ANY)
     nose.assert_equal(len(results), 3)
 
 
