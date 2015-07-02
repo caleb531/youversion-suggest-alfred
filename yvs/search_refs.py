@@ -25,8 +25,6 @@ class SearchResultParser(HTMLParser):
         self.in_ref = None
         self.in_heading = None
         self.in_content = None
-        self.ref_depth = None
-        self.verse_num = None
         self.results = []
 
     def handle_starttag(self, tag, attrs):
