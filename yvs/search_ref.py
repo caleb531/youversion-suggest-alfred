@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# yvs.search_ref
 
 import urllib
 import webbrowser

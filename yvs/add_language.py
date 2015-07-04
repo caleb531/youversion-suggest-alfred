@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-
-# This script is a handy (albeit imperfect) tool for automatically adding
-# support for any language to YouVersion Suggest.
+# yvs.add_language
+# This language utility is a handy (albeit imperfect) tool for automatically
+# adding support for any language to YouVersion Suggest.
 
 from __future__ import unicode_literals
 import argparse

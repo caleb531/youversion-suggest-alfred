@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.decorators
 
 import sys
 import yvs.shared as yvs

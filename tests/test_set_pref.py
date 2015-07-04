@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.test_set_pref
 
 import nose.tools as nose
 import yvs.set_pref as yvs

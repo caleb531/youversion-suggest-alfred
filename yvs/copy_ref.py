@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# yvs.copy_ref
 
 import re
 import yvs.shared as shared

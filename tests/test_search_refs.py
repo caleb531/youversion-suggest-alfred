@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.test_search_refs
 # coding=utf-8
 
 from __future__ import unicode_literals
@@ -7,7 +7,7 @@ import nose.tools as nose
 import yvs.search_refs as yvs
 from mock import ANY, Mock, patch
 from xml.etree import ElementTree as ET
-from tests.decorators import redirect_stdout, use_prefs
+from tests.decorators import redirect_stdout
 
 
 with open('tests/files/search.html') as file:

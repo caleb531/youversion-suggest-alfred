@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# yvs.set_pref
 
 import re
 import yvs.shared as shared

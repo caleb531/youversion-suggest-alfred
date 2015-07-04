@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.test_compliance
 
 import nose.tools as nose
 import glob

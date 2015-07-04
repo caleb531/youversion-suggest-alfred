@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.test_copy_ref
 
 from __future__ import unicode_literals
 import yvs.copy_ref as yvs

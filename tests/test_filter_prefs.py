@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.test_filter_prefs
 
 from __future__ import unicode_literals
 import nose.tools as nose

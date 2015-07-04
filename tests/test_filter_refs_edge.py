@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.test_filter_refs_edge
 # coding=utf-8
 
 from __future__ import unicode_literals

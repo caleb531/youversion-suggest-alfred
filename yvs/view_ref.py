@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# yvs.view_ref
 
 import webbrowser
 import yvs.shared as shared
