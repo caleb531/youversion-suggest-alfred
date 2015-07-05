@@ -71,13 +71,24 @@ def get_version_elems(language_id):
     return version_elems, language_name
 
 
+# Sort and remove duplicates from list of versions
+def get_unique_versions(versions):
+
+    unique_versions = []
+    for name, group in itertools.groupby(versions, key=itemgetter('name')):
+        # When duplicates are encountered, favor the version with the lowest ID
+        version = min(group, key=itemgetter('id'))
+        unique_versions.append(version)
+
+    return unique_versions
+
+
 # Retrieve a list of dictionaries representing Bible versions
 def get_versions(language_id, max_version_id):
 
     print('Retrieving version data...')
 
     versions = []
-    unique_versions = []
 
     version_elems, language_name = get_version_elems(language_id)
 
@@ -90,12 +101,8 @@ def get_versions(language_id, max_version_id):
         if not max_version_id or version['id'] <= max_version_id:
             versions.append(version)
 
-    # Sort and remove duplicates from list of versions
     versions.sort(key=itemgetter('name'))
-    for name, group in itertools.groupby(versions, key=itemgetter('name')):
-        # When duplicates are encountered, favor the version with the lowest ID
-        version = min(group, key=itemgetter('id'))
-        unique_versions.append(version)
+    unique_versions = get_unique_versions(versions)
 
     return unique_versions, language_name
 
