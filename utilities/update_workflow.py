@@ -25,11 +25,8 @@ def get_user_prefs_dir():
 
     # If user is syncing their preferences using a syncing service
     if 'syncfolder' in core_prefs:
-
         return os.path.expanduser(core_prefs['syncfolder'])
-
     else:
-
         return DEFAULT_USER_PREFS_DIR
 
 
@@ -53,6 +50,7 @@ def get_workflow_path():
 
 # Get path to installed workflow's info.plist file
 def get_workflow_info_path(workflow_path):
+
     return os.path.join(workflow_path, 'info.plist')
 
 
@@ -66,7 +64,6 @@ def get_workflow_info(info_path):
 def get_module_content(module_name):
 
     filename = '{}.py'.format(module_name.replace('.', '/'))
-
     with open(filename, 'r') as file:
         return file.read()
 
@@ -87,8 +84,10 @@ def update_workflow_objects(info):
     for obj in info['objects']:
 
         if 'script' in obj['config']:
+
             module_name = get_module_name(obj['config']['script'])
             new_module_content = get_module_content(module_name)
+
             if new_module_content != obj['config']['script']:
                 obj['config']['script'] = new_module_content
                 print('Updated {}'.format(module_name))
