@@ -79,7 +79,7 @@ def get_module_name(module_content):
 # Update content of all scripts in workflow info object
 def update_workflow_objects(info):
 
-    updated = False
+    updated_objects = False
 
     for obj in info['objects']:
 
@@ -91,9 +91,9 @@ def update_workflow_objects(info):
             if new_module_content != obj['config']['script']:
                 obj['config']['script'] = new_module_content
                 print('Updated {}'.format(module_name))
-                updated = True
+                updated_objects = True
 
-    return updated
+    return updated_objects
 
 
 # Recursively check if two directories are exactly equal in terms of content
@@ -143,6 +143,8 @@ def copy_resource(resource_path, dest_resource_path):
 # Copy all package resources (files or directories) to installed workflow
 def copy_pkg_resources(workflow_path):
 
+    updated_resources = False
+
     for resource_path in PKG_RESOURCES:
 
         dest_resource_path = os.path.join(workflow_path, resource_path)
@@ -150,12 +152,15 @@ def copy_pkg_resources(workflow_path):
         if not resources_are_equal(resource_path, dest_resource_path):
             copy_resource(resource_path, dest_resource_path)
             print('Updated {}'.format(resource_path))
+            updated_resources = True
+
+    return updated_resources
 
 
 # Write info.plist object to file if content has updated
-def save_info(info, info_path, updated=True):
+def save_info(info, info_path, updated_workflow=True):
 
-    if updated:
+    if updated_workflow:
         plistlib.writePlist(info, info_path)
         print('Updated info.plist')
 
@@ -165,10 +170,11 @@ def main():
     workflow_path = get_workflow_path()
     info_path = get_workflow_info_path(workflow_path)
     info = get_workflow_info(info_path)
-    updated = update_workflow_objects(info)
-    copy_pkg_resources(workflow_path)
-    save_info(info, info_path, updated)
-    if updated:
+    updated_objects = update_workflow_objects(info)
+    updated_resources = copy_pkg_resources(workflow_path)
+    updated_workflow = updated_objects or updated_resources
+    save_info(info, info_path, updated_workflow)
+    if updated_workflow:
         print('Updated workflow successfully')
     else:
         print('Workflow has not changed')
