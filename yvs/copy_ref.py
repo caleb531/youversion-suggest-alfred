@@ -27,7 +27,7 @@ class ReferenceParser(HTMLParser):
         self.depth = 0
         self.in_block = None
         self.in_verse = None
-        self.in_content = None
+        self.in_verse_content = None
         self.block_depth = None
         self.verse_depth = None
         self.content_depth = None
@@ -36,7 +36,7 @@ class ReferenceParser(HTMLParser):
 
     # Determines if parser is currently within content of verse to include
     def is_in_verse_content(self):
-        return (self.in_verse and self.in_content and
+        return (self.in_verse and self.in_verse_content and
                 (self.verse_start <= self.verse_num and
                  (not self.verse_end or self.verse_num <= self.verse_end)))
 
@@ -52,7 +52,7 @@ class ReferenceParser(HTMLParser):
                 self.block_depth = self.depth
                 self.content_parts.append('\n\n')
             # Detect line breaks within a single verse
-            if elem_class == 'q1' or elem_class == 'q2' or elem_class == 'li1':
+            if re.search('q\d', elem_class) or re.search('li\d', elem_class):
                 self.content_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
             if 'verse ' in elem_class:
@@ -61,7 +61,7 @@ class ReferenceParser(HTMLParser):
                 self.verse_num = int(elem_class.split(' ')[1][1:])
             # Detect beginning of verse content (excludes footnotes)
             if elem_class == 'content':
-                self.in_content = True
+                self.in_verse_content = True
                 self.content_depth = self.depth
 
     def handle_endtag(self, tag):
@@ -71,8 +71,8 @@ class ReferenceParser(HTMLParser):
         # Determine the end of a verse or its content
         if self.depth == self.verse_depth and self.in_verse:
             self.in_verse = False
-        if self.depth == self.content_depth and self.in_content:
-            self.in_content = False
+        if self.depth == self.content_depth and self.in_verse_content:
+            self.in_verse_content = False
         if tag == 'div' or tag == 'span':
             self.depth -= 1
 

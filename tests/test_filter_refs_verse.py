@@ -34,13 +34,6 @@ def test_space_separator():
     nose.assert_equal(results[0]['title'], 'Luke 4:8 (NIV)')
 
 
-def test_zero_verse():
-    """should interpret ignore zeroth verse if given"""
-    results = yvs.get_result_list('ps 23:0')
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Psalm 23 (NIV)')
-
-
 def test_id():
     """should use correct ID for verses"""
     results = yvs.get_result_list('luke 4:8')

@@ -157,19 +157,6 @@ def format_query_str(query_str):
     return query_str
 
 
-# Parses the given query string into components of a Bible reference
-def get_ref_matches(query_str):
-
-    # Pattern for parsing any bible reference
-    patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
-        book='(\d?(?:[^\W\d_]|\s)+|\d)\s?',
-        chapter='(\d+)\s?',
-        verse='(\d+)\s?',
-        endverse='(\d+)?\s?',
-        version='([a-z]+\d*)?.*?')
-    return re.search(patt, query_str, flags=re.UNICODE)
-
-
 # Parses the given reference UID into a dictionary representing that reference
 def get_ref_object(ref_uid):
 
@@ -185,7 +172,7 @@ def get_ref_object(ref_uid):
         'uid': ref_uid,
         'book_id': ref_uid_matches.group(2),
         'version_id': int(ref_uid_matches.group(1)),
-        'chapter': ref_uid_matches.group(3)
+        'chapter': int(ref_uid_matches.group(3))
     }
 
     # Include book name using book ID and currently-set language
