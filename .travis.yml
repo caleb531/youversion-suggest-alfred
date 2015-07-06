@@ -7,7 +7,6 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 script:
-  - nosetests
   - coverage run -m nose
 after_success:
   - coveralls

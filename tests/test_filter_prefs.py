@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+# tests.test_filter_prefs
 
 from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_prefs as yvs
 from xml.etree import ElementTree as ET
-from decorators import redirect_stdout
+from tests.decorators import redirect_stdout
 
 
 def test_show_languages():

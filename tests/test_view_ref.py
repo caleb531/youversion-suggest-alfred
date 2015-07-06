@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.test_view_ref
 
 import nose.tools as nose
 import yvs.view_ref as yvs

@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+# tests.test_filter_refs_version
 
 from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_refs as yvs
-from decorators import use_prefs
+from tests.decorators import use_prefs
 
 
 @use_prefs({'language': 'es'})

@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-
-# This script is a handy (albeit imperfect) tool for automatically adding
-# support for any language to YouVersion Suggest.
+# yvs.add_language
+# This language utility is a handy (albeit imperfect) tool for automatically
+# adding support for any language to YouVersion Suggest.
 
 from __future__ import unicode_literals
 import argparse
@@ -10,7 +9,7 @@ import itertools
 import json
 import os
 import re
-import urllib2
+import yvs.shared as shared
 from operator import itemgetter
 from pyquery import PyQuery as pq
 
@@ -22,12 +21,6 @@ json_params = {
     'ensure_ascii': False,
     'sort_keys': True
 }
-
-
-# Retrieve HTML contents of the given URL as a Unicode string
-def get_url_content(url, **kw):
-
-    return urllib2.urlopen(url).read().decode('utf-8')
 
 
 # Parse the language name from the given category header string
@@ -59,7 +52,7 @@ def get_version_elems(language_id):
 
     d = pq(url='https://www.bible.com/{}/versions'
            .format(language_id.replace('_', '-')),
-           opener=get_url_content)
+           opener=shared.get_url_content)
 
     category_elems = d('#main > article > ul > li')
     version_elems = None
@@ -78,13 +71,24 @@ def get_version_elems(language_id):
     return version_elems, language_name
 
 
+# Sort and remove duplicates from list of versions
+def get_unique_versions(versions):
+
+    unique_versions = []
+    for name, group in itertools.groupby(versions, key=itemgetter('name')):
+        # When duplicates are encountered, favor the version with the lowest ID
+        version = min(group, key=itemgetter('id'))
+        unique_versions.append(version)
+
+    return unique_versions
+
+
 # Retrieve a list of dictionaries representing Bible versions
 def get_versions(language_id, max_version_id):
 
     print('Retrieving version data...')
 
     versions = []
-    unique_versions = []
 
     version_elems, language_name = get_version_elems(language_id)
 
@@ -97,12 +101,8 @@ def get_versions(language_id, max_version_id):
         if not max_version_id or version['id'] <= max_version_id:
             versions.append(version)
 
-    # Sort and remove duplicates from list of versions
     versions.sort(key=itemgetter('name'))
-    for name, group in itertools.groupby(versions, key=itemgetter('name')):
-        # When duplicates are encountered, favor the version with the lowest ID
-        version = min(group, key=itemgetter('id'))
-        unique_versions.append(version)
+    unique_versions = get_unique_versions(versions)
 
     return unique_versions, language_name
 
@@ -136,7 +136,7 @@ def get_books(default_version):
 
     d = pq(url='https://www.bible.com/bible/{}/jhn.1'
            .format(default_version),
-           opener=get_url_content)
+           opener=shared.get_url_content)
 
     book_elems = d('#menu_book_chapter a[data-book]')
 

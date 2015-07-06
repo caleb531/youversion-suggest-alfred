@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+# yvs.set_pref
 
 import re
-import shared
+import yvs.shared as shared
 
 
 def get_pair(pair_str):

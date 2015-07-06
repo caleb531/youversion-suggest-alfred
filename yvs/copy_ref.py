@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+# yvs.copy_ref
 
 import re
-import urllib2
-import shared
+import yvs.shared as shared
 from HTMLParser import HTMLParser
 
 
@@ -28,7 +27,7 @@ class ReferenceParser(HTMLParser):
         self.depth = 0
         self.in_block = None
         self.in_verse = None
-        self.in_content = None
+        self.in_verse_content = None
         self.block_depth = None
         self.verse_depth = None
         self.content_depth = None
@@ -37,7 +36,7 @@ class ReferenceParser(HTMLParser):
 
     # Determines if parser is currently within content of verse to include
     def is_in_verse_content(self):
-        return (self.in_verse and self.in_content and
+        return (self.in_verse and self.in_verse_content and
                 (self.verse_start <= self.verse_num and
                  (not self.verse_end or self.verse_num <= self.verse_end)))
 
@@ -53,7 +52,7 @@ class ReferenceParser(HTMLParser):
                 self.block_depth = self.depth
                 self.content_parts.append('\n\n')
             # Detect line breaks within a single verse
-            if elem_class == 'q1' or elem_class == 'q2' or elem_class == 'li1':
+            if re.search('q\d', elem_class) or re.search('li\d', elem_class):
                 self.content_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
             if 'verse ' in elem_class:
@@ -62,7 +61,7 @@ class ReferenceParser(HTMLParser):
                 self.verse_num = int(elem_class.split(' ')[1][1:])
             # Detect beginning of verse content (excludes footnotes)
             if elem_class == 'content':
-                self.in_content = True
+                self.in_verse_content = True
                 self.content_depth = self.depth
 
     def handle_endtag(self, tag):
@@ -72,8 +71,8 @@ class ReferenceParser(HTMLParser):
         # Determine the end of a verse or its content
         if self.depth == self.verse_depth and self.in_verse:
             self.in_verse = False
-        if self.depth == self.content_depth and self.in_content:
-            self.in_content = False
+        if self.depth == self.content_depth and self.in_verse_content:
+            self.in_verse_content = False
         if tag == 'div' or tag == 'span':
             self.depth -= 1
 
@@ -85,12 +84,8 @@ class ReferenceParser(HTMLParser):
     # Handle all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.is_in_verse_content():
-            if name[0] == 'x':
-                # Handle hexadecimal character references
-                self.content_parts.append(unichr(int(name[1:], 16)))
-            else:
-                # Handle decimal character references
-                self.content_parts.append(unichr(int(name)))
+            char = shared.eval_charref(name)
+            self.content_parts.append(char)
 
 
 # Retrieve HTML for reference with the given ID
@@ -99,23 +94,7 @@ def get_ref_html(ref):
         version=ref['version_id'],
         book=ref['book_id'],
         chapter=ref['chapter'])
-    request = urllib2.Request(
-        url, headers={'User-Agent': 'YouVersion Suggest'})
-    connection = urllib2.urlopen(request)
-    return connection.read().decode('utf-8')
-
-
-# Simplify format of reference content by removing unnecessary whitespace
-def format_ref_content(ref_content):
-    # Collapse consecutive spaces to single space
-    ref_content = re.sub(' {2,}', ' ', ref_content)
-    # Collapse sequences of three or more newlines into two
-    ref_content = re.sub('\n{3,}', '\n\n', ref_content)
-    # Strip leading/trailing whitespace for entire reference
-    ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
-    # Strip leading/trailing whitespace for each paragraph
-    ref_content = re.sub(' ?\n ?', '\n', ref_content)
-    return ref_content
+    return shared.get_url_content(url)
 
 
 # Parse actual reference content from reference HTML
@@ -123,7 +102,7 @@ def get_ref_content(ref):
     html = get_ref_html(ref)
     parser = ReferenceParser(ref)
     parser.feed(html)
-    ref_content = format_ref_content(''.join(parser.content_parts))
+    ref_content = shared.format_ref_content(''.join(parser.content_parts))
     ref_content = '\n\n' + ref_content
     ref_content = shared.get_full_ref(ref) + ref_content
     return ref_content

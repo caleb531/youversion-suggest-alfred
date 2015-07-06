@@ -1,15 +1,29 @@
-#!/usr/bin/env python
+# yvs.filter_refs
 # coding=utf-8
 
 from __future__ import unicode_literals
-import shared
+import re
+import yvs.shared as shared
+
+
+# Parses the given query string into components of a Bible reference
+def get_ref_matches(query_str):
+
+    # Pattern for parsing any bible reference
+    patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
+        book='(\d?(?:[^\W\d_]|\s)+|\d)\s?',
+        chapter='(\d+)\s?',
+        verse='(\d+)\s?',
+        endverse='(\d+)?\s?',
+        version='([a-z]+\d*)?.*?')
+    return re.search(patt, query_str, flags=re.UNICODE)
 
 
 # Builds the query object from the given query string
 def get_query_object(query_str):
 
     # Match section of the bible based on query
-    ref_matches = shared.get_ref_matches(query_str)
+    ref_matches = get_ref_matches(query_str)
 
     if not ref_matches:
         return None
@@ -52,21 +66,85 @@ def guess_version(versions, version_query):
     return None
 
 
+# Determines if the given query string matches the given book name
+def query_matches_book(query_book, book_name):
+    return (book_name.startswith(query_book) or
+            (book_name[0].isnumeric() and
+             book_name[2:].startswith(query_book)))
+
+
 # Retrieves list of books matching the given query
 def get_matching_books(books, query):
 
     matching_books = []
 
     for i in xrange(len(query['book']), 0, -1):
-        if not matching_books:
-            for book in books:
-                book_name = book['name'].lower()
-                if shared.query_matches_book(query['book'][:i], book_name):
-                    matching_books.append(book)
-        else:
+        if matching_books:
             break
+        for book in books:
+            book_name = book['name'].lower()
+            if query_matches_book(query['book'][:i], book_name):
+                matching_books.append(book)
 
     return matching_books
+
+
+# Choose most appropriate version based on current parameters
+def choose_best_version(prefs, bible, query):
+
+    chosen_version = None
+
+    if 'version' in query:
+        chosen_version = guess_version(bible['versions'], query['version'])
+
+    if not chosen_version and 'version' in prefs:
+        chosen_version = shared.get_version(bible['versions'],
+                                            prefs['version'])
+
+    if not chosen_version:
+        chosen_version = shared.get_version(bible['versions'],
+                                            bible['default_version'])
+
+    return chosen_version
+
+
+# Build a single result item
+def get_result(book, query, chosen_version):
+
+    result = {}
+
+    # Find chapter if given
+    result['uid'] = '{book}.{chapter}'.format(
+        book=book['id'],
+        chapter=query['chapter'])
+    result['title'] = '{book} {chapter}'.format(
+        book=book['name'],
+        chapter=query['chapter'])
+
+    if 'verse' in query:
+
+        # Find verse if given
+        result['uid'] += '.{verse}'.format(
+            verse=query['verse'])
+        result['title'] += ':{verse}'.format(
+            verse=query['verse'])
+
+    if 'endverse' in query and query['endverse'] > query['verse']:
+
+        result['uid'] += '-{verse}'.format(
+            verse=query['endverse'])
+        result['title'] += '-{verse}'.format(
+            verse=query['endverse'])
+
+    result['arg'] = '{version}/{uid}'.format(
+        version=chosen_version['id'],
+        uid=result['uid'])
+    result['uid'] = 'yvs-{}'.format(result['arg'])
+    result['title'] += ' ({version})'.format(
+        version=chosen_version['name'])
+    result['subtitle'] = 'View on YouVersion'
+
+    return result
 
 
 # Retrieves search resylts matching the given query
@@ -83,66 +161,21 @@ def get_result_list(query_str):
     bible = shared.get_bible_data(prefs['language'])
     chapters = shared.get_chapter_data()
     matching_books = get_matching_books(bible['books'], query)
-    chosen_version = None
 
-    if 'chapter' not in query or query['chapter'] == 0:
+    if 'chapter' not in query:
         query['chapter'] = 1
 
-    if 'verse' in query and query['verse'] == 0:
-        del query['verse']
-
-    if 'version' in query:
-        chosen_version = guess_version(bible['versions'], query['version'])
-
-    if not chosen_version and 'version' in prefs:
-        chosen_version = shared.get_version(bible['versions'],
-                                            prefs['version'])
-
-    if not chosen_version:
-        chosen_version = shared.get_version(bible['versions'],
-                                            bible['default_version'])
+    chosen_version = choose_best_version(prefs, bible, query)
 
     # Build result list from books matching the query
     for book in matching_books:
-
-        # Result information
-        result = {}
 
         # Skip result if given chapter exceeds number of chapters in book
         if query['chapter'] > chapters[book['id']]:
             continue
 
-        # Find chapter if given
-        result['uid'] = '{book}.{chapter}'.format(
-            book=book['id'],
-            chapter=query['chapter'])
-        result['title'] = '{book} {chapter}'.format(
-            book=book['name'],
-            chapter=query['chapter'])
-
-        if 'verse' in query:
-
-            # Find verse if given
-            result['uid'] += '.{verse}'.format(
-                verse=query['verse'])
-            result['title'] += ':{verse}'.format(
-                verse=query['verse'])
-
-            if 'endverse' in query and query['endverse'] > query['verse']:
-
-                result['uid'] += '-{verse}'.format(
-                    verse=query['endverse'])
-                result['title'] += '-{verse}'.format(
-                    verse=query['endverse'])
-
-        result['arg'] = '{version}/{uid}'.format(
-            version=chosen_version['id'],
-            uid=result['uid'])
-        result['uid'] = 'yvs-{}'.format(result['arg'])
-        result['title'] += ' ({version})'.format(
-            version=chosen_version['name'])
-        result['subtitle'] = 'View on YouVersion'
-        results.append(result)
+        # Result information
+        results.append(get_result(book, query, chosen_version))
 
     return results
 

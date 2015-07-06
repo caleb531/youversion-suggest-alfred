@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# tests.__init__
 
 import os
 import tempfile
