@@ -24,13 +24,13 @@ def test_complexity():
     for file_path in file_paths:
         with open(file_path, 'r') as file:
             blocks = radon.cc_visit(file.read())
-            for block in blocks:
-                test_desc = '{} ({}) should have a low complexity score'
-                test_complexity.__doc__ = test_desc.format(
-                    block.name, file_path)
-                fail_msg = '{} ({}) has a complexity of {}'.format(
-                    block.name, file_path, block.complexity)
-                yield nose.assert_less_equal, block.complexity, 10, fail_msg
+        for block in blocks:
+            test_doc = '{} ({}) should have a low cyclomatic complexity score'
+            test_complexity.__doc__ = test_doc.format(
+                block.name, file_path)
+            fail_msg = '{} ({}) has a cyclomatic complexity of {}'.format(
+                block.name, file_path, block.complexity)
+            yield nose.assert_less_equal, block.complexity, 10, fail_msg
 
 
 def test_json():
