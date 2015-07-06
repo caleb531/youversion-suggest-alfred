@@ -11,20 +11,20 @@ import urllib2
 import unicodedata
 from xml.etree import ElementTree as ET
 
-alfred_data_dir = os.path.join(
+ALFRED_DATA_DIR = os.path.join(
     os.path.expanduser('~'), 'Library', 'Application Support', 'Alfred 2',
     'Workflow Data', 'com.calebevans.youversionsuggest')
 
-prefs_path = os.path.join(alfred_data_dir, 'preferences.json')
-data_path = os.path.join(os.getcwd(), 'yvs', 'data')
+PREFS_PATH = os.path.join(ALFRED_DATA_DIR, 'preferences.json')
+DATA_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
 
-user_agent = 'YouVersion Suggest'
+USER_AGENT = 'YouVersion Suggest'
 
 
 def create_alfred_data_dir():
 
     try:
-        os.makedirs(alfred_data_dir)
+        os.makedirs(ALFRED_DATA_DIR)
     except OSError:
         pass
 
@@ -32,14 +32,14 @@ def create_alfred_data_dir():
 def get_bible_data(language):
 
     bible_data_path = os.path.join(
-        data_path, 'bible', 'language-{}.json'.format(language))
+        DATA_PATH, 'bible', 'language-{}.json'.format(language))
     with open(bible_data_path, 'r') as bible_data_file:
         return json.load(bible_data_file)
 
 
 def get_chapter_data():
 
-    chapter_data_path = os.path.join(data_path, 'bible', 'chapters.json')
+    chapter_data_path = os.path.join(DATA_PATH, 'bible', 'chapters.json')
     with open(chapter_data_path, 'r') as chapter_data_file:
         return json.load(chapter_data_file)
 
@@ -64,7 +64,7 @@ def get_versions(language):
 
 def get_languages():
 
-    languages_path = os.path.join(data_path, 'languages.json')
+    languages_path = os.path.join(DATA_PATH, 'languages.json')
     with open(languages_path, 'r') as languages_file:
         return json.load(languages_file)
 
@@ -74,7 +74,7 @@ def get_languages():
 
 def get_defaults():
 
-    defaults_path = os.path.join(data_path, 'defaults.json')
+    defaults_path = os.path.join(DATA_PATH, 'defaults.json')
     with open(defaults_path, 'r') as defaults_file:
         return json.load(defaults_file)
 
@@ -83,7 +83,7 @@ def create_prefs():
 
     create_alfred_data_dir()
     defaults = get_defaults()
-    with open(prefs_path, 'w') as prefs_file:
+    with open(PREFS_PATH, 'w') as prefs_file:
         json.dump(defaults, prefs_file)
 
     return defaults
@@ -92,7 +92,7 @@ def create_prefs():
 def get_prefs():
 
     try:
-        with open(prefs_path, 'r') as prefs_file:
+        with open(PREFS_PATH, 'r') as prefs_file:
             return json.load(prefs_file)
     except IOError:
         return create_prefs()
@@ -100,7 +100,7 @@ def get_prefs():
 
 def update_prefs(prefs):
 
-    with open(prefs_path, 'w') as prefs_file:
+    with open(PREFS_PATH, 'w') as prefs_file:
         json.dump(prefs, prefs_file)
 
 
@@ -233,7 +233,7 @@ def format_ref_content(ref_content):
 # Retrieve HTML contents of the given URL as a Unicode string
 def get_url_content(url, **kwargs):
 
-    request = urllib2.Request(url, headers={'User-Agent': user_agent})
+    request = urllib2.Request(url, headers={'User-Agent': USER_AGENT})
     connection = urllib2.urlopen(request)
     return connection.read().decode('utf-8')
 
