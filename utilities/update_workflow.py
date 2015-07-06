@@ -1,15 +1,11 @@
 #!/usr/bin/env python2
 
 import biplist
-import copy
 import distutils.dir_util as distutils
-import errno
 import filecmp
 import glob
 import plistlib
-import os
 import os.path
-import json
 import shutil
 
 
