@@ -40,43 +40,29 @@ class ReferenceParser(HTMLParser):
                 (self.verse_start <= self.verse_num and
                  (not self.verse_end or self.verse_num <= self.verse_end)))
 
-    # Detect paragraph breaks between verses
-    def check_starttag_paragraph_break(self, elem_class):
-
-        if elem_class == 'p' or elem_class == 'b':
-            self.in_block = True
-            self.block_depth = self.depth
-            self.content_parts.append('\n\n')
-
-    # Detect line breaks within a single verse
-    def check_starttag_verse_break(self, elem_class):
-
-        if elem_class == 'q1' or elem_class == 'q2' or elem_class == 'li1':
-            self.content_parts.append('\n')
-
-    # Detect beginning of a single verse (may include footnotes)
-    def check_starttag_verse(self, elem_class):
-        if 'verse ' in elem_class:
-            self.in_verse = True
-            self.verse_depth = self.depth
-            self.verse_num = int(elem_class.split(' ')[1][1:])
-
-    def check_starttag_verse_content(self, elem_class):
-        # Detect beginning of verse content (excludes footnotes)
-        if elem_class == 'content':
-            self.in_verse_content = True
-            self.content_depth = self.depth
-
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
         if tag == 'div' or tag == 'span':
             self.depth += 1
         if 'class' in attr_dict:
             elem_class = attr_dict['class']
-            self.check_starttag_paragraph_break(elem_class)
-            self.check_starttag_verse_break(elem_class)
-            self.check_starttag_verse(elem_class)
-            self.check_starttag_verse_content(elem_class)
+            # Detect paragraph breaks between verses
+            if elem_class == 'p' or elem_class == 'b':
+                self.in_block = True
+                self.block_depth = self.depth
+                self.content_parts.append('\n\n')
+            # Detect line breaks within a single verse
+            if re.search('q\d', elem_class) or re.search('li\d', elem_class):
+                self.content_parts.append('\n')
+            # Detect beginning of a single verse (may include footnotes)
+            if 'verse ' in elem_class:
+                self.in_verse = True
+                self.verse_depth = self.depth
+                self.verse_num = int(elem_class.split(' ')[1][1:])
+            # Detect beginning of verse content (excludes footnotes)
+            if elem_class == 'content':
+                self.in_verse_content = True
+                self.content_depth = self.depth
 
     def handle_endtag(self, tag):
         if self.depth == self.block_depth and self.in_block:
