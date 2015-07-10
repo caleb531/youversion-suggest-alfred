@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import urllib2
 import nose.tools as nose
 import yvs.search_refs as yvs
-from mock import ANY, Mock, patch
+from mock import Mock, NonCallableMock, patch
 from xml.etree import ElementTree as ET
 from tests.decorators import redirect_stdout
 
@@ -13,7 +13,7 @@ from tests.decorators import redirect_stdout
 with open('tests/files/search.html') as file:
     patch_urlopen = patch(
         'urllib2.urlopen',
-        return_value=Mock(read=Mock(return_value=file.read())))
+        return_value=NonCallableMock(read=Mock(return_value=file.read())))
 
 
 def setup():
@@ -48,7 +48,7 @@ def test_unicode_input(Request):
     results = yvs.get_result_list('é')
     Request.assert_called_once_with(
         'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
-        headers=ANY)
+        headers={'User-Agent': 'YouVersion Suggest'})
     nose.assert_equal(len(results), 3)
 
 
