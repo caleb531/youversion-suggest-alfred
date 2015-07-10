@@ -13,13 +13,14 @@ YouVersion Suggest is an Alfred workflow which allows you to search the online
 
 ## Usage
 
-### Searching by reference
+### Filtering by reference
 
-Type the `yvfilter` keyword into Alfred, followed by a space and a phrase
-representing the bible reference you wish to find. The phrase can be part of a
-book name, chapter, verse, or range of verses. You may also include an optional
-version (translation) at the end of your query. As you type, YouVersion Suggest
-will display a list of suggestions matching your query.
+To filter the YouVersion Bible by reference, type the `yvfilter` keyword into
+Alfred, followed by a space and a phrase representing the bible reference you
+wish to find. The phrase can be part of a book name, chapter, verse, or range of
+verses. You may also include an optional version (translation) at the end of
+your query. As you type, YouVersion Suggest will display a list of suggestions
+matching your query.
 
 **Pro Tip:** Type `yvf` and press the *tab* key to quickly filter by reference
 (as this will expand to `yvfilter`).
@@ -43,9 +44,9 @@ as Alfred Large Type.
 * `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
 * `yvfilter relevations 7` => Revelation 7
 
-### Searching by keywords
+### Searching by content
 
-You can also search the YouVersion Bible by keyword using the `yvsearch`
+You can also search the YouVersion Bible by content using the `yvsearch`
 keyword. As you type, YouVersion Suggest will display Bible verses whose content
 contains your given keywords.
 
