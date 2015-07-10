@@ -1,4 +1,6 @@
-#!/usr/bin/env python2
+# utilities.update_workflow
+# This workflow utility updates all workflow resources with the latest versions
+# found in this repository.
 
 import biplist
 import distutils.dir_util as distutils

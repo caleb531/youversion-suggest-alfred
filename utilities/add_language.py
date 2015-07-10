@@ -1,4 +1,4 @@
-# yvs.add_language
+# utilities.add_language
 # This language utility is a handy (albeit imperfect) tool for automatically
 # adding support for any language to YouVersion Suggest.
 
