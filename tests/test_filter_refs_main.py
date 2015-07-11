@@ -1,11 +1,9 @@
 # tests.test_filter_refs_main
 
 from __future__ import unicode_literals
-import sys
 import nose.tools as nose
 import yvs.filter_refs as yvs
 from xml.etree import ElementTree as ET
-from mock import patch
 from tests.decorators import redirect_stdout
 
 

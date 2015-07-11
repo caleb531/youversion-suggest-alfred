@@ -6,7 +6,6 @@ import os
 import os.path
 import json
 import re
-import sys
 import urllib2
 import unicodedata
 from xml.etree import ElementTree as ET
@@ -147,12 +146,12 @@ def format_query_str(query_str):
     # Normalize all Unicode characters
     query_str = unicodedata.normalize('NFC', query_str)
     # Remove all non-alphanumeric characters
-    query_str = re.sub('[\W_]', ' ', query_str, flags=re.UNICODE)
+    query_str = re.sub(r'[\W_]', ' ', query_str, flags=re.UNICODE)
     # Remove extra whitespace
     query_str = query_str.strip()
-    query_str = re.sub('\s+', ' ', query_str)
+    query_str = re.sub(r'\s+', ' ', query_str)
     # Parse shorthand reference notation
-    query_str = re.sub('(\d)(?=[a-z])', '\\1 ', query_str)
+    query_str = re.sub(r'(\d)(?=[a-z])', '\\1 ', query_str)
 
     return query_str
 
@@ -160,12 +159,12 @@ def format_query_str(query_str):
 # Parses the given reference UID into a dictionary representing that reference
 def get_ref_object(ref_uid):
 
-    patt = '^{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?$'.format(
-        version='(\d+)',
-        book_id='(\d?[a-z]+)',
-        chapter='(\d+)',
-        verse='(\d+)',
-        endverse='(?:-(\d+))?')
+    patt = r'^{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?$'.format(
+        version=r'(\d+)',
+        book_id=r'(\d?[a-z]+)',
+        chapter=r'(\d+)',
+        verse=r'(\d+)',
+        endverse=r'(?:-(\d+))?')
 
     ref_uid_matches = re.match(patt, ref_uid)
     ref = {
@@ -220,18 +219,18 @@ def get_full_ref(ref):
 def format_ref_content(ref_content):
 
     # Collapse consecutive spaces to single space
-    ref_content = re.sub(' {2,}', ' ', ref_content)
+    ref_content = re.sub(r' {2,}', ' ', ref_content)
     # Collapse sequences of three or more newlines into two
-    ref_content = re.sub('\n{3,}', '\n\n', ref_content)
+    ref_content = re.sub(r'\n{3,}', '\n\n', ref_content)
     # Strip leading/trailing whitespace for entire reference
-    ref_content = re.sub('(^\s+)|(\s+$)', '', ref_content)
+    ref_content = re.sub(r'(^\s+)|(\s+$)', '', ref_content)
     # Strip leading/trailing whitespace for each paragraph
-    ref_content = re.sub(' ?\n ?', '\n', ref_content)
+    ref_content = re.sub(r' ?\n ?', '\n', ref_content)
     return ref_content
 
 
 # Retrieve HTML contents of the given URL as a Unicode string
-def get_url_content(url, **kwargs):
+def get_url_content(url):
 
     request = urllib2.Request(url, headers={'User-Agent': USER_AGENT})
     connection = urllib2.urlopen(request)

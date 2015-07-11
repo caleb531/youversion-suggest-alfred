@@ -2,7 +2,6 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import os
 import nose.tools as nose
 import yvs.filter_refs as yvs
 from tests.decorators import use_prefs

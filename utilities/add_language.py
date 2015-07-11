@@ -26,7 +26,7 @@ json_params = {
 # Parse the language name from the given category header string
 def get_language_name(text):
 
-    patt = '^\s*(.+?)(?:\s*\((\d+)\)\s*)$'
+    patt = r'^\s*(.+?)(?:\s*\((\d+)\)\s*)$'
     matches = re.search(patt, text, flags=re.UNICODE)
     if matches:
         return matches.group(1)
@@ -39,7 +39,7 @@ def get_version(version_elem):
 
     link_elem = version_elem.find('a')
     url = link_elem.get('href')
-    patt = '(?<=/versions/)(\d+)-([a-z]+\d*)'
+    patt = r'(?<=/versions/)(\d+)-([a-z]+\d*)'
     matches = re.search(patt, url, flags=re.UNICODE)
     return {
         'id': int(matches.group(1)),
@@ -86,7 +86,7 @@ def get_unique_versions(versions):
 # Retrieve a list of dictionaries representing Bible versions
 def get_versions(language_id, max_version_id):
 
-    print('Retrieving version data...')
+    print 'Retrieving version data...'
 
     versions = []
 
@@ -129,7 +129,7 @@ def get_chapter_data():
 # Retrieve list of dictionaries, each representing a book of the Bible
 def get_books(default_version):
 
-    print('Retrieving book data...')
+    print 'Retrieving book data...'
 
     books = []
     chapter_data = get_chapter_data()
@@ -175,10 +175,10 @@ def get_bible_data(language_id, default_version, max_version_id):
 
 
 # Write JSON data to file as Unicode
-def write_json_unicode(json_object, file):
+def write_json_unicode(json_object, json_file):
     json_str = unicode(json.dumps(json_object, **json_params))
-    file.write(json_str)
-    file.write('\n')
+    json_file.write(json_str)
+    json_file.write('\n')
 
 
 # Construct the Bible data object and save it to a JSON file
@@ -194,7 +194,7 @@ def save_bible_data(language_id, bible):
 # Add the given language parameters to the list of supported languages
 def update_language_list(language_id, language_name):
 
-    print('Updating language list...')
+    print 'Updating language list...'
 
     langs_path = os.path.join('yvs', 'data', 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
@@ -245,13 +245,13 @@ def parse_cli_args():
 def main():
 
     args = parse_cli_args()
-    print('Adding language support...')
+    print 'Adding language support...'
     add_language(
         args.code.replace('-', '_'),
         args.default_version,
         args.max_version_id)
-    print('Support for {} has been successfully added.'
-          .format(args.code.replace('_', '-')))
+    print 'Support for {} has been successfully added.'.format(
+        args.code.replace('_', '-'))
 
 if __name__ == '__main__':
     main()

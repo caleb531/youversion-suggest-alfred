@@ -2,18 +2,17 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import re
 import yvs.shared as shared
 import urllib
 from HTMLParser import HTMLParser
 
 
-ref_url_prefix = '/bible/'
+REF_URL_PREFIX = '/bible/'
 
 
 def get_uid_from_url(url):
 
-    return url.replace(ref_url_prefix, '')
+    return url.replace(REF_URL_PREFIX, '')
 
 
 # Parser for search result HTML
@@ -26,6 +25,7 @@ class SearchResultParser(HTMLParser):
         self.in_heading = None
         self.in_content = None
         self.results = []
+        self.current_result = None
 
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
@@ -34,16 +34,16 @@ class SearchResultParser(HTMLParser):
             # Detect beginning of search result
             if tag == 'li' and elem_class == 'reference':
                 self.in_ref = True
-                self.currentResult = {
+                self.current_result = {
                     'arg': '',
                     'title': '',
                     'subtitle': ''
                 }
-                self.results.append(self.currentResult)
+                self.results.append(self.current_result)
         # Detect beginning of search result heading
         if self.in_ref and tag == 'a':
             self.in_heading = True
-            self.currentResult['arg'] = get_uid_from_url(attr_dict['href'])
+            self.current_result['arg'] = get_uid_from_url(attr_dict['href'])
         # Detect beginning of search result content
         elif self.in_ref and tag == 'p':
             self.in_content = True
@@ -56,25 +56,25 @@ class SearchResultParser(HTMLParser):
             self.in_heading = False
         elif self.in_content and tag == 'p':
             self.in_content = False
-            self.currentResult['subtitle'] = shared.format_ref_content(
-                self.currentResult['subtitle'])
+            self.current_result['subtitle'] = shared.format_ref_content(
+                self.current_result['subtitle'])
 
     # Handle verse content
     def handle_data(self, content):
         if self.in_ref:
             if self.in_heading:
-                self.currentResult['title'] += content
+                self.current_result['title'] += content
             elif self.in_content:
-                self.currentResult['subtitle'] += content
+                self.current_result['subtitle'] += content
 
     # Handle all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.in_ref:
             char = shared.eval_charref(name)
             if self.in_heading:
-                self.currentResult['title'] += char
+                self.current_result['title'] += char
             elif self.in_content:
-                self.currentResult['subtitle'] += char
+                self.current_result['subtitle'] += char
 
 
 # Retrieve HTML for reference with the given ID
@@ -103,12 +103,12 @@ def main(query_str):
         results = [{
             'uid': 'yvs-no-results',
             'title': 'No Results',
-            'subtitle': 'No bible references matching \'{}\''
-            .format(query_str),
+            'subtitle': 'No bible references matching \'{}\''.format(
+                query_str),
             'valid': 'no'
         }]
 
-    print(shared.get_result_list_xml(results))
+    print shared.get_result_list_xml(results)
 
 if __name__ == '__main__':
     main('{query}')

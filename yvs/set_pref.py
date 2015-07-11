@@ -6,7 +6,7 @@ import yvs.shared as shared
 
 def get_pair(pair_str):
 
-    pair_matches = re.search('^(\w+):(\w+)$', pair_str, flags=re.UNICODE)
+    pair_matches = re.search(r'^(\w+):(\w+)$', pair_str, flags=re.UNICODE)
 
     key = pair_matches.group(1)
     value = pair_matches.group(2)

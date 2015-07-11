@@ -52,7 +52,7 @@ class ReferenceParser(HTMLParser):
                 self.block_depth = self.depth
                 self.content_parts.append('\n\n')
             # Detect line breaks within a single verse
-            if re.search('q\d', elem_class) or re.search('li\d', elem_class):
+            if re.search(r'(q|li)\d', elem_class):
                 self.content_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
             if 'verse ' in elem_class:
@@ -110,7 +110,7 @@ def get_ref_content(ref):
 
 def main(ref_uid):
     ref = shared.get_ref_object(ref_uid)
-    print(get_ref_content(ref).encode('utf-8'))
+    print get_ref_content(ref).encode('utf-8')
 
 if __name__ == '__main__':
     main('{query}')

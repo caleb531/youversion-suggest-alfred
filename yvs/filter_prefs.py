@@ -5,7 +5,7 @@ import re
 import yvs.shared as shared
 
 
-pref_results = [
+PREF_RESULTS = [
     {
         'title': 'Language',
         'subtitle': 'Set your preferred language',
@@ -70,7 +70,7 @@ def get_version_result_list(query_str):
 
 
 # Associate preference with callback to retrieve its possible values
-pref_callbacks = {
+PREF_CALLBACKS = {
     'language': get_language_result_list,
     'version': get_version_result_list
 }
@@ -78,9 +78,9 @@ pref_callbacks = {
 
 def get_pref_matches(query_str):
 
-    patt = '^{name}{value}$'.format(
-        name='(\w+)',
-        value='(?:\s?(\w+))?')
+    patt = r'^{name}{value}$'.format(
+        name=r'(\w+)',
+        value=r'(?:\s?(\w+))?')
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
@@ -98,17 +98,17 @@ def get_result_list(query_str):
         pref_name = pref_matches.group(1)
         pref_value = pref_matches.group(2)
 
-        if pref_name in pref_callbacks:
+        if pref_name in PREF_CALLBACKS:
 
-            results = pref_callbacks[pref_name](pref_value)
+            results = PREF_CALLBACKS[pref_name](pref_value)
 
         else:
 
-            results = filter(filter_by_pref, pref_results)
+            results = filter(filter_by_pref, PREF_RESULTS)
 
     else:
 
-        results = pref_results
+        results = PREF_RESULTS
 
     return results
 
@@ -125,7 +125,7 @@ def main(query_str):
             'valid': 'no'
         }]
 
-    print(shared.get_result_list_xml(results))
+    print shared.get_result_list_xml(results)
 
 
 if __name__ == '__main__':
