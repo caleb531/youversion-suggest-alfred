@@ -9,7 +9,7 @@ import itertools
 import json
 import os
 import re
-import yvs.shared as shared
+import yvs.shared as yvs
 from operator import itemgetter
 from pyquery import PyQuery as pq
 
@@ -52,7 +52,7 @@ def get_version_elems(language_id):
 
     d = pq(url='https://www.bible.com/{}/versions'
            .format(language_id.replace('_', '-')),
-           opener=shared.get_url_content)
+           opener=yvs.get_url_content)
 
     category_elems = d('#main > article > ul > li')
     version_elems = None
@@ -136,7 +136,7 @@ def get_books(default_version):
 
     d = pq(url='https://www.bible.com/bible/{}/jhn.1'
            .format(default_version),
-           opener=shared.get_url_content)
+           opener=yvs.get_url_content)
 
     book_elems = d('#menu_book_chapter a[data-book]')
 
