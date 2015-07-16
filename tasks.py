@@ -14,3 +14,8 @@ def test(cover=False):
         print('')
         subprocess.call(['coverage', 'report'])
         subprocess.call(['coverage', 'html'])
+
+
+@task
+def update():
+    subprocess.call(['python', '-m', 'utilities.update_workflow'])
