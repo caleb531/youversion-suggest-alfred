@@ -3,14 +3,18 @@
 # found in this repository.
 
 import biplist
+import contextlib
 import distutils.dir_util as distutils
 import filecmp
 import glob
 import plistlib
+import os
 import os.path
 import shutil
+from zipfile import ZipFile, ZIP_DEFLATED
 
 
+WORKFLOW_NAME = 'YouVersion Suggest.alfredworkflow'
 HOME_DIR = os.path.expanduser('~')
 CORE_PREFS_NAME = 'com.runningwithcrayons.Alfred-Preferences.plist'
 USER_PREFS_NAME = 'Alfred.alfredpreferences'
@@ -65,8 +69,8 @@ def get_workflow_info(info_path):
 # Get the file content of a module withini the project
 def get_module_content(module_name):
 
-    filename = '{}.py'.format(module_name.replace('.', '/'))
-    with open(filename, 'r') as file:
+    file_name = '{}.py'.format(module_name.replace('.', '/'))
+    with open(file_name, 'r') as file:
         return file.read()
 
 
@@ -159,27 +163,48 @@ def copy_pkg_resources(workflow_path):
     return updated_resources
 
 
-# Write info.plist object to file if content has updated
-def save_info(info, info_path, updated_workflow=True):
+# Write info.plist object to file
+def save_info(info, info_path):
 
-    if updated_workflow:
-        plistlib.writePlist(info, info_path)
-        print 'Updated info.plist'
+    plistlib.writePlist(info, info_path)
+    print 'Updated info.plist'
+
+
+# Export installed workflow to project directory
+def export_workflow(workflow_path, project_path):
+
+    archive_path = os.path.join(project_path, WORKFLOW_NAME)
+    # Create new Alfred workflow archive in project directory
+    # Overwrite any existing archive
+    with ZipFile(archive_path, 'w', compression=ZIP_DEFLATED) as zip_file:
+        # Traverse installed workflow directory
+        for root, dirs, files in os.walk(workflow_path):
+            # Get current subdirectory path relative to workflow directory
+            relative_root = os.path.relpath(root, workflow_path)
+            # Add subdirectory to archive and add files within
+            zip_file.write(root, relative_root)
+            for file_name in files:
+                file_path = os.path.join(root, file_name)
+                # Get path to current file relative to workflow directory
+                relative_file_path = os.path.join(relative_root, file_name)
+                zip_file.write(file_path, relative_file_path)
 
 
 def main():
 
+    project_path = os.getcwd()
     workflow_path = get_workflow_path()
     info_path = get_workflow_info_path(workflow_path)
     info = get_workflow_info(info_path)
     updated_objects = update_workflow_objects(info)
     updated_resources = copy_pkg_resources(workflow_path)
-    updated_workflow = updated_objects or updated_resources
-    save_info(info, info_path, updated_workflow)
-    if updated_workflow:
-        print 'Updated workflow successfully'
+    if updated_objects or updated_resources:
+        save_info(info, info_path)
+        print 'Updated installed workflow successfully'
+        print 'Exported workflow successfully'
     else:
         print 'Workflow has not changed'
+    export_workflow(workflow_path, project_path)
 
 if __name__ == '__main__':
     main()
