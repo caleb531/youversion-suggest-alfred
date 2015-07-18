@@ -5,7 +5,6 @@
 
 import argparse
 import biplist
-import contextlib
 import distutils.dir_util as distutils
 import filecmp
 import glob
