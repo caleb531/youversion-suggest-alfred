@@ -2,6 +2,7 @@
 # This workflow utility updates all workflow resources with the latest versions
 # found in this repository.
 
+import argparse
 import biplist
 import contextlib
 import distutils.dir_util as distutils
@@ -190,8 +191,18 @@ def export_workflow(workflow_path, project_path):
                 zip_file.write(file_path, relative_file_path)
 
 
+def parse_cli_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--export', action='store_true')
+
+    return parser.parse_args()
+
+
 def main():
 
+    cli_args = parse_cli_args()
     project_path = os.getcwd()
     workflow_path = get_workflow_path()
     info_path = get_workflow_info_path(workflow_path)
@@ -201,10 +212,11 @@ def main():
     if updated_objects or updated_resources:
         save_info(info, info_path)
         print 'Updated installed workflow successfully'
-        print 'Exported workflow successfully'
     else:
         print 'Workflow has not changed'
-    export_workflow(workflow_path, project_path)
+    if cli_args.export:
+        export_workflow(workflow_path, project_path)
+        print 'Exported workflow successfully'
 
 if __name__ == '__main__':
     main()
