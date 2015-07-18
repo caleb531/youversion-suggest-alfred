@@ -195,7 +195,8 @@ def parse_cli_args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--export', action='store_true')
+        '--export', action='store_true',
+        help='exports the installed workflow to the local project directory')
 
     return parser.parse_args()
 
