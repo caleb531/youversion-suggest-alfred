@@ -49,7 +49,7 @@ def get_workflow_path():
     yvs_packages = glob.glob(
         os.path.join(get_user_prefs_path(), 'workflows', '*', 'yvs'))
 
-    if len(yvs_packages) == 0:
+    if not yvs_packages:
         raise OSError('YouVersion Suggest in not installed locally')
 
     return os.path.dirname(yvs_packages[0])
@@ -71,16 +71,17 @@ def get_workflow_info(info_path):
 def get_module_content(module_name):
 
     file_name = '{}.py'.format(module_name.replace('.', '/'))
-    with open(file_name, 'r') as file:
-        return file.read()
+    with open(file_name, 'r') as file_obj:
+        return file_obj.read()
 
 
 # Get the name of a module by parsing it from the module content
 def get_module_name(module_content):
 
+    # The module name has been made accessible as a code comment on the first
+    # line of the respective module content
     first_line = module_content.split('\n', 1)[0]
-    module_name = first_line[1:].strip()
-    return module_name
+    return first_line[1:].strip()
 
 
 # Update content of all scripts in workflow info object
@@ -217,7 +218,7 @@ def main():
         print 'Workflow has not changed'
     if cli_args.export:
         export_workflow(workflow_path, project_path)
-        print 'Exported workflow successfully'
+        print 'Exported installed workflow successfully'
 
 if __name__ == '__main__':
     main()
