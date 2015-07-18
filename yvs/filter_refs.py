@@ -11,11 +11,11 @@ def get_ref_matches(query_str):
 
     # Pattern for parsing any bible reference
     patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
-        book='(\d?(?:[^\W\d_]|\s)+|\d)\s?',
-        chapter='(\d+)\s?',
-        verse='(\d+)\s?',
-        endverse='(\d+)?\s?',
-        version='([a-z]+\d*)?.*?')
+        book=r'(\d?(?:[^\W\d_]|\s)+|\d)\s?',
+        chapter=r'(\d+)\s?',
+        verse=r'(\d+)\s?',
+        endverse=r'(\d+)?\s?',
+        version=r'([a-z]+\d*)?.*?')
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
@@ -188,12 +188,12 @@ def main(query_str):
         results = [{
             'uid': 'yvs-no-results',
             'title': 'No Results',
-            'subtitle': 'No bible references matching \'{}\''
-            .format(query_str),
+            'subtitle': 'No bible references matching \'{}\''.format(
+                query_str),
             'valid': 'no'
         }]
 
-    print(shared.get_result_list_xml(results))
+    print shared.get_result_list_xml(results)
 
 if __name__ == '__main__':
     main('{query}')

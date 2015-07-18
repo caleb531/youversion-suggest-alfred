@@ -16,7 +16,6 @@ def test_set_language():
 
 def test_set_version():
     """should set preferred version"""
-    bible = yvs.shared.get_bible_data('en')
     new_version = 59
     yvs.main('version:{}'.format(new_version))
     prefs = yvs.shared.get_prefs()

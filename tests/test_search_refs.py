@@ -2,18 +2,17 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import urllib2
 import nose.tools as nose
 import yvs.search_refs as yvs
-from mock import ANY, Mock, patch
+from mock import Mock, NonCallableMock, patch
 from xml.etree import ElementTree as ET
 from tests.decorators import redirect_stdout
 
 
-with open('tests/files/search.html') as file:
+with open('tests/files/search.html') as html_file:
     patch_urlopen = patch(
-        'urllib2.urlopen',
-        return_value=Mock(read=Mock(return_value=file.read())))
+        'urllib2.urlopen', return_value=NonCallableMock(
+            read=Mock(return_value=html_file.read())))
 
 
 def setup():
@@ -28,9 +27,9 @@ def test_result_titles():
     '''should set result titles as full reference identifiers'''
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
-    nose.assert_regexp_matches(results[0]['title'], 'Romans 13:8 \(NIV\)')
-    nose.assert_regexp_matches(results[1]['title'], 'John 15:12 \(NIV\)')
-    nose.assert_regexp_matches(results[2]['title'], '1 Peter 4:8 \(NIV\)')
+    nose.assert_regexp_matches(results[0]['title'], r'Romans 13:8 \(NIV\)')
+    nose.assert_regexp_matches(results[1]['title'], r'John 15:12 \(NIV\)')
+    nose.assert_regexp_matches(results[2]['title'], r'1 Peter 4:8 \(NIV\)')
 
 
 def test_result_subtitles():
@@ -48,7 +47,7 @@ def test_unicode_input(Request):
     results = yvs.get_result_list('é')
     Request.assert_called_once_with(
         'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
-        headers=ANY)
+        headers={'User-Agent': 'YouVersion Suggest'})
     nose.assert_equal(len(results), 3)
 
 
@@ -57,7 +56,7 @@ def test_charref_dec_title():
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
     nose.assert_regexp_matches(
-        results[0]['title'], 'Romans 13:8 \(NIV\) \u2665')
+        results[0]['title'], r'Romans 13:8 \(NIV\) \u2665')
 
 
 def test_charref_dec_subtitle():

@@ -14,9 +14,10 @@ def mock_open(path, mode):
     return open(path, mode)
 
 
+patch_open = patch('yvs.shared.open', mock_open, create=True)
+
+
 def setup():
-    global patch_open
-    patch_open = patch('yvs.shared.open', mock_open, create=True)
     patch_open.start()
 
 

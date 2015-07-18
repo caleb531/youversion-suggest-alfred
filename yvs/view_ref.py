@@ -1,13 +1,12 @@
 # yvs.view_ref
 
 import webbrowser
-import yvs.shared as shared
 
-base_url = 'https://www.bible.com/bible'
+BASE_URL = 'https://www.bible.com/bible'
 
 
 def get_ref_url(ref_uid):
-    return '{base}/{uid}'.format(base=base_url, uid=ref_uid)
+    return '{base}/{uid}'.format(base=BASE_URL, uid=ref_uid)
 
 
 def open_ref_url(ref_uid):

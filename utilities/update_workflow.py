@@ -1,4 +1,6 @@
-#!/usr/bin/env python2
+# utilities.update_workflow
+# This workflow utility updates all workflow resources with the latest versions
+# found in this repository.
 
 import biplist
 import distutils.dir_util as distutils
@@ -90,7 +92,7 @@ def update_workflow_objects(info):
 
             if new_module_content != obj['config']['script']:
                 obj['config']['script'] = new_module_content
-                print('Updated {}'.format(module_name))
+                print 'Updated {}'.format(module_name)
                 updated_objects = True
 
     return updated_objects
@@ -151,7 +153,7 @@ def copy_pkg_resources(workflow_path):
         # Only copy resources if content has changed
         if not resources_are_equal(resource_path, dest_resource_path):
             copy_resource(resource_path, dest_resource_path)
-            print('Updated {}'.format(resource_path))
+            print 'Updated {}'.format(resource_path)
             updated_resources = True
 
     return updated_resources
@@ -162,7 +164,7 @@ def save_info(info, info_path, updated_workflow=True):
 
     if updated_workflow:
         plistlib.writePlist(info, info_path)
-        print('Updated info.plist')
+        print 'Updated info.plist'
 
 
 def main():
@@ -175,9 +177,9 @@ def main():
     updated_workflow = updated_objects or updated_resources
     save_info(info, info_path, updated_workflow)
     if updated_workflow:
-        print('Updated workflow successfully')
+        print 'Updated workflow successfully'
     else:
-        print('Workflow has not changed')
+        print 'Workflow has not changed'
 
 if __name__ == '__main__':
     main()
