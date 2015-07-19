@@ -1,16 +1,22 @@
 # utilities.update_workflow
-# This workflow utility updates all workflow resources with the latest versions
-# found in this repository.
 
+# This workflow utility updates all workflow resources with the latest versions
+# found in this repository. Passing the --export flag will also export the
+# installed workflow to the local project directory.
+
+import argparse
 import biplist
 import distutils.dir_util as distutils
 import filecmp
 import glob
 import plistlib
+import os
 import os.path
 import shutil
+from zipfile import ZipFile, ZIP_DEFLATED
 
 
+WORKFLOW_NAME = 'YouVersion Suggest.alfredworkflow'
 HOME_DIR = os.path.expanduser('~')
 CORE_PREFS_NAME = 'com.runningwithcrayons.Alfred-Preferences.plist'
 USER_PREFS_NAME = 'Alfred.alfredpreferences'
@@ -44,7 +50,7 @@ def get_workflow_path():
     yvs_packages = glob.glob(
         os.path.join(get_user_prefs_path(), 'workflows', '*', 'yvs'))
 
-    if len(yvs_packages) == 0:
+    if not yvs_packages:
         raise OSError('YouVersion Suggest in not installed locally')
 
     return os.path.dirname(yvs_packages[0])
@@ -65,17 +71,18 @@ def get_workflow_info(info_path):
 # Get the file content of a module withini the project
 def get_module_content(module_name):
 
-    filename = '{}.py'.format(module_name.replace('.', '/'))
-    with open(filename, 'r') as file:
-        return file.read()
+    file_name = '{}.py'.format(module_name.replace('.', '/'))
+    with open(file_name, 'r') as file_obj:
+        return file_obj.read()
 
 
 # Get the name of a module by parsing it from the module content
 def get_module_name(module_content):
 
+    # The module name has been made accessible as a code comment on the first
+    # line of the respective module content
     first_line = module_content.split('\n', 1)[0]
-    module_name = first_line[1:].strip()
-    return module_name
+    return first_line[1:].strip()
 
 
 # Update content of all scripts in workflow info object
@@ -159,27 +166,60 @@ def copy_pkg_resources(workflow_path):
     return updated_resources
 
 
-# Write info.plist object to file if content has updated
-def save_info(info, info_path, updated_workflow=True):
+# Write info.plist object to file
+def save_info(info, info_path):
 
-    if updated_workflow:
-        plistlib.writePlist(info, info_path)
-        print 'Updated info.plist'
+    plistlib.writePlist(info, info_path)
+    print 'Updated info.plist'
+
+
+# Export installed workflow to project directory
+def export_workflow(workflow_path, project_path):
+
+    archive_path = os.path.join(project_path, WORKFLOW_NAME)
+    # Create new Alfred workflow archive in project directory
+    # Overwrite any existing archive
+    with ZipFile(archive_path, 'w', compression=ZIP_DEFLATED) as zip_file:
+        # Traverse installed workflow directory
+        for root, dirs, files in os.walk(workflow_path):
+            # Get current subdirectory path relative to workflow directory
+            relative_root = os.path.relpath(root, workflow_path)
+            # Add subdirectory to archive and add files within
+            zip_file.write(root, relative_root)
+            for file_name in files:
+                file_path = os.path.join(root, file_name)
+                # Get path to current file relative to workflow directory
+                relative_file_path = os.path.join(relative_root, file_name)
+                zip_file.write(file_path, relative_file_path)
+
+
+def parse_cli_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--export', action='store_true',
+        help='exports the installed workflow to the local project directory')
+
+    return parser.parse_args()
 
 
 def main():
 
+    cli_args = parse_cli_args()
+    project_path = os.getcwd()
     workflow_path = get_workflow_path()
     info_path = get_workflow_info_path(workflow_path)
     info = get_workflow_info(info_path)
     updated_objects = update_workflow_objects(info)
     updated_resources = copy_pkg_resources(workflow_path)
-    updated_workflow = updated_objects or updated_resources
-    save_info(info, info_path, updated_workflow)
-    if updated_workflow:
-        print 'Updated workflow successfully'
+    if updated_objects or updated_resources:
+        save_info(info, info_path)
+        print 'Updated installed workflow successfully'
     else:
         print 'Workflow has not changed'
+    if cli_args.export:
+        export_workflow(workflow_path, project_path)
+        print 'Exported installed workflow successfully'
 
 if __name__ == '__main__':
     main()
