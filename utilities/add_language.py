@@ -16,7 +16,7 @@ from pyquery import PyQuery as pq
 
 
 # Parameters for structuring JSON data
-json_params = {
+JSON_PARAMS = {
     'indent': 2,
     'separators': (',', ': '),
     'ensure_ascii': False,
@@ -177,7 +177,8 @@ def get_bible_data(language_id, default_version, max_version_id):
 
 # Write JSON data to file as Unicode
 def write_json_unicode(json_object, json_file):
-    json_str = unicode(json.dumps(json_object, **json_params))
+
+    json_str = unicode(json.dumps(json_object, **JSON_PARAMS))
     json_file.write(json_str)
     json_file.write('\n')
 
@@ -228,7 +229,8 @@ def parse_cli_args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        'code',
+        'language_id',
+        metavar='code',
         help='the language\'s ISO 639-1 code')
     parser.add_argument(
         '--default-version',
@@ -239,20 +241,19 @@ def parse_cli_args():
         type=int,
         help='the upper limit to which Bible version IDs are constrained')
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def main():
 
-    args = parse_cli_args()
+    cli_args = parse_cli_args()
     print 'Adding language support...'
     add_language(
-        args.code.replace('-', '_'),
-        args.default_version,
-        args.max_version_id)
+        cli_args.language_id.replace('-', '_'),
+        cli_args.default_version,
+        cli_args.max_version_id)
     print 'Support for {} has been successfully added.'.format(
-        args.code.replace('_', '-'))
+        cli_args.language_id.replace('_', '-'))
 
 if __name__ == '__main__':
     main()
