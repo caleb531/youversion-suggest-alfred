@@ -3,24 +3,30 @@
 from __future__ import unicode_literals
 import re
 import yvs.shared as shared
+from operator import itemgetter
 
 
-PREF_RESULTS = [
-    {
-        'title': 'Language',
-        'subtitle': 'Set your preferred language',
-        'autocomplete': 'language ',
-        'valid': 'no'
-    },
-    {
-        'title': 'Version',
-        'subtitle': 'Set your preferred version',
-        'autocomplete': 'version ',
-        'valid': 'no'
-    }
-]
+class Preference(object):
+
+    def __init__(self, name, title, get_value_result_list):
+        # Store key name and result title for this preference
+        self.name = name
+        self.title = title
+        # Also store reference to function that produces a result list of
+        # possible values for this preference
+        self.get_value_result_list = get_value_result_list
+
+    # Retrieve Alfred result object for this preference
+    def get_pref_result(self):
+        return {
+            'title': self.title,
+            'subtitle': 'Set your preferred {}'.format(self.title.lower()),
+            'autocomplete': '{} '.format(self.name),
+            'valid': 'no'
+        }
 
 
+# Retrieve list of all available languages
 def get_language_result_list(query_str):
 
     prefs = shared.get_prefs()
@@ -45,6 +51,7 @@ def get_language_result_list(query_str):
     return results
 
 
+# Retrieve list of all available versions for the current preferred language
 def get_version_result_list(query_str):
 
     prefs = shared.get_prefs()
@@ -69,10 +76,14 @@ def get_version_result_list(query_str):
     return results
 
 
-# Associate preference with callback to retrieve its possible values
-PREF_CALLBACKS = {
-    'language': get_language_result_list,
-    'version': get_version_result_list
+# Delineate all available workflow preferences
+PREFERENCES = {
+    'language': Preference(
+        name='language', title='Language',
+        get_value_result_list=get_language_result_list),
+    'version': Preference(
+        name='version', title='Version',
+        get_value_result_list=get_version_result_list)
 }
 
 
@@ -84,31 +95,36 @@ def get_pref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
+# Retrieve result list of available preferences, filtered by the given query
+def get_pref_result_list(query_str):
+
+    return [pref.get_pref_result() for pref_name, pref in
+            PREFERENCES.iteritems() if pref_name.startswith(query_str)]
+
+
 def get_result_list(query_str):
 
     query_str = shared.format_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
 
-    def filter_by_pref(result):
-        return result['autocomplete'].strip().startswith(query_str.lower())
-
     if pref_matches:
 
         pref_name = pref_matches.group(1)
         pref_value = pref_matches.group(2)
 
-        if pref_name in PREF_CALLBACKS:
-
-            results = PREF_CALLBACKS[pref_name](pref_value)
-
+        if pref_name in PREFERENCES:
+            # Get list of available values for the given preference
+            results = PREFERENCES[pref_name].get_value_result_list(pref_value)
         else:
-
-            results = filter(filter_by_pref, PREF_RESULTS)
+            results = get_pref_result_list(query_str)
 
     else:
 
-        results = PREF_RESULTS
+        results = get_pref_result_list(query_str)
+
+    # Always sort results by title in this case
+    results.sort(key=itemgetter('title'))
 
     return results
 
