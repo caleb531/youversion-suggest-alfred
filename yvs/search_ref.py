@@ -22,5 +22,6 @@ def open_search_url(ref_uid):
 def main(ref_uid):
     open_search_url(ref_uid)
 
+
 if __name__ == '__main__':
     main('{query}')

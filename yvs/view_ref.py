@@ -2,6 +2,7 @@
 
 import webbrowser
 
+
 BASE_URL = 'https://www.bible.com/bible'
 
 
@@ -15,6 +16,7 @@ def open_ref_url(ref_uid):
 
 def main(ref_uid):
     open_ref_url(ref_uid)
+
 
 if __name__ == '__main__':
     main('{query}')

@@ -170,12 +170,10 @@ def get_result_list(query_str):
     # Build result list from books matching the query
     for book in matching_books:
 
-        # Skip result if given chapter exceeds number of chapters in book
-        if query['chapter'] > chapters[book['id']]:
-            continue
+        # If given chapter does not exceed number of chapters in book
+        if query['chapter'] <= chapters[book['id']]:
 
-        # Result information
-        results.append(get_result(book, query, chosen_version))
+            results.append(get_result(book, query, chosen_version))
 
     return results
 
@@ -188,12 +186,12 @@ def main(query_str):
         results = [{
             'uid': 'yvs-no-results',
             'title': 'No Results',
-            'subtitle': 'No bible references matching \'{}\''.format(
-                query_str),
+            'subtitle': 'No references matching \'{}\''.format(query_str),
             'valid': 'no'
         }]
 
     print shared.get_result_list_xml(results)
+
 
 if __name__ == '__main__':
     main('{query}')

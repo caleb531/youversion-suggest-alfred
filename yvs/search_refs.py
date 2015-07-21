@@ -2,8 +2,8 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import yvs.shared as shared
 import urllib
+import yvs.shared as shared
 from HTMLParser import HTMLParser
 
 
@@ -80,9 +80,9 @@ class SearchResultParser(HTMLParser):
 # Retrieve HTML for reference with the given ID
 def get_search_html(query_str):
 
-    prefs = shared.get_prefs()
+    version = shared.get_prefs()['version']
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
-        urllib.quote_plus(query_str.encode('utf-8')), prefs['version'])
+        urllib.quote_plus(query_str.encode('utf-8')), version)
     return shared.get_url_content(url)
 
 

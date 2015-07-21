@@ -4,35 +4,39 @@ import re
 import yvs.shared as shared
 
 
-def get_pair(pair_str):
+# Parse key and value from the given key-value string
+def get_key_value(key_value_str):
 
-    pair_matches = re.search(r'^(\w+):(\w+)$', pair_str, flags=re.UNICODE)
+    key_value_matches = re.search(
+        r'^(\w+):(\w+)$', key_value_str, flags=re.UNICODE)
 
-    key = pair_matches.group(1)
-    value = pair_matches.group(2)
+    key = key_value_matches.group(1)
+    value = key_value_matches.group(2)
     if value.isdigit():
         value = int(value)
 
     return (key, value)
 
 
+# Set the YouVersion preference with the given key
 def set_pref(key, value):
 
     prefs = shared.get_prefs()
     prefs[key] = value
 
+    # If new language is set, ensure that preferred version is updated also
     if key == 'language':
         bible = shared.get_bible_data(language=value)
-        # Set version to default version of new language
         prefs['version'] = bible['default_version']
 
     shared.update_prefs(prefs)
 
 
-def main(pair_str='{query}'):
+def main(key_value_str):
 
-    key, value = get_pair(pair_str)
+    key, value = get_key_value(key_value_str)
     set_pref(key, value)
 
+
 if __name__ == '__main__':
-    main()
+    main('{query}')
