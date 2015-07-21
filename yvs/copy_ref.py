@@ -1,5 +1,6 @@
 # yvs.copy_ref
 
+import collections
 import re
 import yvs.shared as shared
 from HTMLParser import HTMLParser
@@ -13,10 +14,7 @@ class ReferenceParser(HTMLParser):
         HTMLParser.__init__(self)
         if 'verse' in ref:
             self.verse_start = ref['verse']
-            if 'endverse' in ref:
-                self.verse_end = ref['endverse']
-            else:
-                self.verse_end = self.verse_start
+            self.verse_end = ref.get('endverse', self.verse_start)
         else:
             self.verse_start = 1
             self.verse_end = None
@@ -32,12 +30,13 @@ class ReferenceParser(HTMLParser):
         self.verse_depth = None
         self.content_depth = None
         self.verse_num = None
-        self.content_parts = []
+        # Use a deque for efficient appends
+        self.content_parts = collections.deque()
 
     # Determines if parser is currently within content of verse to include
     def is_in_verse_content(self):
         return (self.in_verse and self.in_verse_content and
-                (self.verse_start <= self.verse_num and
+                (self.verse_num >= self.verse_start and
                  (not self.verse_end or self.verse_num <= self.verse_end)))
 
     def handle_starttag(self, tag, attrs):
@@ -46,19 +45,20 @@ class ReferenceParser(HTMLParser):
             self.depth += 1
         if 'class' in attr_dict:
             elem_class = attr_dict['class']
+            elem_class_names = elem_class.split(' ')
             # Detect paragraph breaks between verses
-            if elem_class == 'p' or elem_class == 'b':
+            if elem_class in {'b', 'p'}:
                 self.in_block = True
                 self.block_depth = self.depth
                 self.content_parts.append('\n\n')
             # Detect line breaks within a single verse
-            if re.search(r'(q|li)\d', elem_class):
+            if elem_class in {'li1', 'q1', 'q2'}:
                 self.content_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
-            if 'verse ' in elem_class:
+            if 'verse' in elem_class_names:
                 self.in_verse = True
                 self.verse_depth = self.depth
-                self.verse_num = int(elem_class.split(' ')[1][1:])
+                self.verse_num = int(elem_class_names[1][1:])
             # Detect beginning of verse content (excludes footnotes)
             if elem_class == 'content':
                 self.in_verse_content = True
@@ -103,14 +103,15 @@ def get_ref_content(ref):
     parser = ReferenceParser(ref)
     parser.feed(html)
     ref_content = shared.format_ref_content(''.join(parser.content_parts))
-    ref_content = '\n\n' + ref_content
-    ref_content = shared.get_full_ref(ref) + ref_content
+    # Prepend reference header that identifies reference
+    ref_content = ''.join((shared.get_full_ref(ref), '\n\n', ref_content))
     return ref_content
 
 
 def main(ref_uid):
     ref = shared.get_ref_object(ref_uid)
     print get_ref_content(ref).encode('utf-8')
+
 
 if __name__ == '__main__':
     main('{query}')
