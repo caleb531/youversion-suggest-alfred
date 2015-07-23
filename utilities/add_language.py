@@ -168,7 +168,7 @@ def get_bible_data(language_id, default_version, max_version_id):
     elif not any(version['id'] == default_version for version in
                  bible['versions']):
         raise RuntimeError(
-         'Given default version does not exist in given language. Aborting.')
+            'Given default version does not exist in language. Aborting.')
 
     bible['default_version'] = default_version
     bible['books'] = get_books(default_version)
@@ -252,8 +252,8 @@ def main():
         cli_args.language_id.replace('-', '_'),
         cli_args.default_version,
         cli_args.max_version_id)
-    print('Support for {} has been successfully added.'.format()
-        cli_args.language_id.replace('_', '-'))
+    print('Support for {} has been successfully added.'.format(
+        cli_args.language_id.replace('_', '-')))
 
 if __name__ == '__main__':
     main()
