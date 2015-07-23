@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.search_refs as yvs
 from mock import Mock, NonCallableMock, patch
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree as ETree
 from tests.decorators import redirect_stdout
 
 
@@ -42,10 +42,10 @@ def test_result_subtitles():
 
 
 @patch('urllib2.Request')
-def test_unicode_input(Request):
+def test_unicode_input(request):
     '''should not raise exception when input contains non-ASCII characters'''
     results = yvs.get_result_list('é')
-    Request.assert_called_once_with(
+    request.assert_called_once_with(
         'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
         headers={'User-Agent': 'YouVersion Suggest'})
     nose.assert_equal(len(results), 3)
@@ -85,7 +85,7 @@ def test_null_result(out, get_result_list):
     query_str = 'xyz'
     yvs.main(query_str)
     xml = out.getvalue().strip()
-    root = ET.fromstring(xml)
+    root = ETree.fromstring(xml)
     item = root.find('item')
     nose.assert_is_not_none(item, '<item> element is missing')
     nose.assert_equal(item.get('valid'), 'no')

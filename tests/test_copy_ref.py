@@ -115,9 +115,9 @@ def test_whitespace_lines(out):
 
 
 @patch('urllib2.Request')
-def test_url_always_chapter(Request):
+def test_url_always_chapter(request):
     '''should always fetch HTML from chapter URL'''
     yvs.main('59/psa.23.2')
-    Request.assert_called_once_with(
+    request.assert_called_once_with(
         'https://www.bible.com/bible/59/psa.23',
         headers={'User-Agent': 'YouVersion Suggest'})

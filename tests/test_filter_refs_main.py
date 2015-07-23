@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_refs as yvs
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree as ETree
 from tests.decorators import redirect_stdout
 
 
@@ -24,7 +24,7 @@ def test_null_result(out):
     query_str = 'xyz'
     yvs.main(query_str)
     xml = out.getvalue().strip()
-    root = ET.fromstring(xml)
+    root = ETree.fromstring(xml)
     item = root.find('item')
     nose.assert_is_not_none(item, '<item> element is missing')
     nose.assert_equal(item.get('valid'), 'no')
