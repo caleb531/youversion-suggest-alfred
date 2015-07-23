@@ -1,7 +1,6 @@
 # yvs.copy_ref
 
 import collections
-import re
 import yvs.shared as shared
 from HTMLParser import HTMLParser
 
@@ -110,7 +109,7 @@ def get_ref_content(ref):
 
 def main(ref_uid):
     ref = shared.get_ref_object(ref_uid)
-    print get_ref_content(ref).encode('utf-8')
+    print(get_ref_content(ref).encode('utf-8'))
 
 
 if __name__ == '__main__':

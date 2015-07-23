@@ -87,7 +87,7 @@ def get_unique_versions(versions):
 # Retrieve a list of dictionaries representing Bible versions
 def get_versions(language_id, max_version_id):
 
-    print 'Retrieving version data...'
+    print('Retrieving version data...')
 
     versions = []
 
@@ -130,7 +130,7 @@ def get_chapter_data():
 # Retrieve list of dictionaries, each representing a book of the Bible
 def get_books(default_version):
 
-    print 'Retrieving book data...'
+    print('Retrieving book data...')
 
     books = []
     chapter_data = get_chapter_data()
@@ -196,7 +196,7 @@ def save_bible_data(language_id, bible):
 # Add the given language parameters to the list of supported languages
 def update_language_list(language_id, language_name):
 
-    print 'Updating language list...'
+    print('Updating language list...')
 
     langs_path = os.path.join('yvs', 'data', 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
@@ -247,12 +247,12 @@ def parse_cli_args():
 def main():
 
     cli_args = parse_cli_args()
-    print 'Adding language support...'
+    print('Adding language support...')
     add_language(
         cli_args.language_id.replace('-', '_'),
         cli_args.default_version,
         cli_args.max_version_id)
-    print 'Support for {} has been successfully added.'.format(
+    print('Support for {} has been successfully added.'.format()
         cli_args.language_id.replace('_', '-'))
 
 if __name__ == '__main__':

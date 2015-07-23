@@ -99,7 +99,7 @@ def update_workflow_objects(info):
 
             if new_module_content != obj['config']['script']:
                 obj['config']['script'] = new_module_content
-                print 'Updated {}'.format(module_name)
+                print('Updated {}'.format(module_name))
                 updated_objects = True
 
     return updated_objects
@@ -160,7 +160,7 @@ def copy_pkg_resources(workflow_path):
         # Only copy resources if content has changed
         if not resources_are_equal(resource_path, dest_resource_path):
             copy_resource(resource_path, dest_resource_path)
-            print 'Updated {}'.format(resource_path)
+            print('Updated {}'.format(resource_path))
             updated_resources = True
 
     return updated_resources
@@ -170,7 +170,7 @@ def copy_pkg_resources(workflow_path):
 def save_info(info, info_path):
 
     plistlib.writePlist(info, info_path)
-    print 'Updated info.plist'
+    print('Updated info.plist')
 
 
 # Export installed workflow to project directory
@@ -214,12 +214,12 @@ def main():
     updated_resources = copy_pkg_resources(workflow_path)
     if updated_objects or updated_resources:
         save_info(info, info_path)
-        print 'Updated installed workflow successfully'
+        print('Updated installed workflow successfully')
     else:
-        print 'Workflow has not changed'
+        print('Workflow has not changed')
     if cli_args.export:
         export_workflow(workflow_path, project_path)
-        print 'Exported installed workflow successfully'
+        print('Exported installed workflow successfully')
 
 if __name__ == '__main__':
     main()
