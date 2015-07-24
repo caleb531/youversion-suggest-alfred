@@ -66,13 +66,6 @@ def guess_version(versions, version_query):
     return None
 
 
-# Determines if the given query string matches the given book name
-def query_matches_book(query_book, book_name):
-    return (book_name.startswith(query_book) or
-            (book_name[0].isnumeric() and
-             book_name[2:].startswith(query_book)))
-
-
 # Retrieves list of books matching the given query
 def get_matching_books(books, query):
 
@@ -81,9 +74,12 @@ def get_matching_books(books, query):
     for i in xrange(len(query['book']), 0, -1):
         if matching_books:
             break
+        book_query = query['book'][:i]
         for book in books:
             book_name = book['name'].lower()
-            if query_matches_book(query['book'][:i], book_name):
+            if (book_name.startswith(book_query) or
+                (book_name[0].isnumeric() and
+                 book_name[2:].startswith(book_query))):
                 matching_books.append(book)
 
     return matching_books
@@ -170,12 +166,10 @@ def get_result_list(query_str):
     # Build result list from books matching the query
     for book in matching_books:
 
-        # Skip result if given chapter exceeds number of chapters in book
-        if query['chapter'] > chapters[book['id']]:
-            continue
+        # If given chapter does not exceed number of chapters in book
+        if query['chapter'] <= chapters[book['id']]:
 
-        # Result information
-        results.append(get_result(book, query, chosen_version))
+            results.append(get_result(book, query, chosen_version))
 
     return results
 
@@ -188,12 +182,12 @@ def main(query_str):
         results = [{
             'uid': 'yvs-no-results',
             'title': 'No Results',
-            'subtitle': 'No bible references matching \'{}\''.format(
-                query_str),
+            'subtitle': 'No references matching \'{}\''.format(query_str),
             'valid': 'no'
         }]
 
-    print shared.get_result_list_xml(results)
+    print(shared.get_result_list_xml(results))
+
 
 if __name__ == '__main__':
     main('{query}')

@@ -1,4 +1,5 @@
 # utilities.add_language
+
 # This language utility is a handy (albeit imperfect) tool for automatically
 # adding support for any language to YouVersion Suggest.
 
@@ -11,11 +12,11 @@ import os
 import re
 import yvs.shared as yvs
 from operator import itemgetter
-from pyquery import PyQuery as pq
+from pyquery import PyQuery
 
 
 # Parameters for structuring JSON data
-json_params = {
+JSON_PARAMS = {
     'indent': 2,
     'separators': (',', ': '),
     'ensure_ascii': False,
@@ -50,9 +51,10 @@ def get_version(version_elem):
 # Retrieve list of HTML elements, each corresponding to a Bible version
 def get_version_elems(language_id):
 
-    d = pq(url='https://www.bible.com/{}/versions'
-           .format(language_id.replace('_', '-')),
-           opener=yvs.get_url_content)
+    d = PyQuery(
+        url='https://www.bible.com/{}/versions'.format(
+            language_id.replace('_', '-')),
+        opener=yvs.get_url_content)
 
     category_elems = d('#main > article > ul > li')
     version_elems = None
@@ -86,7 +88,7 @@ def get_unique_versions(versions):
 # Retrieve a list of dictionaries representing Bible versions
 def get_versions(language_id, max_version_id):
 
-    print 'Retrieving version data...'
+    print('Retrieving version data...')
 
     versions = []
 
@@ -129,14 +131,14 @@ def get_chapter_data():
 # Retrieve list of dictionaries, each representing a book of the Bible
 def get_books(default_version):
 
-    print 'Retrieving book data...'
+    print('Retrieving book data...')
 
     books = []
     chapter_data = get_chapter_data()
 
-    d = pq(url='https://www.bible.com/bible/{}/jhn.1'
-           .format(default_version),
-           opener=yvs.get_url_content)
+    d = PyQuery(
+        url='https://www.bible.com/bible/{}/jhn.1'.format(default_version),
+        opener=yvs.get_url_content)
 
     book_elems = d('#menu_book_chapter a[data-book]')
 
@@ -167,7 +169,7 @@ def get_bible_data(language_id, default_version, max_version_id):
     elif not any(version['id'] == default_version for version in
                  bible['versions']):
         raise RuntimeError(
-         'Given default version does not exist in given language. Aborting.')
+            'Given default version does not exist in language. Aborting.')
 
     bible['default_version'] = default_version
     bible['books'] = get_books(default_version)
@@ -176,7 +178,8 @@ def get_bible_data(language_id, default_version, max_version_id):
 
 # Write JSON data to file as Unicode
 def write_json_unicode(json_object, json_file):
-    json_str = unicode(json.dumps(json_object, **json_params))
+
+    json_str = unicode(json.dumps(json_object, **JSON_PARAMS))
     json_file.write(json_str)
     json_file.write('\n')
 
@@ -194,7 +197,7 @@ def save_bible_data(language_id, bible):
 # Add the given language parameters to the list of supported languages
 def update_language_list(language_id, language_name):
 
-    print 'Updating language list...'
+    print('Updating language list...')
 
     langs_path = os.path.join('yvs', 'data', 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
@@ -227,7 +230,8 @@ def parse_cli_args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        'code',
+        'language_id',
+        metavar='code',
         help='the language\'s ISO 639-1 code')
     parser.add_argument(
         '--default-version',
@@ -238,20 +242,19 @@ def parse_cli_args():
         type=int,
         help='the upper limit to which Bible version IDs are constrained')
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def main():
 
-    args = parse_cli_args()
-    print 'Adding language support...'
+    cli_args = parse_cli_args()
+    print('Adding language support...')
     add_language(
-        args.code.replace('-', '_'),
-        args.default_version,
-        args.max_version_id)
-    print 'Support for {} has been successfully added.'.format(
-        args.code.replace('_', '-'))
+        cli_args.language_id.replace('-', '_'),
+        cli_args.default_version,
+        cli_args.max_version_id)
+    print('Support for {} has been successfully added.'.format(
+        cli_args.language_id.replace('_', '-')))
 
 if __name__ == '__main__':
     main()

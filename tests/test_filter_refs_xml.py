@@ -3,14 +3,14 @@
 from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_refs as yvs
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree as ETree
 
 
 def test_validity():
     """should return syntactically-valid XML"""
     results = yvs.get_result_list('john 3:16')
     xml = yvs.shared.get_result_list_xml(results)
-    nose.assert_is_instance(ET.fromstring(xml), ET.Element)
+    nose.assert_is_instance(ETree.fromstring(xml), ETree.Element)
 
 
 def test_structure():
@@ -18,7 +18,7 @@ def test_structure():
     results = yvs.get_result_list('matthew 6:34')
     result = results[0]
     xml = yvs.shared.get_result_list_xml(results)
-    root = ET.fromstring(xml)
+    root = ETree.fromstring(xml)
     nose.assert_equal(root.tag, 'items',
                       'root element must be named <items>')
     item = root.find('item')

@@ -17,5 +17,8 @@ def test(cover=False):
 
 
 @task
-def update():
-    subprocess.call(['python', '-m', 'utilities.update_workflow'])
+def update(export=False):
+    proc_args = ['python', '-m', 'utilities.update_workflow']
+    if export:
+        proc_args.append('--export')
+    subprocess.call(proc_args)

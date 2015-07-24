@@ -8,7 +8,7 @@ import json
 import re
 import urllib2
 import unicodedata
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree as ETree
 
 ALFRED_DATA_DIR = os.path.join(
     os.path.expanduser('~'), 'Library', 'Application Support', 'Alfred 2',
@@ -106,11 +106,11 @@ def update_prefs(prefs):
 # Constructs an Alfred XML string from the given results list
 def get_result_list_xml(results):
 
-    root = ET.Element('items')
+    root = ETree.Element('items')
 
     for result in results:
         # Create <item> element for result with appropriate attributes
-        item = ET.SubElement(root, 'item', {
+        item = ETree.SubElement(root, 'item', {
             'arg': result.get('arg', ''),
             'valid': result.get('valid', 'yes')
         })
@@ -119,22 +119,22 @@ def get_result_list_xml(results):
         if 'autocomplete' in result:
             item.set('autocomplete', result['autocomplete'])
         # Create appropriate child elements of <item> element
-        title = ET.SubElement(item, 'title')
+        title = ETree.SubElement(item, 'title')
         title.text = result['title']
-        copy = ET.SubElement(item, 'text', {
+        copy = ETree.SubElement(item, 'text', {
             'type': 'copy'
         })
         copy.text = result.get('copy', result['title'])
-        largetype = ET.SubElement(item, 'text', {
+        largetype = ETree.SubElement(item, 'text', {
             'type': 'largetype'
         })
         largetype.text = result.get('largetype', result['title'])
-        subtitle = ET.SubElement(item, 'subtitle')
+        subtitle = ETree.SubElement(item, 'subtitle')
         subtitle.text = result['subtitle']
-        icon = ET.SubElement(item, 'icon')
+        icon = ETree.SubElement(item, 'icon')
         icon.text = 'icon.png'
 
-    return ET.tostring(root)
+    return ETree.tostring(root)
 
 
 # Query-related functions
