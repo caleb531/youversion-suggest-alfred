@@ -2,6 +2,7 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import os.path
 import nose.tools as nose
 import yvs.filter_refs as yvs
 from tests.decorators import use_prefs
@@ -21,3 +22,10 @@ def test_language_persistence():
     results = yvs.get_result_list('gá 4')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Gálatas 4 (NVI)')
+
+
+def test_create_data_dir_silent_fail():
+    """should silently fail if Alfred data directory already exists"""
+    yvs.shared.create_alfred_data_dir()
+    yvs.shared.create_alfred_data_dir()
+    nose.assert_true(os.path.exists(yvs.shared.ALFRED_DATA_DIR))
