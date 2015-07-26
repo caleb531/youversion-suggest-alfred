@@ -23,7 +23,7 @@ def teardown():
 
 @redirect_stdout
 def test_copy_chapter(out):
-    '''should copy reference content for chapter'''
+    """should copy reference content for chapter"""
     yvs.main('111/psa.23')
     ref_content = out.getvalue()
     assert_regexp_matches(ref_content, 'Lorem')
@@ -33,7 +33,7 @@ def test_copy_chapter(out):
 
 @redirect_stdout
 def test_copy_verse(out):
-    '''should copy reference content for verse'''
+    """should copy reference content for verse"""
     yvs.main('111/psa.23.2')
     ref_content = out.getvalue()
     assert_not_regexp_matches(ref_content, 'Lorem')
@@ -43,7 +43,7 @@ def test_copy_verse(out):
 
 @redirect_stdout
 def test_copy_verse_range(out):
-    '''should copy reference content for verse range'''
+    """should copy reference content for verse range"""
     yvs.main('111/psa.23.1-2')
     ref_content = out.getvalue()
     assert_regexp_matches(ref_content, 'Lorem')
@@ -53,7 +53,7 @@ def test_copy_verse_range(out):
 
 @redirect_stdout
 def test_header(out):
-    '''should prepend reference header to copied string'''
+    """should prepend reference header to copied string"""
     yvs.main('59/psa.23')
     ref_content = out.getvalue()
     assert_regexp_matches(ref_content, r'^Psalm 23 \(ESV\)')
@@ -62,7 +62,7 @@ def test_header(out):
 @redirect_stdout
 @use_prefs({'language': 'es'})
 def test_header_language(out):
-    '''reference header should reflect chosen language'''
+    """reference header should reflect chosen language"""
     yvs.main('128/psa.23')
     ref_content = out.getvalue()
     assert_regexp_matches(ref_content, r'^Salmos 23 \(NVI\)')
@@ -70,7 +70,7 @@ def test_header_language(out):
 
 @redirect_stdout
 def test_charref_dec(out):
-    '''should evaluate decimal character references'''
+    """should evaluate decimal character references"""
     yvs.main('111/psa.23')
     ref_content = out.getvalue().decode('utf-8')
     assert_regexp_matches(ref_content, r'\u201cLorem ipsum\u201d')
@@ -78,7 +78,7 @@ def test_charref_dec(out):
 
 @redirect_stdout
 def test_charref_hex(out):
-    '''should evaluate hexadecimal character references'''
+    """should evaluate hexadecimal character references"""
     yvs.main('111/psa.23')
     ref_content = out.getvalue().decode('utf-8')
     assert_regexp_matches(ref_content, r'\u203a Nunc sem leo')
@@ -86,7 +86,7 @@ def test_charref_hex(out):
 
 @redirect_stdout
 def test_whitespace_words(out):
-    '''should handle spaces appropriately'''
+    """should handle spaces appropriately"""
     yvs.main('111/psa.23')
     ref_content = out.getvalue()
     assert_regexp_matches(ref_content, 'adipiscing elit.',
@@ -97,7 +97,7 @@ def test_whitespace_words(out):
 
 @redirect_stdout
 def test_whitespace_lines(out):
-    '''should add line breaks where appropriate'''
+    """should add line breaks where appropriate"""
     yvs.main('111/psa.23')
     ref_content = out.getvalue()
     assert_regexp_matches(ref_content, r'Psalm 23 \(NIV\)\n\n\S',
@@ -116,7 +116,7 @@ def test_whitespace_lines(out):
 
 @patch('urllib2.Request')
 def test_url_always_chapter(request):
-    '''should always fetch HTML from chapter URL'''
+    """should always fetch HTML from chapter URL"""
     yvs.main('59/psa.23.2')
     request.assert_called_once_with(
         'https://www.bible.com/bible/59/psa.23',

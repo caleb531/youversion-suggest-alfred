@@ -24,7 +24,7 @@ def teardown():
 
 
 def test_result_titles():
-    '''should set result titles as full reference identifiers'''
+    """should set result titles as full reference identifiers"""
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
     nose.assert_regexp_matches(results[0]['title'], r'Romans 13:8 \(NIV\)')
@@ -33,7 +33,7 @@ def test_result_titles():
 
 
 def test_result_subtitles():
-    '''should set result subtitles as snippet of reference content'''
+    """should set result subtitles as snippet of reference content"""
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
     nose.assert_regexp_matches(results[0]['subtitle'], 'Lorem')
@@ -43,7 +43,7 @@ def test_result_subtitles():
 
 @patch('urllib2.Request')
 def test_unicode_input(request):
-    '''should not raise exception when input contains non-ASCII characters'''
+    """should not raise exception when input contains non-ASCII characters"""
     results = yvs.get_result_list('é')
     request.assert_called_once_with(
         'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
@@ -52,7 +52,7 @@ def test_unicode_input(request):
 
 
 def test_charref_dec_title():
-    '''should evaluate character references in result titles'''
+    """should evaluate character references in result titles"""
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
     nose.assert_regexp_matches(
@@ -60,7 +60,7 @@ def test_charref_dec_title():
 
 
 def test_charref_dec_subtitle():
-    '''should evaluate character references in result subtitles'''
+    """should evaluate character references in result subtitles"""
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
     nose.assert_regexp_matches(
