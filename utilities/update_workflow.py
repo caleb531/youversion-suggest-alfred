@@ -213,7 +213,8 @@ def main():
     updated_objects = update_workflow_objects(info)
     updated_resources = copy_pkg_resources(workflow_path)
     if updated_objects or updated_resources:
-        save_info(info, info_path)
+        if updated_objects:
+            save_info(info, info_path)
         print('Updated installed workflow successfully')
     else:
         print('Workflow has not changed')
