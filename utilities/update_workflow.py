@@ -47,6 +47,7 @@ def get_user_prefs_path():
 # Get path to installed workflow
 def get_workflow_path():
 
+    # Assume that whichever workflow contains a 'yvs' directory is YV Suggest
     yvs_packages = glob.glob(
         os.path.join(get_user_prefs_path(), 'workflows', '*', 'yvs'))
 
