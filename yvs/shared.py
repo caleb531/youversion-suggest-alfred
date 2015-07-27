@@ -25,7 +25,7 @@ def create_alfred_data_dir():
     try:
         os.makedirs(ALFRED_DATA_DIR)
     except OSError:
-        pass
+        return
 
 
 def get_bible_data(language):
