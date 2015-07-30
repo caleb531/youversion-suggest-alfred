@@ -32,6 +32,14 @@
     "name": "Nederlands"
   },
   {
+    "id": "pt",
+    "name": "Português (Brasil)"
+  },
+  {
+    "id": "pt_PT",
+    "name": "Português (Portugal)"
+  },
+  {
     "id": "sv",
     "name": "Svenska"
   },
