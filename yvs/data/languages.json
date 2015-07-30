@@ -1,5 +1,9 @@
 [
   {
+    "id": "ar",
+    "name": "العربية"
+  },
+  {
     "id": "de",
     "name": "Deutsch"
   },
