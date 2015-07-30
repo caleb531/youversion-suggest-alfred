@@ -66,6 +66,19 @@ def guess_version(versions, version_query):
     return None
 
 
+# Format book name by removing non-alphanumeric characters
+def format_book_name(book_name):
+
+    book_name = book_name.lower()
+    # Remove all non-alphanumeric characters
+    book_name = re.sub(r'[\W_]', ' ', book_name, flags=re.UNICODE)
+    # Remove extra whitespace
+    book_name = book_name.strip()
+    book_name = re.sub(r'\s+', ' ', book_name)
+
+    return book_name
+
+
 # Retrieves list of books matching the given query
 def get_matching_books(books, query):
 
@@ -76,10 +89,12 @@ def get_matching_books(books, query):
             break
         book_query = query['book'][:i]
         for book in books:
-            book_name = book['name'].lower()
+            book_name = format_book_name(book['name'])
+            # If book name begins with query OR
+            # If non-numbered part of numbered book name matches query
             if (book_name.startswith(book_query) or
                 (book_name[0].isnumeric() and
-                 book_name[2:].startswith(book_query))):
+                 book_name[1:].lstrip().startswith(book_query))):
                 matching_books.append(book)
 
     return matching_books

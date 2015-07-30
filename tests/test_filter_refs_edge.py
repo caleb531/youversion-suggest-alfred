@@ -40,3 +40,11 @@ def test_unicode_normalization():
     """should normalize Unicode characters"""
     results = yvs.get_result_list('e\u0301')
     nose.assert_equal(len(results), 0)
+
+
+@use_prefs({'language': 'de'})
+def test_numbered_puncuation():
+    """should match numbered books even if book name contains punctuation """
+    results = yvs.get_result_list('1 ch')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], '1. Chronik 1 (DELUT)')
