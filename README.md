@@ -71,11 +71,19 @@ Currently, YouVersion Suggest supports the following languages:
 * English (en)
 * Spanish (es)
 * Dutch (nl)
+* Finnish (fi)
 * Simplified Chinese (zh-CN)
 * Swedish (sv)
 
 If you would like support added for another language, please [submit an issue on
-GitHub](https://github.com/caleb531/youversion-suggest/issues).
+GitHub](https://github.com/caleb531/youversion-suggest/issues) with the following
+details:
+
+1. The name of the language (*e.g.* Français)
+2. If possible, the language's ISO 639-1 code (*e.g.* fr)
+3. The name of the YouVersion-supported Bible version to use as the default for
+this language. See [this list](https://www.bible.com/versions) for all of the
+versions that YouVersion supports.
 
 ### Setting your preferred version
 
