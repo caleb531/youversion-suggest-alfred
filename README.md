@@ -80,6 +80,7 @@ Currently, YouVersion Suggest supports the following languages:
 * Finnish (fi)
 * Simplified Chinese (zh-CN)
 * Japanese (ja)
+* Korean (ko)
 * Hindi (hi)
 * Portuguese - Brazil (pt)
 * Portuguese - Portugal (pt-PT)
