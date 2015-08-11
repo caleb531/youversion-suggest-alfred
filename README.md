@@ -64,7 +64,7 @@ version in YouVersion Suggest, see *Setting your preferred version*.
 
 YouVersion Suggest allows you to change the languages used for Bible references
 and versions. To do so, type `yvset language` into Alfred, and the list of
-supported languages will then appear. You may then choose another language as
+supported languages will then appear. You may then choose another language to be
 your preferred language.
 
 Currently, YouVersion Suggest supports the following languages:
@@ -80,6 +80,7 @@ Currently, YouVersion Suggest supports the following languages:
 * Finnish (fi)
 * Simplified Chinese (zh-CN)
 * Japanese (ja)
+* Korean (ko)
 * Hindi (hi)
 * Portuguese - Brazil (pt)
 * Portuguese - Portugal (pt-PT)
