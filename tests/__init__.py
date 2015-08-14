@@ -22,7 +22,10 @@ patch_open = patch('yvs.shared.open', mock_open, create=True)
 
 
 def setup():
-    os.mkdir(yvs.ALFRED_DATA_DIR)
+    try:
+        os.mkdir(yvs.ALFRED_DATA_DIR)
+    except OSError:
+        pass
     patch_open.start()
 
 
