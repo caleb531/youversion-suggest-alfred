@@ -12,7 +12,7 @@ def get_search_url(ref_uid):
     search_engine = shared.get_search_engine(
         search_engines, prefs['searchEngine'])
 
-    ref = shared.get_ref_object(ref_uid)
+    ref = shared.get_ref_object(ref_uid, prefs)
     full_ref = shared.get_full_ref(ref)
     encoded_ref = urllib.quote_plus(full_ref.encode('utf-8'))
 

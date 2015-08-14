@@ -107,9 +107,10 @@ def get_prefs():
     try:
         with open(PREFS_PATH, 'r') as prefs_file:
             prefs.update(json.load(prefs_file))
+            return prefs
     except IOError:
         create_prefs(prefs)
-    return prefs
+        return prefs
 
 
 def update_prefs(prefs):
