@@ -13,8 +13,13 @@
       "description": "The preferred version (in the current preferred language) to use as the default for Bible references",
       "type": "integer",
       "minimum": 1
+    },
+    "searchEngine": {
+      "description": "The preferred search engine to use when searching the selected reference",
+      "type": "string",
+      "pattern": "^([a-z0-9]+)$"
     }
   },
-  "required": ["language", "version"],
+  "required": ["language", "version", "searchEngine"],
   "additionalProperties": false
 }

@@ -36,6 +36,12 @@ def test_filter_versions():
     nose.assert_equal(results[0]['arg'], 'version:110')
 
 
+def test_show_search_enginges():
+    """should show all search engines if no value is given"""
+    results = yvs.get_result_list('searchEngine')
+    nose.assert_not_equal(len(results), 0)
+
+
 def test_nonexistent_pref():
     """should not match nonexistent preference"""
     results = yvs.get_result_list('xyz')
@@ -53,17 +59,13 @@ def test_nonexistent_value():
 def test_invalid():
     """should show all existing preferences for invalid preference name"""
     results = yvs.get_result_list('!@#')
-    nose.assert_equal(len(results), 2)
-    nose.assert_equal(results[0]['title'], 'Language')
-    nose.assert_equal(results[1]['title'], 'Version')
+    nose.assert_not_equal(len(results), 0)
 
 
 def test_empty():
     """should show all existing preferences if query is empty"""
     results = yvs.get_result_list('')
-    nose.assert_equal(len(results), 2)
-    nose.assert_equal(results[0]['title'], 'Language')
-    nose.assert_equal(results[1]['title'], 'Version')
+    nose.assert_not_equal(len(results), 0)
 
 
 @redirect_stdout

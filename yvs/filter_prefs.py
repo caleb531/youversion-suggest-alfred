@@ -71,20 +71,23 @@ class Preference(object):
 
 
 # Delineate all available workflow preferences
-PREFERENCES = {
-    'language': Preference(
+PREFERENCES = [
+    Preference(
         key='language', name='language', title='Language',
         values=shared.get_languages),
-    'version': Preference(
+    Preference(
         key='version', name='version', title='Version',
-        values=partial(shared.get_versions, prefs['language']))
-}
+        values=partial(shared.get_versions, prefs['language'])),
+    Preference(
+        key='searchEngine', name='search engine', title='Search Engine',
+        values=shared.get_search_engines)
+]
 
 
 def get_pref_matches(query_str):
 
-    patt = r'^{name}{value}$'.format(
-        name=r'(\w+)',
+    patt = r'^{key}{value}$'.format(
+        key=r'(\w+)',
         value=r'(?:\s?(\w+))?')
     return re.search(patt, query_str, flags=re.UNICODE)
 
@@ -92,8 +95,8 @@ def get_pref_matches(query_str):
 # Retrieve result list of available preferences, filtered by the given query
 def get_pref_result_list(query_str):
 
-    return [pref.get_pref_result() for pref_name, pref in
-            PREFERENCES.iteritems() if pref_name.startswith(query_str)]
+    return [pref.get_pref_result() for pref in
+            PREFERENCES if pref.key.startswith(query_str)]
 
 
 def get_result_list(query_str):
@@ -104,13 +107,15 @@ def get_result_list(query_str):
 
     if pref_matches:
 
-        pref_name = pref_matches.group(1)
+        pref_key = pref_matches.group(1)
         pref_value = pref_matches.group(2)
 
-        if pref_name in PREFERENCES:
-            # Get list of available values for the given preference
-            results = PREFERENCES[pref_name].get_value_result_list(pref_value)
-        else:
+        for pref in PREFERENCES:
+            if pref.key.lower() == pref_key:
+                # Get list of available values for the given preference
+                results = pref.get_value_result_list(pref_value)
+                break
+        if not results:
             results = get_pref_result_list(query_str)
 
     else:

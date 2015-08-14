@@ -52,7 +52,8 @@ def get_book(books, book_id):
 # Get first version object whose id matches the given id
 def get_version(versions, version_id):
 
-    return next(version for version in versions if version['id'] == version_id)
+    return next((version for version in versions
+                if version['id'] == version_id))
 
 
 def get_versions(language):
@@ -68,6 +69,19 @@ def get_languages():
         return json.load(languages_file)
 
 
+def get_search_engines():
+
+    search_engines_path = os.path.join(DATA_PATH, 'search-engines.json')
+    with open(search_engines_path, 'r') as search_engines_file:
+        return json.load(search_engines_file)
+
+
+def get_search_engine(search_engines, search_engine_id):
+
+    return next((search_engine for search_engine in search_engines if
+                 search_engine['id'] == search_engine_id))
+
+
 # Functions for accessing/manipulating mutable preferences
 
 
@@ -78,10 +92,9 @@ def get_defaults():
         return json.load(defaults_file)
 
 
-def create_prefs():
+def create_prefs(defaults):
 
     create_alfred_data_dir()
-    defaults = get_defaults()
     with open(PREFS_PATH, 'w') as prefs_file:
         json.dump(defaults, prefs_file)
 
@@ -90,11 +103,13 @@ def create_prefs():
 
 def get_prefs():
 
+    prefs = get_defaults()
     try:
         with open(PREFS_PATH, 'r') as prefs_file:
-            return json.load(prefs_file)
+            prefs.update(json.load(prefs_file))
     except IOError:
-        return create_prefs()
+        create_prefs(prefs)
+    return prefs
 
 
 def update_prefs(prefs):
@@ -157,7 +172,7 @@ def format_query_str(query_str):
 
 
 # Parses the given reference UID into a dictionary representing that reference
-def get_ref_object(ref_uid):
+def get_ref_object(ref_uid, prefs=None):
 
     patt = r'^{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?$'.format(
         version=r'(\d+)',
@@ -175,7 +190,8 @@ def get_ref_object(ref_uid):
     }
 
     # Include book name using book ID and currently-set language
-    prefs = get_prefs()
+    if not prefs:
+        prefs = get_prefs()
     bible = get_bible_data(prefs['language'])
     book_name = get_book(bible['books'], ref['book_id'])
     ref['book'] = book_name
