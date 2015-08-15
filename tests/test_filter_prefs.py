@@ -70,7 +70,7 @@ def test_empty_query():
 
 def test_filter_preferences():
     """should filter available preferences if partial key name is given"""
-    results = yvs.get_result_list('s')
+    results = yvs.get_result_list('searche')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Search Engine')
 

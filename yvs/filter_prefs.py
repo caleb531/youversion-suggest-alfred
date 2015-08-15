@@ -13,16 +13,18 @@ prefs = shared.get_prefs()
 class Preference(object):
 
     def __init__(self, key, name, title, values):
+
         # Store key name, preference name and result title for this preference
         self.key = key
-        self.title = title
         self.name = name
+        self.title = title
         # Store reference to function that will produce
         # a list of all possible values for this preference
         self.values = values
 
     # Retrieve Alfred result object for this preference
     def get_pref_result(self):
+
         return {
             'title': self.title,
             'subtitle': 'Set your preferred {}'.format(self.title.lower()),
@@ -30,20 +32,22 @@ class Preference(object):
             'valid': 'yes'
         }
 
-    # Retrieve list of accepted values for this preference
+    # Retrieve list of available values for this preference
     def get_values(self):
+
         return self.values()
 
     # Retrieve the null result for when the given value can't be found
     def get_value_null_result(self):
+
         return {
             'title': 'No Results for {}'.format(self.title),
-            'subtitle': ('Could not find a {} matching the query'
-                         .format(self.name)),
+            'subtitle': 'Could not find a {} matching the query'.format(
+                self.name),
             'valid': 'no'
         }
 
-    # Retrieve list of all available languages
+    # Retrieve Alfred result list of all available values for this preference
     def get_value_result_list(self, query_str):
 
         values = self.get_values()
@@ -55,13 +59,18 @@ class Preference(object):
                 'arg': '{}:{}'.format(self.key, value['id']),
                 'title': value['name']
             }
+
             if value['id'] == prefs[self.key]:
+                # If this value is the current value, indicate such
                 result['subtitle'] = ('This is already your preferred {}'
                                       .format(self.name))
                 result['valid'] = 'no'
             else:
-                result['subtitle'] = 'Set this as your preferred value'
+                result['subtitle'] = 'Set this as your preferred {}'.format(
+                    self.name)
 
+            # Show all results if query string is empty
+            # Otherwise, only show results whose titles begin with query
             if not query_str or result['title'].lower().startswith(query_str):
                 results.append(result)
 
@@ -97,7 +106,7 @@ def get_pref_matches(query_str):
 def get_pref_result_list(query_str):
 
     return [pref.get_pref_result() for pref in
-            PREFERENCES if pref.key.startswith(query_str)]
+            PREFERENCES if pref.key.lower().startswith(query_str)]
 
 
 def get_result_list(query_str):
