@@ -28,8 +28,7 @@ class Preference(object):
         return {
             'title': self.title,
             'subtitle': 'Set your preferred {}'.format(self.title.lower()),
-            'autocomplete': '{} '.format(self.key),
-            'valid': 'yes'
+            'autocomplete': '{} '.format(self.key)
         }
 
     # Retrieve list of available values for this preference
