@@ -16,6 +16,7 @@ ALFRED_DATA_DIR = os.path.join(
 
 PREFS_PATH = os.path.join(ALFRED_DATA_DIR, 'preferences.json')
 DATA_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
+DEFAULTS_PATH = os.path.join(DATA_PATH, 'defaults.json')
 
 USER_AGENT = 'YouVersion Suggest'
 
@@ -87,13 +88,13 @@ def get_search_engine(search_engines, search_engine_id):
 
 def get_defaults():
 
-    defaults_path = os.path.join(DATA_PATH, 'defaults.json')
-    with open(defaults_path, 'r') as defaults_file:
+    with open(DEFAULTS_PATH, 'r') as defaults_file:
         return json.load(defaults_file)
 
 
-def create_prefs(defaults):
+def create_prefs():
 
+    defaults = get_defaults()
     create_alfred_data_dir()
     with open(PREFS_PATH, 'w') as prefs_file:
         json.dump(defaults, prefs_file)
@@ -103,20 +104,20 @@ def create_prefs(defaults):
 
 def get_prefs():
 
-    prefs = get_defaults()
     try:
         with open(PREFS_PATH, 'r') as prefs_file:
-            prefs.update(json.load(prefs_file))
-            return prefs
+            return json.load(prefs_file)
     except IOError:
-        create_prefs(prefs)
-        return prefs
+        return create_prefs()
 
 
 def update_prefs(prefs):
 
+    # Merge preferences with defaults when updating
+    defaults = get_defaults()
+    defaults.update(prefs)
     with open(PREFS_PATH, 'w') as prefs_file:
-        json.dump(prefs, prefs_file)
+        json.dump(defaults, prefs_file)
 
 
 # Constructs an Alfred XML string from the given results list
