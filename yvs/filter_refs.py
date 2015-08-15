@@ -110,10 +110,6 @@ def choose_best_version(prefs, bible, query):
         chosen_version = shared.get_version(
             bible['versions'], prefs['version'])
 
-    if not chosen_version:
-        chosen_version = shared.get_version(
-            bible['versions'], bible['default_version'])
-
     return chosen_version
 
 

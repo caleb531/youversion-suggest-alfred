@@ -29,7 +29,16 @@ def test_url_open_verse_range(wb_open):
         'https://www.google.com/search?q=John+3%3A16-17+%28ESV%29')
 
 
-@use_prefs({'language': 'es'})
+@use_prefs({'searchEngine': 'duckduckgo'})
+@patch('webbrowser.open')
+def test_alternate_search_engine(wb_open):
+    """should search using alternate search engine in one is chosen"""
+    yvs.main('59/jhn.3')
+    wb_open.assert_called_once_with(
+        'https://duckduckgo.com/?q=John+3+%28ESV%29')
+
+
+@use_prefs({'language': 'es', 'version': 128})
 @patch('webbrowser.open')
 def test_unicode_search(wb_open):
     """should open search URL for reference containing Unicode"""

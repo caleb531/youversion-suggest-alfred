@@ -16,7 +16,7 @@ def test_version_persistence():
     nose.assert_equal(results[0]['title'], 'Matthew 4 (ESV)')
 
 
-@use_prefs({'language': 'es'})
+@use_prefs({'language': 'es', 'version': 128})
 def test_language_persistence():
     """should remember language preferences"""
     results = yvs.get_result_list('gá 4')

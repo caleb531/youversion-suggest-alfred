@@ -60,7 +60,7 @@ def test_header(out):
 
 
 @redirect_stdout
-@use_prefs({'language': 'es'})
+@use_prefs({'language': 'es', 'version': 128})
 def test_header_language(out):
     """reference header should reflect chosen language"""
     yvs.main('128/psa.23')

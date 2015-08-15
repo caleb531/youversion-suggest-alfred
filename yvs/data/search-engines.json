@@ -1,0 +1,22 @@
+[
+  {
+    "id": "google",
+    "name": "Google",
+    "url": "https://www.google.com/search?q={query}"
+  },
+  {
+    "id": "duckduckgo",
+    "name": "DuckDuckGo",
+    "url": "https://duckduckgo.com/?q={query}"
+  },
+  {
+    "id": "bing",
+    "name": "Bing",
+    "url": "https://www.bing.com/search?q={query}"
+  },
+  {
+    "id": "yahoo",
+    "name": "Yahoo!",
+    "url": "https://search.yahoo.com/search?p={query}"
+  }
+]

@@ -5,22 +5,23 @@ import webbrowser
 import yvs.shared as shared
 
 
-BASE_URL = 'https://www.google.com/search'
-
-
 def get_search_url(ref_uid):
-    ref = shared.get_ref_object(ref_uid)
+
+    prefs = shared.get_prefs()
+    search_engines = shared.get_search_engines()
+    search_engine = shared.get_search_engine(
+        search_engines, prefs['searchEngine'])
+
+    ref = shared.get_ref_object(ref_uid, prefs)
     full_ref = shared.get_full_ref(ref)
     encoded_ref = urllib.quote_plus(full_ref.encode('utf-8'))
-    return '{base}?q={query_str}'.format(base=BASE_URL, query_str=encoded_ref)
 
-
-def open_search_url(ref_uid):
-    webbrowser.open(get_search_url(ref_uid))
+    return search_engine['url'].format(query=encoded_ref)
 
 
 def main(ref_uid):
-    open_search_url(ref_uid)
+
+    webbrowser.open(get_search_url(ref_uid))
 
 
 if __name__ == '__main__':
