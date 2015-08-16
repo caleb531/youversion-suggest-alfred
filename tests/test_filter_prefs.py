@@ -62,10 +62,26 @@ def test_invalid_query():
     nose.assert_not_equal(len(results), 0)
 
 
-def test_empty_query():
+def test_non_alphanumeric():
+    """should ignore all non-alphanumeric characters"""
+    results = yvs.get_result_list('!language@it#')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Italiano')
+
+
+def test_show_all_preferences():
     """should show all available preferences if query is empty"""
     results = yvs.get_result_list('')
     nose.assert_not_equal(len(results), 0)
+
+
+def test_preferences_autocompletion():
+    """autocompletion should be functioning for all preference results"""
+    results = yvs.get_result_list('')
+    for result in results:
+        nose.assert_in('autocomplete', result)
+        nose.assert_in('valid', result)
+        nose.assert_equal(result['valid'], 'no')
 
 
 def test_filter_preferences():

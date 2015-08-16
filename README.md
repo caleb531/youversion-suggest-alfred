@@ -38,12 +38,12 @@ as Alfred Large Type.
 
 #### Example queries
 
-* `yvfilter luke` => Luke
-* `yvfilter eph 3` => Ephesians 3
-* `yvfilter 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
-* `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
-* `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
-* `yvfilter relevations 7` => Revelation 7
+- `yvfilter luke` => Luke
+- `yvfilter eph 3` => Ephesians 3
+- `yvfilter 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+- `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
+- `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
+- `yvfilter relevations 7` => Revelation 7
 
 ### Searching by content
 
@@ -57,8 +57,8 @@ version in YouVersion Suggest, see *Setting your preferred version*.
 
 #### Example queries
 
-* `yvsearch without faith` => Hebrews 11:6
-* `yvsearch do not worry` => Matthew 6:34
+- `yvsearch without faith` => Hebrews 11:6
+- `yvsearch do not worry` => Matthew 6:34
 
 ### Setting your preferred language
 
@@ -69,28 +69,28 @@ your preferred language.
 
 Currently, YouVersion Suggest supports the following languages:
 
-* English (en)
-* Spanish (es)
-* Spanish - Spain (es-ES)
-* French (fr)
-* German (de)
-* Italian (it)
-* Dutch (nl)
-* Swedish (sv)
-* Finnish (fi)
-* Polish (pl)
-* Simplified Chinese (zh-CN)
-* Japanese (ja)
-* Korean (ko)
-* Hindi (hi)
-* Portuguese - Brazil (pt)
-* Portuguese - Portugal (pt-PT)
-* Russian (ru)
-* Arabic (ar)
+- English (en)
+- Spanish (es)
+- Spanish - Spain (es-ES)
+- French (fr)
+- German (de)
+- Italian (it)
+- Dutch (nl)
+- Swedish (sv)
+- Finnish (fi)
+- Polish (pl)
+- Simplified Chinese (zh-CN)
+- Japanese (ja)
+- Korean (ko)
+- Hindi (hi)
+- Portuguese - Brazil (pt)
+- Portuguese - Portugal (pt-PT)
+- Russian (ru)
+- Arabic (ar)
 
 If you would like support added for another language, please [submit an issue on
-GitHub](https://github.com/caleb531/youversion-suggest/issues) with the following
-details:
+GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
+following details:
 
 1. The name of the language (*e.g.* Simplified Chinese)
 2. If possible, the language's ISO 639-1 code (*e.g.* zh-CN)
@@ -105,10 +105,24 @@ You may also set your preferred version (translation) used for Bible references
 type `yvset version` into Alfred, and the list of supported versions (for the
 currently-set language) will appear.
 
+**Pro Tip:** Type `yvset v` and press the *tab* key to quickly see the list of
+available versions to set (as this will expand to `yvset version`).
+
 To select a version from the list of versions more quickly, you may optionally
-type a query after the initial query to filter the list of versions.
+type a query after `yvset version` to filter the list of versions.
 
 #### Example queries
 
-* `yvset version esv`
-* `yvset version a`
+- `yvset version esv` => ESV
+- `yvset version a` => AMP
+
+### Setting your preferred search engine
+
+You may also set your preferred search engine used for searching selected Bible
+references. To do so, type `yvset searchEngine` into Alfred (again, the tab
+autocompletion will allow you to minimize typing).
+
+#### Example queries
+
+- `yvset searchEngine b` => Bing
+- `yvset searchEngine d` => DuckDuckGo
