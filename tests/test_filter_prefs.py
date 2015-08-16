@@ -62,6 +62,13 @@ def test_invalid_query():
     nose.assert_not_equal(len(results), 0)
 
 
+def test_non_alphanumeric():
+    """should ignore all non-alphanumeric characters"""
+    results = yvs.get_result_list('!language@it#')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Italiano')
+
+
 def test_show_all_preferences():
     """should show all available preferences if query is empty"""
     results = yvs.get_result_list('')
