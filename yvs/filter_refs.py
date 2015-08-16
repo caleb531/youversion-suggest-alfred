@@ -85,17 +85,15 @@ def get_matching_books(books, query):
     matching_books = []
 
     for i in xrange(len(query['book']), 0, -1):
-        if matching_books:
-            break
         book_query = query['book'][:i]
         for book in books:
             book_name = format_book_name(book['name'])
-            # If book name begins with query OR
-            # If non-numbered part of numbered book name matches query
-            if (book_name.startswith(book_query) or
-                (book_name[0].isnumeric() and
-                 book_name[1:].lstrip().startswith(book_query))):
+            if book_name.startswith(book_query):
                 matching_books.append(book)
+        # Stop if all possible matching books have been found
+        # for the current query
+        if matching_books:
+            break
 
     return matching_books
 
@@ -109,12 +107,8 @@ def choose_best_version(prefs, bible, query):
         chosen_version = guess_version(bible['versions'], query['version'])
 
     if not chosen_version and 'version' in prefs:
-        chosen_version = shared.get_version(bible['versions'],
-                                            prefs['version'])
-
-    if not chosen_version:
-        chosen_version = shared.get_version(bible['versions'],
-                                            bible['default_version'])
+        chosen_version = shared.get_version(
+            bible['versions'], prefs['version'])
 
     return chosen_version
 

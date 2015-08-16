@@ -32,13 +32,6 @@ def test_partial_ambiguous():
     nose.assert_equal(results[2]['title'], 'Revelation 1 (NIV)')
 
 
-def test_multiple_words():
-    """should match books with names comprised of multiple words"""
-    results = yvs.get_result_list('song of songs')
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Song of Solomon 1 (NIV)')
-
-
 def test_numbered_partial():
     """should match numbered books by partial numbered name"""
     results = yvs.get_result_list('1 cor')
@@ -53,13 +46,10 @@ def test_number_only():
 
 
 def test_nonnumbered_partial():
-    """should match numbered books by partial non-numbered name"""
-    results = yvs.get_result_list('john')
-    nose.assert_equal(len(results), 4)
+    """should match only non-numbered books by partial non-numbered name"""
+    results = yvs.get_result_list('joh')
+    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'John 1 (NIV)')
-    nose.assert_equal(results[1]['title'], '1 John 1 (NIV)')
-    nose.assert_equal(results[2]['title'], '2 John 1 (NIV)')
-    nose.assert_equal(results[3]['title'], '3 John 1 (NIV)')
 
 
 def test_id():

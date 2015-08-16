@@ -19,6 +19,7 @@ def test_filter_languages():
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'English')
     nose.assert_equal(results[0]['arg'], 'language:en')
+    nose.assert_equal(results[0]['valid'], 'no')
 
 
 def test_show_versions():
@@ -35,26 +36,43 @@ def test_filter_versions():
     nose.assert_equal(results[0]['arg'], 'version:110')
 
 
-def test_nonexistent():
+def test_show_search_enginges():
+    """should show all search engines if no value is given"""
+    results = yvs.get_result_list('searchEngine')
+    nose.assert_not_equal(len(results), 0)
+
+
+def test_nonexistent_pref():
     """should not match nonexistent preference"""
     results = yvs.get_result_list('xyz')
     nose.assert_equal(len(results), 0)
 
 
-def test_invalid():
-    """should show all existing preferences for invalid preference name"""
+def test_nonexistent_value():
+    """should return null result for nonexistent value"""
+    results = yvs.get_result_list('language xyz')
+    nose.assert_equal(len(results), 1)
+    nose.assert_regexp_matches(results[0]['title'], 'No Results')
+    nose.assert_equal(results[0]['valid'], 'no')
+
+
+def test_invalid_query():
+    """should show all available preferences for invalid preference name"""
     results = yvs.get_result_list('!@#')
-    nose.assert_equal(len(results), 2)
-    nose.assert_equal(results[0]['title'], 'Language')
-    nose.assert_equal(results[1]['title'], 'Version')
+    nose.assert_not_equal(len(results), 0)
 
 
-def test_empty():
-    """should show all existing preferences if query is empty"""
+def test_empty_query():
+    """should show all available preferences if query is empty"""
     results = yvs.get_result_list('')
-    nose.assert_equal(len(results), 2)
-    nose.assert_equal(results[0]['title'], 'Language')
-    nose.assert_equal(results[1]['title'], 'Version')
+    nose.assert_not_equal(len(results), 0)
+
+
+def test_filter_preferences():
+    """should filter available preferences if partial key name is given"""
+    results = yvs.get_result_list('searche')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Search Engine')
 
 
 @redirect_stdout

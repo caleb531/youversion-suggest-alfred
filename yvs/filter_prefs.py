@@ -3,94 +3,100 @@
 from __future__ import unicode_literals
 import re
 import yvs.shared as shared
+from functools import partial
 from operator import itemgetter
+
+
+prefs = shared.get_prefs()
 
 
 class Preference(object):
 
-    def __init__(self, name, title, get_value_result_list):
-        # Store key name and result title for this preference
+    def __init__(self, key, name, title, values):
+
+        # Store key name, preference name and result title for this preference
+        self.key = key
         self.name = name
         self.title = title
-        # Also store reference to function that produces a result list of
-        # possible values for this preference
-        self.get_value_result_list = get_value_result_list
+        # Store reference to function that will produce
+        # a list of all possible values for this preference
+        self.values = values
 
     # Retrieve Alfred result object for this preference
     def get_pref_result(self):
+
         return {
             'title': self.title,
             'subtitle': 'Set your preferred {}'.format(self.title.lower()),
-            'autocomplete': '{} '.format(self.name),
+            'autocomplete': '{} '.format(self.key)
+        }
+
+    # Retrieve list of available values for this preference
+    def get_values(self):
+
+        return self.values()
+
+    # Retrieve the null result for when the given value can't be found
+    def get_value_null_result(self):
+
+        return {
+            'title': 'No Results for {}'.format(self.title),
+            'subtitle': 'Could not find a {} matching the query'.format(
+                self.name),
             'valid': 'no'
         }
 
+    # Retrieve Alfred result list of all available values for this preference
+    def get_value_result_list(self, query_str):
 
-# Retrieve list of all available languages
-def get_language_result_list(query_str):
+        values = self.get_values()
+        results = []
 
-    prefs = shared.get_prefs()
-    languages = shared.get_languages()
-    results = []
+        for value in values:
 
-    for language in languages:
+            result = {
+                'arg': '{}:{}'.format(self.key, value['id']),
+                'title': value['name']
+            }
 
-        result = {
-            'arg': 'language:{}'.format(language['id']),
-            'title': language['name']
-        }
-        if language['id'] == prefs['language']:
-            result['subtitle'] = 'This is already your preferred language'
-            result['valid'] = 'no'
-        else:
-            result['subtitle'] = 'Set this as your preferred language'
+            if value['id'] == prefs[self.key]:
+                # If this value is the current value, indicate such
+                result['subtitle'] = ('This is already your preferred {}'
+                                      .format(self.name))
+                result['valid'] = 'no'
+            else:
+                result['subtitle'] = 'Set this as your preferred {}'.format(
+                    self.name)
 
-        if not query_str or result['title'].lower().startswith(query_str):
-            results.append(result)
+            # Show all results if query string is empty
+            # Otherwise, only show results whose titles begin with query
+            if not query_str or result['title'].lower().startswith(query_str):
+                results.append(result)
 
-    return results
+        if not results:
+            results.append(self.get_value_null_result())
 
-
-# Retrieve list of all available versions for the current preferred language
-def get_version_result_list(query_str):
-
-    prefs = shared.get_prefs()
-    versions = shared.get_versions(prefs['language'])
-    results = []
-
-    for version in versions:
-
-        result = {
-            'arg': 'version:{}'.format(version['id']),
-            'title': version['name']
-        }
-        if version['id'] == prefs['version']:
-            result['subtitle'] = 'This is already your preferred version'
-            result['valid'] = 'no'
-        else:
-            result['subtitle'] = 'Set this as your preferred version'
-
-        if not query_str or result['title'].lower().startswith(query_str):
-            results.append(result)
-
-    return results
+        return results
 
 
 # Delineate all available workflow preferences
 PREFERENCES = {
-    'language': Preference(
-        name='language', title='Language',
-        get_value_result_list=get_language_result_list),
-    'version': Preference(
-        name='version', title='Version',
-        get_value_result_list=get_version_result_list)
+    Preference(
+        key='language', name='language', title='Language',
+        values=shared.get_languages),
+    Preference(
+        key='version', name='version', title='Version',
+        values=partial(shared.get_versions, prefs['language'])),
+    Preference(
+        key='searchEngine', name='search engine', title='Search Engine',
+        values=shared.get_search_engines)
 }
 
 
 def get_pref_matches(query_str):
 
-    patt = r'^{name}{value}$'.format(
-        name=r'(\w+)',
+    patt = r'^{key}{value}$'.format(
+        key=r'(\w+)',
         value=r'(?:\s?(\w+))?')
     return re.search(patt, query_str, flags=re.UNICODE)
 
@@ -98,8 +104,8 @@ def get_pref_matches(query_str):
 # Retrieve result list of available preferences, filtered by the given query
 def get_pref_result_list(query_str):
 
-    return [pref.get_pref_result() for pref_name, pref in
-            PREFERENCES.iteritems() if pref_name.startswith(query_str)]
+    return [pref.get_pref_result() for pref in
+            PREFERENCES if pref.key.lower().startswith(query_str)]
 
 
 def get_result_list(query_str):
@@ -110,13 +116,17 @@ def get_result_list(query_str):
 
     if pref_matches:
 
-        pref_name = pref_matches.group(1)
+        pref_key = pref_matches.group(1)
         pref_value = pref_matches.group(2)
 
-        if pref_name in PREFERENCES:
-            # Get list of available values for the given preference
-            results = PREFERENCES[pref_name].get_value_result_list(pref_value)
-        else:
+        for pref in PREFERENCES:
+            # If key name in query exactly matches a preference key name
+            if pref.key.lower() == pref_key:
+                # Get list of available values for the given preference
+                results = pref.get_value_result_list(pref_value)
+                break
+        # If no exact matches, filter list of available preferences by query
+        if not results:
             results = get_pref_result_list(query_str)
 
     else:
