@@ -11,8 +11,8 @@ def test_empty():
     nose.assert_equal(len(results), 0)
 
 
-def test_invalid():
-    """should not match invalid input"""
+def test_non_alphanumeric():
+    """should not match entirely non-alphanumeric input"""
     results = yvs.get_result_list('!!!')
     nose.assert_equal(len(results), 0)
 
