@@ -78,6 +78,7 @@ Currently, YouVersion Suggest supports the following languages:
 * Dutch (nl)
 * Swedish (sv)
 * Finnish (fi)
+* Polish (pl)
 * Simplified Chinese (zh-CN)
 * Japanese (ja)
 * Korean (ko)
