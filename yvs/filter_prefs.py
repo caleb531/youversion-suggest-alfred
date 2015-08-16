@@ -28,7 +28,8 @@ class Preference(object):
         return {
             'title': self.title,
             'subtitle': 'Set your preferred {}'.format(self.title.lower()),
-            'autocomplete': '{} '.format(self.key)
+            'autocomplete': '{} '.format(self.key),
+            'valid': 'no'
         }
 
     # Retrieve list of available values for this preference
@@ -95,7 +96,7 @@ PREFERENCES = {
 
 def get_pref_matches(query_str):
 
-    patt = r'^{key}{value}$'.format(
+    patt = r'^{key}{value}.*?$'.format(
         key=r'(\w+)',
         value=r'(?:\s?(\w+))?')
     return re.search(patt, query_str, flags=re.UNICODE)
