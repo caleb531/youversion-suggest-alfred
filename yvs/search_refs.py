@@ -10,6 +10,7 @@ from HTMLParser import HTMLParser
 REF_URL_PREFIX = '/bible/'
 
 
+# Parses unique reference identifier from the given reference URL
 def get_uid_from_url(url):
 
     return url.replace(REF_URL_PREFIX, '')
@@ -18,7 +19,7 @@ def get_uid_from_url(url):
 # Parser for search result HTML
 class SearchResultParser(HTMLParser):
 
-    # Reset parser variables (implicitly called on instantiation)
+    # Resets parser variables (implicitly called on instantiation)
     def reset(self):
         HTMLParser.reset(self)
         self.in_ref = None
@@ -59,7 +60,7 @@ class SearchResultParser(HTMLParser):
             self.current_result['subtitle'] = shared.format_ref_content(
                 self.current_result['subtitle'])
 
-    # Handle verse content
+    # Handles verse content
     def handle_data(self, content):
         if self.in_ref:
             if self.in_heading:
@@ -67,7 +68,7 @@ class SearchResultParser(HTMLParser):
             elif self.in_content:
                 self.current_result['subtitle'] += content
 
-    # Handle all non-ASCII characters encoded as HTML entities
+    # Handles all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.in_ref:
             char = shared.eval_charref(name)
@@ -77,7 +78,7 @@ class SearchResultParser(HTMLParser):
                 self.current_result['subtitle'] += char
 
 
-# Retrieve HTML for reference with the given ID
+# Retrieves HTML for reference with the given ID
 def get_search_html(query_str):
 
     version = shared.get_prefs()['version']
@@ -86,7 +87,7 @@ def get_search_html(query_str):
     return shared.get_url_content(url)
 
 
-# Parse actual reference content from reference HTML
+# Parses actual reference content from reference HTML
 def get_result_list(query_str):
 
     query_str = shared.format_query_str(query_str)

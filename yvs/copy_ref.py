@@ -18,7 +18,7 @@ class ReferenceParser(HTMLParser):
             self.verse_start = 1
             self.verse_end = None
 
-    # Reset parser variables (implicitly called on instantiation)
+    # Resets parser variables (implicitly called on instantiation)
     def reset(self):
         HTMLParser.reset(self)
         self.depth = 0
@@ -75,19 +75,19 @@ class ReferenceParser(HTMLParser):
         if tag == 'div' or tag == 'span':
             self.depth -= 1
 
-    # Handle verse content
+    # Handles verse content
     def handle_data(self, content):
         if self.is_in_verse_content():
             self.content_parts.append(content)
 
-    # Handle all non-ASCII characters encoded as HTML entities
+    # Handles all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.is_in_verse_content():
             char = shared.eval_charref(name)
             self.content_parts.append(char)
 
 
-# Retrieve HTML for reference with the given ID
+# Retrieves HTML for reference with the given ID
 def get_ref_html(ref):
     url = 'https://www.bible.com/bible/{version}/{book}.{chapter}'.format(
         version=ref['version_id'],
@@ -96,7 +96,7 @@ def get_ref_html(ref):
     return shared.get_url_content(url)
 
 
-# Parse actual reference content from reference HTML
+# Parses actual reference content from reference HTML
 def get_ref_content(ref):
     html = get_ref_html(ref)
     parser = ReferenceParser(ref)

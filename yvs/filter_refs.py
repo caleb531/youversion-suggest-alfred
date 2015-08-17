@@ -53,7 +53,7 @@ def get_query_object(query_str):
     return query
 
 
-# Find a version which best matches the given version query
+# Finds a version which best matches the given version query
 def guess_version(versions, version_query):
 
     # Chop off character from version query until matching version can be
@@ -66,7 +66,7 @@ def guess_version(versions, version_query):
     return None
 
 
-# Format book name by removing non-alphanumeric characters
+# Formats book name by removing non-alphanumeric characters
 def format_book_name(book_name):
 
     book_name = book_name.lower()
@@ -98,7 +98,7 @@ def get_matching_books(books, query):
     return matching_books
 
 
-# Choose most appropriate version based on current parameters
+# Chooses most appropriate version based on current parameters
 def choose_best_version(prefs, bible, query):
 
     chosen_version = None
@@ -113,7 +113,7 @@ def choose_best_version(prefs, bible, query):
     return chosen_version
 
 
-# Build a single result item
+# Builds a single result item
 def get_result(book, query, chosen_version):
 
     result = {}

@@ -10,6 +10,7 @@ from operator import itemgetter
 prefs = shared.get_prefs()
 
 
+# Class used to represent individual user preferences
 class Preference(object):
 
     def __init__(self, key, name, title, values):
@@ -22,7 +23,7 @@ class Preference(object):
         # a list of all possible values for this preference
         self.values = values
 
-    # Retrieve Alfred result object for this preference
+    # Retrieves Alfred result object for this preference
     def get_pref_result(self):
 
         return {
@@ -32,12 +33,12 @@ class Preference(object):
             'valid': 'no'
         }
 
-    # Retrieve list of available values for this preference
+    # Retrieves list of available values for this preference
     def get_values(self):
 
         return self.values()
 
-    # Retrieve the null result for when the given value can't be found
+    # Retrieves the null result for when the given value can't be found
     def get_value_null_result(self):
 
         return {
@@ -47,7 +48,7 @@ class Preference(object):
             'valid': 'no'
         }
 
-    # Retrieve Alfred result list of all available values for this preference
+    # Retrieves Alfred result list of all available values for this preference
     def get_value_result_list(self, query_str):
 
         values = self.get_values()
@@ -94,6 +95,7 @@ PREFERENCES = {
 }
 
 
+# Parses a preference key and optional value from the given query string
 def get_pref_matches(query_str):
 
     patt = r'^{key}{value}.*?$'.format(
@@ -109,6 +111,8 @@ def get_pref_result_list(query_str):
             PREFERENCES if pref.key.lower().startswith(query_str)]
 
 
+# Retrieve result list of preferences or their respective values (depending on
+# the given query string)
 def get_result_list(query_str):
 
     query_str = shared.format_query_str(query_str)
