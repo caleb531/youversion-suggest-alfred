@@ -27,9 +27,9 @@ def use_prefs(prefs):
         def wrapper(*args, **kwargs):
             original_prefs = yvs.get_prefs()
             try:
-                yvs.update_prefs(prefs)
+                yvs.set_prefs(prefs)
                 return func(*args, **kwargs)
             finally:
-                yvs.update_prefs(original_prefs)
+                yvs.set_prefs(original_prefs)
         return wrapper
     return decorator

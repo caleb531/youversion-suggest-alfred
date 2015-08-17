@@ -21,6 +21,8 @@ DEFAULTS_PATH = os.path.join(DATA_PATH, 'defaults.json')
 USER_AGENT = 'YouVersion Suggest'
 
 
+# Creates the directory (and any nonexistent parent directories) where
+# workflow data is stored, failing silently if the directory already exists
 def create_alfred_data_dir():
 
     try:
@@ -29,6 +31,7 @@ def create_alfred_data_dir():
         return
 
 
+# Retrieves bible data object (books, versions, etc.) for the given language
 def get_bible_data(language):
 
     bible_data_path = os.path.join(
@@ -37,6 +40,7 @@ def get_bible_data(language):
         return json.load(bible_data_file)
 
 
+# Retrieves map of chapter counts for every book of the Bible
 def get_chapter_data():
 
     chapter_data_path = os.path.join(DATA_PATH, 'bible', 'chapters.json')
@@ -44,25 +48,27 @@ def get_chapter_data():
         return json.load(chapter_data_file)
 
 
-# Get name of first book whose id matches the given id
+# Retrieves name of first book whose id matches the given id
 def get_book(books, book_id):
 
     return next(book['name'] for book in books if book['id'] == book_id)
 
 
-# Get first version object whose id matches the given id
+# Retrieves first version object whose id matches the given id
 def get_version(versions, version_id):
 
     return next((version for version in versions
                 if version['id'] == version_id))
 
 
+# Retrieves a list of all supported versions for the given language
 def get_versions(language):
 
     bible = get_bible_data(language)
     return bible['versions']
 
 
+# Retrieves a list of all supported languages
 def get_languages():
 
     languages_path = os.path.join(DATA_PATH, 'languages.json')
@@ -70,6 +76,7 @@ def get_languages():
         return json.load(languages_file)
 
 
+# Retrieves a list of all supported search engines
 def get_search_engines():
 
     search_engines_path = os.path.join(DATA_PATH, 'search-engines.json')
@@ -77,6 +84,7 @@ def get_search_engines():
         return json.load(search_engines_file)
 
 
+# Retrieve the search engine object with the given ID
 def get_search_engine(search_engines, search_engine_id):
 
     return next((search_engine for search_engine in search_engines if
@@ -86,38 +94,52 @@ def get_search_engine(search_engines, search_engine_id):
 # Functions for accessing/manipulating mutable preferences
 
 
+# Retrieves map of default values for all available preferences
 def get_defaults():
 
     with open(DEFAULTS_PATH, 'r') as defaults_file:
         return json.load(defaults_file)
 
 
-def create_prefs():
+# Creates new user preferences file from the given defaults
+def create_prefs(defaults):
 
-    defaults = get_defaults()
     create_alfred_data_dir()
     with open(PREFS_PATH, 'w') as prefs_file:
         json.dump(defaults, prefs_file)
 
-    return defaults
+
+# Sets user preferences using the given preferences object
+def set_prefs(prefs):
+
+    with open(PREFS_PATH, 'w') as prefs_file:
+        json.dump(prefs, prefs_file)
 
 
+# Extends preferences with any missing keys
+def validate_prefs(prefs, defaults):
+
+    defaults = get_defaults()
+    # If keys
+    if set(prefs.keys()) != set(defaults.keys()):
+        defaults.update(prefs)
+        set_prefs(defaults)
+        return defaults
+    else:
+        return prefs
+
+
+# Retrieves map of user preferences
 def get_prefs():
 
+    defaults = get_defaults()
     try:
         with open(PREFS_PATH, 'r') as prefs_file:
-            return json.load(prefs_file)
+            prefs = json.load(prefs_file)
+            return validate_prefs(prefs, defaults)
     except IOError:
-        return create_prefs()
-
-
-def update_prefs(prefs):
-
-    # Merge preferences with defaults when updating
-    defaults = get_defaults()
-    defaults.update(prefs)
-    with open(PREFS_PATH, 'w') as prefs_file:
-        json.dump(defaults, prefs_file)
+        create_prefs(defaults)
+        return defaults
 
 
 # Constructs an Alfred XML string from the given results list
@@ -233,7 +255,7 @@ def get_full_ref(ref):
     return full_ref
 
 
-# Simplify format of reference content by removing unnecessary whitespace
+# Simplifies format of reference content by removing unnecessary whitespace
 def format_ref_content(ref_content):
 
     # Collapse consecutive spaces to single space
@@ -247,7 +269,7 @@ def format_ref_content(ref_content):
     return ref_content
 
 
-# Retrieve HTML contents of the given URL as a Unicode string
+# Retrieves HTML contents of the given URL as a Unicode string
 def get_url_content(url):
 
     request = urllib2.Request(url, headers={'User-Agent': USER_AGENT})
@@ -255,7 +277,7 @@ def get_url_content(url):
     return connection.read().decode('utf-8')
 
 
-# Evaluate character reference to its respective Unicode character
+# Evaluates character reference to its respective Unicode character
 def eval_charref(name):
 
     if name[0] == 'x':

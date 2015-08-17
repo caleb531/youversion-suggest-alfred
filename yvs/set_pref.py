@@ -29,7 +29,7 @@ def set_pref(key, value):
         bible = shared.get_bible_data(language=value)
         prefs['version'] = bible['default_version']
 
-    shared.update_prefs(prefs)
+    shared.set_prefs(prefs)
 
 
 def main(key_value_str):
