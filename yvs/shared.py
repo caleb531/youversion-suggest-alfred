@@ -92,32 +92,41 @@ def get_defaults():
         return json.load(defaults_file)
 
 
-def create_prefs():
+def create_prefs(defaults):
 
-    defaults = get_defaults()
     create_alfred_data_dir()
     with open(PREFS_PATH, 'w') as prefs_file:
         json.dump(defaults, prefs_file)
 
-    return defaults
+
+def set_prefs(prefs):
+
+    with open(PREFS_PATH, 'w') as prefs_file:
+        json.dump(prefs, prefs_file)
+
+
+# Extend preferences with any missing keys
+def validate_prefs(prefs, defaults):
+
+    defaults = get_defaults()
+    if set(prefs.keys()) != set(defaults.keys()):
+        defaults.update(prefs)
+        set_prefs(defaults)
+        return defaults
+    else:
+        return prefs
 
 
 def get_prefs():
 
+    defaults = get_defaults()
     try:
         with open(PREFS_PATH, 'r') as prefs_file:
-            return json.load(prefs_file)
+            prefs = json.load(prefs_file)
+            return validate_prefs(prefs, defaults)
     except IOError:
-        return create_prefs()
-
-
-def update_prefs(prefs):
-
-    # Merge preferences with defaults when updating
-    defaults = get_defaults()
-    defaults.update(prefs)
-    with open(PREFS_PATH, 'w') as prefs_file:
-        json.dump(defaults, prefs_file)
+        create_prefs(defaults)
+        return defaults
 
 
 # Constructs an Alfred XML string from the given results list

@@ -24,6 +24,13 @@ def test_language_persistence():
     nose.assert_equal(results[0]['title'], 'Gálatas 4 (NVI)')
 
 
+@use_prefs({})
+def test_missing_prefs():
+    """should supply missing preferences with defaults"""
+    results = yvs.get_result_list('mat 5.3')
+    nose.assert_equal(len(results), 1)
+
+
 def test_create_data_dir_silent_fail():
     """should silently fail if Alfred data directory already exists"""
     yvs.shared.create_alfred_data_dir()
