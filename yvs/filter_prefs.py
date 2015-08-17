@@ -28,7 +28,7 @@ class Preference(object):
 
         return {
             'title': self.title,
-            'subtitle': 'Set your preferred {}'.format(self.title.lower()),
+            'subtitle': 'Set your preferred \'{}\''.format(self.name),
             'autocomplete': '{} '.format(self.key),
             'valid': 'no'
         }
@@ -37,16 +37,6 @@ class Preference(object):
     def get_values(self):
 
         return self.values()
-
-    # Retrieves the null result for when the given value can't be found
-    def get_value_null_result(self):
-
-        return {
-            'title': 'No Results for {}'.format(self.title),
-            'subtitle': 'Could not find a {} matching the query'.format(
-                self.name),
-            'valid': 'no'
-        }
 
     # Retrieves Alfred result list of all available values for this preference
     def get_value_result_list(self, query_str):
@@ -76,7 +66,11 @@ class Preference(object):
                 results.append(result)
 
         if not results:
-            results.append(self.get_value_null_result())
+            results.append({
+                'title': 'No Results',
+                'subtitle': 'No values matching {}'.format(query_str),
+                'valid': 'no'
+            })
 
         return results
 
@@ -104,14 +98,14 @@ def get_pref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
-# Retrieve result list of available preferences, filtered by the given query
+# Retrieves result list of available preferences, filtered by the given query
 def get_pref_result_list(query_str):
 
     return [pref.get_pref_result() for pref in
             PREFERENCES if pref.key.lower().startswith(query_str)]
 
 
-# Retrieve result list of preferences or their respective values (depending on
+# Retrieves result list of preferences or their respective values (depending on
 # the given query string)
 def get_result_list(query_str):
 
@@ -136,6 +130,8 @@ def get_result_list(query_str):
 
     else:
 
+        # Should show all available preferences if query is empty
+        # or if query does not match
         results = get_pref_result_list(query_str)
 
     # Always sort results by title in this case
@@ -147,14 +143,12 @@ def get_result_list(query_str):
 def main(query_str):
 
     results = get_result_list(query_str)
-
     if not results:
-        results = [{
-            'uid': 'yvs-noprefs',
-            'title': 'Invalid preference name or value',
-            'subtitle': 'Please enter a valid name or value to set',
+        results.append({
+            'title': 'No Results',
+            'subtitle': 'No preferences matching \'{}\''.format(query_str),
             'valid': 'no'
-        }]
+        })
 
     print(shared.get_result_list_xml(results))
 
