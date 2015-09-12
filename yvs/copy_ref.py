@@ -1,6 +1,5 @@
 # yvs.copy_ref
 
-import collections
 import yvs.shared as shared
 from HTMLParser import HTMLParser
 
@@ -30,7 +29,7 @@ class ReferenceParser(HTMLParser):
         self.content_depth = None
         self.verse_num = None
         # Use a deque for efficient appends
-        self.content_parts = collections.deque()
+        self.content_parts = []
 
     # Determines if parser is currently within content of verse to include
     def is_in_verse_content(self):
