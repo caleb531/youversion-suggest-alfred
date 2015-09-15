@@ -28,7 +28,6 @@ class ReferenceParser(HTMLParser):
         self.verse_depth = None
         self.content_depth = None
         self.verse_num = None
-        # Use a deque for efficient appends
         self.content_parts = []
 
     # Determines if parser is currently within content of verse to include
