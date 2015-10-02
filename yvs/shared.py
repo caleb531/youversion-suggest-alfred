@@ -51,14 +51,17 @@ def get_chapter_data():
 # Retrieves name of first book whose id matches the given id
 def get_book(books, book_id):
 
-    return next(book['name'] for book in books if book['id'] == book_id)
+    for book in books:
+        if book['id'] == book_id:
+            return book['name']
 
 
 # Retrieves first version object whose id matches the given id
 def get_version(versions, version_id):
 
-    return next((version for version in versions
-                if version['id'] == version_id))
+    for version in versions:
+        if version['id'] == version_id:
+            return version
 
 
 # Retrieves a list of all supported versions for the given language
@@ -87,8 +90,9 @@ def get_search_engines():
 # Retrieve the search engine object with the given ID
 def get_search_engine(search_engines, search_engine_id):
 
-    return next((search_engine for search_engine in search_engines if
-                 search_engine['id'] == search_engine_id))
+    for search_engine in search_engines:
+        if search_engine['id'] == search_engine_id:
+            return search_engine
 
 
 # Functions for accessing/manipulating mutable preferences
