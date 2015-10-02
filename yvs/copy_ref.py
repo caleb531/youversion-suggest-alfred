@@ -38,8 +38,7 @@ class ReferenceParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
-        if tag == 'div' or tag == 'span':
-            self.depth += 1
+        self.depth += 1
         if 'class' in attr_dict:
             elem_class = attr_dict['class']
             elem_class_names = elem_class.split(' ')
@@ -70,8 +69,7 @@ class ReferenceParser(HTMLParser):
             self.in_verse = False
         if self.depth == self.content_depth and self.in_verse_content:
             self.in_verse_content = False
-        if tag == 'div' or tag == 'span':
-            self.depth -= 1
+        self.depth -= 1
 
     # Handles verse content
     def handle_data(self, content):
