@@ -124,7 +124,7 @@ def set_prefs(prefs):
 def validate_prefs(prefs, defaults):
 
     defaults = get_defaults()
-    # If keys
+    # If user preferences contain all keys found in defaults
     if set(prefs.keys()) != set(defaults.keys()):
         defaults.update(prefs)
         set_prefs(defaults)
