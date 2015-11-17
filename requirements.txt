@@ -1,8 +1,8 @@
 biplist==0.9
 colorama==0.3.3
-coverage==4.0
+coverage==4.0.2
 cssselect==0.9.1
-flake8==2.4.1
+flake8==2.5.0
 funcsigs==0.4
 functools32==3.2.3.post2
 invoke==0.11.1
