@@ -1,5 +1,6 @@
 # tests.test_search_ref
 
+import nose.tools as nose
 import yvs.search_ref as yvs
 from mock import patch
 from tests.decorators import use_prefs
@@ -38,6 +39,14 @@ def test_alternate_search_engine(wb_open):
         'https://duckduckgo.com/?q=John+3+%28ESV%29')
 
 
+@use_prefs({'searchEngine': 'xyz'})
+@patch('webbrowser.open')
+def test_invalid_search_engine(wb_open):
+    """should throw exception if nonexistent web browser is given"""
+    with nose.assert_raises(Exception):
+        yvs.main('59/jhn.3')
+
+
 @use_prefs({'language': 'es', 'version': 128})
 @patch('webbrowser.open')
 def test_unicode_search(wb_open):
@@ -45,3 +54,10 @@ def test_unicode_search(wb_open):
     yvs.main('128/exo.4')
     wb_open.assert_called_once_with(
         'https://www.google.com/search?q=%C3%89xodo+4+%28NVI%29')
+
+
+@patch('webbrowser.open')
+def test_invalid_uid(wb_open):
+    """should throw exception when UID for a nonexistent reference is given"""
+    with nose.assert_raises(Exception):
+        yvs.main('64/xyz.7')

@@ -1,6 +1,5 @@
 # yvs.copy_ref
 
-import collections
 import yvs.shared as shared
 from HTMLParser import HTMLParser
 
@@ -29,8 +28,7 @@ class ReferenceParser(HTMLParser):
         self.verse_depth = None
         self.content_depth = None
         self.verse_num = None
-        # Use a deque for efficient appends
-        self.content_parts = collections.deque()
+        self.content_parts = []
 
     # Determines if parser is currently within content of verse to include
     def is_in_verse_content(self):
@@ -40,8 +38,8 @@ class ReferenceParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
-        if tag == 'div' or tag == 'span':
-            self.depth += 1
+        # Keep track of element depth throughout entire document
+        self.depth += 1
         if 'class' in attr_dict:
             elem_class = attr_dict['class']
             elem_class_names = elem_class.split(' ')
@@ -64,6 +62,7 @@ class ReferenceParser(HTMLParser):
                 self.content_depth = self.depth
 
     def handle_endtag(self, tag):
+        # Determine the end of a paragraph block
         if self.depth == self.block_depth and self.in_block:
             self.in_block = False
             self.content_parts.append('\n')
@@ -72,8 +71,8 @@ class ReferenceParser(HTMLParser):
             self.in_verse = False
         if self.depth == self.content_depth and self.in_verse_content:
             self.in_verse_content = False
-        if tag == 'div' or tag == 'span':
-            self.depth -= 1
+        # Remember to keep track of element depth
+        self.depth -= 1
 
     # Handles verse content
     def handle_data(self, content):

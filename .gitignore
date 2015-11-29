@@ -13,3 +13,6 @@ htmlcov/
 .coverage
 coverage.xml
 nosetests.xml
+
+# Required packages
+.virtualenv

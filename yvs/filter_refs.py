@@ -186,14 +186,12 @@ def get_result_list(query_str):
 def main(query_str):
 
     results = get_result_list(query_str)
-
     if not results:
-        results = [{
-            'uid': 'yvs-no-results',
+        results.append({
             'title': 'No Results',
             'subtitle': 'No references matching \'{}\''.format(query_str),
             'valid': 'no'
-        }]
+        })
 
     print(shared.get_result_list_xml(results))
 
