@@ -10,14 +10,18 @@ import urllib2
 import unicodedata
 from xml.etree import ElementTree as ETree
 
+# Path to the directory where Alfred stores non-volatile data for this workflow
 ALFRED_DATA_DIR = os.path.join(
     os.path.expanduser('~'), 'Library', 'Application Support', 'Alfred 2',
     'Workflow Data', 'com.calebevans.youversionsuggest')
-
+# Path to the workflow's user preferences
 PREFS_PATH = os.path.join(ALFRED_DATA_DIR, 'preferences.json')
+# Path to the data directory where defaults and language data files are stored
 DATA_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
+# Path to the workflow's
 DEFAULTS_PATH = os.path.join(DATA_PATH, 'defaults.json')
 
+# The user agent used for HTTP requests sent to the YouVersion website
 USER_AGENT = 'YouVersion Suggest'
 
 
@@ -124,8 +128,10 @@ def set_prefs(prefs):
 def validate_prefs(prefs, defaults):
 
     defaults = get_defaults()
-    # If user preferences contain all keys found in defaults
+    # If any keys in the preference defaults have been added or removed
     if set(prefs.keys()) != set(defaults.keys()):
+        # Merge existing user preferences into defaults (thereby ensuring that
+        # user preferences are not lacking any newly-added preferences)
         defaults.update(prefs)
         set_prefs(defaults)
         return defaults
@@ -142,6 +148,7 @@ def get_prefs():
             prefs = json.load(prefs_file)
             return validate_prefs(prefs, defaults)
     except IOError:
+        # If user preferences don't exist, create them
         create_prefs(defaults)
         return defaults
 
@@ -161,19 +168,23 @@ def get_result_list_xml(results):
             item.set('uid', result['uid'])
         if 'autocomplete' in result:
             item.set('autocomplete', result['autocomplete'])
-        # Create appropriate child elements of <item> element
+        # Result title
         title = ETree.SubElement(item, 'title')
         title.text = result['title']
+        # Text copied to clipboard when cmd-c is invoked for this result
         copy = ETree.SubElement(item, 'text', {
             'type': 'copy'
         })
         copy.text = result.get('copy', result['title'])
+        # Text shown when invoking Alfred's Large Type feature for this result
         largetype = ETree.SubElement(item, 'text', {
             'type': 'largetype'
         })
         largetype.text = result.get('largetype', result['title'])
+        # Result subtitle (always indicates action)
         subtitle = ETree.SubElement(item, 'subtitle')
         subtitle.text = result['subtitle']
+        # Use same YouVersion icon for all results
         icon = ETree.SubElement(item, 'icon')
         icon.text = 'icon.png'
 
@@ -181,6 +192,7 @@ def get_result_list_xml(results):
 
 
 # Query-related functions
+
 
 # Simplifies the format of the query string
 def format_query_str(query_str):
@@ -262,7 +274,7 @@ def get_full_ref(ref):
 # Simplifies format of reference content by removing unnecessary whitespace
 def format_ref_content(ref_content):
 
-    # Collapse consecutive spaces to single space
+    # Collapse consecutive spaces into a single space
     ref_content = re.sub(r' {2,}', ' ', ref_content)
     # Collapse sequences of three or more newlines into two
     ref_content = re.sub(r'\n{3,}', '\n\n', ref_content)
