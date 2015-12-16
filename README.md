@@ -126,3 +126,8 @@ autocompletion will allow you to minimize typing).
 
 - `yvset searchEngine b` => Bing
 - `yvset searchEngine d` => DuckDuckGo
+
+## Disclaimer
+
+This project is not affiliated with YouVersion, and all Bible content is
+copyright of the respective publishers.
