@@ -87,6 +87,8 @@ Currently, YouVersion Suggest supports the following languages:
 - Portuguese - Portugal (pt-PT)
 - Russian (ru)
 - Arabic (ar)
+- Persian (fa)
+- Bulgarian (bg)
 
 If you would like support added for another language, please [submit an issue on
 GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
