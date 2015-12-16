@@ -28,6 +28,7 @@ class SearchResultParser(HTMLParser):
         self.results = []
         self.current_result = None
 
+    # Detects the start of search results, titles, reference content, etc.
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
         if 'class' in attr_dict:
@@ -41,24 +42,27 @@ class SearchResultParser(HTMLParser):
                     'subtitle': ''
                 }
                 self.results.append(self.current_result)
-        # Detect beginning of search result heading
-        if self.in_ref and tag == 'a':
-            self.in_heading = True
-            self.current_result['arg'] = get_uid_from_url(attr_dict['href'])
-        # Detect beginning of search result content
-        elif self.in_ref and tag == 'p':
-            self.in_content = True
+        if self.in_ref:
+            # Detect beginning of search result heading
+            if tag == 'a':
+                self.in_heading = True
+                self.current_result['arg'] = get_uid_from_url(
+                    attr_dict['href'])
+            # Detect beginning of search result content
+            elif tag == 'p':
+                self.in_content = True
 
+    # Detects the end of search results, titles, reference content, etc.
     def handle_endtag(self, tag):
-        if self.in_ref and tag == 'li':
-            self.in_ref = False
-        # Determine the end of a verse or its content
-        elif self.in_heading and tag == 'a':
-            self.in_heading = False
-        elif self.in_content and tag == 'p':
-            self.in_content = False
-            self.current_result['subtitle'] = shared.format_ref_content(
-                self.current_result['subtitle'])
+        if self.in_ref:
+            if tag == 'li':
+                self.in_ref = False
+            elif self.in_heading and tag == 'a':
+                self.in_heading = False
+            elif self.in_content and tag == 'p':
+                self.in_content = False
+                self.current_result['subtitle'] = shared.format_ref_content(
+                    self.current_result['subtitle'])
 
     # Handles verse content
     def handle_data(self, content):

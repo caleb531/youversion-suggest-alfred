@@ -75,18 +75,15 @@ class ReferenceParser(HTMLParser):
                 self.in_verse_content = True
                 self.content_depth = self.depth
 
-    # Detects the start of blocks, breaks, verses, and verse content
+    # Detects the end of blocks, breaks, verses, and verse content
     def handle_endtag(self, tag):
-        # Detect the end of a paragraph block
-        if self.depth == self.block_depth and self.in_block:
+        if self.in_block and self.depth == self.block_depth:
             self.in_block = False
             self.content_parts.append('\n')
-        # Detect the end of a verse or its content
-        if self.depth == self.verse_depth and self.in_verse:
+        elif self.in_verse and self.depth == self.verse_depth:
             self.in_verse = False
-        if self.depth == self.content_depth and self.in_verse_content:
+        elif self.in_verse_content and self.depth == self.content_depth:
             self.in_verse_content = False
-        # Remember to keep track of element depth
         self.depth -= 1
 
     # Handles verse content
