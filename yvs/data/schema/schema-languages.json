@@ -1,23 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Languages",
-  "description": "Information for all supported languages",
+  "description": "Details for all languages supported by YouVersion Suggest",
   "type": "array",
   "items": {
-    "title": "Language",
     "type": "object",
     "properties": {
-      "name": {
-        "description": "The name of the language as written in said language",
-        "type": "string"
-      },
       "id": {
-        "description": "The language's ISO 639-1 code",
+        "description": "The ISO 639-1 code for this language",
         "type": "string",
         "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
+      },
+      "name": {
+        "description": "The name of this language as written in said language",
+        "type": "string"
       }
     },
-    "required": ["name", "id"],
+    "required": ["id", "name"],
     "additionalProperties": false
   }
 }

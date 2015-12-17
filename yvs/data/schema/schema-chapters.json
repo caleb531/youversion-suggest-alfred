@@ -1,11 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Chapter Counts",
-  "description": "A list of chapter counts for each book of the Bible",
+  "description": "A list of chapter counts for each Bible book",
   "type": "object",
   "patternProperties": {
-    "^([a-z]{3}|[1-9][a-z]{2})$": {
-      "title": "Chapter Count",
+    "^([a-z]{3}|[1-3][a-z]{2})$": {
+      "description": "The number of chapters in this book",
       "type": "integer",
       "minimum": 1
     }

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "A list of search engines YouVersion Suggest can use to search Bible references",
+  "type": "array",
+  "items": {
+    "properties": {
+      "id": {
+        "description": "The ID used by YouVersion Suggest to uniquely identify this search engine",
+        "type": "string",
+        "pattern": "^([a-z0-9_]+)$"
+      },
+      "name": {
+        "description": "The name of the search engine",
+        "type": "string"
+      },
+      "url": {
+        "description": "The URL of the search engine's search page (with {query} substituted for the search query)",
+        "type": "string"
+      }
+    },
+    "required": ["id", "name", "url"],
+    "additionalProperties": false
+  }
+}
