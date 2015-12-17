@@ -69,26 +69,26 @@ your preferred language.
 
 Currently, YouVersion Suggest supports the following languages:
 
+- Arabic (ar)
+- Bulgarian (bg)
+- Dutch (nl)
 - English (en)
-- Spanish (es)
-- Spanish - Spain (es-ES)
+- Finnish (fi)
 - French (fr)
 - German (de)
+- Hindi (hi)
 - Italian (it)
-- Dutch (nl)
-- Swedish (sv)
-- Finnish (fi)
-- Polish (pl)
-- Simplified Chinese (zh-CN)
 - Japanese (ja)
 - Korean (ko)
-- Hindi (hi)
+- Persian (fa)
+- Polish (pl)
 - Portuguese - Brazil (pt)
 - Portuguese - Portugal (pt-PT)
 - Russian (ru)
-- Arabic (ar)
-- Persian (fa)
-- Bulgarian (bg)
+- Simplified Chinese (zh-CN)
+- Spanish (es)
+- Spanish - Spain (es-ES)
+- Swedish (sv)
 
 If you would like support added for another language, please [submit an issue on
 GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
