@@ -32,7 +32,7 @@ def create_alfred_data_dir():
     try:
         os.makedirs(ALFRED_DATA_DIR)
     except OSError:
-        return
+        pass
 
 
 # Retrieves bible data object (books, versions, etc.) for the given language
@@ -102,32 +102,25 @@ def get_search_engine(search_engines, search_engine_id):
 # Functions for accessing/manipulating mutable preferences
 
 
-# Retrieves map of default values for all available preferences
+# Retrieves the default values for all workflow preferences
 def get_defaults():
 
     with open(DEFAULTS_PATH, 'r') as defaults_file:
         return json.load(defaults_file)
 
 
-# Creates new user preferences file from the given defaults
-def create_prefs(defaults):
-
-    create_alfred_data_dir()
-    with open(PREFS_PATH, 'w') as prefs_file:
-        json.dump(defaults, prefs_file)
-
-
-# Sets user preferences using the given preferences object
+# Overrwrites (or creates) user preferences using the given preferences object
 def set_prefs(prefs):
 
+    # Always ensure that the data directory (where prefrences reside) exists
+    create_alfred_data_dir()
     with open(PREFS_PATH, 'w') as prefs_file:
         json.dump(prefs, prefs_file)
 
 
-# Extends preferences with any missing keys
-def validate_prefs(prefs, defaults):
+# Extends user preferences with any missing keys
+def extend_prefs(prefs, defaults):
 
-    defaults = get_defaults()
     # If any keys in the preference defaults have been added or removed
     if set(prefs.keys()) != set(defaults.keys()):
         # Merge existing user preferences into defaults (thereby ensuring that
@@ -145,11 +138,10 @@ def get_prefs():
     defaults = get_defaults()
     try:
         with open(PREFS_PATH, 'r') as prefs_file:
-            prefs = json.load(prefs_file)
-            return validate_prefs(prefs, defaults)
+            return extend_prefs(json.load(prefs_file), defaults)
     except IOError:
         # If user preferences don't exist, create them
-        create_prefs(defaults)
+        set_prefs(defaults)
         return defaults
 
 
