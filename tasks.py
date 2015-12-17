@@ -6,14 +6,18 @@ from invoke import task
 
 @task
 def test(cover=False):
-    # Run tests using nose called with coverage
-    code = subprocess.call(['coverage', 'run', '-m', 'nose', '--rednose'])
-    # Also generate coverage reports when --cover flag is given
-    if cover and code == 0:
-        # Add blank line between test report and coverage report
-        print('')
-        subprocess.call(['coverage', 'report'])
-        subprocess.call(['coverage', 'html'])
+    if cover:
+        # Run tests via coverage and generate reports if --cover flag is given
+        code = subprocess.call(['coverage', 'run', '-m', 'nose', '--rednose'])
+        # Only show coverage report if all tests have passed
+        if code == 0:
+            # Add blank line between test report and coverage report
+            print('')
+            subprocess.call(['coverage', 'report'])
+            subprocess.call(['coverage', 'html'])
+    else:
+        # Otherwise, run tests via nose (which is faster)
+        code = subprocess.call(['nosetests', '--rednose'])
 
 
 @task
