@@ -16,13 +16,27 @@ import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 
 
+# Filename of the exported workflow
 WORKFLOW_NAME = 'YouVersion Suggest.alfredworkflow'
+# Path to the current user's home directory
 HOME_DIR = os.path.expanduser('~')
+# Name of Alfred's core preferences file
 CORE_PREFS_NAME = 'com.runningwithcrayons.Alfred-Preferences.plist'
+# Name of Alfred's user preferences file
 USER_PREFS_NAME = 'Alfred.alfredpreferences'
+# Path to the default location of Alfred's user preferences file
 DEFAULT_USER_PREFS_DIR = os.path.join(
     HOME_DIR, 'Library', 'Application Support', 'Alfred 2')
-PKG_RESOURCES = ('icon.png', 'yvs/__init__.py', 'yvs/shared.py', 'yvs/data')
+# List of all files/directories to be copied to the exported workflow
+PKG_RESOURCES = (
+    'icon.png',
+    'yvs/__init__.py',
+    'yvs/shared.py',
+    'yvs/data/bible',
+    'yvs/data/defaults.json',
+    'yvs/data/languages.json',
+    'yvs/data/search-engines.json'
+)
 
 
 # Get path to directory containing Alfred's user preferences
