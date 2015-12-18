@@ -15,7 +15,8 @@
       },
       "url": {
         "description": "The URL of the search engine's search page (with {query} substituted for the search query)",
-        "type": "string"
+        "type": "string",
+        "pattern": "https?://(.*?){query}(.*?)$"
       }
     },
     "required": ["id", "name", "url"],
