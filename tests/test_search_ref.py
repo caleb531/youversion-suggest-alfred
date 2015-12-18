@@ -42,7 +42,7 @@ def test_alternate_search_engine(wb_open):
 @use_prefs({'language': 'en', 'version': 111, 'searchEngine': 'xyz'})
 @patch('webbrowser.open')
 def test_invalid_search_engine(wb_open):
-    """should throw exception if nonexistent web browser is given"""
+    """should raise exception if nonexistent web browser is given"""
     with nose.assert_raises(Exception):
         yvs.main('59/jhn.3')
 
@@ -58,6 +58,6 @@ def test_unicode_search(wb_open):
 
 @patch('webbrowser.open')
 def test_invalid_uid(wb_open):
-    """should throw exception when UID for a nonexistent reference is given"""
+    """should raise exception when UID for a nonexistent reference is given"""
     with nose.assert_raises(Exception):
         yvs.main('64/xyz.7')
