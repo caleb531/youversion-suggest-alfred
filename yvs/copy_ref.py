@@ -3,21 +3,33 @@
 import yvs.shared as shared
 from HTMLParser import HTMLParser
 
+# The base for all Bible reference URLs
+BASE_REF_URL = 'https://www.bible.com/bible/'
 
-# Parser for reference HTML
+# Elements that should be surrounded by blank lines
+BLOCK_ELEMS = {'b', 'p'}
+# Elements that should trigger a line break
+BREAK_ELEMS = {'li1', 'q1', 'q2'}
+
+
+# An basic HTML parser class which receives HTML from the page for a YouVersion
+# Bible reference and parses it to construct a shareable plain text reference
 class ReferenceParser(HTMLParser):
 
     # Associates the given reference object with this parser instance
     def __init__(self, ref):
         HTMLParser.__init__(self)
         if 'verse' in ref:
+            # If reference is a verse or verse range, set the correct range of
+            # verses to copy
             self.verse_start = ref['verse']
             self.verse_end = ref.get('endverse', self.verse_start)
         else:
+            # Otherwise, assume reference is a chapter
             self.verse_start = 1
             self.verse_end = None
 
-    # Resets parser variables (implicitly called on instantiation)
+    # Resets parser variables (implicitly called when parser is instantiated)
     def reset(self):
         HTMLParser.reset(self)
         self.depth = 0
@@ -30,12 +42,14 @@ class ReferenceParser(HTMLParser):
         self.verse_num = None
         self.content_parts = []
 
-    # Determines if parser is currently within content of verse to include
+    # Returns True if parser is currently within the content of a verse to
+    # include (otherwise, returns False)
     def is_in_verse_content(self):
         return (self.in_verse and self.in_verse_content and
                 (self.verse_num >= self.verse_start and
                  (not self.verse_end or self.verse_num <= self.verse_end)))
 
+    # Detects the start of blocks, breaks, verses, and verse content
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
         # Keep track of element depth throughout entire document
@@ -44,12 +58,12 @@ class ReferenceParser(HTMLParser):
             elem_class = attr_dict['class']
             elem_class_names = elem_class.split(' ')
             # Detect paragraph breaks between verses
-            if elem_class in {'b', 'p'}:
+            if elem_class in BLOCK_ELEMS:
                 self.in_block = True
                 self.block_depth = self.depth
                 self.content_parts.append('\n\n')
             # Detect line breaks within a single verse
-            if elem_class in {'li1', 'q1', 'q2'}:
+            if elem_class in BREAK_ELEMS:
                 self.content_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
             if 'verse' in elem_class_names:
@@ -61,17 +75,15 @@ class ReferenceParser(HTMLParser):
                 self.in_verse_content = True
                 self.content_depth = self.depth
 
+    # Detects the end of blocks, breaks, verses, and verse content
     def handle_endtag(self, tag):
-        # Determine the end of a paragraph block
-        if self.depth == self.block_depth and self.in_block:
+        if self.in_block and self.depth == self.block_depth:
             self.in_block = False
             self.content_parts.append('\n')
-        # Determine the end of a verse or its content
-        if self.depth == self.verse_depth and self.in_verse:
+        elif self.in_verse and self.depth == self.verse_depth:
             self.in_verse = False
-        if self.depth == self.content_depth and self.in_verse_content:
+        elif self.in_verse_content and self.depth == self.content_depth:
             self.in_verse_content = False
-        # Remember to keep track of element depth
         self.depth -= 1
 
     # Handles verse content
@@ -88,7 +100,8 @@ class ReferenceParser(HTMLParser):
 
 # Retrieves HTML for reference with the given ID
 def get_ref_html(ref):
-    url = 'https://www.bible.com/bible/{version}/{book}.{chapter}'.format(
+    url = '{base}{version}/{book}.{chapter}'.format(
+        base=BASE_REF_URL,
         version=ref['version_id'],
         book=ref['book_id'],
         chapter=ref['chapter'])
@@ -100,6 +113,7 @@ def get_ref_content(ref):
     html = get_ref_html(ref)
     parser = ReferenceParser(ref)
     parser.feed(html)
+    # Format reference content by removing superfluous whitespace and such
     ref_content = shared.format_ref_content(''.join(parser.content_parts))
     # Prepend reference header that identifies reference
     ref_content = ''.join((shared.get_full_ref(ref), '\n\n', ref_content))

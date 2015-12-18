@@ -16,20 +16,36 @@ import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 
 
+# Name of the exported workflow file
 WORKFLOW_NAME = 'YouVersion Suggest.alfredworkflow'
+# Path to the current user's home directory
 HOME_DIR = os.path.expanduser('~')
+# Name of Alfred's core preferences file
 CORE_PREFS_NAME = 'com.runningwithcrayons.Alfred-Preferences.plist'
+# Path to Alfred's core preferences file
+CORE_PREFS_PATH = os.path.join(
+    HOME_DIR, 'Library', 'Preferences', CORE_PREFS_NAME)
+# Name of Alfred's user preferences file
 USER_PREFS_NAME = 'Alfred.alfredpreferences'
+# Path to the default location of Alfred's user preferences file
 DEFAULT_USER_PREFS_DIR = os.path.join(
     HOME_DIR, 'Library', 'Application Support', 'Alfred 2')
-PKG_RESOURCES = ('icon.png', 'yvs/__init__.py', 'yvs/shared.py', 'yvs/data')
+# List of all files/directories to be copied to the exported workflow
+PKG_RESOURCES = (
+    'icon.png',
+    'yvs/__init__.py',
+    'yvs/shared.py',
+    'yvs/data/bible',
+    'yvs/data/defaults.json',
+    'yvs/data/languages.json',
+    'yvs/data/search-engines.json'
+)
 
 
 # Get path to directory containing Alfred's user preferences
 def get_user_prefs_dir():
 
-    core_prefs = biplist.readPlist(
-        os.path.join(HOME_DIR, 'Library', 'Preferences', CORE_PREFS_NAME))
+    core_prefs = biplist.readPlist(CORE_PREFS_PATH)
 
     # If user is syncing their preferences using a syncing service
     if 'syncfolder' in core_prefs:

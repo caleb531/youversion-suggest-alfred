@@ -4,6 +4,10 @@
     "name": "العربية"
   },
   {
+    "id": "bg",
+    "name": "Български език"
+  },
+  {
     "id": "de",
     "name": "Deutsch"
   },
@@ -18,6 +22,10 @@
   {
     "id": "es_ES",
     "name": "Español (España)"
+  },
+  {
+    "id": "fa",
+    "name": "فارسی"
   },
   {
     "id": "fi",
