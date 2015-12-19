@@ -56,8 +56,9 @@ def get_version_elems(language_id):
             language_id.replace('_', '-')),
         opener=yvs.get_url_content)
 
-    category_elems = d('#main > article > ul > li')
+    category_elems = d('article > ul > li')
     version_elems = None
+    language_name = None
 
     if category_elems:
 
@@ -67,8 +68,8 @@ def get_version_elems(language_id):
         text = category_elem.text
         language_name = get_language_name(text)
 
-        if not language_name:
-            raise RuntimeError('Language name cannot be determined. Aborting.')
+    if not language_name:
+        raise RuntimeError('Language name cannot be determined. Aborting.')
 
     return version_elems, language_name
 
@@ -140,7 +141,7 @@ def get_books(default_version):
         url='https://www.bible.com/bible/{}/jhn.1'.format(default_version),
         opener=yvs.get_url_content)
 
-    book_elems = d('#menu_book_chapter a[data-book]')
+    book_elems = d('a[data-book]')
 
     if not book_elems:
         raise RuntimeError('Cannot retrieve book data. Aborting.')
