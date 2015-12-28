@@ -1,7 +1,7 @@
 # utilities.update_workflow
 
-# This workflow utility updates all workflow resources with the latest versions
-# found in this repository. Passing the --export flag will also export the
+# This workflow utility updates the installed workflow's scripts/resources with
+# their latest versions. Passing the --export flag will also export the
 # installed workflow to the local project directory.
 
 import argparse
@@ -54,35 +54,18 @@ def get_user_prefs_dir():
         return DEFAULT_USER_PREFS_DIR
 
 
-# Get path to Alfred's user preferences file
-def get_user_prefs_path():
-
-    return os.path.join(get_user_prefs_dir(), USER_PREFS_NAME)
-
-
 # Get path to installed workflow
 def get_workflow_path():
 
     # Assume that whichever workflow contains a 'yvs' directory is YV Suggest
-    yvs_packages = glob.glob(
-        os.path.join(get_user_prefs_path(), 'workflows', '*', 'yvs'))
+    yvs_packages = glob.glob(os.path.join(
+        get_user_prefs_dir(), USER_PREFS_NAME, 'workflows', '*', 'yvs'))
 
     if not yvs_packages:
         raise OSError('YouVersion Suggest in not installed locally')
 
+    # Return the first (and presumably only) match found
     return os.path.dirname(yvs_packages[0])
-
-
-# Get path to installed workflow's info.plist file
-def get_workflow_info_path(workflow_path):
-
-    return os.path.join(workflow_path, 'info.plist')
-
-
-# Parse the info.plist file at the given path
-def get_workflow_info(info_path):
-
-    return plistlib.readPlist(info_path)
 
 
 # Get the file content of a module withini the project
@@ -97,7 +80,7 @@ def get_module_content(module_name):
 def get_module_name(module_content):
 
     # The module name has been made accessible as a code comment on the first
-    # line of the respective module content
+    # line of the respective module's content
     first_line = module_content.split('\n', 1)[0]
     return first_line[1:].strip()
 
@@ -105,7 +88,7 @@ def get_module_name(module_content):
 # Update content of all scripts in workflow info object
 def update_workflow_objects(info):
 
-    updated_objects = False
+    updated_objects = []
 
     for obj in info['objects']:
 
@@ -116,8 +99,7 @@ def update_workflow_objects(info):
 
             if new_module_content != obj['config']['script']:
                 obj['config']['script'] = new_module_content
-                print('Updated {}'.format(module_name))
-                updated_objects = True
+                updated_objects.append(module_name)
 
     return updated_objects
 
@@ -169,7 +151,7 @@ def copy_resource(resource_path, dest_resource_path):
 # Copy all package resources (files or directories) to installed workflow
 def copy_pkg_resources(workflow_path):
 
-    updated_resources = False
+    updated_resources = []
 
     for resource_path in PKG_RESOURCES:
 
@@ -177,17 +159,9 @@ def copy_pkg_resources(workflow_path):
         # Only copy resources if content has changed
         if not resources_are_equal(resource_path, dest_resource_path):
             copy_resource(resource_path, dest_resource_path)
-            print('Updated {}'.format(resource_path))
-            updated_resources = True
+            updated_resources.append(resource_path)
 
     return updated_resources
-
-
-# Write info.plist object to file
-def save_info(info, info_path):
-
-    plistlib.writePlist(info, info_path)
-    print('Updated info.plist')
 
 
 # Export installed workflow to project directory
@@ -216,25 +190,39 @@ def parse_cli_args():
     parser.add_argument(
         '--export', action='store_true',
         help='exports the installed workflow to the local project directory')
-
     return parser.parse_args()
 
 
 def main():
 
     cli_args = parse_cli_args()
+
     project_path = os.getcwd()
     workflow_path = get_workflow_path()
-    info_path = get_workflow_info_path(workflow_path)
-    info = get_workflow_info(info_path)
+
+    info_path = os.path.join(workflow_path, 'info.plist')
+    info = plistlib.readPlist(info_path)
+
     updated_objects = update_workflow_objects(info)
     updated_resources = copy_pkg_resources(workflow_path)
+
     if updated_objects or updated_resources:
+
         if updated_objects:
-            save_info(info, info_path)
+            plistlib.writePlist(info, info_path)
+            for module_name in updated_objects:
+                print('Updated {}'.format(module_name))
+
+        if updated_resources:
+            for resource_path in updated_resources:
+                print('Updated {}'.format(resource_path))
+
         print('Updated installed workflow successfully')
+
     else:
+
         print('Workflow has not changed')
+
     if cli_args.export:
         export_workflow(workflow_path, project_path)
         print('Exported installed workflow successfully')
