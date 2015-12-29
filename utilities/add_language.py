@@ -180,7 +180,7 @@ def get_bible_data(language_id, default_version, max_version_id):
 # Write JSON data to file as Unicode
 def write_json_unicode(json_object, json_file):
 
-    json_str = unicode(json.dumps(json_object, **JSON_PARAMS))
+    json_str = json.dumps(json_object, **JSON_PARAMS)
     json_file.write(json_str)
     json_file.write('\n')
 
