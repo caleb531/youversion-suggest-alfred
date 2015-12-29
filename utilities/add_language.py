@@ -1,7 +1,9 @@
 # utilities.add_language
 
-# This language utility is a handy (albeit imperfect) tool for automatically
-# adding support for any language to YouVersion Suggest.
+# This language utility adds support for a language to YouVersion Suggest by
+# gathering and parsing data from the YouVersion website to create all needed
+# language files; this utility can also be used to update any Bible data for an
+# already-supported language
 
 from __future__ import unicode_literals
 import argparse
@@ -24,7 +26,7 @@ JSON_PARAMS = {
 }
 
 
-# Parse the language name from the given category header string
+# Parses the language name from the given category header string
 def get_language_name(text):
 
     patt = r'^\s*(.+?)(?:\s*\((\d+)\)\s*)$'
@@ -35,7 +37,7 @@ def get_language_name(text):
         return None
 
 
-# Construct an object representing a Bible version
+# Constructs an object representing a Bible version
 def get_version(version_elem):
 
     link_elem = version_elem.find('a')
@@ -48,7 +50,7 @@ def get_version(version_elem):
     }
 
 
-# Retrieve list of HTML elements, each corresponding to a Bible version
+# Retrieves list of HTML elements, each corresponding to a Bible version
 def get_version_elems(language_id):
 
     d = PyQuery(
@@ -74,7 +76,7 @@ def get_version_elems(language_id):
     return version_elems, language_name
 
 
-# Sort and remove duplicates from list of versions
+# Returns a copy of the given version list, sorted and with duplicates removed
 def get_unique_versions(versions):
 
     unique_versions = []
@@ -86,7 +88,7 @@ def get_unique_versions(versions):
     return unique_versions
 
 
-# Retrieve a list of dictionaries representing Bible versions
+# Retrieves a list of dictionaries representing Bible versions
 def get_versions(language_id, max_version_id):
 
     print('Retrieving version data...')
@@ -110,7 +112,7 @@ def get_versions(language_id, max_version_id):
     return unique_versions, language_name
 
 
-# Construct an object representing a book of the Bible
+# Constructs an object representing a book of the Bible
 def get_book(book_elem):
 
     return {
@@ -119,7 +121,7 @@ def get_book(book_elem):
     }
 
 
-# Retrieve list of chapter counts for each book of the Bible
+# Retrieves a list of chapter counts for each book
 def get_chapter_data():
 
     chapter_data_path = os.path.join('yvs', 'data', 'bible', 'chapters.json')
@@ -129,7 +131,7 @@ def get_chapter_data():
     return chapter_data
 
 
-# Retrieve list of dictionaries, each representing a book of the Bible
+# Retrieves a list of books available in this language
 def get_books(default_version):
 
     print('Retrieving book data...')
@@ -155,7 +157,7 @@ def get_books(default_version):
     return books
 
 
-# Construct object representing all Bible data for a particular version
+# Constructs object representing all Bible data for a particular version
 # This data includes the list of books, list of versions, and default version
 def get_bible_data(language_id, default_version, max_version_id):
 
@@ -164,7 +166,7 @@ def get_bible_data(language_id, default_version, max_version_id):
         language_id,
         max_version_id)
 
-    # If no explicit default version is given, use version with lowest ID
+    # If no explicit default version is given, use version with smallest ID
     if not default_version:
         default_version = min(bible['versions'], key=itemgetter('id'))['id']
     elif not any(version['id'] == default_version for version in
@@ -177,7 +179,7 @@ def get_bible_data(language_id, default_version, max_version_id):
     return bible, language_name
 
 
-# Write JSON data to file as Unicode
+# Writes the given JSON data to a file as Unicode
 def write_json_unicode(json_object, json_file):
 
     json_str = json.dumps(json_object, **JSON_PARAMS)
@@ -185,7 +187,7 @@ def write_json_unicode(json_object, json_file):
     json_file.write('\n')
 
 
-# Construct the Bible data object and save it to a JSON file
+# Constructs the Bible data object and save it to a JSON file
 def save_bible_data(language_id, bible):
 
     bible_path = os.path.join(
@@ -195,7 +197,7 @@ def save_bible_data(language_id, bible):
         write_json_unicode(bible, bible_file)
 
 
-# Add the given language parameters to the list of supported languages
+# Adds this language's details (name, code) to the list of supported languages
 def update_language_list(language_id, language_name):
 
     print('Updating language list...')
@@ -215,7 +217,7 @@ def update_language_list(language_id, language_name):
             write_json_unicode(langs, langs_file)
 
 
-# Add support for the language with the given parameters to the workflow
+# Adds to the worklow support for the language with the given parameters
 def add_language(language_id, default_version, max_version_id):
 
     bible, language_name = get_bible_data(
@@ -226,14 +228,14 @@ def add_language(language_id, default_version, max_version_id):
     update_language_list(language_id, language_name)
 
 
-# Parse command-line arguments
+# Parses all command-line arguments
 def parse_cli_args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'language_id',
         metavar='code',
-        help='the language\'s ISO 639-1 code')
+        help='the ISO 639-1 code of the language')
     parser.add_argument(
         '--default-version',
         type=int,
