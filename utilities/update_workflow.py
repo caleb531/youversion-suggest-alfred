@@ -42,7 +42,7 @@ PKG_RESOURCES = (
 )
 
 
-# Get path to directory containing Alfred's user preferences
+# Retrieves correct path to directory containing Alfred's user preferences
 def get_user_prefs_dir():
 
     core_prefs = biplist.readPlist(CORE_PREFS_PATH)
@@ -54,7 +54,7 @@ def get_user_prefs_dir():
         return DEFAULT_USER_PREFS_DIR
 
 
-# Get path to installed workflow
+# Retrieves path to installed workflow
 def get_workflow_path():
 
     # Assume that whichever workflow contains a 'yvs' directory is YV Suggest
@@ -68,7 +68,7 @@ def get_workflow_path():
     return os.path.dirname(yvs_packages[0])
 
 
-# Get the file content of a module withini the project
+# Retrieves the file content of a module withini the project
 def get_module_content(module_name):
 
     file_name = '{}.py'.format(module_name.replace('.', '/'))
@@ -76,7 +76,7 @@ def get_module_content(module_name):
         return file_obj.read()
 
 
-# Get the name of a module by parsing it from the module content
+# Retrieve the name of a module by parsing it from the module's content
 def get_module_name(module_content):
 
     # The module name has been made accessible as a code comment on the first
@@ -85,7 +85,7 @@ def get_module_name(module_content):
     return first_line[1:].strip()
 
 
-# Update content of all scripts in workflow info object
+# Updates content of all scripts in workflow info object
 def update_workflow_objects(info):
 
     updated_objects = []
@@ -104,7 +104,7 @@ def update_workflow_objects(info):
     return updated_objects
 
 
-# Recursively check if two directories are exactly equal in terms of content
+# Recursively checks if two directories are exactly equal in terms of content
 def dirs_are_equal(dir_path, dest_dir_path):
 
     dirs_cmp = filecmp.dircmp(dir_path, dest_dir_path)
@@ -125,7 +125,7 @@ def dirs_are_equal(dir_path, dest_dir_path):
     return True
 
 
-# Check if resource (file or directory) is equal to destination resource
+# Checks if resource (file or directory) is equal to destination resource
 def resources_are_equal(resource_path, dest_resource_path):
 
     try:
@@ -139,7 +139,7 @@ def resources_are_equal(resource_path, dest_resource_path):
             return False
 
 
-# Copy package resource (file or directory) to corresponding destination path
+# Copies package resource to corresponding destination path
 def copy_resource(resource_path, dest_resource_path):
 
     try:
@@ -148,7 +148,7 @@ def copy_resource(resource_path, dest_resource_path):
         shutil.copy(resource_path, dest_resource_path)
 
 
-# Copy all package resources (files or directories) to installed workflow
+# Copy all package resources to installed workflow
 def copy_pkg_resources(workflow_path):
 
     updated_resources = []
@@ -164,7 +164,7 @@ def copy_pkg_resources(workflow_path):
     return updated_resources
 
 
-# Export installed workflow to project directory
+# Exports installed workflow to project directory
 def export_workflow(workflow_path, project_path):
 
     archive_path = os.path.join(project_path, WORKFLOW_NAME)
