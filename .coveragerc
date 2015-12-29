@@ -8,8 +8,6 @@ branch = True
 
 # Regexes for lines to exclude from consideration
 exclude_lines =
-    # Allow source to designate lines/branches to be skipped
-    pragma: no cover
 
     # Ignore non-runnable code
     if __name__ == .__main__.:
