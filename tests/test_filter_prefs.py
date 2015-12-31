@@ -42,6 +42,14 @@ def test_show_search_enginges():
     nose.assert_not_equal(len(results), 0)
 
 
+def test_filter_search_engines():
+    """should filter available search engines if value is given"""
+    results = yvs.get_result_list('searchEngine y')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Yahoo!')
+    nose.assert_equal(results[0]['arg'], 'searchEngine:yahoo')
+
+
 def test_nonexistent_pref():
     """should not match nonexistent preference"""
     results = yvs.get_result_list('xyz')
