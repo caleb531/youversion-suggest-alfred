@@ -15,11 +15,10 @@ def test_show_languages():
 
 def test_filter_languages():
     """should filter available languages if value is given"""
-    results = yvs.get_result_list('language en')
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'English')
-    nose.assert_equal(results[0]['arg'], 'language:en')
-    nose.assert_equal(results[0]['valid'], 'no')
+    results = yvs.get_result_list('language p')
+    nose.assert_equal(len(results), 3)
+    nose.assert_equal(results[0]['title'], 'Polski')
+    nose.assert_equal(results[0]['arg'], 'language:pl')
 
 
 def test_show_versions():
