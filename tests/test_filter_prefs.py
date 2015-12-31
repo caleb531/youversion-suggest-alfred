@@ -64,6 +64,14 @@ def test_nonexistent_value():
     nose.assert_equal(results[0]['valid'], 'no')
 
 
+def test_current_value():
+    """should not make preference's current value actionable"""
+    results = yvs.get_result_list('language english')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'English')
+    nose.assert_equal(results[0]['valid'], 'no')
+
+
 def test_invalid_query():
     """should show all available preferences for invalid preference name"""
     results = yvs.get_result_list('!@#')
