@@ -7,12 +7,12 @@ import yvs.shared as shared
 
 def get_search_url(ref_uid):
 
-    prefs = shared.get_prefs()
+    user_prefs = shared.get_user_prefs()
     search_engines = shared.get_search_engines()
     search_engine = shared.get_search_engine(
-        search_engines, prefs['searchEngine'])
+        search_engines, user_prefs['searchEngine'])
 
-    ref = shared.get_ref_object(ref_uid, prefs)
+    ref = shared.get_ref_object(ref_uid, user_prefs)
     full_ref = shared.get_full_ref(ref)
     encoded_ref = urllib.quote_plus(full_ref.encode('utf-8'))
 

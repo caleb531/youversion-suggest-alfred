@@ -3,10 +3,10 @@
 from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_refs as yvs
-from tests.decorators import use_prefs
+from tests.decorators import use_user_prefs
 
 
-@use_prefs({'language': 'es', 'version': 128})
+@use_user_prefs({'language': 'es', 'version': 128})
 def test_numbered():
     """should match versions ending in number by partial name"""
     results = yvs.get_result_list('lucas 4:8 rvr1')

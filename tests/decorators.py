@@ -20,16 +20,16 @@ def redirect_stdout(func):
     return wrapper
 
 
-def use_prefs(prefs):
-    """temporarily use the given preferences"""
+def use_user_prefs(user_prefs):
+    """temporarily use the given values for user preferences"""
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            original_prefs = yvs.get_prefs()
+            original_prefs = yvs.get_user_prefs()
             try:
-                yvs.set_prefs(prefs)
+                yvs.set_user_prefs(user_prefs)
                 return func(*args, **kwargs)
             finally:
-                yvs.set_prefs(original_prefs)
+                yvs.set_user_prefs(original_prefs)
         return wrapper
     return decorator

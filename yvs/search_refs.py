@@ -85,7 +85,7 @@ class SearchResultParser(HTMLParser):
 # Retrieves HTML for reference with the given ID
 def get_search_html(query_str):
 
-    version = shared.get_prefs()['version']
+    version = shared.get_user_prefs()['version']
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
         urllib.quote_plus(query_str.encode('utf-8')), version)
     return shared.get_url_content(url)

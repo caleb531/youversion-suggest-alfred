@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import yvs.copy_ref as yvs
 from mock import Mock, NonCallableMock, patch
 from nose.tools import assert_regexp_matches, assert_not_regexp_matches
-from tests.decorators import redirect_stdout, use_prefs
+from tests.decorators import redirect_stdout, use_user_prefs
 
 
 with open('tests/files/psa.23.html') as html_file:
@@ -60,7 +60,7 @@ def test_header(out):
 
 
 @redirect_stdout
-@use_prefs({'language': 'es', 'version': 128})
+@use_user_prefs({'language': 'es', 'version': 128})
 def test_header_language(out):
     """reference header should reflect chosen language"""
     yvs.main('128/psa.23')

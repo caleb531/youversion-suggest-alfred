@@ -103,46 +103,47 @@ def get_search_engine(search_engines, search_engine_id):
 
 
 # Retrieves the default values for all workflow preferences
-def get_defaults():
+def get_default_user_prefs():
 
     with open(DEFAULTS_PATH, 'r') as defaults_file:
         return json.load(defaults_file)
 
 
 # Overrwrites (or creates) user preferences using the given preferences object
-def set_prefs(prefs):
+def set_user_prefs(user_prefs):
 
     # Always ensure that the data directory (where prefrences reside) exists
     create_alfred_data_dir()
     with open(PREFS_PATH, 'w') as prefs_file:
-        json.dump(prefs, prefs_file)
+        json.dump(user_prefs, prefs_file)
 
 
 # Extends user preferences with any missing keys
-def extend_prefs(prefs, defaults):
+def extend_user_prefs(user_prefs, default_user_prefs):
 
     # If any keys in the preference defaults have been added or removed
-    if set(prefs.keys()) != set(defaults.keys()):
+    if set(user_prefs.keys()) != set(default_user_prefs.keys()):
         # Merge existing user preferences into defaults (thereby ensuring that
         # user preferences are not lacking any newly-added preferences)
-        defaults.update(prefs)
-        set_prefs(defaults)
-        return defaults
+        default_user_prefs.update(user_prefs)
+        set_user_prefs(default_user_prefs)
+        return default_user_prefs
     else:
-        return prefs
+        return user_prefs
 
 
 # Retrieves map of user preferences
-def get_prefs():
+def get_user_prefs():
 
-    defaults = get_defaults()
+    default_user_prefs = get_default_user_prefs()
     try:
         with open(PREFS_PATH, 'r') as prefs_file:
-            return extend_prefs(json.load(prefs_file), defaults)
+            return extend_user_prefs(
+                json.load(prefs_file), default_user_prefs)
     except IOError:
         # If user preferences don't exist, create them
-        set_prefs(defaults)
-        return defaults
+        set_user_prefs(default_user_prefs)
+        return default_user_prefs
 
 
 # Constructs an Alfred XML string from the given results list
@@ -204,7 +205,7 @@ def format_query_str(query_str):
 
 
 # Parses the given reference UID into a dictionary representing that reference
-def get_ref_object(ref_uid, prefs=None):
+def get_ref_object(ref_uid, user_prefs=None):
 
     patt = r'^{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?$'.format(
         version=r'(\d+)',
@@ -222,9 +223,9 @@ def get_ref_object(ref_uid, prefs=None):
     }
 
     # Include book name using book ID and currently-set language
-    if not prefs:
-        prefs = get_prefs()
-    bible = get_bible_data(prefs['language'])
+    if not user_prefs:
+        user_prefs = get_user_prefs()
+    bible = get_bible_data(user_prefs['language'])
     book_name = get_book(bible['books'], ref['book_id'])
     ref['book'] = book_name
 

@@ -7,7 +7,29 @@ from functools import partial
 from operator import itemgetter
 
 
-prefs = shared.get_prefs()
+# Returns a list of definition objects for all available preferences
+def get_pref_defs(user_prefs):
+
+    return [
+        {
+            'key': 'language',
+            'name': 'language',
+            'title': 'Language',
+            'values': shared.get_languages
+        },
+        {
+            'key': 'version',
+            'name': 'version',
+            'title': 'Version',
+            'values': partial(shared.get_versions, user_prefs['language'])
+        },
+        {
+            'key': 'searchEngine',
+            'name': 'search engine',
+            'title': 'Search Engine',
+            'values': shared.get_search_engines
+        }
+    ]
 
 
 # Retrieves Alfred result object for this preference
@@ -22,7 +44,7 @@ def get_pref_result(pref):
 
 
 # Retrieves Alfred result list of all available values for this preference
-def get_value_result_list(pref, query_str):
+def get_value_result_list(user_prefs, pref, query_str):
 
     values = pref['values']()
     results = []
@@ -34,7 +56,7 @@ def get_value_result_list(pref, query_str):
             'title': value['name']
         }
 
-        if value['id'] == prefs[pref['key']]:
+        if value['id'] == user_prefs[pref['key']]:
             # If this value is the current value, indicate such
             result['subtitle'] = ('This is already your preferred {}'
                                   .format(pref['name']))
@@ -58,29 +80,6 @@ def get_value_result_list(pref, query_str):
     return results
 
 
-# Delineate all available workflow preferences
-PREFERENCES = [
-    {
-        'key': 'language',
-        'name': 'language',
-        'title': 'Language',
-        'values': shared.get_languages
-    },
-    {
-        'key': 'version',
-        'name': 'version',
-        'title': 'Version',
-        'values': partial(shared.get_versions, prefs['language'])
-    },
-    {
-        'key': 'searchEngine',
-        'name': 'search engine',
-        'title': 'Search Engine',
-        'values': shared.get_search_engines
-    }
-]
-
-
 # Parses a preference key and optional value from the given query string
 def get_pref_matches(query_str):
 
@@ -91,16 +90,18 @@ def get_pref_matches(query_str):
 
 
 # Retrieves result list of available preferences, filtered by the given query
-def get_pref_result_list(query_str):
+def get_pref_result_list(query_str, prefs):
 
     return [get_pref_result(pref) for pref in
-            PREFERENCES if pref['key'].lower().startswith(query_str)]
+            prefs if pref['key'].lower().startswith(query_str)]
 
 
 # Retrieves result list of preferences or their respective values (depending on
 # the given query string)
 def get_result_list(query_str):
 
+    user_prefs = shared.get_user_prefs()
+    pref_defs = get_pref_defs(user_prefs)
     query_str = shared.format_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
@@ -110,21 +111,22 @@ def get_result_list(query_str):
         pref_key = pref_matches.group(1)
         pref_value = pref_matches.group(2)
 
-        for pref in PREFERENCES:
+        for pref_def in pref_defs:
             # If key name in query exactly matches a preference key name
-            if pref['key'].lower() == pref_key:
+            if pref_def['key'].lower() == pref_key:
                 # Get list of available values for the given preference
-                results = get_value_result_list(pref, pref_value)
+                results = get_value_result_list(
+                    user_prefs, pref_def, pref_value)
                 break
         # If no exact matches, filter list of available preferences by query
         if not results:
-            results = get_pref_result_list(query_str)
+            results = get_pref_result_list(query_str, pref_defs)
 
     else:
 
         # Should show all available preferences if query is empty
         # or if query does not match
-        results = get_pref_result_list(query_str)
+        results = get_pref_result_list(query_str, pref_defs)
 
     # Always sort results by title in this case
     results.sort(key=itemgetter('title'))

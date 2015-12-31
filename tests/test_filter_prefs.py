@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_prefs as yvs
 from xml.etree import ElementTree as ETree
-from tests.decorators import redirect_stdout, use_prefs
+from tests.decorators import redirect_stdout, use_user_prefs
 
 
 def test_show_languages():
@@ -21,7 +21,7 @@ def test_filter_languages():
     nose.assert_equal(results[0]['arg'], 'language:pl')
 
 
-@use_prefs({'language': 'es', 'version': 128})
+@use_user_prefs({'language': 'es', 'version': 128})
 def test_show_versions():
     """should show all versions if no value is given"""
     results = yvs.get_result_list('version')
