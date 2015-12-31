@@ -28,3 +28,10 @@ def test_set_search_engine():
     yvs.main('searchEngine:{}'.format(new_search_engine))
     user_prefs = yvs.shared.get_user_prefs()
     nose.assert_equal(user_prefs['searchEngine'], new_search_engine)
+
+
+def test_set_nonstandard():
+    """should discard non-standard preferences"""
+    yvs.main('foo:bar')
+    user_prefs = yvs.shared.get_user_prefs()
+    nose.assert_not_in('foo', user_prefs)

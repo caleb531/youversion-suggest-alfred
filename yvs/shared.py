@@ -123,11 +123,12 @@ def extend_user_prefs(user_prefs, default_user_prefs):
 
     # If any keys in the preference defaults have been added or removed
     if set(user_prefs.keys()) != set(default_user_prefs.keys()):
-        # Merge existing user preferences into defaults (thereby ensuring that
-        # user preferences are not lacking any newly-added preferences)
-        default_user_prefs.update(user_prefs)
-        set_user_prefs(default_user_prefs)
-        return default_user_prefs
+        # Supply defaults for missing keys and remove non-standard keys
+        new_user_prefs = {}
+        for pref_key in default_user_prefs:
+            new_user_prefs[pref_key] = user_prefs.get(
+                pref_key, default_user_prefs[pref_key])
+        return new_user_prefs
     else:
         return user_prefs
 
