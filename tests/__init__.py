@@ -37,5 +37,11 @@ def set_up():
 
 def tear_down():
     patch_open.stop()
-    shutil.rmtree(yvs.LOCAL_CACHE_DIR_PATH)
-    shutil.rmtree(yvs.LOCAL_DATA_DIR_PATH)
+    try:
+        shutil.rmtree(yvs.LOCAL_CACHE_DIR_PATH)
+    except OSError:
+        pass
+    try:
+        shutil.rmtree(yvs.LOCAL_DATA_DIR_PATH)
+    except OSError:
+        pass
