@@ -4,9 +4,11 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_refs as yvs
 from xml.etree import ElementTree as ETree
+from tests import set_up, tear_down
 from tests.decorators import redirect_stdout
 
 
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_output(out):
     """should output ref result list XML"""
@@ -18,6 +20,7 @@ def test_output(out):
     nose.assert_equal(output, xml)
 
 
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_null_result(out):
     """should output "No Results" XML item for empty ref result list"""
