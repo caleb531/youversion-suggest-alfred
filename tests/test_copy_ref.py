@@ -128,9 +128,25 @@ def test_whitespace_lines(out):
 
 @nose.with_setup(set_up, tear_down)
 @patch('urllib2.Request')
-def test_url_always_chapter(request):
+@redirect_stdout
+def test_url_always_chapter(out, request):
     """should always fetch HTML from chapter URL"""
     yvs.main('59/psa.23.2')
     request.assert_called_once_with(
         'https://www.bible.com/bible/59/psa.23',
         headers={'User-Agent': 'YouVersion Suggest'})
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_cache_url_content(out):
+    """should cache chapter URL content after first fetch"""
+    yvs.main('59/psa.23.2')
+    fetched_content = out.getvalue()
+    out.seek(0)
+    out.truncate(0)
+    with patch('urllib2.Request') as request:
+        yvs.main('59/psa.23.2')
+        cached_content = out.getvalue()
+        nose.assert_equal(fetched_content, cached_content)
+        request.assert_not_called()
