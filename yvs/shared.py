@@ -7,6 +7,7 @@ import os.path
 import hashlib
 import json
 import re
+import shutil
 import urllib2
 import unicodedata
 from xml.etree import ElementTree as ETree
@@ -228,18 +229,25 @@ def add_cache_entry(entry_key, entry_content):
     entry_path = get_cache_entry_path(entry_key)
     create_local_cache_dir()
     with open(entry_path, 'w') as entry_file:
-        entry_file.write(entry_content)
+        entry_file.write(entry_content.encode('utf-8'))
 
 
 # Retrieves the unmodified content of a cache entry
 def get_cache_entry_content(entry_key):
 
+    create_local_cache_dir()
     entry_path = get_cache_entry_path(entry_key)
     try:
         with open(entry_path, 'r') as entry_file:
-            return entry_file.read()
+            return entry_file.read().decode('utf-8')
     except IOError:
         return None
+
+
+# Removes all cache entries and the directory itself
+def clear_cache():
+
+    shutil.rmtree(LOCAL_CACHE_DIR_PATH)
 
 
 # Query-related functions

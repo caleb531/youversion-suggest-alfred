@@ -4,7 +4,7 @@ import yvs.shared as shared
 from HTMLParser import HTMLParser
 
 # The base for all Bible reference URLs
-BASE_REF_URL = 'https://www.bible.com/bible/'
+BASE_REF_URL = 'https://www.bible.com/bible/{ref_uid}'
 
 # Elements that should be surrounded by blank lines
 BLOCK_ELEMS = {'b', 'p'}
@@ -98,18 +98,32 @@ class ReferenceParser(HTMLParser):
             self.content_parts.append(char)
 
 
-# Retrieves HTML for reference with the given ID
-def get_ref_html(ref):
-    url = '{base}{version}/{book}.{chapter}'.format(
-        base=BASE_REF_URL,
+# Retrieves the UID of the chapter to which this reference belongs
+def get_ref_chapter_uid(ref):
+
+    return '{version}/{book}.{chapter}'.format(
         version=ref['version_id'],
         book=ref['book_id'],
         chapter=ref['chapter'])
-    return shared.get_url_content(url)
+
+
+# Retrieves HTML for reference with the given ID
+def get_ref_html(ref):
+
+    chapter_uid = get_ref_chapter_uid(ref)
+    url = BASE_REF_URL.format(ref_uid=chapter_uid)
+
+    ref_html = shared.get_cache_entry_content(chapter_uid)
+    if ref_html is None:
+        ref_html = shared.get_url_content(url)
+        shared.add_cache_entry(chapter_uid, ref_html)
+
+    return ref_html
 
 
 # Parses actual reference content from reference HTML
 def get_ref_content(ref):
+
     html = get_ref_html(ref)
     parser = ReferenceParser(ref)
     parser.feed(html)
@@ -121,6 +135,7 @@ def get_ref_content(ref):
 
 
 def main(ref_uid):
+
     ref = shared.get_ref_object(ref_uid)
     print(get_ref_content(ref).encode('utf-8'))
 
