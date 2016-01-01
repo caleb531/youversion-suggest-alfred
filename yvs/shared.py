@@ -4,16 +4,25 @@
 from __future__ import unicode_literals
 import os
 import os.path
+import hashlib
 import json
 import re
 import urllib2
 import unicodedata
 from xml.etree import ElementTree as ETree
 
+# Path to the user's home directory
+HOME_DIR_PATH = os.path.expanduser('~')
+# Unique identifier for the workflow
+WORKFLOW_UID = 'com.calebevans.youversionsuggest'
 # Path to the directory where this workflow stores non-volatile local data
 LOCAL_DATA_DIR_PATH = os.path.join(
-    os.path.expanduser('~'), 'Library', 'Application Support', 'Alfred 2',
-    'Workflow Data', 'com.calebevans.youversionsuggest')
+    HOME_DIR_PATH, 'Library', 'Application Support', 'Alfred 2',
+    'Workflow Data', WORKFLOW_UID)
+# Path to the directory where this workflow stores volatile local data
+LOCAL_CACHE_DIR_PATH = os.path.join(
+    HOME_DIR_PATH, 'Library', 'Caches',
+    'com.runningwithcrayons.Alfred-2', 'Workflow Data', WORKFLOW_UID)
 # Path to the workflow's user preferences
 USER_PREFS_PATH = os.path.join(LOCAL_DATA_DIR_PATH, 'preferences.json')
 # Path to the directory containing data files apart of the packaged workflow
@@ -31,6 +40,16 @@ def create_local_data_dir():
 
     try:
         os.makedirs(LOCAL_DATA_DIR_PATH)
+    except OSError:
+        pass
+
+
+# Creates the directory (and any nonexistent parent directories) where this
+# workflow stores volatile local data (i.e. cache data)
+def create_local_cache_dir():
+
+    try:
+        os.makedirs(LOCAL_CACHE_DIR_PATH)
     except OSError:
         pass
 
@@ -185,6 +204,42 @@ def get_user_prefs():
         # If user preferences don't exist, create them
         set_user_prefs(default_user_prefs)
         return default_user_prefs
+
+
+# Functions for accessing/manipulating cache data
+
+
+# Calculates the unique SHA1 checksum used as the filename for a cache entry
+def get_cache_entry_checksum(entry_key):
+
+    return hashlib.sha1(entry_key.encode('utf-8')).hexdigest()
+
+
+# Retrieves the local filepath for a cache entry
+def get_cache_entry_path(entry_key):
+
+    entry_checksum = get_cache_entry_checksum(entry_key)
+    return os.path.join(LOCAL_CACHE_DIR_PATH, entry_checksum)
+
+
+# Adds to the cache a new entry with the given content
+def add_cache_entry(entry_key, entry_content):
+
+    entry_path = get_cache_entry_path(entry_key)
+    create_local_cache_dir()
+    with open(entry_path, 'w') as entry_file:
+        entry_file.write(entry_content)
+
+
+# Retrieves the unmodified content of a cache entry
+def get_cache_entry_content(entry_key):
+
+    entry_path = get_cache_entry_path(entry_key)
+    try:
+        with open(entry_path, 'r') as entry_file:
+            return entry_file.read()
+    except IOError:
+        return None
 
 
 # Query-related functions
