@@ -141,12 +141,13 @@ def test_url_always_chapter(out, request):
 @redirect_stdout
 def test_cache_url_content(out):
     """should cache chapter URL content after first fetch"""
-    yvs.main('59/psa.23.2')
+    query_str = '59/psa.23.2'
+    yvs.main(query_str)
     fetched_content = out.getvalue()
     out.seek(0)
     out.truncate(0)
     with patch('urllib2.Request') as request:
-        yvs.main('59/psa.23.2')
+        yvs.main(query_str)
         cached_content = out.getvalue()
-        nose.assert_equal(fetched_content, cached_content)
+        nose.assert_equal(cached_content, fetched_content)
         request.assert_not_called()

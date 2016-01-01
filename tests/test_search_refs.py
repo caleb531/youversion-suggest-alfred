@@ -23,7 +23,7 @@ def set_up():
 
 def tear_down():
     patch_urlopen.stop()
-    tests.tear_down
+    tests.tear_down()
 
 
 @nose.with_setup(set_up, tear_down)
@@ -49,7 +49,7 @@ def test_result_subtitles():
 @nose.with_setup(set_up, tear_down)
 @patch('urllib2.Request')
 def test_unicode_input(request):
-    """should not raise exception when input contains non-ASCII characters"""
+    """should correctly handle non-ASCII characters in query string"""
     results = yvs.get_result_list('é')
     request.assert_called_once_with(
         'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
@@ -101,3 +101,19 @@ def test_null_result(out, get_result_list):
     nose.assert_equal(item.get('valid'), 'no')
     title = item.find('title')
     nose.assert_equal(title.text, 'No Results')
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_cache_url_content(out):
+    """should cache search page HTML after first fetch"""
+    query_str = 'love others'
+    yvs.main(query_str)
+    fetched_content = out.getvalue()
+    out.seek(0)
+    out.truncate(0)
+    with patch('urllib2.Request') as request:
+        yvs.main(query_str)
+        cached_content = out.getvalue()
+        nose.assert_equal(cached_content, fetched_content)
+        request.assert_not_called()
