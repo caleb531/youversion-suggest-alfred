@@ -247,7 +247,10 @@ def get_cache_entry_content(entry_key):
 # Removes all cache entries and the directory itself
 def clear_cache():
 
-    shutil.rmtree(LOCAL_CACHE_DIR_PATH)
+    try:
+        shutil.rmtree(LOCAL_CACHE_DIR_PATH)
+    except OSError:
+        pass
 
 
 # Query-related functions
