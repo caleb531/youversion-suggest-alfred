@@ -88,7 +88,14 @@ def get_search_html(query_str):
     version = shared.get_user_prefs()['version']
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
         urllib.quote_plus(query_str.encode('utf-8')), version)
-    return shared.get_url_content(url)
+
+    entry_key = 'yvsearch {}'.format(query_str)
+    search_html = shared.get_cache_entry_content(entry_key)
+    if search_html is None:
+        search_html = shared.get_url_content(url)
+        shared.add_cache_entry(entry_key, search_html)
+
+    return search_html
 
 
 # Parses actual reference content from reference HTML

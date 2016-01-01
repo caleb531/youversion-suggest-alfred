@@ -5,9 +5,11 @@ from __future__ import unicode_literals
 import os.path
 import nose.tools as nose
 import yvs.filter_refs as yvs
+from tests import set_up, tear_down
 from tests.decorators import use_user_prefs
 
 
+@nose.with_setup(set_up, tear_down)
 @use_user_prefs({'language': 'en', 'version': 59})
 def test_version_persistence():
     """should remember version preferences"""
@@ -16,6 +18,7 @@ def test_version_persistence():
     nose.assert_equal(results[0]['title'], 'Matthew 4 (ESV)')
 
 
+@nose.with_setup(set_up, tear_down)
 @use_user_prefs({'language': 'es', 'version': 128})
 def test_language_persistence():
     """should remember language preferences"""

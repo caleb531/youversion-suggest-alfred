@@ -4,15 +4,18 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_prefs as yvs
 from xml.etree import ElementTree as ETree
+from tests import set_up, tear_down
 from tests.decorators import redirect_stdout, use_user_prefs
 
 
+@nose.with_setup(set_up, tear_down)
 def test_show_languages():
     """should show all languages if no value is given"""
     results = yvs.get_result_list('language')
     nose.assert_equal(len(results), 21)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_filter_languages():
     """should filter available languages if value is given"""
     results = yvs.get_result_list('language p')
@@ -21,6 +24,7 @@ def test_filter_languages():
     nose.assert_equal(results[0]['arg'], 'language:pl')
 
 
+@nose.with_setup(set_up, tear_down)
 @use_user_prefs({'language': 'es', 'version': 128})
 def test_show_versions():
     """should show all versions if no value is given"""
@@ -28,6 +32,7 @@ def test_show_versions():
     nose.assert_equal(len(results), 13)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_filter_versions():
     """should filter available versions if value is given"""
     results = yvs.get_result_list('version ni')
@@ -36,12 +41,14 @@ def test_filter_versions():
     nose.assert_equal(results[0]['arg'], 'version:110')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_show_search_enginges():
     """should show all search engines if no value is given"""
     results = yvs.get_result_list('searchEngine')
     nose.assert_equal(len(results), 4)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_filter_search_engines():
     """should filter available search engines if value is given"""
     results = yvs.get_result_list('searchEngine y')
@@ -50,12 +57,14 @@ def test_filter_search_engines():
     nose.assert_equal(results[0]['arg'], 'searchEngine:yahoo')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_nonexistent_pref():
     """should not match nonexistent preference"""
     results = yvs.get_result_list('xyz')
     nose.assert_equal(len(results), 0)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_nonexistent_value():
     """should return null result for nonexistent value"""
     results = yvs.get_result_list('language xyz')
@@ -64,6 +73,7 @@ def test_nonexistent_value():
     nose.assert_equal(results[0]['valid'], 'no')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_current_value():
     """should not make preference's current value actionable"""
     results = yvs.get_result_list('language english')
@@ -72,18 +82,21 @@ def test_current_value():
     nose.assert_equal(results[0]['valid'], 'no')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_invalid_query():
     """should show all available preferences for invalid preference name"""
     results = yvs.get_result_list('!@#')
     nose.assert_not_equal(len(results), 0)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_nonexistent_preference():
     """should show null result if preference matching query does not exist"""
     results = yvs.get_result_list('xyz')
     nose.assert_equal(len(results), 0)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_non_alphanumeric():
     """should ignore all non-alphanumeric characters"""
     results = yvs.get_result_list('!language@it#')
@@ -91,12 +104,14 @@ def test_non_alphanumeric():
     nose.assert_equal(results[0]['title'], 'Italiano')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_show_all_preferences():
     """should show all available preferences if query is empty"""
     results = yvs.get_result_list('')
     nose.assert_not_equal(len(results), 0)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_preferences_autocompletion():
     """autocompletion should be functioning for all preference results"""
     results = yvs.get_result_list('')
@@ -106,6 +121,7 @@ def test_preferences_autocompletion():
         nose.assert_equal(result['valid'], 'no')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_filter_preferences():
     """should filter available preferences if partial key name is given"""
     results = yvs.get_result_list('searche')
@@ -113,6 +129,7 @@ def test_filter_preferences():
     nose.assert_equal(results[0]['title'], 'Search Engine')
 
 
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_main_output(out):
     """should output pref result list XML"""
@@ -124,6 +141,7 @@ def test_main_output(out):
     nose.assert_equal(output, xml)
 
 
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_null_result(out):
     """should output "No Results" XML item for empty pref result list"""
@@ -136,6 +154,7 @@ def test_null_result(out):
     nose.assert_equal(item.get('valid'), 'no')
 
 
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_xml_show_all(out):
     """should output XML for all results if query is empty"""
