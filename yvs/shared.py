@@ -101,6 +101,44 @@ def get_search_engine(search_engines, search_engine_id):
             return search_engine
 
 
+# Constructs an Alfred XML string from the given results list
+def get_result_list_xml(results):
+
+    root = ETree.Element('items')
+
+    for result in results:
+        # Create <item> element for result with appropriate attributes
+        item = ETree.SubElement(root, 'item', {
+            'arg': result.get('arg', ''),
+            'valid': result.get('valid', 'yes')
+        })
+        if 'uid' in result:
+            item.set('uid', result['uid'])
+        if 'autocomplete' in result:
+            item.set('autocomplete', result['autocomplete'])
+        # Result title
+        title = ETree.SubElement(item, 'title')
+        title.text = result['title']
+        # Text copied to clipboard when cmd-c is invoked for this result
+        copy = ETree.SubElement(item, 'text', {
+            'type': 'copy'
+        })
+        copy.text = result.get('copy', result['title'])
+        # Text shown when invoking Alfred's Large Type feature for this result
+        largetype = ETree.SubElement(item, 'text', {
+            'type': 'largetype'
+        })
+        largetype.text = result.get('largetype', result['title'])
+        # Result subtitle (always indicates action)
+        subtitle = ETree.SubElement(item, 'subtitle')
+        subtitle.text = result['subtitle']
+        # Use same YouVersion icon for all results
+        icon = ETree.SubElement(item, 'icon')
+        icon.text = 'icon.png'
+
+    return ETree.tostring(root)
+
+
 # Functions for accessing/manipulating mutable preferences
 
 
@@ -147,44 +185,6 @@ def get_user_prefs():
         # If user preferences don't exist, create them
         set_user_prefs(default_user_prefs)
         return default_user_prefs
-
-
-# Constructs an Alfred XML string from the given results list
-def get_result_list_xml(results):
-
-    root = ETree.Element('items')
-
-    for result in results:
-        # Create <item> element for result with appropriate attributes
-        item = ETree.SubElement(root, 'item', {
-            'arg': result.get('arg', ''),
-            'valid': result.get('valid', 'yes')
-        })
-        if 'uid' in result:
-            item.set('uid', result['uid'])
-        if 'autocomplete' in result:
-            item.set('autocomplete', result['autocomplete'])
-        # Result title
-        title = ETree.SubElement(item, 'title')
-        title.text = result['title']
-        # Text copied to clipboard when cmd-c is invoked for this result
-        copy = ETree.SubElement(item, 'text', {
-            'type': 'copy'
-        })
-        copy.text = result.get('copy', result['title'])
-        # Text shown when invoking Alfred's Large Type feature for this result
-        largetype = ETree.SubElement(item, 'text', {
-            'type': 'largetype'
-        })
-        largetype.text = result.get('largetype', result['title'])
-        # Result subtitle (always indicates action)
-        subtitle = ETree.SubElement(item, 'subtitle')
-        subtitle.text = result['subtitle']
-        # Use same YouVersion icon for all results
-        icon = ETree.SubElement(item, 'icon')
-        icon.text = 'icon.png'
-
-    return ETree.tostring(root)
 
 
 # Query-related functions
@@ -289,8 +289,8 @@ def get_url_content(url):
     return connection.read().decode('utf-8')
 
 
-# Evaluates character reference to its respective Unicode character
-def eval_charref(name):
+# Evaluates HTML character reference to its respective Unicode character
+def eval_html_charref(name):
 
     if name[0] == 'x':
         # Handle hexadecimal character references

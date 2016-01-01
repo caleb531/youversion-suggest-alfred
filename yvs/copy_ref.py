@@ -94,7 +94,7 @@ class ReferenceParser(HTMLParser):
     # Handles all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.is_in_verse_content():
-            char = shared.eval_charref(name)
+            char = shared.eval_html_charref(name)
             self.content_parts.append(char)
 
 

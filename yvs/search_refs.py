@@ -75,7 +75,7 @@ class SearchResultParser(HTMLParser):
     # Handles all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.in_ref:
-            char = shared.eval_charref(name)
+            char = shared.eval_html_charref(name)
             if self.in_heading:
                 self.current_result['title'] += char
             elif self.in_content:
