@@ -8,13 +8,13 @@ import yvs.shared as yvs
 from mock import patch
 
 
-yvs.ALFRED_DATA_DIR = os.path.join(tempfile.gettempdir(), 'yvs')
-yvs.PREFS_PATH = os.path.join(yvs.ALFRED_DATA_DIR, 'preferences.json')
+yvs.LOCAL_DATA_DIR_PATH = os.path.join(tempfile.gettempdir(), 'yvs')
+yvs.USER_PREFS_PATH = os.path.join(yvs.LOCAL_DATA_DIR_PATH, 'preferences.json')
 
 
 def mock_open(path, mode):
     if path.endswith('preferences.json'):
-        path = yvs.PREFS_PATH
+        path = yvs.USER_PREFS_PATH
     return open(path, mode)
 
 
@@ -23,7 +23,7 @@ patch_open = patch('yvs.shared.open', mock_open, create=True)
 
 def setup():
     try:
-        os.mkdir(yvs.ALFRED_DATA_DIR)
+        os.mkdir(yvs.LOCAL_DATA_DIR_PATH)
     except OSError:
         pass
     patch_open.start()
@@ -31,4 +31,4 @@ def setup():
 
 def teardown():
     patch_open.stop()
-    shutil.rmtree(yvs.ALFRED_DATA_DIR)
+    shutil.rmtree(yvs.LOCAL_DATA_DIR_PATH)

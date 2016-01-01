@@ -31,8 +31,8 @@ def test_missing_prefs():
     nose.assert_equal(len(results), 1)
 
 
-def test_create_data_dir_silent_fail():
-    """should silently fail if Alfred data directory already exists"""
-    yvs.shared.create_alfred_data_dir()
-    yvs.shared.create_alfred_data_dir()
-    nose.assert_true(os.path.exists(yvs.shared.ALFRED_DATA_DIR))
+def test_create_local_data_dir_silent_fail():
+    """should silently fail if local data directory already exists"""
+    yvs.shared.create_local_data_dir()
+    yvs.shared.create_local_data_dir()
+    nose.assert_true(os.path.exists(yvs.shared.LOCAL_DATA_DIR_PATH))

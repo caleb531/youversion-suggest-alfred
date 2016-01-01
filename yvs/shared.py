@@ -10,27 +10,27 @@ import urllib2
 import unicodedata
 from xml.etree import ElementTree as ETree
 
-# Path to the directory where Alfred stores non-volatile data for this workflow
-ALFRED_DATA_DIR = os.path.join(
+# Path to the directory where this workflow stores non-volatile local data
+LOCAL_DATA_DIR_PATH = os.path.join(
     os.path.expanduser('~'), 'Library', 'Application Support', 'Alfred 2',
     'Workflow Data', 'com.calebevans.youversionsuggest')
 # Path to the workflow's user preferences
-PREFS_PATH = os.path.join(ALFRED_DATA_DIR, 'preferences.json')
-# Path to the data directory where defaults and language data files are stored
-DATA_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
-# Path to the workflow's
-DEFAULTS_PATH = os.path.join(DATA_PATH, 'defaults.json')
+USER_PREFS_PATH = os.path.join(LOCAL_DATA_DIR_PATH, 'preferences.json')
+# Path to the directory containing data files apart of the packaged workflow
+PACKAGED_DATA_DIR_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
+# Path to the workflow's default user preferences
+DEFAULT_USER_PREFS_PATH = os.path.join(PACKAGED_DATA_DIR_PATH, 'defaults.json')
 
 # The user agent used for HTTP requests sent to the YouVersion website
 USER_AGENT = 'YouVersion Suggest'
 
 
-# Creates the directory (and any nonexistent parent directories) where
-# workflow data is stored, failing silently if the directory already exists
-def create_alfred_data_dir():
+# Creates the directory (and any nonexistent parent directories) where this
+# workflow stores non-volatile local data
+def create_local_data_dir():
 
     try:
-        os.makedirs(ALFRED_DATA_DIR)
+        os.makedirs(LOCAL_DATA_DIR_PATH)
     except OSError:
         pass
 
@@ -39,7 +39,7 @@ def create_alfred_data_dir():
 def get_bible_data(language):
 
     bible_data_path = os.path.join(
-        DATA_PATH, 'bible', 'language-{}.json'.format(language))
+        PACKAGED_DATA_DIR_PATH, 'bible', 'language-{}.json'.format(language))
     with open(bible_data_path, 'r') as bible_data_file:
         return json.load(bible_data_file)
 
@@ -47,7 +47,8 @@ def get_bible_data(language):
 # Retrieves map of chapter counts for every book of the Bible
 def get_chapter_data():
 
-    chapter_data_path = os.path.join(DATA_PATH, 'bible', 'chapters.json')
+    chapter_data_path = os.path.join(
+        PACKAGED_DATA_DIR_PATH, 'bible', 'chapters.json')
     with open(chapter_data_path, 'r') as chapter_data_file:
         return json.load(chapter_data_file)
 
@@ -78,7 +79,7 @@ def get_versions(language):
 # Retrieves a list of all supported languages
 def get_languages():
 
-    languages_path = os.path.join(DATA_PATH, 'languages.json')
+    languages_path = os.path.join(PACKAGED_DATA_DIR_PATH, 'languages.json')
     with open(languages_path, 'r') as languages_file:
         return json.load(languages_file)
 
@@ -86,7 +87,8 @@ def get_languages():
 # Retrieves a list of all supported search engines
 def get_search_engines():
 
-    search_engines_path = os.path.join(DATA_PATH, 'search-engines.json')
+    search_engines_path = os.path.join(
+        PACKAGED_DATA_DIR_PATH, 'search-engines.json')
     with open(search_engines_path, 'r') as search_engines_file:
         return json.load(search_engines_file)
 
@@ -105,7 +107,7 @@ def get_search_engine(search_engines, search_engine_id):
 # Retrieves the default values for all workflow preferences
 def get_default_user_prefs():
 
-    with open(DEFAULTS_PATH, 'r') as defaults_file:
+    with open(DEFAULT_USER_PREFS_PATH, 'r') as defaults_file:
         return json.load(defaults_file)
 
 
@@ -113,8 +115,8 @@ def get_default_user_prefs():
 def set_user_prefs(user_prefs):
 
     # Always ensure that the data directory (where prefrences reside) exists
-    create_alfred_data_dir()
-    with open(PREFS_PATH, 'w') as prefs_file:
+    create_local_data_dir()
+    with open(USER_PREFS_PATH, 'w') as prefs_file:
         json.dump(user_prefs, prefs_file)
 
 
@@ -138,7 +140,7 @@ def get_user_prefs():
 
     default_user_prefs = get_default_user_prefs()
     try:
-        with open(PREFS_PATH, 'r') as prefs_file:
+        with open(USER_PREFS_PATH, 'r') as prefs_file:
             return extend_user_prefs(
                 json.load(prefs_file), default_user_prefs)
     except IOError:
