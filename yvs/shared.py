@@ -12,10 +12,11 @@ import urllib2
 import unicodedata
 from xml.etree import ElementTree as ETree
 
-# Path to the user's home directory
-HOME_DIR_PATH = os.path.expanduser('~')
 # Unique identifier for the workflow
 WORKFLOW_UID = 'com.calebevans.youversionsuggest'
+
+# Path to the user's home directory
+HOME_DIR_PATH = os.path.expanduser('~')
 # Path to the directory where this workflow stores non-volatile local data
 LOCAL_DATA_DIR_PATH = os.path.join(
     HOME_DIR_PATH, 'Library', 'Application Support', 'Alfred 2',
@@ -24,6 +25,10 @@ LOCAL_DATA_DIR_PATH = os.path.join(
 LOCAL_CACHE_DIR_PATH = os.path.join(
     HOME_DIR_PATH, 'Library', 'Caches',
     'com.runningwithcrayons.Alfred-2', 'Workflow Data', WORKFLOW_UID)
+# Path to the directory where this workflow stores cache entries
+LOCAL_CACHE_ENTRY_DIR_PATH = os.path.join(LOCAL_CACHE_DIR_PATH, 'entries')
+# Path to the manifest file which stores cache entry checksums
+LOCAL_CACHE_MANIFEST_PATH = os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
 # Path to the workflow's user preferences
 USER_PREFS_PATH = os.path.join(LOCAL_DATA_DIR_PATH, 'preferences.json')
 # Path to the directory containing data files apart of the packaged workflow
@@ -47,10 +52,10 @@ def create_local_data_dir():
 
 # Creates the directory (and any nonexistent parent directories) where this
 # workflow stores volatile local data (i.e. cache data)
-def create_local_cache_dir():
+def create_local_cache_dirs():
 
     try:
-        os.makedirs(LOCAL_CACHE_DIR_PATH)
+        os.makedirs(LOCAL_CACHE_ENTRY_DIR_PATH)
     except OSError:
         pass
 
@@ -220,22 +225,42 @@ def get_cache_entry_checksum(entry_key):
 def get_cache_entry_path(entry_key):
 
     entry_checksum = get_cache_entry_checksum(entry_key)
-    return os.path.join(LOCAL_CACHE_DIR_PATH, entry_checksum)
+    return os.path.join(LOCAL_CACHE_ENTRY_DIR_PATH, entry_checksum)
+
+
+# Removes the oldest cache entry (the first line of the manifest file)
+def remove_oldest_cache_entry():
+
+    with open(LOCAL_CACHE_MANIFEST_PATH, 'r+') as manifest_file:
+        # Read checksums from manifest then erase contents
+        entry_checksums = manifest_file.read().splitlines(keepends=True)
+        manifest_file.truncate(0)
+        manifest_file.seek(0)
+        # Write checksums (except the first) back to manifest
+        manifest_file.writelines(entry_checksums[1:])
 
 
 # Adds to the cache a new entry with the given content
 def add_cache_entry(entry_key, entry_content):
 
+    create_local_cache_dirs()
+
+    # Write entry content to entry file
     entry_path = get_cache_entry_path(entry_key)
-    create_local_cache_dir()
     with open(entry_path, 'w') as entry_file:
         entry_file.write(entry_content.encode('utf-8'))
+
+    # Write entry filename to manifest file
+    entry_checksum = os.path.dirname(entry_path)
+    with open(LOCAL_CACHE_MANIFEST_PATH, 'a') as manifest_file:
+        manifest_file.write(entry_checksum)
+        manifest_file.write('\n')
 
 
 # Retrieves the unmodified content of a cache entry
 def get_cache_entry_content(entry_key):
 
-    create_local_cache_dir()
+    create_local_cache_dirs()
     entry_path = get_cache_entry_path(entry_key)
     try:
         with open(entry_path, 'r') as entry_file:

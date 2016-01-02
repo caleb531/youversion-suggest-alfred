@@ -11,6 +11,10 @@ from mock import patch
 temp_dir = tempfile.gettempdir()
 yvs.LOCAL_DATA_DIR_PATH = os.path.join(temp_dir, 'yvs-data')
 yvs.LOCAL_CACHE_DIR_PATH = os.path.join(temp_dir, 'yvs-cache')
+yvs.LOCAL_CACHE_ENTRY_DIR_PATH = os.path.join(
+    yvs.LOCAL_CACHE_DIR_PATH, 'entries')
+yvs.LOCAL_CACHE_MANIFEST_PATH = os.path.join(
+    yvs.LOCAL_CACHE_DIR_PATH, 'manifest.txt')
 yvs.USER_PREFS_PATH = os.path.join(yvs.LOCAL_DATA_DIR_PATH, 'preferences.json')
 
 
