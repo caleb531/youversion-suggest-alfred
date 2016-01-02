@@ -107,30 +107,38 @@ def get_ref_chapter_uid(ref):
         chapter=ref['chapter'])
 
 
-# Retrieves HTML for reference with the given ID
-def get_ref_html(ref):
+# Retrieves HTML for of the chapter to which the reference belongs
+def get_chapter_html(ref):
 
     chapter_uid = get_ref_chapter_uid(ref)
     url = BASE_REF_URL.format(ref_uid=chapter_uid)
 
-    ref_html = shared.get_cache_entry_content(chapter_uid)
-    if ref_html is None:
-        ref_html = shared.get_url_content(url)
-        shared.add_cache_entry(chapter_uid, ref_html)
+    entry_key = '{}.html'.format(chapter_uid)
+    chapter_html = shared.get_cache_entry_content(entry_key)
+    if chapter_html is None:
+        chapter_html = shared.get_url_content(url)
+        shared.add_cache_entry(entry_key, chapter_html)
 
-    return ref_html
+    return chapter_html
 
 
-# Parses actual reference content from reference HTML
+# Parses actual reference content from chapter HTML
 def get_ref_content(ref):
 
-    html = get_ref_html(ref)
-    parser = ReferenceParser(ref)
-    parser.feed(html)
-    # Format reference content by removing superfluous whitespace and such
-    ref_content = shared.format_ref_content(''.join(parser.content_parts))
-    # Prepend reference header that identifies reference
-    ref_content = ''.join((shared.get_full_ref(ref), '\n\n', ref_content))
+    entry_key = '{}.txt'.format(ref['uid'])
+    ref_content = shared.get_cache_entry_content(entry_key)
+    if ref_content is None:
+
+        chapter_html = get_chapter_html(ref)
+        parser = ReferenceParser(ref)
+        parser.feed(chapter_html)
+        # Format reference content by removing superfluous whitespace and such
+        ref_content = shared.format_ref_content(''.join(parser.content_parts))
+        # Prepend reference header that identifies reference
+        ref_content = ''.join((shared.get_full_ref(ref), '\n\n', ref_content))
+
+        shared.add_cache_entry(entry_key, ref_content)
+
     return ref_content
 
 
