@@ -5,26 +5,11 @@ import os.path
 import shutil
 import tempfile
 import yvs.shared as yvs
-from mock import patch
 
 
 temp_dir = tempfile.gettempdir()
 yvs.LOCAL_DATA_DIR_PATH = os.path.join(temp_dir, 'yvs-data')
 yvs.LOCAL_CACHE_DIR_PATH = os.path.join(temp_dir, 'yvs-cache')
-yvs.LOCAL_CACHE_ENTRY_DIR_PATH = os.path.join(
-    yvs.LOCAL_CACHE_DIR_PATH, 'entries')
-yvs.LOCAL_CACHE_MANIFEST_PATH = os.path.join(
-    yvs.LOCAL_CACHE_DIR_PATH, 'manifest.txt')
-yvs.USER_PREFS_PATH = os.path.join(yvs.LOCAL_DATA_DIR_PATH, 'preferences.json')
-
-
-def mock_open(path, mode):
-    if path.endswith('preferences.json'):
-        path = yvs.USER_PREFS_PATH
-    return open(path, mode)
-
-
-patch_open = patch('yvs.shared.open', mock_open, create=True)
 
 
 def set_up():
@@ -36,11 +21,9 @@ def set_up():
         os.mkdir(yvs.LOCAL_CACHE_DIR_PATH)
     except OSError:
         pass
-    patch_open.start()
 
 
 def tear_down():
-    patch_open.stop()
     try:
         shutil.rmtree(yvs.LOCAL_CACHE_DIR_PATH)
     except OSError:

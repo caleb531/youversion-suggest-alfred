@@ -25,16 +25,8 @@ LOCAL_DATA_DIR_PATH = os.path.join(
 LOCAL_CACHE_DIR_PATH = os.path.join(
     HOME_DIR_PATH, 'Library', 'Caches',
     'com.runningwithcrayons.Alfred-2', 'Workflow Data', WORKFLOW_UID)
-# Path to the directory where this workflow stores cache entries
-LOCAL_CACHE_ENTRY_DIR_PATH = os.path.join(LOCAL_CACHE_DIR_PATH, 'entries')
-# Path to the manifest file which stores cache entry checksums
-LOCAL_CACHE_MANIFEST_PATH = os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
-# Path to the workflow's user preferences
-USER_PREFS_PATH = os.path.join(LOCAL_DATA_DIR_PATH, 'preferences.json')
 # Path to the directory containing data files apart of the packaged workflow
 PACKAGED_DATA_DIR_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
-# Path to the workflow's default user preferences
-DEFAULT_USER_PREFS_PATH = os.path.join(PACKAGED_DATA_DIR_PATH, 'defaults.json')
 
 # The user agent used for HTTP requests sent to the YouVersion website
 USER_AGENT = 'YouVersion Suggest'
@@ -55,7 +47,7 @@ def create_local_data_dir():
 def create_local_cache_dirs():
 
     try:
-        os.makedirs(LOCAL_CACHE_ENTRY_DIR_PATH)
+        os.makedirs(get_cache_entry_dir_path())
     except OSError:
         pass
 
@@ -167,11 +159,23 @@ def get_result_list_xml(results):
 # Functions for accessing/manipulating mutable preferences
 
 
+# Retrieves the path to the workflow's default user preferences file
+def get_default_user_prefs_path():
+
+    return os.path.join(PACKAGED_DATA_DIR_PATH, 'defaults.json')
+
+
 # Retrieves the default values for all workflow preferences
 def get_default_user_prefs():
 
-    with open(DEFAULT_USER_PREFS_PATH, 'r') as defaults_file:
+    with open(get_default_user_prefs_path(), 'r') as defaults_file:
         return json.load(defaults_file)
+
+
+# Retrieves the path to the workflow's user preferences file
+def get_user_prefs_path():
+
+    return os.path.join(LOCAL_DATA_DIR_PATH, 'preferences.json')
 
 
 # Overrwrites (or creates) user preferences using the given preferences object
@@ -179,7 +183,7 @@ def set_user_prefs(user_prefs):
 
     # Always ensure that the data directory (where prefrences reside) exists
     create_local_data_dir()
-    with open(USER_PREFS_PATH, 'w') as prefs_file:
+    with open(get_user_prefs_path(), 'w') as prefs_file:
         json.dump(user_prefs, prefs_file)
 
 
@@ -203,7 +207,7 @@ def get_user_prefs():
 
     default_user_prefs = get_default_user_prefs()
     try:
-        with open(USER_PREFS_PATH, 'r') as prefs_file:
+        with open(get_user_prefs_path(), 'r') as prefs_file:
             return extend_user_prefs(
                 json.load(prefs_file), default_user_prefs)
     except IOError:
@@ -225,13 +229,25 @@ def get_cache_entry_checksum(entry_key):
 def get_cache_entry_path(entry_key):
 
     entry_checksum = get_cache_entry_checksum(entry_key)
-    return os.path.join(LOCAL_CACHE_ENTRY_DIR_PATH, entry_checksum)
+    return os.path.join(get_cache_entry_dir_path(), entry_checksum)
+
+
+# Retrieves the path to the directory where all cache entries are stored
+def get_cache_entry_dir_path():
+
+    return os.path.join(LOCAL_CACHE_DIR_PATH, 'entries')
+
+
+# Retrieves the path to the manifest file listing all cache entries
+def get_cache_manifest_path():
+
+    return os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
 
 
 # Removes the oldest cache entry (the first line of the manifest file)
 def remove_oldest_cache_entry():
 
-    with open(LOCAL_CACHE_MANIFEST_PATH, 'r+') as manifest_file:
+    with open(get_cache_manifest_path(), 'r+') as manifest_file:
         # Read checksums from manifest then erase contents
         entry_checksums = manifest_file.read().splitlines(keepends=True)
         manifest_file.truncate(0)
@@ -252,7 +268,7 @@ def add_cache_entry(entry_key, entry_content):
 
     # Write entry filename to manifest file
     entry_checksum = os.path.basename(entry_path)
-    with open(LOCAL_CACHE_MANIFEST_PATH, 'a') as manifest_file:
+    with open(get_cache_manifest_path(), 'a') as manifest_file:
         manifest_file.write(entry_checksum)
         manifest_file.write('\n')
 
