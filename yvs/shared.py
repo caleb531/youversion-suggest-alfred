@@ -251,7 +251,7 @@ def add_cache_entry(entry_key, entry_content):
         entry_file.write(entry_content.encode('utf-8'))
 
     # Write entry filename to manifest file
-    entry_checksum = os.path.dirname(entry_path)
+    entry_checksum = os.path.basename(entry_path)
     with open(LOCAL_CACHE_MANIFEST_PATH, 'a') as manifest_file:
         manifest_file.write(entry_checksum)
         manifest_file.write('\n')
