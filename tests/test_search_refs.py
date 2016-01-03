@@ -105,8 +105,8 @@ def test_null_result(out, get_result_list):
 
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
-def test_cache_url_content(out):
-    """should cache search page HTML after first fetch"""
+def test_cache_xml_reesults(out):
+    """should cache final XML results after first fetch and parse"""
     query_str = 'love others'
     yvs.main(query_str)
     fetched_content = out.getvalue()
