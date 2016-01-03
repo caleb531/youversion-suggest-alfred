@@ -2,6 +2,8 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import os
+import os.path
 import nose.tools as nose
 import tests
 import yvs.search_refs as yvs
@@ -117,3 +119,21 @@ def test_cache_xml_reesults(out):
         cached_content = out.getvalue()
         nose.assert_equal(cached_content, fetched_content)
         request.assert_not_called()
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_cache_housekeeping(out):
+    """should purge oldest entry when cache grows too large"""
+    query_str = 'a'
+    num_entries = 101
+    purged_entry_checksum = 'ac2ee56cf99614a3ff33410b15ba26222fee09d3'
+    last_entry_checksum = '5f6894cdffb2170bdee59c75ad083aee081a20b9'
+    nose.assert_false(os.path.exists(yvs.shared.get_cache_entry_dir_path()))
+    for i in range(num_entries):
+        yvs.main(query_str)
+        query_str += 'a'
+    entry_checksums = os.listdir(yvs.shared.get_cache_entry_dir_path())
+    nose.assert_equal(len(entry_checksums), 100)
+    nose.assert_not_in(purged_entry_checksum, entry_checksums)
+    nose.assert_in(last_entry_checksum, entry_checksums)

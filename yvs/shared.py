@@ -267,8 +267,8 @@ def add_cache_entry(entry_key, entry_content):
         # Read checksums from manifest; splitlines(True) preserves newlines
         entry_checksums = manifest_file.read().splitlines(True)
         # Purge the oldest entry if the cache is too large
-        if len(entry_checksums) >= MAX_NUM_CACHE_ENTRIES:
-            old_entry_checksum = entry_checksums[0]
+        if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
+            old_entry_checksum = entry_checksums[0].rstrip()
             manifest_file.truncate(0)
             manifest_file.seek(0)
             manifest_file.writelines(entry_checksums[1:])
