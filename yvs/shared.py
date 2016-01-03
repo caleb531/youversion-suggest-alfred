@@ -28,6 +28,9 @@ LOCAL_CACHE_DIR_PATH = os.path.join(
 # Path to the directory containing data files apart of the packaged workflow
 PACKAGED_DATA_DIR_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
 
+# The maximum number of cache entries to store
+MAX_NUM_CACHE_ENTRIES = 100
+
 # The user agent used for HTTP requests sent to the YouVersion website
 USER_AGENT = 'YouVersion Suggest'
 
@@ -244,18 +247,6 @@ def get_cache_manifest_path():
     return os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
 
 
-# Removes the oldest cache entry (the first line of the manifest file)
-def remove_oldest_cache_entry():
-
-    with open(get_cache_manifest_path(), 'r+') as manifest_file:
-        # Read checksums from manifest then erase contents
-        entry_checksums = manifest_file.read().splitlines(keepends=True)
-        manifest_file.truncate(0)
-        manifest_file.seek(0)
-        # Write checksums (except the first) back to manifest
-        manifest_file.writelines(entry_checksums[1:])
-
-
 # Adds to the cache a new entry with the given content
 def add_cache_entry(entry_key, entry_content):
 
@@ -266,11 +257,23 @@ def add_cache_entry(entry_key, entry_content):
     with open(entry_path, 'w') as entry_file:
         entry_file.write(entry_content.encode('utf-8'))
 
-    # Write entry filename to manifest file
     entry_checksum = os.path.basename(entry_path)
-    with open(get_cache_manifest_path(), 'a') as manifest_file:
+    cache_manifest_path = get_cache_manifest_path()
+    with open(cache_manifest_path, 'a+') as manifest_file:
+        # Write the new entry checksum to manifest file
         manifest_file.write(entry_checksum)
         manifest_file.write('\n')
+        manifest_file.seek(0)
+        # Read checksums from manifest; splitlines(True) preserves newlines
+        entry_checksums = manifest_file.read().splitlines(True)
+        # Purge the oldest entry if the cache is too large
+        if len(entry_checksums) >= MAX_NUM_CACHE_ENTRIES:
+            old_entry_checksum = entry_checksums[0]
+            manifest_file.truncate(0)
+            manifest_file.seek(0)
+            manifest_file.writelines(entry_checksums[1:])
+            os.remove(os.path.join(
+                get_cache_entry_dir_path(), old_entry_checksum))
 
 
 # Retrieves the unmodified content of a cache entry
