@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 import tests
 import yvs.copy_ref as yvs
-from mock import Mock, NonCallableMock, patch
 import nose.tools as nose
+from mock import Mock, NonCallableMock, patch
 from tests.decorators import redirect_stdout, use_user_prefs
 
 
@@ -141,13 +141,23 @@ def test_url_always_chapter(out, request):
 @redirect_stdout
 def test_cache_url_content(out):
     """should cache chapter URL content after first fetch"""
+    yvs.main('59/psa.23.2')
+    with patch('urllib2.Request') as request:
+        yvs.main('59/psa.23.3')
+        request.assert_not_called()
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_cache_ref_content(out):
+    """should cache reference content after first parse"""
     query_str = '59/psa.23.2'
     yvs.main(query_str)
     fetched_content = out.getvalue()
     out.seek(0)
     out.truncate(0)
-    with patch('urllib2.Request') as request:
+    with patch('yvs.copy_ref.ReferenceParser') as referenceParser:
         yvs.main(query_str)
         cached_content = out.getvalue()
         nose.assert_equal(cached_content, fetched_content)
-        request.assert_not_called()
+        referenceParser.assert_not_called()
