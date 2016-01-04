@@ -10,7 +10,7 @@ def get_search_url(ref_uid):
     prefs = shared.get_prefs()
     search_engines = shared.get_search_engines()
     search_engine = shared.get_search_engine(
-        search_engines, prefs['searchEngine'])
+        search_engines, prefs['search_engine'])
 
     ref = shared.get_ref_object(ref_uid, prefs)
     full_ref = shared.get_full_ref(ref)

@@ -126,6 +126,10 @@ def extend_prefs(prefs, defaults):
         # Merge existing user preferences into defaults (thereby ensuring that
         # user preferences are not lacking any newly-added preferences)
         defaults.update(prefs)
+        # Rename 'searchEngine' key to 'search_engine'
+        if 'searchEngine' in defaults:
+            defaults['search_engine'] = defaults['searchEngine']
+            del defaults['searchEngine']
         set_prefs(defaults)
         return defaults
     else:

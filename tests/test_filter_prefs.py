@@ -38,7 +38,7 @@ def test_filter_versions():
 
 def test_show_search_enginges():
     """should show all search engines if no value is given"""
-    results = yvs.get_result_list('searchEngine')
+    results = yvs.get_result_list('search_engine')
     nose.assert_not_equal(len(results), 0)
 
 
