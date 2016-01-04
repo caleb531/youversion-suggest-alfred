@@ -125,6 +125,8 @@ def get_result_list(query_str):
                 # Get list of available values for the given preference
                 results = get_value_result_list(
                     user_prefs, pref_def, pref_value_query_str)
+                # Always sort results by title in this case
+                results.sort(key=itemgetter('title'))
                 break
         # If no exact matches, filter list of available preferences by query
         if not results:
@@ -135,9 +137,6 @@ def get_result_list(query_str):
         # Should show all available preferences if query is empty
         # or if query does not match
         results = get_pref_result_list(pref_defs)
-
-    # Always sort results by title in this case
-    results.sort(key=itemgetter('title'))
 
     return results
 
