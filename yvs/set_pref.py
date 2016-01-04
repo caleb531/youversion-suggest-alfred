@@ -1,5 +1,7 @@
 # yvs.set_pref
+# coding=utf-8
 
+from __future__ import unicode_literals
 import re
 import yvs.shared as shared
 
