@@ -1,4 +1,5 @@
 # tests.test_filter_prefs
+# coding=utf-8
 
 from __future__ import unicode_literals
 import nose.tools as nose
@@ -18,10 +19,10 @@ def test_show_languages():
 @nose.with_setup(set_up, tear_down)
 def test_filter_languages():
     """should filter available languages if value is given"""
-    results = yvs.get_result_list('language p')
-    nose.assert_equal(len(results), 3)
-    nose.assert_equal(results[0]['title'], 'Polski')
-    nose.assert_equal(results[0]['arg'], 'language:pl')
+    results = yvs.get_result_list('language español')
+    nose.assert_equal(len(results), 2)
+    nose.assert_equal(results[0]['title'], 'Español')
+    nose.assert_equal(results[0]['arg'], 'language:es')
 
 
 @nose.with_setup(set_up, tear_down)
