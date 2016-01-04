@@ -25,7 +25,7 @@ def get_pref_defs(user_prefs):
             'values': partial(shared.get_versions, user_prefs['language'])
         },
         {
-            'key': 'searchEngine',
+            'key': 'search_engine',
             'name': 'search engine',
             'title': 'Search Engine',
             'values': shared.get_search_engines
@@ -93,7 +93,13 @@ def get_pref_matches(query_str):
 # Simplify the given preference key for comparison with a query string
 def format_pref_key(pref_key):
 
-    return pref_key.lower()
+    return pref_key.replace('_', '').lower()
+
+
+# Format the query string specifically for this script filter
+def format_query_str(query_str):
+
+    return shared.format_query_str(query_str.replace('_', ''))
 
 
 # Retrieves result list of available preferences, filtered by the given query
@@ -110,7 +116,7 @@ def get_result_list(query_str):
 
     user_prefs = shared.get_user_prefs()
     pref_defs = get_pref_defs(user_prefs)
-    query_str = shared.format_query_str(query_str)
+    query_str = format_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
 

@@ -29,9 +29,9 @@ def test_set_version():
 def test_set_search_engine():
     """should set preferred search engine"""
     new_search_engine = 'yahoo'
-    yvs.main('searchEngine:{}'.format(new_search_engine))
+    yvs.main('search_engine:{}'.format(new_search_engine))
     user_prefs = yvs.shared.get_user_prefs()
-    nose.assert_equal(user_prefs['searchEngine'], new_search_engine)
+    nose.assert_equal(user_prefs['search_engine'], new_search_engine)
 
 
 @nose.with_setup(set_up, tear_down)

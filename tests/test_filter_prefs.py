@@ -43,19 +43,19 @@ def test_filter_versions():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_show_search_enginges():
+def test_show_search_engines():
     """should show all search engines if no value is given"""
-    results = yvs.get_result_list('searchEngine')
+    results = yvs.get_result_list('search_engine')
     nose.assert_equal(len(results), 4)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_filter_search_engines():
     """should filter available search engines if value is given"""
-    results = yvs.get_result_list('searchEngine y')
+    results = yvs.get_result_list('search_engine y')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Yahoo!')
-    nose.assert_equal(results[0]['arg'], 'searchEngine:yahoo')
+    nose.assert_equal(results[0]['arg'], 'search_engine:yahoo')
 
 
 @nose.with_setup(set_up, tear_down)

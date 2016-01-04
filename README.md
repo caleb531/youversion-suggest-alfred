@@ -122,13 +122,13 @@ type a query after `yvset version` to filter the list of versions.
 ### Setting your preferred search engine
 
 You may also set your preferred search engine used for searching selected Bible
-references. To do so, type `yvset searchEngine` into Alfred (again, the tab
+references. To do so, type `yvset search_engine` into Alfred (again, the tab
 autocompletion will allow you to minimize typing).
 
 #### Example queries
 
-- `yvset searchEngine b` => Bing
-- `yvset searchEngine d` => DuckDuckGo
+- `yvset search_engine b` => Bing
+- `yvset search_engine d` => DuckDuckGo
 
 ## Disclaimer
 

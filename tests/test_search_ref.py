@@ -35,7 +35,7 @@ def test_url_open_verse_range(wb_open):
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'en', 'version': 111, 'searchEngine': 'yahoo'})
+@use_user_prefs({'language': 'en', 'version': 111, 'search_engine': 'yahoo'})
 @patch('webbrowser.open')
 def test_alternate_search_engine(wb_open):
     """should search using alternate search engine in one is chosen"""
@@ -45,7 +45,7 @@ def test_alternate_search_engine(wb_open):
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'en', 'version': 111, 'searchEngine': 'xyz'})
+@use_user_prefs({'language': 'en', 'version': 111, 'search_engine': 'xyz'})
 @patch('webbrowser.open')
 def test_invalid_search_engine(wb_open):
     """should raise exception if nonexistent web browser is given"""
@@ -54,7 +54,7 @@ def test_invalid_search_engine(wb_open):
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'es', 'version': 128, 'searchEngine': 'google'})
+@use_user_prefs({'language': 'es', 'version': 128, 'search_engine': 'google'})
 @patch('webbrowser.open')
 def test_unicode_search(wb_open):
     """should open search URL for reference containing Unicode"""
