@@ -12,10 +12,11 @@ import urllib2
 import unicodedata
 from xml.etree import ElementTree as ETree
 
-# Path to the user's home directory
-HOME_DIR_PATH = os.path.expanduser('~')
 # Unique identifier for the workflow
 WORKFLOW_UID = 'com.calebevans.youversionsuggest'
+
+# Path to the user's home directory
+HOME_DIR_PATH = os.path.expanduser('~')
 # Path to the directory where this workflow stores non-volatile local data
 LOCAL_DATA_DIR_PATH = os.path.join(
     HOME_DIR_PATH, 'Library', 'Application Support', 'Alfred 2',
@@ -24,12 +25,11 @@ LOCAL_DATA_DIR_PATH = os.path.join(
 LOCAL_CACHE_DIR_PATH = os.path.join(
     HOME_DIR_PATH, 'Library', 'Caches',
     'com.runningwithcrayons.Alfred-2', 'Workflow Data', WORKFLOW_UID)
-# Path to the workflow's user preferences
-USER_PREFS_PATH = os.path.join(LOCAL_DATA_DIR_PATH, 'preferences.json')
 # Path to the directory containing data files apart of the packaged workflow
 PACKAGED_DATA_DIR_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
-# Path to the workflow's default user preferences
-DEFAULT_USER_PREFS_PATH = os.path.join(PACKAGED_DATA_DIR_PATH, 'defaults.json')
+
+# The maximum number of cache entries to store
+MAX_NUM_CACHE_ENTRIES = 100
 
 # The user agent used for HTTP requests sent to the YouVersion website
 USER_AGENT = 'YouVersion Suggest'
@@ -47,10 +47,10 @@ def create_local_data_dir():
 
 # Creates the directory (and any nonexistent parent directories) where this
 # workflow stores volatile local data (i.e. cache data)
-def create_local_cache_dir():
+def create_local_cache_dirs():
 
     try:
-        os.makedirs(LOCAL_CACHE_DIR_PATH)
+        os.makedirs(get_cache_entry_dir_path())
     except OSError:
         pass
 
@@ -162,11 +162,23 @@ def get_result_list_xml(results):
 # Functions for accessing/manipulating mutable preferences
 
 
+# Retrieves the path to the workflow's default user preferences file
+def get_default_user_prefs_path():
+
+    return os.path.join(PACKAGED_DATA_DIR_PATH, 'defaults.json')
+
+
 # Retrieves the default values for all workflow preferences
 def get_default_user_prefs():
 
-    with open(DEFAULT_USER_PREFS_PATH, 'r') as defaults_file:
+    with open(get_default_user_prefs_path(), 'r') as defaults_file:
         return json.load(defaults_file)
+
+
+# Retrieves the path to the workflow's user preferences file
+def get_user_prefs_path():
+
+    return os.path.join(LOCAL_DATA_DIR_PATH, 'preferences.json')
 
 
 # Overrwrites (or creates) user preferences using the given preferences object
@@ -174,7 +186,7 @@ def set_user_prefs(user_prefs):
 
     # Always ensure that the data directory (where prefrences reside) exists
     create_local_data_dir()
-    with open(USER_PREFS_PATH, 'w') as prefs_file:
+    with open(get_user_prefs_path(), 'w') as prefs_file:
         json.dump(user_prefs, prefs_file)
 
 
@@ -198,7 +210,7 @@ def get_user_prefs():
 
     default_user_prefs = get_default_user_prefs()
     try:
-        with open(USER_PREFS_PATH, 'r') as prefs_file:
+        with open(get_user_prefs_path(), 'r') as prefs_file:
             return extend_user_prefs(
                 json.load(prefs_file), default_user_prefs)
     except IOError:
@@ -220,22 +232,54 @@ def get_cache_entry_checksum(entry_key):
 def get_cache_entry_path(entry_key):
 
     entry_checksum = get_cache_entry_checksum(entry_key)
-    return os.path.join(LOCAL_CACHE_DIR_PATH, entry_checksum)
+    return os.path.join(get_cache_entry_dir_path(), entry_checksum)
+
+
+# Retrieves the path to the directory where all cache entries are stored
+def get_cache_entry_dir_path():
+
+    return os.path.join(LOCAL_CACHE_DIR_PATH, 'entries')
+
+
+# Retrieves the path to the manifest file listing all cache entries
+def get_cache_manifest_path():
+
+    return os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
 
 
 # Adds to the cache a new entry with the given content
 def add_cache_entry(entry_key, entry_content):
 
+    create_local_cache_dirs()
+
+    # Write entry content to entry file
     entry_path = get_cache_entry_path(entry_key)
-    create_local_cache_dir()
     with open(entry_path, 'w') as entry_file:
         entry_file.write(entry_content.encode('utf-8'))
+
+    entry_checksum = os.path.basename(entry_path)
+    cache_manifest_path = get_cache_manifest_path()
+    with open(cache_manifest_path, 'a+') as manifest_file:
+        # Write the new entry checksum to manifest file
+        manifest_file.write(entry_checksum)
+        manifest_file.write('\n')
+        manifest_file.seek(0)
+        # Read checksums from manifest; splitlines(True) preserves newlines
+        entry_checksums = manifest_file.read().splitlines(True)
+        # Purge the oldest entry if the cache is too large
+        if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
+            old_entry_checksum = entry_checksums[0].rstrip()
+            manifest_file.truncate(0)
+            manifest_file.seek(0)
+            manifest_file.writelines(entry_checksums[1:])
+            os.remove(os.path.join(
+                get_cache_entry_dir_path(), old_entry_checksum))
 
 
 # Retrieves the unmodified content of a cache entry
 def get_cache_entry_content(entry_key):
 
-    create_local_cache_dir()
+    create_local_cache_dirs()
     entry_path = get_cache_entry_path(entry_key)
     try:
         with open(entry_path, 'r') as entry_file:
