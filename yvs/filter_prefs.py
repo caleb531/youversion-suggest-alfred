@@ -84,7 +84,7 @@ PREFERENCES = {
         key='version', name='version', title='Version',
         values=partial(shared.get_versions, prefs['language'])),
     Preference(
-        key='searchEngine', name='search engine', title='Search Engine',
+        key='search_engine', name='search engine', title='Search Engine',
         values=shared.get_search_engines)
 }
 
@@ -102,13 +102,15 @@ def get_pref_matches(query_str):
 def get_pref_result_list(query_str):
 
     return [pref.get_pref_result() for pref in
-            PREFERENCES if pref.key.lower().startswith(query_str)]
+            PREFERENCES if pref.key.lower().replace(
+                '_', '').startswith(query_str)]
 
 
 # Retrieves result list of preferences or their respective values (depending on
 # the given query string)
 def get_result_list(query_str):
 
+    query_str = query_str.replace('_', '')
     query_str = shared.format_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
@@ -120,7 +122,7 @@ def get_result_list(query_str):
 
         for pref in PREFERENCES:
             # If key name in query exactly matches a preference key name
-            if pref.key.lower() == pref_key:
+            if pref.key.lower().replace('_', '') == pref_key:
                 # Get list of available values for the given preference
                 results = pref.get_value_result_list(pref_value)
                 break
