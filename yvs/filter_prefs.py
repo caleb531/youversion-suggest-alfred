@@ -38,7 +38,7 @@ def get_pref_result(pref_def):
 
     return {
         'title': pref_def['title'],
-        'subtitle': 'Set your preferred \'{}\''.format(pref_def['name']),
+        'subtitle': 'Set your preferred {}'.format(pref_def['name']),
         'autocomplete': '{} '.format(pref_def['key']),
         'valid': 'no'
     }
@@ -59,8 +59,8 @@ def get_value_result_list(user_prefs, pref_def, query_str):
 
         if value['id'] == user_prefs[pref_def['key']]:
             # If this value is the current value, indicate such
-            result['subtitle'] = ('This is already your preferred {}'
-                                  .format(pref_def['name']))
+            result['subtitle'] = 'This is already your preferred {}'.format(
+                pref_def['name'])
             result['valid'] = 'no'
         else:
             result['subtitle'] = 'Set this as your preferred {}'.format(
