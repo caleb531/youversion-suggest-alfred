@@ -8,8 +8,6 @@ branch = True
 
 # Regexes for lines to exclude from consideration
 exclude_lines =
-    # Allow source to designate lines/branches to be skipped
-    pragma: no cover
 
     # Ignore non-runnable code
     if __name__ == .__main__.:
@@ -24,3 +22,4 @@ include =
     yvs/copy_ref.py
     yvs/search_ref.py
     yvs/set_pref.py
+    yvs/clear_cache.py

@@ -2,7 +2,10 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import os
+import os.path
 import nose.tools as nose
+import tests
 import yvs.search_refs as yvs
 from mock import Mock, NonCallableMock, patch
 from xml.etree import ElementTree as ETree
@@ -15,25 +18,29 @@ with open('tests/files/search.html') as html_file:
             read=Mock(return_value=html_file.read())))
 
 
-def setup():
+def set_up():
     patch_urlopen.start()
+    tests.set_up()
 
 
-def teardown():
+def tear_down():
     patch_urlopen.stop()
+    tests.tear_down()
 
 
+@nose.with_setup(set_up, tear_down)
 def test_result_titles():
-    """should set result titles as full reference identifiers"""
+    """should correctly parse result titles from HTML"""
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
-    nose.assert_regexp_matches(results[0]['title'], r'Romans 13:8 \(NIV\)')
-    nose.assert_regexp_matches(results[1]['title'], r'John 15:12 \(NIV\)')
-    nose.assert_regexp_matches(results[2]['title'], r'1 Peter 4:8 \(NIV\)')
+    nose.assert_regexp_matches(results[0]['title'], r'^Romans 13:8 \(NIV\)')
+    nose.assert_regexp_matches(results[1]['title'], r'^John 15:12 \(NIV\)')
+    nose.assert_regexp_matches(results[2]['title'], r'^1 Peter 4:8 \(NIV\)')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_result_subtitles():
-    """should set result subtitles as snippet of reference content"""
+    """should correctly parse result subtitles from HTML"""
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
     nose.assert_regexp_matches(results[0]['subtitle'], 'Lorem')
@@ -41,9 +48,20 @@ def test_result_subtitles():
     nose.assert_regexp_matches(results[2]['subtitle'], 'Ut aliquam')
 
 
+@nose.with_setup(set_up, tear_down)
+def test_result_arg():
+    """should correctly parse result UID arguments from HTML"""
+    results = yvs.get_result_list('love others')
+    nose.assert_equal(len(results), 3)
+    nose.assert_equal(results[0]['arg'], '111/rom.13.8')
+    nose.assert_equal(results[1]['arg'], '111/jhn.15.12')
+    nose.assert_equal(results[2]['arg'], '111/1pe.4.8')
+
+
+@nose.with_setup(set_up, tear_down)
 @patch('urllib2.Request')
 def test_unicode_input(request):
-    """should not raise exception when input contains non-ASCII characters"""
+    """should correctly handle non-ASCII characters in query string"""
     results = yvs.get_result_list('é')
     request.assert_called_once_with(
         'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
@@ -51,14 +69,15 @@ def test_unicode_input(request):
     nose.assert_equal(len(results), 3)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_charref_dec_title():
     """should evaluate character references in result titles"""
     results = yvs.get_result_list('love others')
     nose.assert_equal(len(results), 3)
-    nose.assert_regexp_matches(
-        results[0]['title'], r'Romans 13:8 \(NIV\) \u2665')
+    nose.assert_equal(results[0]['title'], 'Romans 13:8 (NIV) \u2665')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_charref_dec_subtitle():
     """should evaluate character references in result subtitles"""
     results = yvs.get_result_list('love others')
@@ -67,6 +86,7 @@ def test_charref_dec_subtitle():
         results[0]['subtitle'], '\u201cLorem ipsum\u201d')
 
 
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_output(out):
     """should output result list XML"""
@@ -78,6 +98,7 @@ def test_output(out):
     nose.assert_equal(output, xml)
 
 
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 @patch('yvs.search_refs.get_result_list', return_value=[])
 def test_null_result(out, get_result_list):
@@ -91,3 +112,37 @@ def test_null_result(out, get_result_list):
     nose.assert_equal(item.get('valid'), 'no')
     title = item.find('title')
     nose.assert_equal(title.text, 'No Results')
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_cache_xml_reesults(out):
+    """should cache final XML results after first fetch and parse"""
+    query_str = 'love others'
+    yvs.main(query_str)
+    fetched_content = out.getvalue()
+    out.seek(0)
+    out.truncate(0)
+    with patch('urllib2.Request') as request:
+        yvs.main(query_str)
+        cached_content = out.getvalue()
+        nose.assert_equal(cached_content, fetched_content)
+        request.assert_not_called()
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_cache_housekeeping(out):
+    """should purge oldest entry when cache grows too large"""
+    query_str = 'a'
+    num_entries = 101
+    purged_entry_checksum = 'ac2ee56cf99614a3ff33410b15ba26222fee09d3'
+    last_entry_checksum = '5f6894cdffb2170bdee59c75ad083aee081a20b9'
+    nose.assert_false(os.path.exists(yvs.shared.get_cache_entry_dir_path()))
+    for i in range(num_entries):
+        yvs.main(query_str)
+        query_str += 'a'
+    entry_checksums = os.listdir(yvs.shared.get_cache_entry_dir_path())
+    nose.assert_equal(len(entry_checksums), 100)
+    nose.assert_not_in(purged_entry_checksum, entry_checksums)
+    nose.assert_in(last_entry_checksum, entry_checksums)

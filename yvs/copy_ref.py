@@ -1,10 +1,12 @@
 # yvs.copy_ref
+# coding=utf-8
 
+from __future__ import unicode_literals
 import yvs.shared as shared
 from HTMLParser import HTMLParser
 
 # The base for all Bible reference URLs
-BASE_REF_URL = 'https://www.bible.com/bible/'
+BASE_REF_URL = 'https://www.bible.com/bible/{ref_uid}'
 
 # Elements that should be surrounded by blank lines
 BLOCK_ELEMS = {'b', 'p'}
@@ -94,33 +96,56 @@ class ReferenceParser(HTMLParser):
     # Handles all non-ASCII characters encoded as HTML entities
     def handle_charref(self, name):
         if self.is_in_verse_content():
-            char = shared.eval_charref(name)
+            char = shared.eval_html_charref(name)
             self.content_parts.append(char)
 
 
-# Retrieves HTML for reference with the given ID
-def get_ref_html(ref):
-    url = '{base}{version}/{book}.{chapter}'.format(
-        base=BASE_REF_URL,
+# Retrieves the UID of the chapter to which this reference belongs
+def get_ref_chapter_uid(ref):
+
+    return '{version}/{book}.{chapter}'.format(
         version=ref['version_id'],
         book=ref['book_id'],
         chapter=ref['chapter'])
-    return shared.get_url_content(url)
 
 
-# Parses actual reference content from reference HTML
+# Retrieves HTML for of the chapter to which the reference belongs
+def get_chapter_html(ref):
+
+    chapter_uid = get_ref_chapter_uid(ref)
+    url = BASE_REF_URL.format(ref_uid=chapter_uid)
+
+    entry_key = '{}.html'.format(chapter_uid)
+    chapter_html = shared.get_cache_entry_content(entry_key)
+    if chapter_html is None:
+        chapter_html = shared.get_url_content(url)
+        shared.add_cache_entry(entry_key, chapter_html)
+
+    return chapter_html
+
+
+# Parses actual reference content from chapter HTML
 def get_ref_content(ref):
-    html = get_ref_html(ref)
-    parser = ReferenceParser(ref)
-    parser.feed(html)
-    # Format reference content by removing superfluous whitespace and such
-    ref_content = shared.format_ref_content(''.join(parser.content_parts))
-    # Prepend reference header that identifies reference
-    ref_content = ''.join((shared.get_full_ref(ref), '\n\n', ref_content))
+
+    entry_key = '{}.txt'.format(ref['uid'])
+    ref_content = shared.get_cache_entry_content(entry_key)
+    if ref_content is None:
+
+        chapter_html = get_chapter_html(ref)
+        parser = ReferenceParser(ref)
+        parser.feed(chapter_html)
+        # Format reference content by removing superfluous whitespace and such
+        ref_content = shared.format_ref_content(''.join(parser.content_parts))
+        # Prepend reference header that identifies reference
+        ref_content = ''.join((shared.get_full_ref(ref), '\n\n', ref_content))
+
+        shared.add_cache_entry(entry_key, ref_content)
+
     return ref_content
 
 
 def main(ref_uid):
+
     ref = shared.get_ref_object(ref_uid)
     print(get_ref_content(ref).encode('utf-8'))
 

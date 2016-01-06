@@ -88,6 +88,7 @@ Currently, YouVersion Suggest supports the following languages:
 - Simplified Chinese (zh-CN)
 - Spanish (es)
 - Spanish - Spain (es-ES)
+- Swahili (sw)
 - Swedish (sv)
 
 If you would like support added for another language, please [submit an issue on

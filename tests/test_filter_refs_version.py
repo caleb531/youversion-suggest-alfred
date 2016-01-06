@@ -3,10 +3,12 @@
 from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_refs as yvs
-from tests.decorators import use_prefs
+from tests import set_up, tear_down
+from tests.decorators import use_user_prefs
 
 
-@use_prefs({'language': 'es', 'version': 128})
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'es', 'version': 128})
 def test_numbered():
     """should match versions ending in number by partial name"""
     results = yvs.get_result_list('lucas 4:8 rvr1')
@@ -14,6 +16,7 @@ def test_numbered():
     nose.assert_equal(results[0]['title'], 'Lucas 4:8 (RVR1960)')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_case():
     """should match versions irrespective of case"""
     query = 'e 4:8 esv'
@@ -25,6 +28,7 @@ def test_case():
     nose.assert_list_equal(results_upper, results)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_whitespace():
     """should match versions irrespective of surrounding whitespace"""
     results = yvs.get_result_list('1 peter 5:7    esv')
@@ -32,6 +36,7 @@ def test_whitespace():
     nose.assert_equal(results[0]['title'], '1 Peter 5:7 (ESV)')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_partial():
     """should match versions by partial name"""
     results = yvs.get_result_list('luke 4:8 e')
@@ -39,6 +44,7 @@ def test_partial():
     nose.assert_equal(results[0]['title'], 'Luke 4:8 (ESV)')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_partial_ambiguous():
     """should match versions by ambiguous partial name"""
     results = yvs.get_result_list('luke 4:8 c')
@@ -46,6 +52,7 @@ def test_partial_ambiguous():
     nose.assert_equal(results[0]['title'], 'Luke 4:8 (CEB)')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_closest_match():
     """should try to find closest match for nonexistent versions"""
     results = yvs.get_result_list('hosea 6:3 nlab')
@@ -53,6 +60,7 @@ def test_closest_match():
     nose.assert_equal(results[0]['title'], 'Hosea 6:3 (NLT)')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_nonexistent():
     """should use default version for nonexistent versions with no matches"""
     results = yvs.get_result_list('hosea 6:3 xyz')
@@ -60,6 +68,7 @@ def test_nonexistent():
     nose.assert_equal(results[0]['title'], 'Hosea 6:3 (NIV)')
 
 
+@nose.with_setup(set_up, tear_down)
 def test_id():
     """should use correct ID for versions"""
     results = yvs.get_result_list('malachi 3:2 esv')

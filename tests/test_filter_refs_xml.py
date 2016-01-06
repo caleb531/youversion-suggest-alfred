@@ -4,8 +4,10 @@ from __future__ import unicode_literals
 import nose.tools as nose
 import yvs.filter_refs as yvs
 from xml.etree import ElementTree as ETree
+from tests import set_up, tear_down
 
 
+@nose.with_setup(set_up, tear_down)
 def test_validity():
     """should return syntactically-valid XML"""
     results = yvs.get_result_list('john 3:16')
@@ -13,6 +15,7 @@ def test_validity():
     nose.assert_is_instance(ETree.fromstring(xml), ETree.Element)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_structure():
     """XML should match result list"""
     results = yvs.get_result_list('matthew 6:34')

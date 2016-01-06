@@ -8,86 +8,77 @@ from functools import partial
 from operator import itemgetter
 
 
-prefs = shared.get_prefs()
+# Returns a list of definition objects for all available preferences
+def get_pref_defs(user_prefs):
+
+    return [
+        {
+            'key': 'language',
+            'name': 'language',
+            'title': 'Language',
+            'values': shared.get_languages
+        },
+        {
+            'key': 'version',
+            'name': 'version',
+            'title': 'Version',
+            'values': partial(shared.get_versions, user_prefs['language'])
+        },
+        {
+            'key': 'search_engine',
+            'name': 'search engine',
+            'title': 'Search Engine',
+            'values': shared.get_search_engines
+        }
+    ]
 
 
-# Class used to represent individual user preferences
-class Preference(object):
+# Retrieves Alfred result object for this preference
+def get_pref_result(pref_def):
 
-    def __init__(self, key, name, title, values):
+    return {
+        'title': pref_def['title'],
+        'subtitle': 'Set your preferred {}'.format(pref_def['name']),
+        'autocomplete': '{} '.format(pref_def['key']),
+        'valid': 'no'
+    }
 
-        # Store key name, preference name and result title for this preference
-        self.key = key
-        self.name = name
-        self.title = title
-        # Store reference to function that will produce
-        # a list of all possible values for this preference
-        self.values = values
 
-    # Retrieves Alfred result object for this preference
-    def get_pref_result(self):
+# Retrieves Alfred result list of all available values for this preference
+def get_value_result_list(user_prefs, pref_def, query_str):
 
-        return {
-            'title': self.title,
-            'subtitle': 'Set your preferred \'{}\''.format(self.name),
-            'autocomplete': '{} '.format(self.key),
-            'valid': 'no'
+    values = pref_def['values']()
+    results = []
+
+    for value in values:
+
+        result = {
+            'arg': '{}:{}'.format(pref_def['key'], value['id']),
+            'title': value['name']
         }
 
-    # Retrieves list of available values for this preference
-    def get_values(self):
+        if value['id'] == user_prefs[pref_def['key']]:
+            # If this value is the current value, indicate such
+            result['subtitle'] = 'This is already your preferred {}'.format(
+                pref_def['name'])
+            result['valid'] = 'no'
+        else:
+            result['subtitle'] = 'Set this as your preferred {}'.format(
+                pref_def['name'])
 
-        return self.values()
+        # Show all results if query string is empty
+        # Otherwise, only show results whose titles begin with query
+        if not query_str or result['title'].lower().startswith(query_str):
+            results.append(result)
 
-    # Retrieves Alfred result list of all available values for this preference
-    def get_value_result_list(self, query_str):
+    if not results:
+        results.append({
+            'title': 'No Results',
+            'subtitle': 'No values matching {}'.format(query_str),
+            'valid': 'no'
+        })
 
-        values = self.get_values()
-        results = []
-
-        for value in values:
-
-            result = {
-                'arg': '{}:{}'.format(self.key, value['id']),
-                'title': value['name']
-            }
-
-            if value['id'] == prefs[self.key]:
-                # If this value is the current value, indicate such
-                result['subtitle'] = ('This is already your preferred {}'
-                                      .format(self.name))
-                result['valid'] = 'no'
-            else:
-                result['subtitle'] = 'Set this as your preferred {}'.format(
-                    self.name)
-
-            # Show all results if query string is empty
-            # Otherwise, only show results whose titles begin with query
-            if not query_str or result['title'].lower().startswith(query_str):
-                results.append(result)
-
-        if not results:
-            results.append({
-                'title': 'No Results',
-                'subtitle': 'No values matching {}'.format(query_str),
-                'valid': 'no'
-            })
-
-        return results
-
-
-# Delineate all available workflow preferences
-PREFERENCES = {
-    Preference(
-        key='language', name='language', title='Language',
-        values=shared.get_languages),
-    Preference(
-        key='version', name='version', title='Version',
-        values=partial(shared.get_versions, prefs['language'])),
-    Preference(
-        key='search_engine', name='search engine', title='Search Engine',
-        values=shared.get_search_engines)
-}
+    return results
 
 
 # Parses a preference key and optional value from the given query string
@@ -99,46 +90,59 @@ def get_pref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
-# Retrieves result list of available preferences, filtered by the given query
-def get_pref_result_list(query_str):
+# Simplify the given preference key for comparison with a query string
+def format_pref_key(pref_key):
 
-    return [pref.get_pref_result() for pref in
-            PREFERENCES if pref.key.lower().replace(
-                '_', '').startswith(query_str)]
+    return pref_key.replace('_', '').lower()
+
+
+# Format the query string specifically for this script filter
+def format_query_str(query_str):
+
+    return shared.format_query_str(query_str.replace('_', ''))
+
+
+# Retrieves result list of available preferences, filtered by the given query
+def get_pref_result_list(pref_defs, pref_key_query_str=''):
+
+    return [get_pref_result(pref_def) for pref_def in
+            pref_defs if format_pref_key(pref_def['key']).startswith(
+                pref_key_query_str)]
 
 
 # Retrieves result list of preferences or their respective values (depending on
 # the given query string)
 def get_result_list(query_str):
 
-    query_str = query_str.replace('_', '')
-    query_str = shared.format_query_str(query_str)
+    user_prefs = shared.get_user_prefs()
+    pref_defs = get_pref_defs(user_prefs)
+    query_str = format_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
 
     if pref_matches:
 
-        pref_key = pref_matches.group(1)
-        pref_value = pref_matches.group(2)
+        pref_key_query_str = pref_matches.group(1)
+        pref_value_query_str = pref_matches.group(2)
 
-        for pref in PREFERENCES:
+        for pref_def in pref_defs:
             # If key name in query exactly matches a preference key name
-            if pref.key.lower().replace('_', '') == pref_key:
+            if format_pref_key(pref_def['key']) == pref_key_query_str:
                 # Get list of available values for the given preference
-                results = pref.get_value_result_list(pref_value)
+                results = get_value_result_list(
+                    user_prefs, pref_def, pref_value_query_str)
+                # Always sort results by title in this case
+                results.sort(key=itemgetter('title'))
                 break
         # If no exact matches, filter list of available preferences by query
         if not results:
-            results = get_pref_result_list(query_str)
+            results = get_pref_result_list(pref_defs, pref_key_query_str)
 
     else:
 
         # Should show all available preferences if query is empty
         # or if query does not match
-        results = get_pref_result_list(query_str)
-
-    # Always sort results by title in this case
-    results.sort(key=itemgetter('title'))
+        results = get_pref_result_list(pref_defs)
 
     return results
 

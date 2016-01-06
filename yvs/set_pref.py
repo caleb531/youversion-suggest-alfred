@@ -1,5 +1,7 @@
 # yvs.set_pref
+# coding=utf-8
 
+from __future__ import unicode_literals
 import re
 import yvs.shared as shared
 
@@ -21,15 +23,15 @@ def get_key_value(key_value_str):
 # Set the YouVersion preference with the given key
 def set_pref(key, value):
 
-    prefs = shared.get_prefs()
-    prefs[key] = value
+    user_prefs = shared.get_user_prefs()
+    user_prefs[key] = value
 
     # If new language is set, ensure that preferred version is updated also
     if key == 'language':
         bible = shared.get_bible_data(language=value)
-        prefs['version'] = bible['default_version']
+        user_prefs['version'] = bible['default_version']
 
-    shared.set_prefs(prefs)
+    shared.set_user_prefs(user_prefs)
 
 
 def main(key_value_str):

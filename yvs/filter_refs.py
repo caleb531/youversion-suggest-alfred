@@ -99,16 +99,16 @@ def get_matching_books(books, query):
 
 
 # Chooses most appropriate version based on current parameters
-def choose_best_version(prefs, bible, query):
+def choose_best_version(user_prefs, bible, query):
 
     chosen_version = None
 
     if 'version' in query:
         chosen_version = guess_version(bible['versions'], query['version'])
 
-    if not chosen_version and 'version' in prefs:
+    if not chosen_version and 'version' in user_prefs:
         chosen_version = shared.get_version(
-            bible['versions'], prefs['version'])
+            bible['versions'], user_prefs['version'])
 
     return chosen_version
 
@@ -162,15 +162,15 @@ def get_result_list(query_str):
     if not query:
         return results
 
-    prefs = shared.get_prefs()
-    bible = shared.get_bible_data(prefs['language'])
+    user_prefs = shared.get_user_prefs()
+    bible = shared.get_bible_data(user_prefs['language'])
     chapters = shared.get_chapter_data()
     matching_books = get_matching_books(bible['books'], query)
 
     if 'chapter' not in query:
         query['chapter'] = 1
 
-    chosen_version = choose_best_version(prefs, bible, query)
+    chosen_version = choose_best_version(user_prefs, bible, query)
 
     # Build result list from books matching the query
     for book in matching_books:

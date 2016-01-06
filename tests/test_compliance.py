@@ -53,3 +53,16 @@ def test_json():
                 os.path.relpath(data_path, 'yvs/data'))
             validator = jsonschema.validate(data, schema)
             yield nose.assert_is_none, validator
+
+
+def test_headers():
+
+    for module_path in glob.iglob('yvs/*.py'):
+        module_name = module_path.replace('/', '.').replace('.py', '')
+        with open(module_path, 'r') as module_file:
+            module_contents = module_file.read().splitlines()
+            test_headers.__doc__ = '{} should contain proper headers'.format(
+                os.path.relpath(module_path, 'yvs'))
+            yield nose.assert_equal, module_contents[0], '# {}'.format(
+                module_name)
+            yield nose.assert_equal, module_contents[1], '# coding=utf-8'
