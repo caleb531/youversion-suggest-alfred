@@ -7,7 +7,7 @@
 [![Build Status](https://travis-ci.org/caleb531/youversion-suggest.svg?branch=master)](https://travis-ci.org/caleb531/youversion-suggest)
 [![Coverage Status](https://coveralls.io/repos/caleb531/youversion-suggest/badge.svg?branch=master)](https://coveralls.io/r/caleb531/youversion-suggest?branch=master)
 
-YouVersion Suggest is an Alfred workflow which allows you to search the online
+YouVersion Suggest is an [Alfred 2](https://www.alfredapp.com/) workflow which allows you to search the online
 [YouVersion](https://www.youversion.com/) bible quickly and conveniently.
 
 ![YouVersion Suggest in action](screenshot.png)
