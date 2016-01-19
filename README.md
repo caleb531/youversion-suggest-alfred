@@ -1,7 +1,7 @@
 
 # YouVersion Suggest
 
-*Copyright 2015 Caleb Evans*  
+*Copyright 2016 Caleb Evans*  
 *Released under the MIT license*
 
 [![Build Status](https://travis-ci.org/caleb531/youversion-suggest.svg?branch=master)](https://travis-ci.org/caleb531/youversion-suggest)
