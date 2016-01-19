@@ -1,4 +1,3 @@
-
 # YouVersion Suggest
 
 *Copyright 2016 Caleb Evans*  
