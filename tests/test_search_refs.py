@@ -138,7 +138,9 @@ def test_cache_housekeeping(out):
     num_entries = 101
     purged_entry_checksum = 'ac2ee56cf99614a3ff33410b15ba26222fee09d3'
     last_entry_checksum = '5f6894cdffb2170bdee59c75ad083aee081a20b9'
-    nose.assert_false(os.path.exists(yvs.shared.get_cache_entry_dir_path()))
+    nose.assert_false(
+        os.path.exists(yvs.shared.get_cache_entry_dir_path()),
+        'local cache entry directory exists')
     for i in range(num_entries):
         yvs.main(query_str)
         query_str += 'a'
