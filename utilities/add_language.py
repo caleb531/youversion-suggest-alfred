@@ -65,10 +65,10 @@ def get_version_elems(language_id):
     if category_elems:
 
         category_elem = category_elems[0]
+        lang_title_elem = d(category_elem).find('.lang_title')[0]
         version_elems = d(category_elem).find('li')
 
-        text = category_elem.text
-        language_name = get_language_name(text)
+        language_name = get_language_name(lang_title_elem.text)
 
     if not language_name:
         raise RuntimeError('Language name cannot be determined. Aborting.')
