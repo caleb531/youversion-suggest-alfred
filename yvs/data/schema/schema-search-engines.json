@@ -7,7 +7,7 @@
       "id": {
         "description": "The ID used by YouVersion Suggest to uniquely identify this search engine",
         "type": "string",
-        "pattern": "^([a-z0-9_]+)$"
+        "pattern": "^[a-z0-9_]+$"
       },
       "name": {
         "description": "The name of the search engine",
@@ -16,7 +16,7 @@
       "url": {
         "description": "The URL of the search engine's search page (with {query} substituted for the search query)",
         "type": "string",
-        "pattern": "https?://(.*?){query}(.*?)$"
+        "pattern": "^https?://(.*?){query}(.*?)$"
       }
     },
     "required": ["id", "name", "url"],
