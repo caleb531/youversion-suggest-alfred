@@ -51,8 +51,7 @@ def test_json():
                 data = json.load(data_file)
             test_json.__doc__ = '{} should comply with schema'.format(
                 os.path.relpath(data_path, 'yvs/data'))
-            validator = jsonschema.validate(data, schema)
-            yield nose.assert_is_none, validator
+            yield jsonschema.validate, data, schema
 
 
 def test_headers():
