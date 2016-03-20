@@ -42,7 +42,7 @@ def test_json():
         'schema-bible': 'yvs/data/bible/language-*.json'
     }
     for schema_name, data_path_pattern in schemas.iteritems():
-        schema_path = 'yvs/data/schema/{}.json'.format(schema_name)
+        schema_path = 'tests/schemas/{}.json'.format(schema_name)
         with open(schema_path) as schema_file:
             schema = json.load(schema_file)
         data_paths = glob.iglob(data_path_pattern)
