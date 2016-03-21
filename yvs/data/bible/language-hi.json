@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 819,
+  "language": {
+    "id": "hi",
+    "name": "हिन्दी"
+  },
   "versions": [
     {
       "id": 819,

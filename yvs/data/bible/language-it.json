@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 80,
+  "language": {
+    "id": "it",
+    "name": "Italiano"
+  },
   "versions": [
     {
       "id": 54,

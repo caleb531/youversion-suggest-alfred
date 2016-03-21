@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 13,
+  "language": {
+    "id": "ar",
+    "name": "العربية"
+  },
   "versions": [
     {
       "id": 13,

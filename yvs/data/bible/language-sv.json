@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 154,
+  "language": {
+    "id": "sv",
+    "name": "Svenska"
+  },
   "versions": [
     {
       "id": 154,

@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 215,
+  "language": {
+    "id": "pt_PT",
+    "name": "Português (Portugal)"
+  },
   "versions": [
     {
       "id": 215,

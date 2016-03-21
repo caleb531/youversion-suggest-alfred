@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 330,
+  "language": {
+    "id": "fi",
+    "name": "Suomi"
+  },
   "versions": [
     {
       "id": 60,

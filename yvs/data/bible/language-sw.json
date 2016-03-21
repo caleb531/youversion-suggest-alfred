@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 74,
+  "language": {
+    "id": "sw",
+    "name": "Kiswahili"
+  },
   "versions": [
     {
       "id": 74,

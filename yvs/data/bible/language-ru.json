@@ -110,6 +110,10 @@
     }
   ],
   "default_version": 45,
+  "language": {
+    "id": "ru",
+    "name": "Русский"
+  },
   "versions": [
     {
       "id": 313,

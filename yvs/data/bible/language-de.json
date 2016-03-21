@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 51,
+  "language": {
+    "id": "de",
+    "name": "Deutsch"
+  },
   "versions": [
     {
       "id": 51,

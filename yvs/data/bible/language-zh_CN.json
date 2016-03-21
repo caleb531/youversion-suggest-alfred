@@ -262,6 +262,10 @@
     }
   ],
   "default_version": 47,
+  "language": {
+    "id": "zh_CN",
+    "name": "简体中文"
+  },
   "versions": [
     {
       "id": 36,
