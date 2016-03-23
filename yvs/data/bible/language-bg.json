@@ -262,10 +262,6 @@
     }
   ],
   "default_version": 22,
-  "language": {
-    "id": "bg",
-    "name": "Български език"
-  },
   "versions": [
     {
       "id": 22,

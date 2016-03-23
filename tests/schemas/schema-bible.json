@@ -28,21 +28,6 @@
       "type": "integer",
       "minimum": 1
     },
-    "language": {
-      "description": "Identification details for this language",
-      "type": "object",
-      "properties": {
-        "id": {
-          "description": "The ISO 639-1 code for this language",
-          "type": "string",
-          "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
-        },
-        "name": {
-          "description": "The name of this language as written in said language",
-          "type": "string"
-        }
-      }
-    },
     "versions": {
       "description": "The list of Bible versions for this language",
       "type": "array",

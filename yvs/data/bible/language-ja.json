@@ -262,10 +262,6 @@
     }
   ],
   "default_version": 81,
-  "language": {
-    "id": "ja",
-    "name": "日本語"
-  },
   "versions": [
     {
       "id": 81,

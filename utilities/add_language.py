@@ -175,10 +175,6 @@ def get_bible_data(language_id, default_version, max_version_id):
             'Given default version does not exist in language. Aborting.')
 
     bible['default_version'] = default_version
-    bible['language'] = {
-        'id': language_id,
-        'name': language_name
-    }
     bible['books'] = get_books(default_version)
     return bible, language_name
 

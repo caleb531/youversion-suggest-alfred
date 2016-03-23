@@ -262,10 +262,6 @@
     }
   ],
   "default_version": 21,
-  "language": {
-    "id": "fr",
-    "name": "Français"
-  },
   "versions": [
     {
       "id": 504,

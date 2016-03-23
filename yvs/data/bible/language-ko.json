@@ -262,10 +262,6 @@
     }
   ],
   "default_version": 86,
-  "language": {
-    "id": "ko",
-    "name": "한국어"
-  },
   "versions": [
     {
       "id": 86,
