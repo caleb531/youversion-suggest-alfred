@@ -1,9 +1,9 @@
 # tests.decorators
 
 import sys
-import yvs.shared as yvs
 from functools import wraps
 from io import BytesIO
+from mock import patch
 
 
 def redirect_stdout(func):
@@ -25,11 +25,7 @@ def use_user_prefs(user_prefs):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            original_prefs = yvs.get_user_prefs()
-            try:
-                yvs.set_user_prefs(user_prefs)
+            with patch('yvs.shared.get_user_prefs', return_value=user_prefs):
                 return func(*args, **kwargs)
-            finally:
-                yvs.set_user_prefs(original_prefs)
         return wrapper
     return decorator

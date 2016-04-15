@@ -14,12 +14,12 @@ exclude_lines =
 
 # Only check coverage for source files
 include =
-    yvs/shared.py
-    yvs/filter_refs.py
-    yvs/search_refs.py
-    yvs/filter_prefs.py
-    yvs/view_ref.py
-    yvs/copy_ref.py
-    yvs/search_ref.py
-    yvs/set_pref.py
     yvs/clear_cache.py
+    yvs/copy_ref.py
+    yvs/filter_prefs.py
+    yvs/filter_refs.py
+    yvs/search_ref.py
+    yvs/search_refs.py
+    yvs/set_pref.py
+    yvs/shared.py
+    yvs/view_ref.py

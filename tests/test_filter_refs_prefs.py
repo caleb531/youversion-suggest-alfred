@@ -27,15 +27,19 @@ def test_language_persistence():
     nose.assert_equal(results[0]['title'], 'Gálatas 4 (NVI)')
 
 
-@use_user_prefs({})
+@nose.with_setup(set_up, tear_down)
 def test_missing_prefs():
     """should supply missing preferences with defaults"""
+    yvs.shared.set_user_prefs({})
     results = yvs.get_result_list('mat 5.3')
     nose.assert_equal(len(results), 1)
 
 
+@nose.with_setup(set_up, tear_down)
 def test_create_local_data_dir_silent_fail():
     """should silently fail if local data directory already exists"""
     yvs.shared.create_local_data_dir()
     yvs.shared.create_local_data_dir()
-    nose.assert_true(os.path.exists(yvs.shared.LOCAL_DATA_DIR_PATH))
+    nose.assert_true(
+        os.path.exists(yvs.shared.LOCAL_DATA_DIR_PATH),
+        'local data directory does not exist')

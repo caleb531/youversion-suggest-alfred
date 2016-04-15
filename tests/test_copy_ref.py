@@ -8,7 +8,7 @@ from mock import Mock, NonCallableMock, patch
 from tests.decorators import redirect_stdout, use_user_prefs
 
 
-with open('tests/files/psa.23.html') as html_file:
+with open('tests/html/psa.23.html') as html_file:
     patch_urlopen = patch(
         'urllib2.urlopen', return_value=NonCallableMock(
             read=Mock(return_value=html_file.read())))
