@@ -17,11 +17,11 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 
 # Name of the exported workflow file
-WORKFLOW_NAME = 'YouVersion Suggest.alfredworkflow'
+WORKFLOW_NAME = 'YouVersion Suggest (Alfred 3).alfredworkflow'
 # Path to the current user's home directory
 HOME_DIR = os.path.expanduser('~')
 # Name of Alfred's core preferences file
-CORE_PREFS_NAME = 'com.runningwithcrayons.Alfred-Preferences.plist'
+CORE_PREFS_NAME = 'com.runningwithcrayons.Alfred-Preferences-3.plist'
 # Path to Alfred's core preferences file
 CORE_PREFS_PATH = os.path.join(
     HOME_DIR, 'Library', 'Preferences', CORE_PREFS_NAME)
