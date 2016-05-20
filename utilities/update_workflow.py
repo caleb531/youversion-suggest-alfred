@@ -17,7 +17,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 
 # Name of the exported workflow file
-WORKFLOW_NAME = 'YouVersion Suggest.alfredworkflow'
+WORKFLOW_NAME = 'YouVersion Suggest (Alfred 3).alfredworkflow'
 # Path to the current user's home directory
 HOME_DIR = os.path.expanduser('~')
 # Name of Alfred's core preferences file
