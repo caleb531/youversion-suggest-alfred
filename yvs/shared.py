@@ -19,12 +19,12 @@ WORKFLOW_UID = 'com.calebevans.youversionsuggest'
 HOME_DIR_PATH = os.path.expanduser('~')
 # Path to the directory where this workflow stores non-volatile local data
 LOCAL_DATA_DIR_PATH = os.path.join(
-    HOME_DIR_PATH, 'Library', 'Application Support', 'Alfred 2',
+    HOME_DIR_PATH, 'Library', 'Application Support', 'Alfred 3',
     'Workflow Data', WORKFLOW_UID)
 # Path to the directory where this workflow stores volatile local data
 LOCAL_CACHE_DIR_PATH = os.path.join(
     HOME_DIR_PATH, 'Library', 'Caches',
-    'com.runningwithcrayons.Alfred-2', 'Workflow Data', WORKFLOW_UID)
+    'com.runningwithcrayons.Alfred-3', 'Workflow Data', WORKFLOW_UID)
 # Path to the directory containing data files apart of the packaged workflow
 PACKAGED_DATA_DIR_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
 
