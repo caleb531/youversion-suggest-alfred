@@ -7,8 +7,12 @@
 [![Coverage Status](https://coveralls.io/repos/caleb531/youversion-suggest/badge.svg?branch=master)](https://coveralls.io/r/caleb531/youversion-suggest?branch=master)
 
 YouVersion Suggest is an [Alfred](https://www.alfredapp.com/) workflow which
-allows you to search the online [YouVersion](https://www.youversion.com/) bible
-quickly and conveniently. The workflow supports both Alfred 2 and Alfred 3.
+allows you to search the online [YouVersion](https://www.youversion.com/) Bible
+quickly and conveniently.
+
+The workflow will be solely supporting Alfred 3 going forward, but the latest
+Alfred 2-compatible release (v5.0.0) will remain available here for your
+convenience.
 
 ![YouVersion Suggest in action](screenshot.png)
 

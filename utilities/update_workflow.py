@@ -29,7 +29,7 @@ CORE_PREFS_PATH = os.path.join(
 USER_PREFS_NAME = 'Alfred.alfredpreferences'
 # Path to the default location of Alfred's user preferences file
 DEFAULT_USER_PREFS_DIR = os.path.join(
-    HOME_DIR, 'Library', 'Application Support', 'Alfred 2')
+    HOME_DIR, 'Library', 'Application Support', 'Alfred 3')
 # List of all files/directories to be copied to the exported workflow
 PKG_RESOURCES = (
     'icon.png',
