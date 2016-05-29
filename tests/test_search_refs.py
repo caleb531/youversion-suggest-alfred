@@ -2,14 +2,13 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import hashlib
-import json
 import os
 import os.path
 import nose.tools as nose
 import tests
 import yvs.search_refs as yvs
 from mock import Mock, NonCallableMock, patch
+from xml.etree import ElementTree as ETree
 from tests.decorators import redirect_stdout
 
 
@@ -90,34 +89,35 @@ def test_charref_dec_subtitle():
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_output(out):
-    """should output result list JSON"""
+    """should output result list XML"""
     query_str = 'love others'
     yvs.main(query_str)
     output = out.getvalue().strip()
     results = yvs.get_result_list(query_str)
-    feedback = yvs.shared.get_result_list_feedback_str(results).strip()
-    nose.assert_equal(output, feedback)
+    xml = yvs.shared.get_result_list_xml(results).strip()
+    nose.assert_equal(output, xml)
 
 
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
 @patch('yvs.search_refs.get_result_list', return_value=[])
 def test_null_result(out, get_result_list):
-    """should output "No Results" JSON item for empty result list"""
+    """should output "No Results" XML item for empty result list"""
     query_str = 'xyz'
     yvs.main(query_str)
-    feedback_str = out.getvalue().strip()
-    feedback = json.loads(feedback_str)
-    nose.assert_equal(len(feedback['items']), 1, 'result item is missing')
-    item = feedback['items'][0]
-    nose.assert_equal(item['valid'], 'no')
-    nose.assert_equal(item['title'], 'No Results')
+    xml = out.getvalue().strip()
+    root = ETree.fromstring(xml)
+    item = root.find('item')
+    nose.assert_is_not_none(item, '<item> element is missing')
+    nose.assert_equal(item.get('valid'), 'no')
+    title = item.find('title')
+    nose.assert_equal(title.text, 'No Results')
 
 
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
-def test_cache_feedback_results(out):
-    """should cache final JSON results after first fetch and parse"""
+def test_cache_xml_reesults(out):
+    """should cache final XML results after first fetch and parse"""
     query_str = 'love others'
     yvs.main(query_str)
     fetched_content = out.getvalue()
@@ -136,10 +136,8 @@ def test_cache_housekeeping(out):
     """should purge oldest entry when cache grows too large"""
     query_str = 'a'
     num_entries = 101
-    purged_entry_checksum = hashlib.sha1('yvsearch {}.json'.format(
-        'a' * 1).encode('utf-8')).hexdigest()
-    last_entry_checksum = hashlib.sha1('yvsearch {}.json'.format(
-        'a' * num_entries).encode('utf-8')).hexdigest()
+    purged_entry_checksum = 'ac2ee56cf99614a3ff33410b15ba26222fee09d3'
+    last_entry_checksum = '5f6894cdffb2170bdee59c75ad083aee081a20b9'
     nose.assert_false(
         os.path.exists(yvs.shared.get_cache_entry_dir_path()),
         'local cache entry directory exists')

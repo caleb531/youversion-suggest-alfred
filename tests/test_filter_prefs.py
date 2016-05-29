@@ -2,9 +2,9 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import json
 import nose.tools as nose
 import yvs.filter_prefs as yvs
+from xml.etree import ElementTree as ETree
 from tests import set_up, tear_down
 from tests.decorators import redirect_stdout, use_user_prefs
 
@@ -133,35 +133,34 @@ def test_filter_preferences():
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_main_output(out):
-    """should output pref result list JSON"""
+    """should output pref result list XML"""
     query_str = 'language'
     yvs.main(query_str)
     output = out.getvalue().strip()
     results = yvs.get_result_list(query_str)
-    feedback = yvs.shared.get_result_list_feedback_str(results).strip()
-    nose.assert_equal(output, feedback)
+    xml = yvs.shared.get_result_list_xml(results).strip()
+    nose.assert_equal(output, xml)
 
 
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_null_result(out):
-    """should output "No Results" JSON item for empty pref result list"""
+    """should output "No Results" XML item for empty pref result list"""
     query_str = 'xyz'
     yvs.main(query_str)
-    feedback_str = out.getvalue().strip()
-    feedback = json.loads(feedback_str)
-    nose.assert_equal(len(feedback['items']), 1, 'result item is missing')
-    item = feedback['items'][0]
-    nose.assert_equal(item['title'], 'No Results')
-    nose.assert_equal(item['valid'], 'no')
+    xml = out.getvalue().strip()
+    root = ETree.fromstring(xml)
+    item = root.find('item')
+    nose.assert_is_not_none(item, '<item> element is missing')
+    nose.assert_equal(item.get('valid'), 'no')
 
 
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
-def test_feedback_show_all(out):
-    """should output JSON for all results if query is empty"""
+def test_xml_show_all(out):
+    """should output XML for all results if query is empty"""
     yvs.main('')
     output = out.getvalue().strip()
     results = yvs.get_result_list('')
-    feedback = yvs.shared.get_result_list_feedback_str(results).strip()
-    nose.assert_equal(output, feedback)
+    xml = yvs.shared.get_result_list_xml(results).strip()
+    nose.assert_equal(output, xml)

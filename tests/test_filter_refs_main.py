@@ -1,9 +1,9 @@
 # tests.test_filter_refs_main
 
 from __future__ import unicode_literals
-import json
 import nose.tools as nose
 import yvs.filter_refs as yvs
+from xml.etree import ElementTree as ETree
 from tests import set_up, tear_down
 from tests.decorators import redirect_stdout
 
@@ -11,24 +11,25 @@ from tests.decorators import redirect_stdout
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_output(out):
-    """should output ref result list JSON"""
+    """should output ref result list XML"""
     query_str = 'genesis 50:20'
     yvs.main(query_str)
     output = out.getvalue().strip()
     results = yvs.get_result_list(query_str)
-    feedback = yvs.shared.get_result_list_feedback_str(results).strip()
-    nose.assert_equal(output, feedback)
+    xml = yvs.shared.get_result_list_xml(results).strip()
+    nose.assert_equal(output, xml)
 
 
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_null_result(out):
-    """should output "No Results" JSON item for empty ref result list"""
+    """should output "No Results" XML item for empty ref result list"""
     query_str = 'xyz'
     yvs.main(query_str)
-    feedback_str = out.getvalue().strip()
-    feedback = json.loads(feedback_str)
-    nose.assert_equal(len(feedback['items']), 1, 'result item is missing')
-    item = feedback['items'][0]
-    nose.assert_equal(item['title'], 'No Results')
-    nose.assert_equal(item['valid'], 'no')
+    xml = out.getvalue().strip()
+    root = ETree.fromstring(xml)
+    item = root.find('item')
+    nose.assert_is_not_none(item, '<item> element is missing')
+    nose.assert_equal(item.get('valid'), 'no')
+    title = item.find('title')
+    nose.assert_equal(title.text, 'No Results')
