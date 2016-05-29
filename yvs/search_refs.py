@@ -104,9 +104,9 @@ def get_result_list(query_str):
 
 def main(query_str):
 
-    entry_key = 'yvsearch {}.xml'.format(shared.format_query_str(query_str))
-    xml = shared.get_cache_entry_content(entry_key)
-    if xml is None:
+    entry_key = 'yvsearch {}.json'.format(shared.format_query_str(query_str))
+    json = shared.get_cache_entry_content(entry_key)
+    if json is None:
 
         results = get_result_list(query_str)
         if not results:
@@ -116,10 +116,10 @@ def main(query_str):
                 'valid': 'no'
             })
 
-        xml = shared.get_result_list_xml(results)
-        shared.add_cache_entry(entry_key, xml)
+        json = shared.get_result_list_feedback_str(results)
+        shared.add_cache_entry(entry_key, json)
 
-    print(xml.encode('utf-8'))
+    print(json.encode('utf-8'))
 
 
 if __name__ == '__main__':

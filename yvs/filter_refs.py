@@ -193,7 +193,7 @@ def main(query_str):
             'valid': 'no'
         })
 
-    print(shared.get_result_list_xml(results))
+    print(shared.get_result_list_feedback_str(results))
 
 
 if __name__ == '__main__':

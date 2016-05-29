@@ -10,7 +10,7 @@ import re
 import shutil
 import urllib2
 import unicodedata
-from xml.etree import ElementTree as ETree
+
 
 # Unique identifier for the workflow
 WORKFLOW_UID = 'com.calebevans.youversionsuggest'
@@ -121,42 +121,41 @@ def get_search_engine(search_engines, search_engine_id):
             return search_engine
 
 
-# Constructs an Alfred XML string from the given results list
-def get_result_list_xml(results):
+# Constructs an Alfred JSON string from the given result list
+def get_result_list_feedback_str(results):
 
-    root = ETree.Element('items')
+    feedback = {
+        'items': []
+    }
 
     for result in results:
-        # Create <item> element for result with appropriate attributes
-        item = ETree.SubElement(root, 'item', {
+        # An individual result
+        item = {
             'arg': result.get('arg', ''),
             'valid': result.get('valid', 'yes')
-        })
+        }
         if 'uid' in result:
-            item.set('uid', result['uid'])
+            item['uid'] = result['uid']
         if 'autocomplete' in result:
-            item.set('autocomplete', result['autocomplete'])
+            item['autocomplete'] = result['autocomplete']
         # Result title
-        title = ETree.SubElement(item, 'title')
-        title.text = result['title']
-        # Text copied to clipboard when cmd-c is invoked for this result
-        copy = ETree.SubElement(item, 'text', {
-            'type': 'copy'
-        })
-        copy.text = result.get('copy', result['title'])
-        # Text shown when invoking Alfred's Large Type feature for this result
-        largetype = ETree.SubElement(item, 'text', {
-            'type': 'largetype'
-        })
-        largetype.text = result.get('largetype', result['title'])
-        # Result subtitle (always indicates action)
-        subtitle = ETree.SubElement(item, 'subtitle')
-        subtitle.text = result['subtitle']
-        # Use same YouVersion icon for all results
-        icon = ETree.SubElement(item, 'icon')
-        icon.text = 'icon.png'
+        item['title'] = result['title']
+        # Subtitle text shown under result title
+        item['subtitle'] = result['subtitle']
+        # Associated text to use when action is invoked
+        item['text'] = {
+            # Text copied to clipboard when cmd-c is invoked for this result
+            'copy': result.get('copy', result['title']),
+            # Text shown when invoking Large Type for this result
+            'largetype': result.get('largetype', result['title'])
+        }
+        # Icon shown next to result text
+        item['icon'] = {
+            'path': 'icon.png'
+        }
+        feedback['items'].append(item)
 
-    return ETree.tostring(root)
+    return json.dumps(feedback)
 
 
 # Functions for accessing/manipulating mutable preferences
