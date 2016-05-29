@@ -12,6 +12,7 @@ import glob
 import plistlib
 import os
 import os.path
+import re
 import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -148,7 +149,7 @@ def copy_resource(resource_path, dest_resource_path):
         shutil.copy(resource_path, dest_resource_path)
 
 
-# Copy all package resources to installed workflow
+# Copies all package resources to installed workflow
 def copy_pkg_resources(workflow_path):
 
     updated_resources = []
@@ -162,6 +163,43 @@ def copy_pkg_resources(workflow_path):
             updated_resources.append(resource_path)
 
     return updated_resources
+
+
+# Converts the given Markdown content to plain text
+def convert_md_to_text(md_content):
+
+    text_content = md_content
+    # Convert backticks for code blocks to ''
+    text_content = re.sub(r'`', '\'', text_content)
+    # Remove formatting characters (except for - to denote lists)
+    text_content = re.sub(r'(?<!\\)[*#]', '', text_content)
+    # Remove images
+    text_content = re.sub(r'!\[(.*?)\]\((.*?)\)', '', text_content)
+    # Remove links
+    text_content = re.sub(r'\[(.*?)\]\((.*?)\)', '\\1', text_content)
+    # Remove backslashes
+    text_content = re.sub(r'\\', '', text_content)
+    # Remove leading/trailing whitespace
+    text_content = text_content.strip()
+    # Remove hard-wrapping from paragraphs
+    text_content = re.sub(r'(?<![\-\s])\n(?![\-\s\d])', ' ', text_content)
+    # Collapse whitespace
+    text_content = re.sub(r' +', ' ', text_content)
+    text_content = re.sub(r'\n\n+', '\n\n', text_content)
+    text_content = re.sub(r'( *)\n( *)', '\n', text_content)
+
+    return text_content
+
+
+# Updates the workflow README with the current project README
+def update_workflow_readme(info):
+
+    with open('README.md', 'r') as readme_file:
+        readme_md = readme_file.read()
+    readme_text = convert_md_to_text(readme_md)
+    original_readme_text = info['readme']
+    info['readme'] = readme_text
+    return original_readme_text != readme_text
 
 
 # Exports installed workflow to project directory
@@ -184,6 +222,50 @@ def export_workflow(workflow_path, project_path):
                 zip_file.write(file_path, relative_file_path)
 
 
+# Prints a list of all the workflow objects that have been updated
+def print_updated_objects(updated_objects):
+    for module_name in updated_objects:
+        print('Updated {}'.format(module_name))
+
+
+# Prints a list of all the workflow resources that have been updated
+def print_updated_resources(updated_resources):
+    for resource_path in updated_resources:
+        print('Updated {}'.format(resource_path))
+
+
+# Check if workflow has any changes and print status messages if so
+def check_workflow_for_updates(workflow_path, info_path, info):
+
+    updated_objects = update_workflow_objects(info)
+    updated_resources = copy_pkg_resources(workflow_path)
+    did_update_readme = update_workflow_readme(info)
+    did_update_workflow = False
+    did_update_workflow_plist = False
+
+    if updated_objects:
+        did_update_workflow = True
+        did_update_workflow_plist = True
+        print_updated_objects(updated_objects)
+
+    if updated_resources:
+        did_update_workflow = True
+        print_updated_resources(updated_resources)
+
+    if did_update_readme:
+        did_update_workflow = True
+        did_update_workflow_plist = True
+        print('Updated workflow README')
+
+    if did_update_workflow_plist:
+        plistlib.writePlist(info, info_path)
+
+    if did_update_workflow:
+        print('Updated installed workflow successfully')
+    else:
+        print('Workflow has not changed')
+
+
 def parse_cli_args():
 
     parser = argparse.ArgumentParser()
@@ -203,25 +285,7 @@ def main():
     info_path = os.path.join(workflow_path, 'info.plist')
     info = plistlib.readPlist(info_path)
 
-    updated_objects = update_workflow_objects(info)
-    updated_resources = copy_pkg_resources(workflow_path)
-
-    if updated_objects or updated_resources:
-
-        if updated_objects:
-            plistlib.writePlist(info, info_path)
-            for module_name in updated_objects:
-                print('Updated {}'.format(module_name))
-
-        if updated_resources:
-            for resource_path in updated_resources:
-                print('Updated {}'.format(resource_path))
-
-        print('Updated installed workflow successfully')
-
-    else:
-
-        print('Workflow has not changed')
+    check_workflow_for_updates(workflow_path, info_path, info)
 
     if cli_args.export:
         export_workflow(workflow_path, project_path)
