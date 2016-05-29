@@ -31,6 +31,9 @@ PACKAGED_DATA_DIR_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
 # The maximum number of cache entries to store
 MAX_NUM_CACHE_ENTRIES = 100
 
+# The template used to build the URL for a Bible reference
+REF_URL_TEMPLATE = 'https://www.bible.com/bible/{ref}'
+
 # The user agent used for HTTP requests sent to the YouVersion website
 USER_AGENT = 'YouVersion Suggest'
 
@@ -121,6 +124,38 @@ def get_search_engine(search_engines, search_engine_id):
             return search_engine
 
 
+# Build the object for a single result list feedback item
+def get_result_list_feedback_item(result):
+
+    item = {}
+    if 'arg' in result:
+        item['arg'] = result['arg']
+        item['quicklookurl'] = get_ref_url(item['arg'])
+    item['valid'] = result.get('valid', 'yes')
+
+    if 'uid' in result:
+        item['uid'] = result['uid']
+    if 'autocomplete' in result:
+        item['autocomplete'] = result['autocomplete']
+
+    # Result title
+    item['title'] = result['title']
+    # Subtitle text shown under result title
+    item['subtitle'] = result['subtitle']
+    # Associated text to use when action is invoked
+    item['text'] = {
+        # Text copied to clipboard when cmd-c is invoked for this result
+        'copy': result.get('copy', result['title']),
+        # Text shown when invoking Large Type for this result
+        'largetype': result.get('largetype', result['title'])
+    }
+    # Icon shown next to result text
+    item['icon'] = {
+        'path': 'icon.png'
+    }
+    return item
+
+
 # Constructs an Alfred JSON string from the given result list
 def get_result_list_feedback_str(results):
 
@@ -129,31 +164,8 @@ def get_result_list_feedback_str(results):
     }
 
     for result in results:
-        # An individual result
-        item = {
-            'arg': result.get('arg', ''),
-            'valid': result.get('valid', 'yes')
-        }
-        if 'uid' in result:
-            item['uid'] = result['uid']
-        if 'autocomplete' in result:
-            item['autocomplete'] = result['autocomplete']
-        # Result title
-        item['title'] = result['title']
-        # Subtitle text shown under result title
-        item['subtitle'] = result['subtitle']
-        # Associated text to use when action is invoked
-        item['text'] = {
-            # Text copied to clipboard when cmd-c is invoked for this result
-            'copy': result.get('copy', result['title']),
-            # Text shown when invoking Large Type for this result
-            'largetype': result.get('largetype', result['title'])
-        }
-        # Icon shown next to result text
-        item['icon'] = {
-            'path': 'icon.png'
-        }
-        feedback['items'].append(item)
+
+        feedback['items'].append(get_result_list_feedback_item(result))
 
     return json.dumps(feedback)
 
@@ -374,6 +386,11 @@ def get_full_ref(ref):
     full_ref += ' ({version})'.format(version=ref['version'])
 
     return full_ref
+
+
+# Builds the URL used to view the reference with the given UID
+def get_ref_url(ref_uid):
+    return REF_URL_TEMPLATE.format(ref=ref_uid)
 
 
 # Simplifies format of reference content by removing unnecessary whitespace

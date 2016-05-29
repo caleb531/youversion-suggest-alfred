@@ -3,17 +3,11 @@
 
 from __future__ import unicode_literals
 import webbrowser
-
-
-BASE_URL = 'https://www.bible.com/bible'
-
-
-def get_ref_url(ref_uid):
-    return '{base}/{uid}'.format(base=BASE_URL, uid=ref_uid)
+import yvs.shared as shared
 
 
 def open_ref_url(ref_uid):
-    webbrowser.open(get_ref_url(ref_uid))
+    webbrowser.open(shared.get_ref_url(ref_uid))
 
 
 def main(ref_uid):
