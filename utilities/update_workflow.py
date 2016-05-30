@@ -41,6 +41,8 @@ PKG_RESOURCES = (
     'yvs/data/languages.json',
     'yvs/data/search-engines.json'
 )
+# The miminum depth a section must be at to be numbered
+MIN_README_SECTION_DEPTH = 2
 
 
 # Retrieves correct path to directory containing Alfred's user preferences
@@ -165,6 +167,30 @@ def copy_pkg_resources(workflow_path):
     return updated_resources
 
 
+# Number MD sections by replacing # headings with plain-text numbered headings
+def number_md_sections(content):
+    stack = []
+    lines = content.splitlines()
+    for l, line in enumerate(lines):
+        section_depth = (len(re.search('#*', line).group(0)) -
+                         MIN_README_SECTION_DEPTH + 1)
+        if section_depth > 0:
+            current_depth = len(stack)
+            if section_depth > current_depth:
+                stack.append(1)
+            elif section_depth < current_depth:
+                for i in xrange(current_depth - section_depth):
+                    stack.pop()
+                stack[-1] += 1
+            elif section_depth == current_depth:
+                stack[-1] += 1
+            lines[l] = re.sub('^#+', '{}.'.format('.'.join(
+                map(str, stack))), line)
+        else:
+            lines[l] = re.sub('^#+ ', '', line)
+    return '\n'.join(lines)
+
+
 # Converts the given Markdown content to plain text
 def convert_md_to_text(md_content):
 
@@ -172,7 +198,7 @@ def convert_md_to_text(md_content):
     # Convert backticks for code blocks to ''
     text_content = re.sub(r'`', '\'', text_content)
     # Remove formatting characters (except for - to denote lists)
-    text_content = re.sub(r'(?<!\\)[*#]', '', text_content)
+    text_content = re.sub(r'(?<!\\)[*]', '', text_content)
     # Remove images
     text_content = re.sub(r'!\[(.*?)\]\((.*?)\)', '', text_content)
     # Reformat links
@@ -187,6 +213,8 @@ def convert_md_to_text(md_content):
     text_content = re.sub(r' +', ' ', text_content)
     text_content = re.sub(r'\n\n+', '\n\n', text_content)
     text_content = re.sub(r' ?\n ?', '\n', text_content)
+    # Number Markdown sections (marked by # headings)
+    text_content = number_md_sections(text_content)
 
     return text_content
 
