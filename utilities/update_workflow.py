@@ -167,27 +167,32 @@ def copy_pkg_resources(workflow_path):
     return updated_resources
 
 
-# Number MD sections by replacing # headings with plain-text numbered headings
+# Operates on the section number stack according to the given section depth
+def update_section_stack(stack, section_depth):
+    current_depth = len(stack)
+    if section_depth > current_depth:
+        stack.append(1)
+    else:
+        for i in xrange(current_depth - section_depth):
+            stack.pop()
+        stack[-1] += 1
+
+
+# Numbers MD sections by replacing # headings with numbered headings
 def number_md_sections(content):
+
     stack = []
     lines = content.splitlines()
     for l, line in enumerate(lines):
         section_depth = (len(re.search('#*', line).group(0)) -
                          MIN_README_SECTION_DEPTH + 1)
         if section_depth > 0:
-            current_depth = len(stack)
-            if section_depth > current_depth:
-                stack.append(1)
-            elif section_depth < current_depth:
-                for i in xrange(current_depth - section_depth):
-                    stack.pop()
-                stack[-1] += 1
-            elif section_depth == current_depth:
-                stack[-1] += 1
-            lines[l] = re.sub('^#+', '{}.'.format('.'.join(
-                map(str, stack))), line)
+            update_section_stack(stack, section_depth)
+            lines[l] = re.sub(
+                '^#+', '{}.'.format('.'.join(map(str, stack))), line)
         else:
             lines[l] = re.sub('^#+ ', '', line)
+
     return '\n'.join(lines)
 
 
