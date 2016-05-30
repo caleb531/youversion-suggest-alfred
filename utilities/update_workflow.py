@@ -186,7 +186,7 @@ def convert_md_to_text(md_content):
     # Collapse whitespace
     text_content = re.sub(r' +', ' ', text_content)
     text_content = re.sub(r'\n\n+', '\n\n', text_content)
-    text_content = re.sub(r'( *)\n( *)', '\n', text_content)
+    text_content = re.sub(r' ?\n ?', '\n', text_content)
 
     return text_content
 
