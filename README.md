@@ -99,9 +99,9 @@ If you would like support added for another language, please [submit an issue on
 GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
 following details:
 
-1. The name of the language (*e.g.* Simplified Chinese)
-2. If possible, the language's ISO 639-1 code (*e.g.* zh-CN)
-3. The name of the YouVersion-supported Bible version to use as the default for
+- The name of the language (*e.g.* Simplified Chinese)
+- If possible, the language's ISO 639-1 code (*e.g.* zh-CN)
+- The name of the YouVersion-supported Bible version to use as the default for
 this language. See [this list](https://www.bible.com/versions) for all of the
 versions that YouVersion supports.
 
