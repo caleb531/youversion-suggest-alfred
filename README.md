@@ -30,6 +30,15 @@ matching your query.
 **Pro Tip:** Type `yvf` and press the `tab` key to quickly filter by reference
 (as this will expand to `yvfilter`).
 
+#### Example queries
+
+- `yvfilter luke` => Luke
+- `yvfilter eph 3` => Ephesians 3
+- `yvfilter 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+- `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
+- `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
+- `yvfilter relevations 7` => Revelation 7
+
 #### Actions
 
 - Choosing a result will open the respective reference on the YouVersion website
@@ -47,15 +56,6 @@ of the respective reference
 
 - Pressing `command-l` while a result is selected will show the respective reference's identifier as Large Type
 
-#### Example queries
-
-- `yvfilter luke` => Luke
-- `yvfilter eph 3` => Ephesians 3
-- `yvfilter 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
-- `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
-- `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
-- `yvfilter relevations 7` => Revelation 7
-
 ### Searching by content
 
 You can also search the YouVersion Bible by content using the `yvsearch`
@@ -66,15 +66,15 @@ Note that when using the `yvsearch` filter, YouVersion Suggest will only search
 for verses in your preferred version. To learn more about setting your preferred
 version in YouVersion Suggest, see *Setting your preferred version*.
 
-#### Actions
-
-You can perform all the same actions on a result with `yvsearch` as you can with
-`yvfilter`.
-
 #### Example queries
 
 - `yvsearch without faith` => Hebrews 11:6
 - `yvsearch do not worry` => Matthew 6:34
+
+#### Actions
+
+You can perform all the same actions on a result with `yvsearch` as you can with
+`yvfilter`.
 
 ### Setting your preferred language
 
