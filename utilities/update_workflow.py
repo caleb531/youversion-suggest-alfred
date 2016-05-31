@@ -322,7 +322,8 @@ def main():
 
     if cli_args.export:
         export_workflow(workflow_path, project_path)
-        print('Exported installed workflow successfully')
+        print('Exported installed workflow successfully (v{})'.format(
+            info['version']))
 
 if __name__ == '__main__':
     main()
