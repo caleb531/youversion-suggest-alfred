@@ -12,6 +12,7 @@ import glob
 import plistlib
 import os
 import os.path
+import re
 import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -40,6 +41,8 @@ PKG_RESOURCES = (
     'yvs/data/languages.json',
     'yvs/data/search-engines.json'
 )
+# The miminum depth a section must be at to be numbered
+MIN_README_SECTION_DEPTH = 2
 
 
 # Retrieves correct path to directory containing Alfred's user preferences
@@ -88,8 +91,6 @@ def get_module_name(module_content):
 # Updates content of all scripts in workflow info object
 def update_workflow_objects(info):
 
-    updated_objects = []
-
     for obj in info['objects']:
 
         if 'script' in obj['config']:
@@ -99,9 +100,7 @@ def update_workflow_objects(info):
 
             if new_module_content != obj['config']['script']:
                 obj['config']['script'] = new_module_content
-                updated_objects.append(module_name)
-
-    return updated_objects
+                print('Updated {}'.format(module_name))
 
 
 # Recursively checks if two directories are exactly equal in terms of content
@@ -148,10 +147,8 @@ def copy_resource(resource_path, dest_resource_path):
         shutil.copy(resource_path, dest_resource_path)
 
 
-# Copy all package resources to installed workflow
+# Copies all package resources to installed workflow
 def copy_pkg_resources(workflow_path):
-
-    updated_resources = []
 
     for resource_path in PKG_RESOURCES:
 
@@ -159,9 +156,82 @@ def copy_pkg_resources(workflow_path):
         # Only copy resources if content has changed
         if not resources_are_equal(resource_path, dest_resource_path):
             copy_resource(resource_path, dest_resource_path)
-            updated_resources.append(resource_path)
+            print('Updated {}'.format(resource_path))
 
-    return updated_resources
+
+# Operates on the section number stack according to the given section depth
+def update_section_stack(stack, section_depth):
+    current_depth = len(stack)
+    if section_depth > current_depth:
+        stack.append(1)
+    else:
+        for i in xrange(current_depth - section_depth):
+            stack.pop()
+        stack[-1] += 1
+
+
+# Numbers MD sections by replacing # headings with numbered headings
+def number_md_sections(content):
+
+    stack = []
+    lines = content.splitlines()
+    for l, line in enumerate(lines):
+        section_depth = (len(re.search('#*', line).group(0)) -
+                         MIN_README_SECTION_DEPTH + 1)
+        if section_depth > 0:
+            update_section_stack(stack, section_depth)
+            lines[l] = re.sub(
+                '^#+', '{}.'.format('.'.join(map(str, stack))), line)
+        else:
+            lines[l] = re.sub('^#+ ', '', line)
+
+    return '\n'.join(lines)
+
+
+# Converts the given Markdown content to plain text
+def convert_md_to_text(md_content):
+
+    text_content = md_content
+    # Convert backticks for code blocks to ''
+    text_content = re.sub(r'`', '\'', text_content)
+    # Remove formatting characters (except for - to denote lists)
+    text_content = re.sub(r'(?<!\\)[*]', '', text_content)
+    # Remove images
+    text_content = re.sub(r'!\[(.*?)\]\((.*?)\)', '', text_content)
+    # Reformat links
+    text_content = re.sub(r'\[(.*?)\]\((.*?)\)', '\\1 (\\2)', text_content)
+    # Remove backslashes
+    text_content = re.sub(r'\\', '', text_content)
+    # Remove leading/trailing whitespace
+    text_content = text_content.strip()
+    # Remove hard-wrapping from paragraphs
+    text_content = re.sub(r'(?<![\-\s])\n(?![\-\s\d])', ' ', text_content)
+    # Collapse whitespace
+    text_content = re.sub(r' +', ' ', text_content)
+    text_content = re.sub(r'\n\n+', '\n\n', text_content)
+    text_content = re.sub(r' ?\n ?', '\n', text_content)
+    # Number Markdown sections (marked by # headings)
+    text_content = number_md_sections(text_content)
+
+    return text_content
+
+
+# Updates the workflow README with the current project README
+def update_workflow_readme(info):
+
+    with open('README.md', 'r') as readme_file:
+        readme_md = readme_file.read()
+    orig_readme_hash = hash(info['readme'])
+    info['readme'] = convert_md_to_text(readme_md)
+    if orig_readme_hash != hash(info['readme']):
+        print('Updated workflow README')
+
+
+# Sets the workflow version to a new version number if one is given
+def update_workflow_version(info, new_version_num):
+    if new_version_num:
+        info['version'] = new_version_num
+        print('Set version to v{}'.format(new_version_num))
 
 
 # Exports installed workflow to project directory
@@ -190,6 +260,9 @@ def parse_cli_args():
     parser.add_argument(
         '--export', action='store_true',
         help='exports the installed workflow to the local project directory')
+    parser.add_argument(
+        '--version',
+        help='the new version number to use for the workflow')
     return parser.parse_args()
 
 
@@ -203,29 +276,16 @@ def main():
     info_path = os.path.join(workflow_path, 'info.plist')
     info = plistlib.readPlist(info_path)
 
-    updated_objects = update_workflow_objects(info)
-    updated_resources = copy_pkg_resources(workflow_path)
-
-    if updated_objects or updated_resources:
-
-        if updated_objects:
-            plistlib.writePlist(info, info_path)
-            for module_name in updated_objects:
-                print('Updated {}'.format(module_name))
-
-        if updated_resources:
-            for resource_path in updated_resources:
-                print('Updated {}'.format(resource_path))
-
-        print('Updated installed workflow successfully')
-
-    else:
-
-        print('Workflow has not changed')
+    update_workflow_objects(info)
+    copy_pkg_resources(workflow_path)
+    update_workflow_readme(info)
+    update_workflow_version(info, cli_args.version)
+    plistlib.writePlist(info, info_path)
 
     if cli_args.export:
         export_workflow(workflow_path, project_path)
-        print('Exported installed workflow successfully')
+        print('Exported installed workflow successfully (v{})'.format(
+            info['version']))
 
 if __name__ == '__main__':
     main()

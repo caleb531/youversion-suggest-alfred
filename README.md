@@ -27,18 +27,8 @@ verses. You may also include an optional version (translation) at the end of
 your query. As you type, YouVersion Suggest will display a list of suggestions
 matching your query.
 
-**Pro Tip:** Type `yvf` and press the *tab* key to quickly filter by reference
+**Pro Tip:** Type `yvf` and press the `tab` key to quickly filter by reference
 (as this will expand to `yvfilter`).
-
-Choosing a result will open the selected reference on the YouVersion website.
-Choosing a result while holding down the *command* key will copy the contents of
-the selected reference to the clipboard. Choosing a result while holding down
-the *ctrl* key will open a Google search for the selected reference.
-
-Pressing *Command-C* when choosing a result will copy the respective reference
-identifier, such as *1 Corinthians 13:4-7 (ESV)*, to the clipboard. Pressing
-*Command-L* when choosing a result will show the respective reference identifier
-as Alfred Large Type.
 
 #### Example queries
 
@@ -48,6 +38,23 @@ as Alfred Large Type.
 - `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
 - `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
 - `yvfilter relevations 7` => Revelation 7
+
+#### Actions
+
+- Choosing a result will open the respective reference on the YouVersion website
+
+- Choosing a result while pressing `command` will copy the contents of
+the respective reference to the clipboard
+
+- Choosing a result while pressing `ctrl` will open a Google search
+for the respective reference.
+
+- Pressing `shift` while a result is selected will preview the contents
+of the respective reference
+
+- Pressing `command-c` while a result is selected will copy to the clipboard the respective reference's identifier, such as *1 Corinthians 13:4-7 (ESV)*
+
+- Pressing `command-l` while a result is selected will show the respective reference's identifier as Large Type
 
 ### Searching by content
 
@@ -63,6 +70,11 @@ version in YouVersion Suggest, see *Setting your preferred version*.
 
 - `yvsearch without faith` => Hebrews 11:6
 - `yvsearch do not worry` => Matthew 6:34
+
+#### Actions
+
+You can perform all the same actions on a result with `yvsearch` as you can with
+`yvfilter`.
 
 ### Setting your preferred language
 
@@ -95,15 +107,19 @@ Currently, YouVersion Suggest supports the following languages:
 - Swahili (sw)
 - Swedish (sv)
 
-If you would like support added for another language, please [submit an issue on
+#### Requesting language support
+
+If you would like to see YouVersion Suggest support a language not in the above
+list, please [submit an issue on
 GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
 following details:
 
-1. The name of the language (*e.g.* Simplified Chinese)
-2. If possible, the language's ISO 639-1 code (*e.g.* zh-CN)
-3. The name of the YouVersion-supported Bible version to use as the default for
-this language. See [this list](https://www.bible.com/versions) for all of the
-versions that YouVersion supports.
+- The name and ISO-639 code of the language from [this
+list](https://www.bible.com/languages)
+
+- The name of the YouVersion-supported Bible version to use as the default for
+this language; click the language name on the page linked above to view the
+versions available for the language
 
 ### Setting your preferred version
 
@@ -112,7 +128,7 @@ You may also set your preferred version (translation) used for Bible references
 type `yvset version` into Alfred, and the list of supported versions (for the
 currently-set language) will appear.
 
-**Pro Tip:** Type `yvset v` and press the *tab* key to quickly see the list of
+**Pro Tip:** Type `yvset v` and press the `tab` key to quickly see the list of
 available versions to set (as this will expand to `yvset version`).
 
 To select a version from the list of versions more quickly, you may optionally
