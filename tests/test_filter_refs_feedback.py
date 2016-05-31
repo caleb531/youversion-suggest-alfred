@@ -1,4 +1,4 @@
-# tests.test_filter_refs_json
+# tests.test_filter_refs_feedback
 
 from __future__ import unicode_literals
 import json
