@@ -95,15 +95,19 @@ Currently, YouVersion Suggest supports the following languages:
 - Swahili (sw)
 - Swedish (sv)
 
-If you would like support added for another language, please [submit an issue on
+#### Requesting language support
+
+If you would like to see YouVersion Suggest support a language not in the above
+list, please [submit an issue on
 GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
 following details:
 
-1. The name of the language (*e.g.* Simplified Chinese)
-2. If possible, the language's ISO 639-1 code (*e.g.* zh-CN)
-3. The name of the YouVersion-supported Bible version to use as the default for
-this language. See [this list](https://www.bible.com/versions) for all of the
-versions that YouVersion supports.
+- The name and ISO-639 code of the language from [this
+list](https://www.bible.com/languages)
+
+- The name of the YouVersion-supported Bible version to use as the default for
+this language; click the language name on the page linked above to view the
+versions available for the language
 
 ### Setting your preferred version
 
