@@ -13,21 +13,18 @@ def get_pref_defs(user_prefs):
 
     return [
         {
-            'key': 'language',
-            'name': 'language',
-            'title': 'Language',
+            'id': 'language',
+            'name': 'Language',
             'values': shared.get_languages
         },
         {
-            'key': 'version',
-            'name': 'version',
-            'title': 'Version',
+            'id': 'version',
+            'name': 'Version',
             'values': partial(shared.get_versions, user_prefs['language'])
         },
         {
-            'key': 'search_engine',
-            'name': 'search engine',
-            'title': 'Search Engine',
+            'id': 'search_engine',
+            'name': 'Search Engine',
             'values': shared.get_search_engines
         }
     ]
@@ -37,9 +34,10 @@ def get_pref_defs(user_prefs):
 def get_pref_result(pref_def):
 
     return {
-        'title': pref_def['title'],
-        'subtitle': 'Set your preferred {}'.format(pref_def['name']),
-        'autocomplete': '{} '.format(pref_def['key']),
+        'uid': 'yvs-{}'.format(pref_def['id']),
+        'title': pref_def['name'],
+        'subtitle': 'Set your preferred {}'.format(pref_def['name'].lower()),
+        'autocomplete': '{} '.format(pref_def['id']),
         'valid': 'no'
     }
 
@@ -53,11 +51,12 @@ def get_value_result_list(user_prefs, pref_def, query_str):
     for value in values:
 
         result = {
-            'arg': '{}:{}'.format(pref_def['key'], value['id']),
+            'uid': 'yvs-{}-{}'.format(pref_def['id'], value['id']),
+            'arg': '{}:{}'.format(pref_def['id'], value['id']),
             'title': value['name']
         }
 
-        if value['id'] == user_prefs[pref_def['key']]:
+        if value['id'] == user_prefs[pref_def['id']]:
             # If this value is the current value, indicate such
             result['subtitle'] = 'This is already your preferred {}'.format(
                 pref_def['name'])
@@ -106,7 +105,7 @@ def format_query_str(query_str):
 def get_pref_result_list(pref_defs, pref_key_query_str=''):
 
     return [get_pref_result(pref_def) for pref_def in
-            pref_defs if format_pref_key(pref_def['key']).startswith(
+            pref_defs if format_pref_key(pref_def['id']).startswith(
                 pref_key_query_str)]
 
 
@@ -127,7 +126,7 @@ def get_result_list(query_str):
 
         for pref_def in pref_defs:
             # If key name in query exactly matches a preference key name
-            if format_pref_key(pref_def['key']) == pref_key_query_str:
+            if format_pref_key(pref_def['id']) == pref_key_query_str:
                 # Get list of available values for the given preference
                 results = get_value_result_list(
                     user_prefs, pref_def, pref_value_query_str)

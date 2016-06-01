@@ -21,6 +21,7 @@ def test_filter_languages():
     """should filter available languages if value is given"""
     results = yvs.get_result_list('language español')
     nose.assert_equal(len(results), 2)
+    nose.assert_equal(results[0]['uid'], 'yvs-language-es')
     nose.assert_equal(results[0]['title'], 'Español')
     nose.assert_equal(results[0]['arg'], 'language:es')
 
@@ -38,6 +39,7 @@ def test_filter_versions():
     """should filter available versions if value is given"""
     results = yvs.get_result_list('version ni')
     nose.assert_equal(len(results), 3)
+    nose.assert_equal(results[0]['uid'], 'yvs-version-110')
     nose.assert_equal(results[0]['title'], 'NIRV')
     nose.assert_equal(results[0]['arg'], 'version:110')
 
@@ -54,6 +56,7 @@ def test_filter_search_engines():
     """should filter available search engines if value is given"""
     results = yvs.get_result_list('search_engine y')
     nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['uid'], 'yvs-search_engine-yahoo')
     nose.assert_equal(results[0]['title'], 'Yahoo!')
     nose.assert_equal(results[0]['arg'], 'search_engine:yahoo')
 
@@ -127,6 +130,7 @@ def test_filter_preferences():
     """should filter available preferences if partial key name is given"""
     results = yvs.get_result_list('searche')
     nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['uid'], 'yvs-search_engine')
     nose.assert_equal(results[0]['title'], 'Search Engine')
 
 
