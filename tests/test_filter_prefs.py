@@ -135,6 +135,15 @@ def test_filter_preferences():
 
 
 @nose.with_setup(set_up, tear_down)
+def test_filter_preferences_show_current():
+    """should show current values for all preferences"""
+    results = yvs.get_result_list('')
+    nose.assert_in('English', results[0]['subtitle'])
+    nose.assert_in('NIV', results[1]['subtitle'])
+    nose.assert_in('Google', results[2]['subtitle'])
+
+
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_main_output(out):
     """should output pref result list JSON"""

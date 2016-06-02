@@ -30,13 +30,25 @@ def get_pref_defs(user_prefs):
     ]
 
 
+# Get the value object with the given ID for the given preference
+def get_pref_value(pref_def, value_id):
+
+    values = pref_def['values']()
+    for value in values:  # pragma: no branch
+        if value['id'] == value_id:
+            return value
+
+
 # Retrieves Alfred result object for this preference
-def get_pref_result(pref_def):
+def get_pref_result(pref_def, user_prefs):
+
+    value = get_pref_value(pref_def, user_prefs[pref_def['id']])
 
     return {
         'uid': 'yvs-{}'.format(pref_def['id']),
         'title': pref_def['name'],
-        'subtitle': 'Set your preferred {}'.format(pref_def['name'].lower()),
+        'subtitle': 'Set your preferred {} (currently {})'.format(
+            pref_def['name'].lower(), value['name']),
         'autocomplete': '{} '.format(pref_def['id']),
         'valid': 'no'
     }
@@ -102,9 +114,9 @@ def format_query_str(query_str):
 
 
 # Retrieves result list of available preferences, filtered by the given query
-def get_pref_result_list(pref_defs, pref_key_query_str=''):
+def get_pref_result_list(user_prefs, pref_defs, pref_key_query_str=''):
 
-    return [get_pref_result(pref_def) for pref_def in
+    return [get_pref_result(pref_def, user_prefs) for pref_def in
             pref_defs if format_pref_key(pref_def['id']).startswith(
                 pref_key_query_str)]
 
@@ -135,13 +147,14 @@ def get_result_list(query_str):
                 break
         # If no exact matches, filter list of available preferences by query
         if not results:
-            results = get_pref_result_list(pref_defs, pref_key_query_str)
+            results = get_pref_result_list(
+                user_prefs, pref_defs, pref_key_query_str)
 
     else:
 
         # Should show all available preferences if query is empty
         # or if query does not match
-        results = get_pref_result_list(pref_defs)
+        results = get_pref_result_list(user_prefs, pref_defs)
 
     return results
 
