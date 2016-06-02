@@ -144,6 +144,16 @@ def test_filter_preferences_show_current():
 
 
 @nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'en', 'version': 999, 'search_engine': 'xyz'})
+def test_filter_preferences_no_show_invalid_current():
+    """should show current values for all preferences"""
+    results = yvs.get_result_list('')
+    nose.assert_in('currently', results[0]['subtitle'])
+    nose.assert_not_in('currently', results[1]['subtitle'])
+    nose.assert_not_in('currently', results[2]['subtitle'])
+
+
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_main_output(out):
     """should output pref result list JSON"""

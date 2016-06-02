@@ -34,24 +34,28 @@ def get_pref_defs(user_prefs):
 def get_pref_value(pref_def, value_id):
 
     values = pref_def['values']()
-    for value in values:  # pragma: no branch
+    for value in values:
         if value['id'] == value_id:
             return value
+    return None
 
 
 # Retrieves Alfred result object for this preference
 def get_pref_result(pref_def, user_prefs):
 
     value = get_pref_value(pref_def, user_prefs[pref_def['id']])
+    result = {}
 
-    return {
-        'uid': 'yvs-{}'.format(pref_def['id']),
-        'title': pref_def['name'],
-        'subtitle': 'Set your preferred {} (currently {})'.format(
-            pref_def['name'].lower(), value['name']),
-        'autocomplete': '{} '.format(pref_def['id']),
-        'valid': 'no'
-    }
+    result['uid'] = 'yvs-{}'.format(pref_def['id'])
+    result['title'] = pref_def['name']
+    result['subtitle'] = 'Set your preferred {}'.format(
+        pref_def['name'].lower())
+    if value is not None:
+        result['subtitle'] += ' (currently {})'.format(value['name'])
+    result['autocomplete'] = '{} '.format(pref_def['id'])
+    result['valid'] = 'no'
+
+    return result
 
 
 # Retrieves Alfred result list of all available values for this preference
