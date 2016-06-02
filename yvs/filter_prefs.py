@@ -2,6 +2,7 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import json
 import re
 import yvs.shared as shared
 from functools import partial
@@ -67,7 +68,16 @@ def get_value_result_list(user_prefs, pref_def, query_str):
 
         result = {
             'uid': 'yvs-{}-{}'.format(pref_def['id'], value['id']),
-            'arg': '{}:{}'.format(pref_def['id'], value['id']),
+            'arg': json.dumps({
+                'pref': {
+                    'id': pref_def['id'],
+                    'name': pref_def['name']
+                },
+                'value': {
+                    'id': value['id'],
+                    'name': value['name']
+                }
+            }),
             'title': value['name']
         }
 

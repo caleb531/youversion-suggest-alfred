@@ -23,7 +23,16 @@ def test_filter_languages():
     nose.assert_equal(len(results), 2)
     nose.assert_equal(results[0]['uid'], 'yvs-language-es')
     nose.assert_equal(results[0]['title'], 'Español')
-    nose.assert_equal(results[0]['arg'], 'language:es')
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'language',
+            'name': 'Language'
+        },
+        'value': {
+            'id': 'es',
+            'name': 'Español'
+        }
+    })
 
 
 @nose.with_setup(set_up, tear_down)
@@ -41,7 +50,16 @@ def test_filter_versions():
     nose.assert_equal(len(results), 3)
     nose.assert_equal(results[0]['uid'], 'yvs-version-110')
     nose.assert_equal(results[0]['title'], 'NIRV')
-    nose.assert_equal(results[0]['arg'], 'version:110')
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'version',
+            'name': 'Version'
+        },
+        'value': {
+            'id': 110,
+            'name': 'NIRV'
+        }
+    })
 
 
 @nose.with_setup(set_up, tear_down)
@@ -58,7 +76,16 @@ def test_filter_search_engines():
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-search_engine-yahoo')
     nose.assert_equal(results[0]['title'], 'Yahoo!')
-    nose.assert_equal(results[0]['arg'], 'search_engine:yahoo')
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'search_engine',
+            'name': 'Search Engine'
+        },
+        'value': {
+            'id': 'yahoo',
+            'name': 'Yahoo!'
+        }
+    })
 
 
 @nose.with_setup(set_up, tear_down)

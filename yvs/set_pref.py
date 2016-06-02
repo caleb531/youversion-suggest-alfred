@@ -2,42 +2,37 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import re
+import json
 import yvs.shared as shared
 
 
-# Parse key and value from the given key-value string
-def get_key_value(key_value_str):
+# Parse pref set data from the given JSON string
+def parse_pref_set_data(pref_set_data_str):
 
-    key_value_matches = re.search(
-        r'^(\w+):(\w+)$', key_value_str, flags=re.UNICODE)
-
-    key = key_value_matches.group(1)
-    value = key_value_matches.group(2)
-    if value.isdigit():
-        value = int(value)
-
-    return (key, value)
+    pref_set_data = json.loads(pref_set_data_str)
+    return pref_set_data['pref'], pref_set_data['value']
 
 
-# Set the YouVersion preference with the given key
-def set_pref(key, value):
+# Set the YouVersion Suggest preference with the given key
+def set_pref(pref_id, value_id):
 
     user_prefs = shared.get_user_prefs()
-    user_prefs[key] = value
+    user_prefs[pref_id] = value_id
 
     # If new language is set, ensure that preferred version is updated also
-    if key == 'language':
-        bible = shared.get_bible_data(language=value)
+    if pref_id == 'language':
+        bible = shared.get_bible_data(language=value_id)
         user_prefs['version'] = bible['default_version']
 
     shared.set_user_prefs(user_prefs)
 
 
-def main(key_value_str):
+def main(pref_set_data_str):
 
-    key, value = get_key_value(key_value_str)
-    set_pref(key, value)
+    pref, value = parse_pref_set_data(pref_set_data_str)
+    set_pref(pref['id'], value['id'])
+    print('Set preferred {} to {}'.format(
+        pref['name'].lower(), value['name']).encode('utf-8'))
 
 
 if __name__ == '__main__':
