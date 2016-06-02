@@ -75,11 +75,11 @@ def get_value_result_list(user_prefs, pref_def, query_str):
         if value['id'] == user_prefs[pref_def['id']]:
             # If this value is the current value, indicate such
             result['subtitle'] = 'This is already your preferred {}'.format(
-                pref_def['name'])
+                pref_def['name'].lower())
             result['valid'] = 'no'
         else:
             result['subtitle'] = 'Set this as your preferred {}'.format(
-                pref_def['name'])
+                pref_def['name'].lower())
 
         # Show all results if query string is empty
         # Otherwise, only show results whose titles begin with query
