@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import re
 import yvs.shared as shared
 from functools import partial
-from operator import itemgetter
 
 
 # Returns a list of definition objects for all available preferences
@@ -146,8 +145,6 @@ def get_result_list(query_str):
                 # Get list of available values for the given preference
                 results = get_value_result_list(
                     user_prefs, pref_def, pref_value_query_str)
-                # Always sort results by title in this case
-                results.sort(key=itemgetter('title'))
                 break
         # If no exact matches, filter list of available preferences by query
         if not results:
