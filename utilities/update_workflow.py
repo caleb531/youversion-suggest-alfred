@@ -138,10 +138,12 @@ def resources_are_equal(resource_path, dest_resource_path):
 # Copies package resource to corresponding destination path
 def copy_resource(resource_path, dest_resource_path):
 
-    try:
-        distutils.copy_tree(resource_path, dest_resource_path)
-    except distutils.DistutilsFileError:
-        shutil.copy(resource_path, dest_resource_path)
+    if not resources_are_equal(resource_path, dest_resource_path):
+        try:
+            distutils.copy_tree(resource_path, dest_resource_path)
+        except distutils.DistutilsFileError:
+            shutil.copy(resource_path, dest_resource_path)
+        print('Updated {}'.format(resource_path))
 
 
 # Create parent directories in the installed workflow for the given resource
@@ -162,10 +164,7 @@ def copy_pkg_resources(workflow_path):
         create_resource_dirs(resource_patt, workflow_path)
         for resource_path in glob.iglob(resource_patt):
             dest_resource_path = os.path.join(workflow_path, resource_path)
-            # Only copy resources if content has changed
-            if not resources_are_equal(resource_path, dest_resource_path):
-                copy_resource(resource_path, dest_resource_path)
-                print('Updated {}'.format(resource_path))
+            copy_resource(resource_path, dest_resource_path)
 
 
 # Operates on the section number stack according to the given section depth
