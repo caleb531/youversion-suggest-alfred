@@ -35,8 +35,8 @@ DEFAULT_USER_PREFS_DIR = os.path.join(
 PKG_RESOURCES = (
     'icon.png',
     'yvs/*.py',
-    'yvs/data/bible/*.json',
     'yvs/data/*.json',
+    'yvs/data/bible/*.json'
 )
 # The miminum depth a section must be at to be numbered
 MIN_README_SECTION_DEPTH = 2
