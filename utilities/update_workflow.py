@@ -34,12 +34,9 @@ DEFAULT_USER_PREFS_DIR = os.path.join(
 # List of all files/directories to be copied to the exported workflow
 PKG_RESOURCES = (
     'icon.png',
-    'yvs/__init__.py',
-    'yvs/shared.py',
-    'yvs/data/bible',
-    'yvs/data/defaults.json',
-    'yvs/data/languages.json',
-    'yvs/data/search-engines.json'
+    'yvs/*.py',
+    'yvs/data/bible/*.json',
+    'yvs/data/*.json',
 )
 # The miminum depth a section must be at to be numbered
 MIN_README_SECTION_DEPTH = 2
@@ -147,16 +144,28 @@ def copy_resource(resource_path, dest_resource_path):
         shutil.copy(resource_path, dest_resource_path)
 
 
+# Create parent directories in the installed workflow for the given resource
+def create_resource_dirs(resource_patt, workflow_path):
+    resource_dir = os.path.dirname(resource_patt)
+    if resource_dir:
+        workflow_resource_dir = os.path.join(workflow_path, resource_dir)
+        try:
+            os.makedirs(workflow_resource_dir)
+        except OSError:
+            pass
+
+
 # Copies all package resources to installed workflow
 def copy_pkg_resources(workflow_path):
 
-    for resource_path in PKG_RESOURCES:
-
-        dest_resource_path = os.path.join(workflow_path, resource_path)
-        # Only copy resources if content has changed
-        if not resources_are_equal(resource_path, dest_resource_path):
-            copy_resource(resource_path, dest_resource_path)
-            print('Updated {}'.format(resource_path))
+    for resource_patt in PKG_RESOURCES:
+        create_resource_dirs(resource_patt, workflow_path)
+        for resource_path in glob.iglob(resource_patt):
+            dest_resource_path = os.path.join(workflow_path, resource_path)
+            # Only copy resources if content has changed
+            if not resources_are_equal(resource_path, dest_resource_path):
+                copy_resource(resource_path, dest_resource_path)
+                print('Updated {}'.format(resource_path))
 
 
 # Operates on the section number stack according to the given section depth
