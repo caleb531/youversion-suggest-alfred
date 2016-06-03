@@ -34,7 +34,7 @@ DEFAULT_USER_PREFS_DIR = os.path.join(
 # List of all files/directories to be copied to the exported workflow
 PKG_RESOURCES = (
     'icon.png',
-    'yvs/*.py',
+    'yvs/shared.py',
     'yvs/data/*.json',
     'yvs/data/bible/*.json'
 )
