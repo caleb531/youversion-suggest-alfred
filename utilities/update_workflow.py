@@ -38,7 +38,7 @@ PKG_RESOURCES = (
     'yvs/data/*.json',
     'yvs/data/bible/*.json'
 )
-# The miminum depth a section must be at to be numbered
+# The miminum depth a README section must be at in order to be numbered
 MIN_README_SECTION_DEPTH = 2
 
 
@@ -68,23 +68,46 @@ def get_workflow_path():
     return os.path.dirname(yvs_packages[0])
 
 
-# Recursively checks if two directories are exactly equal in terms of content
-def dirs_are_equal(dir_path, dest_dir_path):
+# Returns True if the item counts for the given directories match; otherwise,
+# returns False
+def check_dir_item_count_match(dir_path, dest_dir_path, dirs_cmp):
 
-    dirs_cmp = filecmp.dircmp(dir_path, dest_dir_path)
-    if len(dirs_cmp.left_only) > 0 or len(dirs_cmp.right_only) > 0:
-        return False
+    return (not dirs_cmp.left_only and not dirs_cmp.right_only and
+            not dirs_cmp.funny_files)
+
+
+# Returns True if the contents of all files in the given directories match;
+# otherwise, returns False
+def check_dir_file_content_match(dir_path, dest_dir_path, dirs_cmp):
 
     match, mismatch, errors = filecmp.cmpfiles(
         dir_path, dest_dir_path, dirs_cmp.common_files, shallow=False)
-    if len(mismatch) > 0 or len(errors) > 0:
-        return False
+    return not mismatch and not errors
+
+
+# Returns True if the contents of all subdirectories (found recursively) match;
+# otherwise, returns False
+def check_subdir_content_match(dir_path, dest_dir_path, dirs_cmp):
 
     for common_dir in dirs_cmp.common_dirs:
         new_dir_path = os.path.join(dir_path, common_dir)
         new_dest_dir_path = os.path.join(dest_dir_path, common_dir)
         if not dirs_are_equal(new_dir_path, new_dest_dir_path):
             return False
+    return True
+
+
+# Recursively checks if two directories are exactly equal in terms of content
+def dirs_are_equal(dir_path, dest_dir_path):
+
+    dirs_cmp = filecmp.dircmp(dir_path, dest_dir_path)
+
+    if not check_dir_item_count_match(dir_path, dest_dir_path, dirs_cmp):
+        return False
+    if not check_dir_file_content_match(dir_path, dest_dir_path, dirs_cmp):
+        return False
+    if not check_subdir_content_match(dir_path, dest_dir_path, dirs_cmp):
+        return False
 
     return True
 
