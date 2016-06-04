@@ -2,6 +2,7 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import sys
 import webbrowser
 import yvs.shared as shared
 
@@ -15,4 +16,4 @@ def main(ref_uid):
 
 
 if __name__ == '__main__':
-    main('{query}')
+    main(sys.argv[1].decode('utf-8'))

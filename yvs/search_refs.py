@@ -2,6 +2,7 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import sys
 import urllib
 import yvs.shared as shared
 from HTMLParser import HTMLParser
@@ -123,4 +124,4 @@ def main(query_str):
 
 
 if __name__ == '__main__':
-    main('{query}')
+    main(sys.argv[1].decode('utf-8'))

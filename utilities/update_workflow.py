@@ -34,8 +34,7 @@ DEFAULT_USER_PREFS_DIR = os.path.join(
 # List of all files/directories to be copied to the exported workflow
 PKG_RESOURCES = (
     'icon.png',
-    'yvs/__init__.py',
-    'yvs/shared.py',
+    'yvs/*.py',
     'yvs/data/*.json',
     'yvs/data/bible/*.json'
 )
@@ -67,38 +66,6 @@ def get_workflow_path():
 
     # Return the first (and presumably only) match found
     return os.path.dirname(yvs_packages[0])
-
-
-# Retrieves the file content of a module withini the project
-def get_module_content(module_name):
-
-    file_name = '{}.py'.format(module_name.replace('.', '/'))
-    with open(file_name, 'r') as file_obj:
-        return file_obj.read()
-
-
-# Retrieve the name of a module by parsing it from the module's content
-def get_module_name(module_content):
-
-    # The module name has been made accessible as a code comment on the first
-    # line of the respective module's content
-    first_line = module_content.split('\n', 1)[0]
-    return first_line[1:].strip()
-
-
-# Updates content of all scripts in workflow info object
-def update_workflow_objects(info):
-
-    for obj in info['objects']:
-
-        if 'script' in obj['config']:
-
-            module_name = get_module_name(obj['config']['script'])
-            new_module_content = get_module_content(module_name)
-
-            if new_module_content != obj['config']['script']:
-                obj['config']['script'] = new_module_content
-                print('Updated {}'.format(module_name))
 
 
 # Recursively checks if two directories are exactly equal in terms of content
@@ -285,7 +252,6 @@ def main():
     info_path = os.path.join(workflow_path, 'info.plist')
     info = plistlib.readPlist(info_path)
 
-    update_workflow_objects(info)
     copy_pkg_resources(workflow_path)
     update_workflow_readme(info)
     update_workflow_version(info, cli_args.version)
