@@ -129,8 +129,8 @@ def create_resource_dirs(resource_patt, workflow_path):
 def copy_pkg_resources(workflow_path):
 
     for resource_patt in PKG_RESOURCES:
-        create_resource_dirs(resource_patt, workflow_path)
         for resource_path in glob.iglob(resource_patt):
+            create_resource_dirs(resource_path, workflow_path)
             dest_resource_path = os.path.join(workflow_path, resource_path)
             copy_resource(resource_path, dest_resource_path)
 
