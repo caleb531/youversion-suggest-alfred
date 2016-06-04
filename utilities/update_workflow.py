@@ -210,6 +210,28 @@ def update_workflow_version(info, new_version_num):
         print('Set version to v{}'.format(new_version_num))
 
 
+# Writes installed workflow subdirectory files to the given zip file
+def zip_workflow_dir_files(workflow_path, zip_file,
+                           root, relative_root, files):
+    for file_name in files:
+        file_path = os.path.join(root, file_name)
+        # Get path to current file relative to workflow directory
+        relative_file_path = os.path.join(relative_root, file_name)
+        zip_file.write(file_path, relative_file_path)
+
+
+# Writes installed workflow subdirectories to the given zip file
+def zip_workflow_dirs(workflow_path, zip_file):
+    # Traverse installed workflow directory
+    for root, dirs, files in os.walk(workflow_path):
+        # Get current subdirectory path relative to workflow directory
+        relative_root = os.path.relpath(root, workflow_path)
+        # Add subdirectory to archive and add files within
+        zip_file.write(root, relative_root)
+        zip_workflow_dir_files(
+            workflow_path, zip_file, root, relative_root, files)
+
+
 # Exports installed workflow to project directory
 def export_workflow(workflow_path, project_path):
 
@@ -217,17 +239,7 @@ def export_workflow(workflow_path, project_path):
     # Create new Alfred workflow archive in project directory
     # Overwrite any existing archive
     with ZipFile(archive_path, 'w', compression=ZIP_DEFLATED) as zip_file:
-        # Traverse installed workflow directory
-        for root, dirs, files in os.walk(workflow_path):
-            # Get current subdirectory path relative to workflow directory
-            relative_root = os.path.relpath(root, workflow_path)
-            # Add subdirectory to archive and add files within
-            zip_file.write(root, relative_root)
-            for file_name in files:
-                file_path = os.path.join(root, file_name)
-                # Get path to current file relative to workflow directory
-                relative_file_path = os.path.join(relative_root, file_name)
-                zip_file.write(file_path, relative_file_path)
+        zip_workflow_dirs(workflow_path, zip_file)
 
 
 def parse_cli_args():
