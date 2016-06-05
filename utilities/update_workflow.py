@@ -194,7 +194,7 @@ def convert_md_to_text(md_content):
     # Convert backticks for code blocks to ''
     text_content = re.sub(r'`', '\'', text_content)
     # Remove formatting characters (except for - to denote lists)
-    text_content = re.sub(r'(?<!\\)[*]', '', text_content)
+    text_content = re.sub(r'(?<!\\)[*_~]', '', text_content)
     # Remove images
     text_content = re.sub(r'!\[(.*?)\]\((.*?)\)', '', text_content)
     # Reformat links
