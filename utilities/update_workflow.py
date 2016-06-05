@@ -198,6 +198,7 @@ def convert_md_to_text(md_content):
     # Remove images
     text_content = re.sub(r'!\[(.*?)\]\((.*?)\)', '', text_content)
     # Reformat links
+    text_content = re.sub(r'\[\]\((.*?)\)', '', text_content)
     text_content = re.sub(r'\[(.*?)\]\((.*?)\)', '\\1 (\\2)', text_content)
     # Remove backslashes
     text_content = re.sub(r'\\', '', text_content)
