@@ -53,7 +53,7 @@ def get_pref_result(pref_def, user_prefs):
         pref_def['name'].lower())
     if value is not None:
         result['subtitle'] += ' (currently {})'.format(value['name'])
-    result['autocomplete'] = '{} '.format(pref_def['id'])
+    result['autocomplete'] = '{} '.format(pref_def['id'].replace('_', ''))
     result['valid'] = 'no'
 
     return result
