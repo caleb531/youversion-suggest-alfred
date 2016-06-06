@@ -50,11 +50,13 @@ the respective reference to the clipboard
 for the respective reference.
 
 - Pressing `shift` while a result is selected will preview the contents
-of the respective reference
+of the respective reference (new in v6.1.0; Alfred 3 only)
 
-- Pressing `command-c` while a result is selected will copy to the clipboard the respective reference's identifier, such as *1 Corinthians 13:4-7 (ESV)*
+- Pressing `command-c` while a result is selected will copy to the clipboard the
+respective reference's identifier, such as *1 Corinthians 13:4-7 (ESV)*
 
-- Pressing `command-l` while a result is selected will show the respective reference's identifier as Large Type
+- Pressing `command-l` while a result is selected will show the respective
+reference's identifier as Large Type
 
 ### Searching by content
 

@@ -34,14 +34,11 @@ DEFAULT_USER_PREFS_DIR = os.path.join(
 # List of all files/directories to be copied to the exported workflow
 PKG_RESOURCES = (
     'icon.png',
-    'yvs/__init__.py',
-    'yvs/shared.py',
-    'yvs/data/bible',
-    'yvs/data/defaults.json',
-    'yvs/data/languages.json',
-    'yvs/data/search-engines.json'
+    'yvs/*.py',
+    'yvs/data/*.json',
+    'yvs/data/bible/*.json'
 )
-# The miminum depth a section must be at to be numbered
+# The miminum depth a README section must be at in order to be numbered
 MIN_README_SECTION_DEPTH = 2
 
 
@@ -71,55 +68,46 @@ def get_workflow_path():
     return os.path.dirname(yvs_packages[0])
 
 
-# Retrieves the file content of a module withini the project
-def get_module_content(module_name):
+# Returns True if the item counts for the given directories match; otherwise,
+# returns False
+def check_dir_item_count_match(dir_path, dest_dir_path, dirs_cmp):
 
-    file_name = '{}.py'.format(module_name.replace('.', '/'))
-    with open(file_name, 'r') as file_obj:
-        return file_obj.read()
-
-
-# Retrieve the name of a module by parsing it from the module's content
-def get_module_name(module_content):
-
-    # The module name has been made accessible as a code comment on the first
-    # line of the respective module's content
-    first_line = module_content.split('\n', 1)[0]
-    return first_line[1:].strip()
+    return (not dirs_cmp.left_only and not dirs_cmp.right_only and
+            not dirs_cmp.funny_files)
 
 
-# Updates content of all scripts in workflow info object
-def update_workflow_objects(info):
-
-    for obj in info['objects']:
-
-        if 'script' in obj['config']:
-
-            module_name = get_module_name(obj['config']['script'])
-            new_module_content = get_module_content(module_name)
-
-            if new_module_content != obj['config']['script']:
-                obj['config']['script'] = new_module_content
-                print('Updated {}'.format(module_name))
-
-
-# Recursively checks if two directories are exactly equal in terms of content
-def dirs_are_equal(dir_path, dest_dir_path):
-
-    dirs_cmp = filecmp.dircmp(dir_path, dest_dir_path)
-    if len(dirs_cmp.left_only) > 0 or len(dirs_cmp.right_only) > 0:
-        return False
+# Returns True if the contents of all files in the given directories match;
+# otherwise, returns False
+def check_dir_file_content_match(dir_path, dest_dir_path, dirs_cmp):
 
     match, mismatch, errors = filecmp.cmpfiles(
         dir_path, dest_dir_path, dirs_cmp.common_files, shallow=False)
-    if len(mismatch) > 0 or len(errors) > 0:
-        return False
+    return not mismatch and not errors
+
+
+# Returns True if the contents of all subdirectories (found recursively) match;
+# otherwise, returns False
+def check_subdir_content_match(dir_path, dest_dir_path, dirs_cmp):
 
     for common_dir in dirs_cmp.common_dirs:
         new_dir_path = os.path.join(dir_path, common_dir)
         new_dest_dir_path = os.path.join(dest_dir_path, common_dir)
         if not dirs_are_equal(new_dir_path, new_dest_dir_path):
             return False
+    return True
+
+
+# Recursively checks if two directories are exactly equal in terms of content
+def dirs_are_equal(dir_path, dest_dir_path):
+
+    dirs_cmp = filecmp.dircmp(dir_path, dest_dir_path)
+
+    if not check_dir_item_count_match(dir_path, dest_dir_path, dirs_cmp):
+        return False
+    if not check_dir_file_content_match(dir_path, dest_dir_path, dirs_cmp):
+        return False
+    if not check_subdir_content_match(dir_path, dest_dir_path, dirs_cmp):
+        return False
 
     return True
 
@@ -141,22 +129,33 @@ def resources_are_equal(resource_path, dest_resource_path):
 # Copies package resource to corresponding destination path
 def copy_resource(resource_path, dest_resource_path):
 
-    try:
-        distutils.copy_tree(resource_path, dest_resource_path)
-    except distutils.DistutilsFileError:
-        shutil.copy(resource_path, dest_resource_path)
+    if not resources_are_equal(resource_path, dest_resource_path):
+        try:
+            distutils.copy_tree(resource_path, dest_resource_path)
+        except distutils.DistutilsFileError:
+            shutil.copy(resource_path, dest_resource_path)
+        print('Updated {}'.format(resource_path))
+
+
+# Create parent directories in the installed workflow for the given resource
+def create_resource_dirs(resource_patt, workflow_path):
+    resource_dir = os.path.dirname(resource_patt)
+    if resource_dir:
+        workflow_resource_dir = os.path.join(workflow_path, resource_dir)
+        try:
+            os.makedirs(workflow_resource_dir)
+        except OSError:
+            pass
 
 
 # Copies all package resources to installed workflow
 def copy_pkg_resources(workflow_path):
 
-    for resource_path in PKG_RESOURCES:
-
-        dest_resource_path = os.path.join(workflow_path, resource_path)
-        # Only copy resources if content has changed
-        if not resources_are_equal(resource_path, dest_resource_path):
+    for resource_patt in PKG_RESOURCES:
+        for resource_path in glob.iglob(resource_patt):
+            create_resource_dirs(resource_path, workflow_path)
+            dest_resource_path = os.path.join(workflow_path, resource_path)
             copy_resource(resource_path, dest_resource_path)
-            print('Updated {}'.format(resource_path))
 
 
 # Operates on the section number stack according to the given section depth
@@ -195,10 +194,11 @@ def convert_md_to_text(md_content):
     # Convert backticks for code blocks to ''
     text_content = re.sub(r'`', '\'', text_content)
     # Remove formatting characters (except for - to denote lists)
-    text_content = re.sub(r'(?<!\\)[*]', '', text_content)
+    text_content = re.sub(r'(?<!\\)[*_~]', '', text_content)
     # Remove images
     text_content = re.sub(r'!\[(.*?)\]\((.*?)\)', '', text_content)
     # Reformat links
+    text_content = re.sub(r'\[\]\((.*?)\)', '', text_content)
     text_content = re.sub(r'\[(.*?)\]\((.*?)\)', '\\1 (\\2)', text_content)
     # Remove backslashes
     text_content = re.sub(r'\\', '', text_content)
@@ -234,6 +234,28 @@ def update_workflow_version(info, new_version_num):
         print('Set version to v{}'.format(new_version_num))
 
 
+# Writes installed workflow subdirectory files to the given zip file
+def zip_workflow_dir_files(workflow_path, zip_file,
+                           root, relative_root, files):
+    for file_name in files:
+        file_path = os.path.join(root, file_name)
+        # Get path to current file relative to workflow directory
+        relative_file_path = os.path.join(relative_root, file_name)
+        zip_file.write(file_path, relative_file_path)
+
+
+# Writes installed workflow subdirectories to the given zip file
+def zip_workflow_dirs(workflow_path, zip_file):
+    # Traverse installed workflow directory
+    for root, dirs, files in os.walk(workflow_path):
+        # Get current subdirectory path relative to workflow directory
+        relative_root = os.path.relpath(root, workflow_path)
+        # Add subdirectory to archive and add files within
+        zip_file.write(root, relative_root)
+        zip_workflow_dir_files(
+            workflow_path, zip_file, root, relative_root, files)
+
+
 # Exports installed workflow to project directory
 def export_workflow(workflow_path, project_path):
 
@@ -241,17 +263,7 @@ def export_workflow(workflow_path, project_path):
     # Create new Alfred workflow archive in project directory
     # Overwrite any existing archive
     with ZipFile(archive_path, 'w', compression=ZIP_DEFLATED) as zip_file:
-        # Traverse installed workflow directory
-        for root, dirs, files in os.walk(workflow_path):
-            # Get current subdirectory path relative to workflow directory
-            relative_root = os.path.relpath(root, workflow_path)
-            # Add subdirectory to archive and add files within
-            zip_file.write(root, relative_root)
-            for file_name in files:
-                file_path = os.path.join(root, file_name)
-                # Get path to current file relative to workflow directory
-                relative_file_path = os.path.join(relative_root, file_name)
-                zip_file.write(file_path, relative_file_path)
+        zip_workflow_dirs(workflow_path, zip_file)
 
 
 def parse_cli_args():
@@ -276,7 +288,6 @@ def main():
     info_path = os.path.join(workflow_path, 'info.plist')
     info = plistlib.readPlist(info_path)
 
-    update_workflow_objects(info)
     copy_pkg_resources(workflow_path)
     update_workflow_readme(info)
     update_workflow_version(info, cli_args.version)

@@ -48,7 +48,7 @@ def test_alternate_search_engine(wb_open):
 @use_user_prefs({'language': 'en', 'version': 111, 'search_engine': 'xyz'})
 @patch('webbrowser.open')
 def test_invalid_search_engine(wb_open):
-    """should raise exception if nonexistent web browser is given"""
+    """should raise exception if nonexistent search engine is given"""
     with nose.assert_raises(Exception):
         yvs.main('59/jhn.3')
 

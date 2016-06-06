@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import re
+import sys
 import yvs.shared as shared
 
 
@@ -197,4 +198,4 @@ def main(query_str):
 
 
 if __name__ == '__main__':
-    main('{query}')
+    main(sys.argv[1].decode('utf-8'))

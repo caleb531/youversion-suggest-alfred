@@ -21,8 +21,18 @@ def test_filter_languages():
     """should filter available languages if value is given"""
     results = yvs.get_result_list('language español')
     nose.assert_equal(len(results), 2)
+    nose.assert_equal(results[0]['uid'], 'yvs-language-es')
     nose.assert_equal(results[0]['title'], 'Español')
-    nose.assert_equal(results[0]['arg'], 'language:es')
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'language',
+            'name': 'Language'
+        },
+        'value': {
+            'id': 'es',
+            'name': 'Español'
+        }
+    })
 
 
 @nose.with_setup(set_up, tear_down)
@@ -38,8 +48,18 @@ def test_filter_versions():
     """should filter available versions if value is given"""
     results = yvs.get_result_list('version ni')
     nose.assert_equal(len(results), 3)
+    nose.assert_equal(results[0]['uid'], 'yvs-version-110')
     nose.assert_equal(results[0]['title'], 'NIRV')
-    nose.assert_equal(results[0]['arg'], 'version:110')
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'version',
+            'name': 'Version'
+        },
+        'value': {
+            'id': 110,
+            'name': 'NIRV'
+        }
+    })
 
 
 @nose.with_setup(set_up, tear_down)
@@ -54,8 +74,18 @@ def test_filter_search_engines():
     """should filter available search engines if value is given"""
     results = yvs.get_result_list('search_engine y')
     nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['uid'], 'yvs-search_engine-yahoo')
     nose.assert_equal(results[0]['title'], 'Yahoo!')
-    nose.assert_equal(results[0]['arg'], 'search_engine:yahoo')
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'search_engine',
+            'name': 'Search Engine'
+        },
+        'value': {
+            'id': 'yahoo',
+            'name': 'Yahoo!'
+        }
+    })
 
 
 @nose.with_setup(set_up, tear_down)
@@ -127,7 +157,27 @@ def test_filter_preferences():
     """should filter available preferences if partial key name is given"""
     results = yvs.get_result_list('searche')
     nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['uid'], 'yvs-search_engine')
     nose.assert_equal(results[0]['title'], 'Search Engine')
+
+
+@nose.with_setup(set_up, tear_down)
+def test_filter_preferences_show_current():
+    """should show current values for all preferences"""
+    results = yvs.get_result_list('')
+    nose.assert_in('English', results[0]['subtitle'])
+    nose.assert_in('NIV', results[1]['subtitle'])
+    nose.assert_in('Google', results[2]['subtitle'])
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'en', 'version': 999, 'search_engine': 'xyz'})
+def test_filter_preferences_no_show_invalid_current():
+    """should show current values for all preferences"""
+    results = yvs.get_result_list('')
+    nose.assert_in('currently', results[0]['subtitle'])
+    nose.assert_not_in('currently', results[1]['subtitle'])
+    nose.assert_not_in('currently', results[2]['subtitle'])
 
 
 @nose.with_setup(set_up, tear_down)
