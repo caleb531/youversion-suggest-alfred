@@ -4,6 +4,7 @@
 # their latest versions. Passing the --export flag will also export the
 # installed workflow to the local project directory.
 
+from __future__ import print_function
 import argparse
 import biplist
 import distutils.dir_util as distutils
