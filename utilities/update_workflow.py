@@ -8,6 +8,7 @@ import argparse
 import biplist
 import distutils.dir_util as distutils
 import filecmp
+import hashlib
 import glob
 import plistlib
 import os
@@ -221,9 +222,9 @@ def update_workflow_readme(info):
 
     with open('README.md', 'r') as readme_file:
         readme_md = readme_file.read()
-    orig_readme_hash = hash(info['readme'])
+    orig_readme_hash = hashlib.sha1(info['readme']).hexdigest()
     info['readme'] = convert_md_to_text(readme_md)
-    if orig_readme_hash != hash(info['readme']):
+    if orig_readme_hash != hashlib.sha1(info['readme']).hexdigest():
         print('Updated workflow README')
 
 
