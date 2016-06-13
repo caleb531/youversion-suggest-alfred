@@ -22,8 +22,7 @@ def test(cover=False):
 
 @task
 def update(export=False, version=None):
-    proc_args = ['python', '-m', 'utilities.update_workflow',
-                 'utilities/workflow_packager.json']
+    proc_args = ['workflow-packager', 'utilities/workflow_packager.json']
     if export:
         proc_args.append('--export')
     if version:
