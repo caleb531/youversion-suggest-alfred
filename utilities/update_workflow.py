@@ -15,7 +15,6 @@ import json
 import plistlib
 import os
 import os.path
-import re
 import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -152,71 +151,12 @@ def copy_pkg_resources(workflow_path, workflow_resources):
             copy_resource(resource_path, dest_resource_path)
 
 
-# Operates on the section number stack according to the given section depth
-def update_section_stack(stack, section_depth):
-    current_depth = len(stack)
-    if section_depth > current_depth:
-        stack.append(1)
-    else:
-        for i in xrange(current_depth - section_depth):
-            stack.pop()
-        stack[-1] += 1
-
-
-# Numbers MD sections by replacing # headings with numbered headings
-def number_md_sections(content):
-
-    stack = []
-    lines = content.splitlines()
-    for l, line in enumerate(lines):
-        section_depth = (len(re.search('#*', line).group(0)) -
-                         MIN_README_SECTION_DEPTH + 1)
-        if section_depth > 0:
-            update_section_stack(stack, section_depth)
-            lines[l] = re.sub(
-                '^#+', '{}.'.format('.'.join(map(str, stack))), line)
-        else:
-            lines[l] = re.sub('^#+ ', '', line)
-
-    return '\n'.join(lines)
-
-
-# Converts the given Markdown content to plain text
-def convert_md_to_text(md_content):
-
-    text_content = md_content
-    # Convert backticks for code blocks to ''
-    text_content = re.sub(r'`', '\'', text_content)
-    # Remove formatting characters (except for - to denote lists)
-    text_content = re.sub(r'(?<!\\)[*_~]', '', text_content)
-    # Remove images
-    text_content = re.sub(r'!\[(.*?)\]\((.*?)\)', '', text_content)
-    # Reformat links
-    text_content = re.sub(r'\[\]\((.*?)\)', '', text_content)
-    text_content = re.sub(r'\[(.*?)\]\((.*?)\)', '\\1 (\\2)', text_content)
-    # Remove backslashes
-    text_content = re.sub(r'\\', '', text_content)
-    # Remove leading/trailing whitespace
-    text_content = text_content.strip()
-    # Remove hard-wrapping from paragraphs
-    text_content = re.sub(r'(?<![\-\s])\n(?![\-\s\d])', ' ', text_content)
-    # Collapse whitespace
-    text_content = re.sub(r' +', ' ', text_content)
-    text_content = re.sub(r'\n\n+', '\n\n', text_content)
-    text_content = re.sub(r' ?\n ?', '\n', text_content)
-    # Number Markdown sections (marked by # headings)
-    text_content = number_md_sections(text_content)
-
-    return text_content
-
-
 # Updates the workflow README with the current project README
-def update_workflow_readme(info):
+def update_workflow_readme(info, readme_path):
 
-    with open('README.md', 'r') as readme_file:
-        readme_md = readme_file.read()
     orig_readme_hash = hashlib.sha1(info['readme']).hexdigest()
-    info['readme'] = convert_md_to_text(readme_md)
+    with open(readme_path, 'r') as readme_file:
+        info['readme'] = readme_file.read()
     if orig_readme_hash != hashlib.sha1(info['readme']).hexdigest():
         print('Updated workflow README')
 
@@ -290,7 +230,8 @@ def main():
         config['alfred_version'], config['workflow_bundle_id'])
 
     copy_pkg_resources(workflow_path, config['workflow_resources'])
-    update_workflow_readme(info)
+    if 'readme' in config:
+        update_workflow_readme(info, config['readme'])
     update_workflow_version(info, cli_args.version)
     plistlib.writePlist(info, os.path.join(workflow_path, 'info.plist'))
 
