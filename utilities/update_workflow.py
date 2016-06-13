@@ -20,6 +20,8 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 # Name of the exported workflow file
 WORKFLOW_NAME = 'YouVersion Suggest (Alfred 3).alfredworkflow'
+# Bundle ID of the workflow
+WORKFLOW_BUNDLE_ID = 'com.calebevans.youversionsuggest'
 # Path to the current user's home directory
 HOME_DIR = os.path.expanduser('~')
 # Name of Alfred's core preferences file
@@ -55,18 +57,22 @@ def get_user_prefs_dir():
         return DEFAULT_USER_PREFS_DIR
 
 
-# Retrieves path to installed workflow
-def get_workflow_path():
+# Retrieves path to and info.plist object for installed workflow
+def get_installed_workflow():
 
-    # Assume that whichever workflow contains a 'yvs' directory is YV Suggest
-    yvs_packages = glob.glob(os.path.join(
-        get_user_prefs_dir(), USER_PREFS_NAME, 'workflows', '*', 'yvs'))
+    # Retrieve list of the directories for all installed workflows
+    workflow_dirs = glob.iglob(os.path.join(
+        get_user_prefs_dir(), USER_PREFS_NAME, 'workflows', '*'))
 
-    if not yvs_packages:
-        raise OSError('YouVersion Suggest in not installed locally')
+    # Find workflow whose bundle ID matches this workflow's
+    for workflow_dir in workflow_dirs:
+        info_path = os.path.join(workflow_dir, 'info.plist')
+        info = plistlib.readPlist(info_path)
+        if info['bundleid'] == WORKFLOW_BUNDLE_ID:
+            return workflow_dir, info
 
-    # Return the first (and presumably only) match found
-    return os.path.dirname(yvs_packages[0])
+    # Assume workflow is not installed at this point
+    raise OSError('YouVersion Suggest is not installed locally')
 
 
 # Returns True if the item counts for the given directories match; otherwise,
@@ -284,15 +290,12 @@ def main():
     cli_args = parse_cli_args()
 
     project_path = os.getcwd()
-    workflow_path = get_workflow_path()
-
-    info_path = os.path.join(workflow_path, 'info.plist')
-    info = plistlib.readPlist(info_path)
+    workflow_path, info = get_installed_workflow()
 
     copy_pkg_resources(workflow_path)
     update_workflow_readme(info)
     update_workflow_version(info, cli_args.version)
-    plistlib.writePlist(info, info_path)
+    plistlib.writePlist(info, os.path.join(workflow_path, 'info.plist'))
 
     if cli_args.export:
         export_workflow(workflow_path, project_path)
