@@ -19,11 +19,6 @@ import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 
 
-# Path to the current user's home directory
-# The miminum depth a README section must be at in order to be numbered
-MIN_README_SECTION_DEPTH = 2
-
-
 # Retrieves correct path to directory containing Alfred's user preferences
 def get_user_prefs_dir(alfred_version):
 
