@@ -10,6 +10,7 @@ import distutils.dir_util as distutils
 import filecmp
 import hashlib
 import glob
+import json
 import plistlib
 import os
 import os.path
@@ -18,57 +19,42 @@ import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 
 
-# Name of the exported workflow file
-WORKFLOW_NAME = 'YouVersion Suggest (Alfred 3).alfredworkflow'
-# Bundle ID of the workflow
-WORKFLOW_BUNDLE_ID = 'com.calebevans.youversionsuggest'
 # Path to the current user's home directory
-HOME_DIR = os.path.expanduser('~')
-# Name of Alfred's core preferences file
-CORE_PREFS_NAME = 'com.runningwithcrayons.Alfred-Preferences-3.plist'
-# Path to Alfred's core preferences file
-CORE_PREFS_PATH = os.path.join(
-    HOME_DIR, 'Library', 'Preferences', CORE_PREFS_NAME)
-# Name of Alfred's user preferences file
-USER_PREFS_NAME = 'Alfred.alfredpreferences'
-# Path to the default location of Alfred's user preferences file
-DEFAULT_USER_PREFS_DIR = os.path.join(
-    HOME_DIR, 'Library', 'Application Support', 'Alfred 3')
-# List of all files/directories to be copied to the exported workflow
-PKG_RESOURCES = (
-    'icon.png',
-    'yvs/*.py',
-    'yvs/data/*.json',
-    'yvs/data/bible/*.json'
-)
 # The miminum depth a README section must be at in order to be numbered
 MIN_README_SECTION_DEPTH = 2
 
 
 # Retrieves correct path to directory containing Alfred's user preferences
-def get_user_prefs_dir():
+def get_user_prefs_dir(alfred_version):
 
-    core_prefs = biplist.readPlist(CORE_PREFS_PATH)
+    library_dir = os.path.join(os.path.expanduser('~'), 'Library')
+    core_prefs = biplist.readPlist(os.path.join(
+        library_dir, 'Preferences',
+        'com.runningwithcrayons.Alfred-Preferences-{}.plist'.format(
+            alfred_version)))
 
     # If user is syncing their preferences using a syncing service
     if 'syncfolder' in core_prefs:
         return os.path.expanduser(core_prefs['syncfolder'])
     else:
-        return DEFAULT_USER_PREFS_DIR
+        return os.path.join(
+            library_dir, 'Application Support',
+            'Alfred {}'.format(alfred_version))
 
 
 # Retrieves path to and info.plist object for installed workflow
-def get_installed_workflow():
+def get_installed_workflow(alfred_version, workflow_bundle_id):
 
     # Retrieve list of the directories for all installed workflows
     workflow_dirs = glob.iglob(os.path.join(
-        get_user_prefs_dir(), USER_PREFS_NAME, 'workflows', '*'))
+        get_user_prefs_dir(alfred_version), 'Alfred.alfredpreferences',
+        'workflows', '*'))
 
     # Find workflow whose bundle ID matches this workflow's
     for workflow_dir in workflow_dirs:
         info_path = os.path.join(workflow_dir, 'info.plist')
         info = plistlib.readPlist(info_path)
-        if info['bundleid'] == WORKFLOW_BUNDLE_ID:
+        if info['bundleid'] == workflow_bundle_id:
             return workflow_dir, info
 
     # Assume workflow is not installed at this point
@@ -156,9 +142,9 @@ def create_resource_dirs(resource_patt, workflow_path):
 
 
 # Copies all package resources to installed workflow
-def copy_pkg_resources(workflow_path):
+def copy_pkg_resources(workflow_path, workflow_resources):
 
-    for resource_patt in PKG_RESOURCES:
+    for resource_patt in workflow_resources:
         for resource_path in glob.iglob(resource_patt):
             create_resource_dirs(resource_path, workflow_path)
             dest_resource_path = os.path.join(workflow_path, resource_path)
@@ -264,9 +250,8 @@ def zip_workflow_dirs(workflow_path, zip_file):
 
 
 # Exports installed workflow to project directory
-def export_workflow(workflow_path, project_path):
+def export_workflow(workflow_path, archive_path):
 
-    archive_path = os.path.join(project_path, WORKFLOW_NAME)
     # Create new Alfred workflow archive in project directory
     # Overwrite any existing archive
     with ZipFile(archive_path, 'w', compression=ZIP_DEFLATED) as zip_file:
@@ -277,6 +262,9 @@ def parse_cli_args():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        'config_path',
+        help='the path to the utility configuration for this project')
+    parser.add_argument(
         '--export', action='store_true',
         help='exports the installed workflow to the local project directory')
     parser.add_argument(
@@ -285,20 +273,29 @@ def parse_cli_args():
     return parser.parse_args()
 
 
+# Locate and parse the configuration for the utility
+def get_utility_config(config_path):
+    with open(config_path, 'r') as config_file:
+        return json.load(config_file)
+
+
 def main():
 
     cli_args = parse_cli_args()
+    config = get_utility_config(cli_args.config_path)
 
     project_path = os.getcwd()
-    workflow_path, info = get_installed_workflow()
+    workflow_path, info = get_installed_workflow(
+        config['alfred_version'], config['workflow_bundle_id'])
 
-    copy_pkg_resources(workflow_path)
+    copy_pkg_resources(workflow_path, config['workflow_resources'])
     update_workflow_readme(info)
     update_workflow_version(info, cli_args.version)
     plistlib.writePlist(info, os.path.join(workflow_path, 'info.plist'))
 
     if cli_args.export:
-        export_workflow(workflow_path, project_path)
+        export_workflow(workflow_path, os.path.join(
+            project_path, config['exported_workflow']))
         print('Exported installed workflow successfully (v{})'.format(
             info['version']))
 

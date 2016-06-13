@@ -1,0 +1,11 @@
+{
+  "alfred_version": 3,
+  "exported_workflow": "YouVersion Suggest (Alfred 3).alfredworkflow",
+  "workflow_bundle_id": "com.calebevans.youversionsuggest",
+  "workflow_resources": [
+      "icon.png",
+      "yvs/*.py",
+      "yvs/data/*.json",
+      "yvs/data/bible/*.json"
+  ]
+}
