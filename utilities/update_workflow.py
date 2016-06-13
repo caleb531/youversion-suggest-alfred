@@ -220,26 +220,35 @@ def get_utility_config(config_path):
         return json.load(config_file)
 
 
-def main():
+# Package installed workflow by copying resources from project, updating
+# README, and optionally exporting workflow
+def package_workflow(config_path, version, export):
 
-    cli_args = parse_cli_args()
-    config = get_utility_config(cli_args.config_path)
-
-    project_path = os.getcwd()
+    config = get_utility_config(config_path)
     workflow_path, info = get_installed_workflow(
         config['alfred_version'], config['workflow_bundle_id'])
 
     copy_pkg_resources(workflow_path, config['workflow_resources'])
     if 'readme' in config:
         update_workflow_readme(info, config['readme'])
-    update_workflow_version(info, cli_args.version)
+    update_workflow_version(info, version)
     plistlib.writePlist(info, os.path.join(workflow_path, 'info.plist'))
 
-    if cli_args.export:
+    if export:
+        project_path = os.getcwd()
         export_workflow(workflow_path, os.path.join(
             project_path, config['exported_workflow']))
         print('Exported installed workflow successfully (v{})'.format(
             info['version']))
+
+
+def main():
+
+    cli_args = parse_cli_args()
+    package_workflow(
+        cli_args.config_path,
+        version=cli_args.version,
+        export=cli_args.export)
 
 if __name__ == '__main__':
     main()
