@@ -58,7 +58,7 @@ def get_installed_workflow(alfred_version, workflow_bundle_id):
             return workflow_dir, info
 
     # Assume workflow is not installed at this point
-    raise OSError('YouVersion Suggest is not installed locally')
+    raise OSError('Workflow is not installed locally')
 
 
 # Returns True if the item counts for the given directories match; otherwise,
