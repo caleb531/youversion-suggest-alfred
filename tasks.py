@@ -18,14 +18,3 @@ def test(cover=False):
     else:
         # Otherwise, run tests via nose (which is faster)
         code = subprocess.call(['nosetests', '--rednose'])
-
-
-@task
-def update(export=False, version=None):
-    proc_args = ['python', '-m', 'utilities.update_workflow']
-    if export:
-        proc_args.append('--export')
-    if version:
-        proc_args.append('--version')
-        proc_args.append(version)
-    subprocess.call(proc_args)

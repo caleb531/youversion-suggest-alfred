@@ -1,3 +1,4 @@
+-e git+https://github.com/caleb531/alfred-workflow-packager.git@0db9b203dddefa6576bbcf357453587f05403180#egg=alfred_workflow_packager
 biplist==1.0.1
 colorama==0.3.7
 coverage==4.1
