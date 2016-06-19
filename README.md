@@ -144,8 +144,9 @@ type a query after `yvset version` to filter the list of versions.
 ### Setting your preferred search engine
 
 You may also set your preferred search engine used for searching selected Bible
-references. To do so, type `yvset searchengine` into Alfred (again, the tab
-autocompletion will allow you to minimize typing).
+references. To do so, open the YouVersion Suggest workflow in Alfred Preferences
+and double-click the *Default Web Search* object. You can then choose a search
+engine to set as your preferred for YouVersion Suggest.
 
 #### Example queries
 
