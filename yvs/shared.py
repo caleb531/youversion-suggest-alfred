@@ -79,7 +79,7 @@ def get_chapter_data():
 # Retrieves name of first book whose id matches the given id
 def get_book(books, book_id):
 
-    for book in books:
+    for book in books:  # pragma: no branch
         if book['id'] == book_id:
             return book['name']
 
@@ -107,23 +107,6 @@ def get_languages():
         return json.load(languages_file)
 
 
-# Retrieves a list of all supported search engines
-def get_search_engines():
-
-    search_engines_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'search-engines.json')
-    with open(search_engines_path, 'r') as search_engines_file:
-        return json.load(search_engines_file)
-
-
-# Retrieve the search engine object with the given ID
-def get_search_engine(search_engines, search_engine_id):
-
-    for search_engine in search_engines:
-        if search_engine['id'] == search_engine_id:
-            return search_engine
-
-
 # Build the object for a single result list feedback item
 def get_result_list_feedback_item(result):
 
@@ -148,6 +131,12 @@ def get_result_list_feedback_item(result):
         'copy': result.get('copy', result['title']),
         # Text shown when invoking Large Type for this result
         'largetype': result.get('largetype', result['title'])
+    }
+    # Use different args when different modifiers are pressed
+    item['mods'] = {
+        'ctrl': {
+            'arg': result['title']
+        }
     }
     # Icon shown next to result text
     item['icon'] = {
@@ -347,8 +336,7 @@ def get_ref_object(ref_uid, user_prefs=None):
     }
 
     # Include book name using book ID and currently-set language
-    if not user_prefs:
-        user_prefs = get_user_prefs()
+    user_prefs = get_user_prefs()
     bible = get_bible_data(user_prefs['language'])
     book_name = get_book(bible['books'], ref['book_id'])
     ref['book'] = book_name

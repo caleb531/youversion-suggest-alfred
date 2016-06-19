@@ -8,17 +8,12 @@
       "type": "string",
       "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
     },
-    "search_engine": {
-      "description": "The preferred search engine to use when searching the selected Bible reference",
-      "type": "string",
-      "pattern": "^[a-z0-9_]+$"
-    },
     "version": {
       "description": "The preferred version (in the current preferred language) to use as the default for Bible references",
       "type": "integer",
       "minimum": 1
     }
   },
-  "required": ["language", "search_engine", "version"],
+  "required": ["language", "version"],
   "additionalProperties": false
 }
