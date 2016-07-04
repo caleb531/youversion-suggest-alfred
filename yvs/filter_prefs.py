@@ -22,11 +22,6 @@ def get_pref_defs(user_prefs):
             'id': 'version',
             'name': 'Version',
             'values': partial(shared.get_versions, user_prefs['language'])
-        },
-        {
-            'id': 'search_engine',
-            'name': 'Search Engine',
-            'values': shared.get_search_engines
         }
     ]
 
