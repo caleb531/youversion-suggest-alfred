@@ -148,11 +148,6 @@ references. To do so, open the YouVersion Suggest workflow in Alfred Preferences
 and double-click the *Default Web Search* object. You can then choose a search
 engine to set as your preferred for YouVersion Suggest.
 
-#### Example queries
-
-- `yvset searchengine b` => Bing
-- `yvset searchengine d` => DuckDuckGo
-
 ## Disclaimer
 
 This project is not affiliated with YouVersion, and all Bible content is
