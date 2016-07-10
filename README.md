@@ -18,12 +18,9 @@ convenience.
 
 ### Filtering by reference
 
-To filter the YouVersion Bible by reference, type the `yvfilter` keyword into
-Alfred, followed by a space and a phrase representing the bible reference you
-wish to find. The phrase can be part of a book name, chapter, verse, or range of
-verses. You may also include an optional version (translation) at the end of
-your query. As you type, YouVersion Suggest will display a list of suggestions
-matching your query.
+The `yvfilter` keyword allows you to filter the YouVersion Bible by reference,
+meaning you can jump to a particular Bible reference (book, chapter, verse, or
+range of verses) with just a few keystrokes.
 
 **Pro Tip:** Type `yvf` and press the `tab` key to quickly filter by reference
 (as this will expand to `yvfilter`).
@@ -41,22 +38,23 @@ matching your query.
 
 #### Actions
 
-- Choosing a result will open the respective reference on the YouVersion website
+- Choosing a result will open the Bible reference on the YouVersion website
 
-- Choosing a result while pressing `command` will copy the contents of
-the respective reference to the clipboard
+- Choosing a result while pressing `command` will copy the contents of the Bible
+reference to the clipboard
 
-- Choosing a result while pressing `ctrl` will open a Google search
-for the respective reference.
+- Choosing a result while pressing `ctrl` will open a Google search for the
+Bible reference.
 
-- Pressing `shift` while a result is selected will preview the contents
-of the respective reference (new in v6.1.0; Alfred 3 only)
+- Pressing `shift` while a result is selected will preview the contents of the
+Bible reference without leaving the search results (new in v6.1.0; Alfred 3
+only)
 
 - Pressing `command-c` while a result is selected will copy to the clipboard the
-respective reference's identifier, such as *1 Corinthians 13:4-7 (ESV)*
+full Bible reference identifier, such as *1 Corinthians 13:4-7 (ESV)*
 
-- Pressing `command-l` while a result is selected will show the respective
-reference's identifier as Large Type
+- Pressing `command-l` while a result is selected will show the full Bible
+reference identifier as Large Type
 
 ### Searching by content
 
