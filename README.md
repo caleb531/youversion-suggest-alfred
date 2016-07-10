@@ -14,8 +14,6 @@ The workflow will be solely supporting Alfred 3 going forward, but the latest
 Alfred 2-compatible release (v5.0.0) will remain available here for your
 convenience.
 
-![YouVersion Suggest in action](screenshot.png)
-
 ## Usage
 
 ### Filtering by reference
@@ -38,6 +36,8 @@ matching your query.
 - `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
 - `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
 - `yvfilter relevations 7` => Revelation 7
+
+![Filtering by reference](screenshot-yvfilter.png)
 
 #### Actions
 
@@ -72,6 +72,8 @@ version in YouVersion Suggest, see *Setting your preferred version*.
 
 - `yvsearch without faith` => Hebrews 11:6
 - `yvsearch do not worry` => Matthew 6:34
+
+![Searching by content](screenshot-yvsearch.png)
 
 #### Actions
 
