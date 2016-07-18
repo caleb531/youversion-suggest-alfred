@@ -63,32 +63,6 @@ def test_filter_versions():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_show_search_engines():
-    """should show all search engines if no value is given"""
-    results = yvs.get_result_list('search_engine')
-    nose.assert_equal(len(results), 4)
-
-
-@nose.with_setup(set_up, tear_down)
-def test_filter_search_engines():
-    """should filter available search engines if value is given"""
-    results = yvs.get_result_list('search_engine y')
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['uid'], 'yvs-search_engine-yahoo')
-    nose.assert_equal(results[0]['title'], 'Yahoo!')
-    nose.assert_equal(json.loads(results[0]['arg']), {
-        'pref': {
-            'id': 'search_engine',
-            'name': 'Search Engine'
-        },
-        'value': {
-            'id': 'yahoo',
-            'name': 'Yahoo!'
-        }
-    })
-
-
-@nose.with_setup(set_up, tear_down)
 def test_nonexistent_pref():
     """should not match nonexistent preference"""
     results = yvs.get_result_list('xyz')
@@ -155,10 +129,10 @@ def test_preferences_autocompletion():
 @nose.with_setup(set_up, tear_down)
 def test_filter_preferences():
     """should filter available preferences if partial key name is given"""
-    results = yvs.get_result_list('searche')
+    results = yvs.get_result_list('ver')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['uid'], 'yvs-search_engine')
-    nose.assert_equal(results[0]['title'], 'Search Engine')
+    nose.assert_equal(results[0]['uid'], 'yvs-version')
+    nose.assert_equal(results[0]['title'], 'Version')
 
 
 @nose.with_setup(set_up, tear_down)
@@ -167,17 +141,15 @@ def test_filter_preferences_show_current():
     results = yvs.get_result_list('')
     nose.assert_in('English', results[0]['subtitle'])
     nose.assert_in('NIV', results[1]['subtitle'])
-    nose.assert_in('Google', results[2]['subtitle'])
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'en', 'version': 999, 'search_engine': 'xyz'})
+@use_user_prefs({'language': 'en', 'version': 999})
 def test_filter_preferences_no_show_invalid_current():
     """should show current values for all preferences"""
     results = yvs.get_result_list('')
     nose.assert_in('currently', results[0]['subtitle'])
     nose.assert_not_in('currently', results[1]['subtitle'])
-    nose.assert_not_in('currently', results[2]['subtitle'])
 
 
 @nose.with_setup(set_up, tear_down)

@@ -37,18 +37,6 @@ def test_set_version(out):
 
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
-def test_set_search_engine(out):
-    """should set preferred search engine"""
-    yvs.main(json.dumps({
-        'pref': {'id': 'search_engine', 'name': 'Search Engine'},
-        'value': {'id': 'yahoo', 'name': 'Yahoo!'}
-    }))
-    user_prefs = yvs.shared.get_user_prefs()
-    nose.assert_equal(user_prefs['search_engine'], 'yahoo')
-
-
-@nose.with_setup(set_up, tear_down)
-@redirect_stdout
 def test_set_nonexistent(out):
     """should discard nonexistent preferences"""
     yvs.main(json.dumps({

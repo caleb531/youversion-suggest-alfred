@@ -36,6 +36,14 @@ def test_missing_prefs():
 
 
 @nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'en', 'version': 999})
+def test_invalid_user_version():
+    """should raise exception when invalid version is set"""
+    with nose.assert_raises(Exception):
+        yvs.get_result_list('ph 4')
+
+
+@nose.with_setup(set_up, tear_down)
 def test_create_local_data_dir_silent_fail():
     """should silently fail if local data directory already exists"""
     yvs.shared.create_local_data_dir()
