@@ -32,7 +32,7 @@ def main(pref_set_data_str):
 
     pref, value = parse_pref_set_data(pref_set_data_str)
     set_pref(pref['id'], value['id'])
-    print('Set preferred {} to {}'.format(
+    print('Preferred {} set to {}'.format(
         pref['name'].lower(), value['name']).encode('utf-8'))
 
 
