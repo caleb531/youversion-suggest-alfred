@@ -1,6 +1,7 @@
 # yvs.copy_ref
 # coding=utf-8
 
+from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 import yvs.shared as shared
@@ -148,7 +149,7 @@ def get_ref_content(ref):
 def main(ref_uid):
 
     ref = shared.get_ref_object(ref_uid)
-    print(get_ref_content(ref).encode('utf-8'))
+    print(get_ref_content(ref).encode('utf-8'), end=''.encode('utf-8'))
 
 
 if __name__ == '__main__':
