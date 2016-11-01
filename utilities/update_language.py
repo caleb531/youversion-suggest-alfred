@@ -23,19 +23,25 @@ def parse_cli_args():
     return parser.parse_args()
 
 
-def main():
+# Updates the Bible data file for the language with the given ID
+def update_language(language_id):
 
-    cli_args = parse_cli_args()
-    bible = shared.get_bible_data(cli_args.language_id)
+    bible = shared.get_bible_data(language_id)
     default_version = bible['default_version']
     max_version_id = max(bible['versions'], key=itemgetter('id'))['id']
 
     add_language(
-        cli_args.language_id,
+        language_id,
         default_version,
         max_version_id)
     print('Support for {} has been successfully updated.'.format(
-        cli_args.language_id.replace('_', '-')))
+        language_id.replace('_', '-')))
+
+
+def main():
+
+    cli_args = parse_cli_args()
+    update_language(cli_args.language_id)
 
 
 if __name__ == '__main__':
