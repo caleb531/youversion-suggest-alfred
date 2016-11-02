@@ -30,12 +30,14 @@ def update_language(language_id):
     default_version = bible['default_version']
     max_version_id = max(bible['versions'], key=itemgetter('id'))['id']
 
+    print('Updating language \'{}\' data...'.format(
+        language_id))
     add_language(
         language_id,
         default_version,
         max_version_id)
-    print('Support for {} has been successfully updated.'.format(
-        language_id.replace('_', '-')))
+    print('Updated language \'{}\' data!'.format(
+        language_id))
 
 
 def main():

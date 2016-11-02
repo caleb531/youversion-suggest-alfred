@@ -12,7 +12,6 @@ def main():
 
     for file_path in glob.iglob('yvs/data/bible/language-*.json'):
         language_id = re.search('language-(.*?).json', file_path).group(1)
-        print('Updating language {}...'.format(language_id))
         update_language(language_id)
 
 
