@@ -23,9 +23,9 @@ class SearchResultParser(HTMLParser):
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
         HTMLParser.reset(self)
-        self.in_ref = None
-        self.in_heading = None
-        self.in_content = None
+        self.in_ref = False
+        self.in_heading = False
+        self.in_content = False
         self.results = []
         self.current_result = None
 

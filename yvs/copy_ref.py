@@ -37,9 +37,9 @@ class ReferenceParser(HTMLParser):
     def reset(self):
         HTMLParser.reset(self)
         self.depth = 0
-        self.in_block = None
-        self.in_verse = None
-        self.in_verse_content = None
+        self.in_block = False
+        self.in_verse = False
+        self.in_verse_content = False
         self.block_depth = None
         self.verse_depth = None
         self.content_depth = None
