@@ -409,8 +409,9 @@ def get_url_content(url):
 
     # Decompress response body if gzipped
     if response.info().get('Content-Encoding') == 'gzip':
-        gzip_file = GzipFile(fileobj=StringIO(url_content))
-        url_content = gzip_file.read()
+        str_buf = StringIO(url_content)
+        with GzipFile(fileobj=str_buf, mode='rb') as gzip_file:
+            url_content = gzip_file.read()
 
     return url_content.decode('utf-8')
 

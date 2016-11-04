@@ -1,10 +1,10 @@
 # tests.test_shared
 
 from __future__ import unicode_literals
-import gzip
 import tests
 import yvs.shared as yvs
 import nose.tools as nose
+from gzip import GzipFile
 from StringIO import StringIO
 from mock import Mock, NonCallableMock, patch
 
@@ -43,7 +43,7 @@ def test_get_url_content_compressed(request):
     """should automatically decompress compressed URL content"""
     url = 'https://www.bible.com/bible/59/psa.23'
     gzip_buf = StringIO()
-    with gzip.GzipFile(fileobj=gzip_buf, mode='wb') as gzip_file:
+    with GzipFile(fileobj=gzip_buf, mode='wb') as gzip_file:
         gzip_file.write(html_content)
     gzipped_content = gzip_buf.getvalue()
     response_mock = NonCallableMock(
