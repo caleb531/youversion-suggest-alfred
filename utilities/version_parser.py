@@ -19,13 +19,14 @@ class VersionParser(HTMLParser):
     # Detects the start of a version link
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
-        patt = r'(?<=/versions/)(\d+)-([a-z]+\d*)'
-        matches = re.search(patt, attr_dict['href'], flags=re.UNICODE)
-        if matches:
-            self.versions.append({
-                'id': int(matches.group(1)),
-                'name': matches.group(2).upper(),
-            })
+        if 'href' in attr_dict:
+            patt = r'(?<=/versions/)(\d+)-([a-z]+\d*)'
+            matches = re.search(patt, attr_dict['href'], flags=re.UNICODE)
+            if matches:
+                self.versions.append({
+                    'id': int(matches.group(1)),
+                    'name': matches.group(2).upper(),
+                })
 
 
 # Retrieves all versions listed on the chapter page in the given language code

@@ -28,7 +28,8 @@ class LanguageParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
         self.depth += 1
-        if attr_dict['href'].endswith(self.language_url_suffix):
+        if ('href' in attr_dict and
+                attr_dict['href'].endswith(self.language_url_suffix)):
             self.in_language = True
             self.language_depth = self.depth
 
