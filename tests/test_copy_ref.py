@@ -127,14 +127,13 @@ def test_whitespace_lines(out):
 
 
 @nose.with_setup(set_up, tear_down)
-@patch('urllib2.Request')
+@patch('yvs.shared.get_url_content', return_value='abc')
 @redirect_stdout
-def test_url_always_chapter(out, request):
+def test_url_always_chapter(out, get_url_content):
     """should always fetch HTML from chapter URL"""
     yvs.main('59/psa.23.2')
-    request.assert_called_once_with(
-        'https://www.bible.com/bible/59/psa.23',
-        headers={'User-Agent': 'YouVersion Suggest'})
+    get_url_content.assert_called_once_with(
+        'https://www.bible.com/bible/59/psa.23')
 
 
 @nose.with_setup(set_up, tear_down)
