@@ -13,7 +13,7 @@ class LanguageParser(HTMLParser):
     # Associates the given language ID with this parser instance
     def __init__(self, language_id):
         HTMLParser.__init__(self)
-        self.language_url_base = '/languages/{}'.format(language_id)
+        self.language_url_suffix = '/languages/{}'.format(language_id)
 
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
@@ -28,7 +28,7 @@ class LanguageParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
         self.depth += 1
-        if self.language_url_base in attr_dict['href']:
+        if attr_dict['href'].endswith(self.language_url_suffix):
             self.in_language = True
             self.language_depth = self.depth
 
