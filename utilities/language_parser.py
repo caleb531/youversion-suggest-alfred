@@ -6,6 +6,8 @@ import yvs.shared as shared
 from HTMLParser import HTMLParser
 
 
+# Finds on the YouVersion website the language name associated with the given
+# language code
 class LanguageParser(HTMLParser):
 
     # Associates the given language ID with this parser instance

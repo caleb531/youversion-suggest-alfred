@@ -7,6 +7,8 @@ import yvs.shared as shared
 from HTMLParser import HTMLParser
 
 
+# Finds on the YouVersion website the ID and name of every Bible version in a
+# particular YouVersion-supported language
 class VersionParser(HTMLParser):
 
     # Resets parser variables (implicitly called on instantiation)

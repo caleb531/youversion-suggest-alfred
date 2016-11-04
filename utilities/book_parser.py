@@ -6,6 +6,8 @@ import yvs.shared as shared
 from HTMLParser import HTMLParser
 
 
+# Finds on the YouVersion website the ID and name of every Bible book in a
+# particular Bible version
 class BookParser(HTMLParser):
 
     # Resets parser variables (implicitly called on instantiation)
