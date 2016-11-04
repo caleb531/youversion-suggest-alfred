@@ -48,7 +48,8 @@ def test_get_url_content_compressed(request):
     gzipped_content = gzip_buf.getvalue()
     response_mock = NonCallableMock(
         read=Mock(return_value=gzipped_content),
-        info=Mock(return_value=Mock(get=Mock(return_value='gzip'))))
+        info=Mock(return_value=NonCallableMock(
+            get=Mock(return_value='gzip'))))
     with patch('urllib2.urlopen', return_value=response_mock):
         url_content = yvs.get_url_content(url).encode('utf-8')
         nose.assert_equal(url_content, html_content)
