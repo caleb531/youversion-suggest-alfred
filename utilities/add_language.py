@@ -193,16 +193,15 @@ def update_language_list(language_id, language_name):
     langs_path = os.path.join('yvs', 'data', 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
         langs = json.load(langs_file)
-        # If language does not already exist in list of supported languages
-        if not any(lang['id'] == language_id for lang in langs):
-            langs.append({
-                'id': language_id,
-                'name': language_name
-            })
-            langs.sort(key=itemgetter('id'))
-            langs_file.truncate(0)
-            langs_file.seek(0)
-            write_json_unicode(langs, langs_file)
+        langs[:] = [lang for lang in langs if lang['id'] != language_id]
+        langs.append({
+            'id': language_id,
+            'name': language_name
+        })
+        langs.sort(key=itemgetter('id'))
+        langs_file.truncate(0)
+        langs_file.seek(0)
+        write_json_unicode(langs, langs_file)
 
 
 # Adds to the worklow support for the language with the given parameters
