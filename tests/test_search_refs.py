@@ -9,7 +9,7 @@ import os.path
 import nose.tools as nose
 import tests
 import yvs.search_refs as yvs
-from mock import ANY, Mock, NonCallableMock, patch
+from mock import Mock, NonCallableMock, patch
 from tests.decorators import redirect_stdout
 
 
@@ -60,17 +60,12 @@ def test_result_arg():
 
 
 @nose.with_setup(set_up, tear_down)
-@patch('urllib2.Request')
-def test_unicode_input(request):
+@patch('yvs.shared.get_url_content', return_value='abc')
+def test_unicode_input(get_url_content):
     """should correctly handle non-ASCII characters in query string"""
-    results = yvs.get_result_list('é')
-    request.assert_called_once_with(
-        'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
-        headers={
-            'User-Agent': 'YouVersion Suggest',
-            'Accept-Encoding': ANY
-        })
-    nose.assert_equal(len(results), 3)
+    yvs.get_result_list('é')
+    get_url_content.assert_called_once_with(
+        'https://www.bible.com/search/bible?q=%C3%A9&version_id=111')
 
 
 @nose.with_setup(set_up, tear_down)
