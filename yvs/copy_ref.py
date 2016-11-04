@@ -40,9 +40,9 @@ class ReferenceParser(HTMLParser):
         self.in_block = False
         self.in_verse = False
         self.in_verse_content = False
-        self.block_depth = None
-        self.verse_depth = None
-        self.content_depth = None
+        self.block_depth = 0
+        self.verse_depth = 0
+        self.content_depth = 0
         self.verse_num = None
         self.content_parts = []
 
