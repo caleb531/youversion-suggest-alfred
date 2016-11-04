@@ -10,6 +10,8 @@ import re
 import shutil
 import urllib2
 import unicodedata
+from gzip import GzipFile
+from StringIO import StringIO
 
 
 # Unique identifier for the workflow
@@ -398,9 +400,20 @@ def format_ref_content(ref_content):
 # Retrieves HTML contents of the given URL as a Unicode string
 def get_url_content(url):
 
-    request = urllib2.Request(url, headers={'User-Agent': USER_AGENT})
-    connection = urllib2.urlopen(request)
-    return connection.read().decode('utf-8')
+    request = urllib2.Request(url, headers={
+        'User-Agent': USER_AGENT,
+        'Accept-Encoding': 'gzip, deflate'
+    })
+    response = urllib2.urlopen(request)
+    url_content = response.read()
+
+    # Decompress response body if gzipped
+    if response.info().get('Content-Encoding') == 'gzip':
+        str_buf = StringIO(url_content)
+        with GzipFile(fileobj=str_buf, mode='rb') as gzip_file:
+            url_content = gzip_file.read()
+
+    return url_content.decode('utf-8')
 
 
 # Evaluates HTML character reference to its respective Unicode character
