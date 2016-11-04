@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import tests
 import yvs.copy_ref as yvs
 import nose.tools as nose
-from mock import Mock, NonCallableMock, patch
+from mock import ANY, Mock, NonCallableMock, patch
 from tests.decorators import redirect_stdout, use_user_prefs
 
 
@@ -134,7 +134,10 @@ def test_url_always_chapter(out, request):
     yvs.main('59/psa.23.2')
     request.assert_called_once_with(
         'https://www.bible.com/bible/59/psa.23',
-        headers={'User-Agent': 'YouVersion Suggest'})
+        headers={
+            'User-Agent': 'YouVersion Suggest',
+            'Accept-Encoding': ANY
+        })
 
 
 @nose.with_setup(set_up, tear_down)

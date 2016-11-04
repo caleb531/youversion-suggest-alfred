@@ -9,7 +9,7 @@ import os.path
 import nose.tools as nose
 import tests
 import yvs.search_refs as yvs
-from mock import Mock, NonCallableMock, patch
+from mock import ANY, Mock, NonCallableMock, patch
 from tests.decorators import redirect_stdout
 
 
@@ -66,7 +66,10 @@ def test_unicode_input(request):
     results = yvs.get_result_list('é')
     request.assert_called_once_with(
         'https://www.bible.com/search/bible?q=%C3%A9&version_id=111',
-        headers={'User-Agent': 'YouVersion Suggest'})
+        headers={
+            'User-Agent': 'YouVersion Suggest',
+            'Accept-Encoding': ANY
+        })
     nose.assert_equal(len(results), 3)
 
 
