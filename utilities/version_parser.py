@@ -9,14 +9,6 @@ from HTMLParser import HTMLParser
 
 class VersionParser(HTMLParser):
 
-    # Associates the given language ID with this parser instance
-    def __init__(self, language_id):
-        HTMLParser.__init__(self)
-        self.language_id = language_id
-        # The base URL used to determine if a particular version link belongs
-        # to the given language
-        self.version_url_base = '/{}/versions/'.format(self.language_id)
-
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
         HTMLParser.reset(self)
@@ -39,7 +31,7 @@ class VersionParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
         self.depth += 1
-        if self.version_url_base in attr_dict['href']:
+        if '/versions/' in attr_dict['href']:
             self.in_version = True
             self.version_depth = self.depth
             self.versions.append({
@@ -72,10 +64,10 @@ class VersionParser(HTMLParser):
 def get_versions(language_id):
 
     page_html = shared.get_url_content(
-        'https://www.bible.com/{}/versions'.format(
+        'https://www.bible.com/languages/{}'.format(
             language_id.replace('_', '-')))
 
-    parser = VersionParser(language_id)
+    parser = VersionParser()
     parser.feed(page_html)
 
     return parser.versions
