@@ -13,6 +13,7 @@ import json
 import os
 import re
 import yvs.shared as yvs
+import utilities.book_parser as book_parser
 from operator import itemgetter
 from pyquery import PyQuery
 
@@ -112,15 +113,6 @@ def get_versions(language_id, max_version_id):
     return unique_versions, language_name
 
 
-# Constructs an object representing a book of the Bible
-def get_book(book_elem):
-
-    return {
-        'id': book_elem.get('data-book'),
-        'name': book_elem.text.strip()
-    }
-
-
 # Retrieves a list of chapter counts for each book
 def get_chapter_data():
 
@@ -139,22 +131,18 @@ def get_books(default_version):
     books = []
     chapter_data = get_chapter_data()
 
-    d = PyQuery(
-        url='https://www.bible.com/bible/{}/jhn.1'.format(default_version),
-        opener=yvs.get_url_content)
-
-    book_elems = d('a[data-book]')
-
-    if not book_elems:
+    books = book_parser.get_books(default_version)
+    if not books:
         raise RuntimeError('Cannot retrieve book data. Aborting.')
 
-    for book_elem in book_elems:
-        book = get_book(book_elem)
-        # Only add book to list if a chapter count exists for that book
+    # Ensure that returned books are recognized by the workflow (where the
+    # workflow only recognizes books within the Biblical canon)
+    canonical_books = []
+    for book in books:
         if book['id'] in chapter_data:
-            books.append(book)
+            canonical_books.append(book)
 
-    return books
+    return canonical_books
 
 
 # Constructs object representing all Bible data for a particular version

@@ -47,3 +47,15 @@ class BookParser(HTMLParser):
         if self.in_book:
             char = shared.eval_html_charref(name)
             self.book_name_parts.append(char)
+
+
+# Retrieves all books listed on the chapter page in the given default version
+def get_books(default_version):
+
+    page_html = shared.get_url_content(
+        'https://www.bible.com/bible/{}/jhn.1'.format(default_version))
+
+    parser = BookParser()
+    parser.feed(page_html)
+
+    return parser.books
