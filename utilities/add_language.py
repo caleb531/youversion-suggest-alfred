@@ -12,9 +12,10 @@ import itertools
 import json
 import os
 import re
-import yvs.shared as yvs
+import utilities.book_parser as book_parser
+import utilities.language_parser as language_parser
+import utilities.version_parser as version_parser
 from operator import itemgetter
-from pyquery import PyQuery
 
 
 # Parameters for structuring JSON data
@@ -37,46 +38,7 @@ def get_language_name(text):
         return None
 
 
-# Constructs an object representing a Bible version
-def get_version(version_elem):
-
-    link_elem = version_elem.find('a')
-    url = link_elem.get('href')
-    patt = r'(?<=/versions/)(\d+)-([a-z]+\d*)'
-    matches = re.search(patt, url, flags=re.UNICODE)
-    return {
-        'id': int(matches.group(1)),
-        'name': matches.group(2).upper(),
-    }
-
-
-# Retrieves list of HTML elements, each corresponding to a Bible version
-def get_version_elems(language_id):
-
-    d = PyQuery(
-        url='https://www.bible.com/{}/versions'.format(
-            language_id.replace('_', '-')),
-        opener=yvs.get_url_content)
-
-    category_elems = d('article > ul > li')
-    version_elems = None
-    language_name = None
-
-    if category_elems:
-
-        category_elem = category_elems[0]
-        lang_title_elem = d(category_elem).find('.lang_title')[0]
-        version_elems = d(category_elem).find('li')
-
-        language_name = get_language_name(lang_title_elem.text)
-
-    if not language_name:
-        raise RuntimeError('Language name cannot be determined. Aborting.')
-
-    return version_elems, language_name
-
-
-# Returns a copy of the given version list, sorted and with duplicates removed
+# Returns a copy of the given version list with duplicates removed
 def get_unique_versions(versions):
 
     unique_versions = []
@@ -93,32 +55,18 @@ def get_versions(language_id, max_version_id):
 
     print('Retrieving version data...')
 
-    versions = []
-
-    version_elems, language_name = get_version_elems(language_id)
-
-    if not version_elems:
+    versions = version_parser.get_versions(language_id)
+    if not versions:
         raise RuntimeError('Cannot find the given language. Aborting.')
 
-    for version_elem in version_elems:
-        version = get_version(version_elem)
-        # Only add version if ID does not exceed a certain limit (if defined)
-        if not max_version_id or version['id'] <= max_version_id:
-            versions.append(version)
+    # Exclude versions whose numerical ID exceeds a certain limit (if defined)
+    versions[:] = [version for version in versions
+                   if not max_version_id or version['id'] <= max_version_id]
 
     versions.sort(key=itemgetter('name'))
     unique_versions = get_unique_versions(versions)
 
-    return unique_versions, language_name
-
-
-# Constructs an object representing a book of the Bible
-def get_book(book_elem):
-
-    return {
-        'id': book_elem.get('data-book'),
-        'name': book_elem.text.strip()
-    }
+    return unique_versions
 
 
 # Retrieves a list of chapter counts for each book
@@ -139,20 +87,13 @@ def get_books(default_version):
     books = []
     chapter_data = get_chapter_data()
 
-    d = PyQuery(
-        url='https://www.bible.com/bible/{}/jhn.1'.format(default_version),
-        opener=yvs.get_url_content)
-
-    book_elems = d('a[data-book]')
-
-    if not book_elems:
+    books = book_parser.get_books(default_version)
+    if not books:
         raise RuntimeError('Cannot retrieve book data. Aborting.')
 
-    for book_elem in book_elems:
-        book = get_book(book_elem)
-        # Only add book to list if a chapter count exists for that book
-        if book['id'] in chapter_data:
-            books.append(book)
+    # Ensure that returned books are recognized by the workflow (where the
+    # workflow only recognizes books within the Biblical canon)
+    books[:] = [book for book in books if book['id'] in chapter_data]
 
     return books
 
@@ -162,7 +103,7 @@ def get_books(default_version):
 def get_bible_data(language_id, default_version, max_version_id):
 
     bible = {}
-    bible['versions'], language_name = get_versions(
+    bible['versions'] = get_versions(
         language_id,
         max_version_id)
 
@@ -176,7 +117,7 @@ def get_bible_data(language_id, default_version, max_version_id):
 
     bible['default_version'] = default_version
     bible['books'] = get_books(default_version)
-    return bible, language_name
+    return bible
 
 
 # Writes the given JSON data to a file as Unicode
@@ -205,26 +146,27 @@ def update_language_list(language_id, language_name):
     langs_path = os.path.join('yvs', 'data', 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
         langs = json.load(langs_file)
-        # If language does not already exist in list of supported languages
-        if not any(lang['id'] == language_id for lang in langs):
-            langs.append({
-                'id': language_id,
-                'name': language_name
-            })
-            langs.sort(key=itemgetter('id'))
-            langs_file.truncate(0)
-            langs_file.seek(0)
-            write_json_unicode(langs, langs_file)
+        langs[:] = [lang for lang in langs if lang['id'] != language_id]
+        langs.append({
+            'id': language_id,
+            'name': language_name
+        })
+        langs.sort(key=itemgetter('id'))
+        langs_file.truncate(0)
+        langs_file.seek(0)
+        write_json_unicode(langs, langs_file)
 
 
 # Adds to the worklow support for the language with the given parameters
 def add_language(language_id, default_version, max_version_id):
 
-    bible, language_name = get_bible_data(
+    bible = get_bible_data(
         language_id,
         default_version,
         max_version_id)
     save_bible_data(language_id, bible)
+
+    language_name = language_parser.get_language_name(language_id)
     update_language_list(language_id, language_name)
 
 
