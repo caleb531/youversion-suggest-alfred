@@ -61,8 +61,9 @@ def get_versions(language_id, max_version_id):
         raise RuntimeError('Cannot find the given language. Aborting.')
 
     # Exclude versions whose numerical ID exceeds a certain limit (if defined)
-    versions[:] = [version for version in versions
-                   if not max_version_id or version['id'] <= max_version_id]
+    if max_version_id:
+        versions[:] = [version for version in versions
+                       if version['id'] <= max_version_id]
 
     versions.sort(key=itemgetter('name'))
     unique_versions = get_unique_versions(versions)
