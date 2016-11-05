@@ -21,7 +21,7 @@ def test_filter_languages():
     """should filter available languages if value is given"""
     results = yvs.get_result_list('language español')
     nose.assert_equal(len(results), 2)
-    nose.assert_equal(results[0]['uid'], 'yvs-language-es')
+    nose.assert_equal(results[0]['uid'], 'yvs-language-spa')
     nose.assert_equal(results[0]['title'], 'Español')
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
@@ -29,14 +29,14 @@ def test_filter_languages():
             'name': 'Language'
         },
         'value': {
-            'id': 'es',
+            'id': 'spa',
             'name': 'Español'
         }
     })
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'es', 'version': 128})
+@use_user_prefs({'language': 'spa', 'version': 128})
 def test_show_versions():
     """should show all versions if no value is given"""
     results = yvs.get_result_list('version')
@@ -144,7 +144,7 @@ def test_filter_preferences_show_current():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'en', 'version': 999})
+@use_user_prefs({'language': 'eng', 'version': 999})
 def test_filter_preferences_no_show_invalid_current():
     """should show current values for all preferences"""
     results = yvs.get_result_list('')

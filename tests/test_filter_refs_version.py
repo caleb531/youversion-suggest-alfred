@@ -8,7 +8,7 @@ from tests.decorators import use_user_prefs
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'es', 'version': 128})
+@use_user_prefs({'language': 'spa', 'version': 128})
 def test_numbered():
     """should match versions ending in number by partial name"""
     results = yvs.get_result_list('lucas 4:8 rvr1')

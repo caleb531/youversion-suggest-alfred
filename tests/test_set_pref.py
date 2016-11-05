@@ -15,10 +15,10 @@ def test_set_language(out):
     """should set preferred language"""
     yvs.main(json.dumps({
         'pref': {'id': 'language', 'name': 'Language'},
-        'value': {'id': 'es', 'name': 'Español'}
+        'value': {'id': 'spa', 'name': 'Español'}
     }))
     user_prefs = yvs.shared.get_user_prefs()
-    nose.assert_equal(user_prefs['language'], 'es')
+    nose.assert_equal(user_prefs['language'], 'spa')
     bible = yvs.shared.get_bible_data(user_prefs['language'])
     nose.assert_equal(user_prefs['version'], bible['default_version'])
 

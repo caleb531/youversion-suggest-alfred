@@ -68,7 +68,7 @@ def test_header(out):
 
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
-@use_user_prefs({'language': 'es', 'version': 128})
+@use_user_prefs({'language': 'spa', 'version': 128})
 def test_header_language(out):
     """reference header should reflect chosen language"""
     yvs.main('128/psa.23')
