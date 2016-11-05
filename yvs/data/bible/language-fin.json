@@ -264,20 +264,20 @@
   "default_version": 330,
   "versions": [
     {
+      "id": 365,
+      "name": "FB38"
+    },
+    {
+      "id": 330,
+      "name": "FB92"
+    },
+    {
       "id": 60,
       "name": "FI1776"
     },
     {
       "id": 61,
       "name": "FINPR"
-    },
-    {
-      "id": 365,
-      "name": "KINB38"
-    },
-    {
-      "id": 330,
-      "name": "KR92"
     }
   ]
 }

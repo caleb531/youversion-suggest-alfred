@@ -27,7 +27,7 @@ def test_whitespace():
     """should ignore excessive whitespace"""
     results = yvs.get_result_list('  romans  8  28  a  ')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Romans 8:28 (AMP)')
+    nose.assert_equal(results[0]['title'], 'Romans 8:28 (AMPC)')
 
 
 @nose.with_setup(set_up, tear_down)

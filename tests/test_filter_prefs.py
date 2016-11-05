@@ -22,7 +22,8 @@ def test_filter_languages():
     results = yvs.get_result_list('language español')
     nose.assert_equal(len(results), 2)
     nose.assert_equal(results[0]['uid'], 'yvs-language-spa')
-    nose.assert_equal(results[0]['title'], 'Español')
+    nose.assert_equal(
+        results[0]['title'], 'Español (América Latina) - Spanish')
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
@@ -30,7 +31,7 @@ def test_filter_languages():
         },
         'value': {
             'id': 'spa',
-            'name': 'Español'
+            'name': 'Español (América Latina) - Spanish'
         }
     })
 
@@ -106,7 +107,7 @@ def test_non_alphanumeric():
     """should ignore all non-alphanumeric characters"""
     results = yvs.get_result_list('!language@it#')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Italiano')
+    nose.assert_equal(results[0]['title'], 'Italiano - Italian')
 
 
 @nose.with_setup(set_up, tear_down)

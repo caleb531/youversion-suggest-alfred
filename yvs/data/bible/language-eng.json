@@ -86,7 +86,7 @@
     },
     {
       "id": "sng",
-      "name": "Song of Solomon"
+      "name": "Song of Songs"
     },
     {
       "id": "isa",
@@ -265,7 +265,7 @@
   "versions": [
     {
       "id": 8,
-      "name": "AMP"
+      "name": "AMPC"
     },
     {
       "id": 12,

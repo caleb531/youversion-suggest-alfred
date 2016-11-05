@@ -1,86 +1,86 @@
 [
   {
     "id": "arb",
-    "name": "العربية"
+    "name": "العربية - Arabic"
   },
   {
     "id": "bul",
-    "name": "Български език"
+    "name": "български - Bulgarian"
   },
   {
     "id": "deu",
-    "name": "Deutsch"
+    "name": "Deutsch - German"
   },
   {
     "id": "eng",
     "name": "English"
   },
   {
-    "id": "pes",
-    "name": "فارسی"
-  },
-  {
     "id": "fin",
-    "name": "Suomi"
+    "name": "Suomi - Finnish"
   },
   {
     "id": "fra",
-    "name": "Français"
+    "name": "Français - French"
   },
   {
     "id": "hin",
-    "name": "हिन्दी"
+    "name": "हिन्दी - Hindi"
   },
   {
     "id": "ita",
-    "name": "Italiano"
+    "name": "Italiano - Italian"
   },
   {
     "id": "jpn",
-    "name": "日本語"
+    "name": "日本語 - Japanese"
   },
   {
     "id": "kor",
-    "name": "한국어"
+    "name": "한국어 - Korean"
   },
   {
     "id": "nld",
-    "name": "Nederlands"
+    "name": "Nederlands - Dutch"
+  },
+  {
+    "id": "pes",
+    "name": "فارسی - Farsi (Persian)"
   },
   {
     "id": "pol",
-    "name": "Polski"
+    "name": "Polski - Polish"
   },
   {
     "id": "por",
-    "name": "Português (Brasil)"
+    "name": "Português (Brasil) - Portuguese (Brazil)"
   },
   {
     "id": "por_pt",
-    "name": "Português (Portugal)"
+    "name": "Português (Portugal) - Portuguese (Portugal)"
   },
   {
     "id": "rus",
-    "name": "Русский"
+    "name": "русский - Russian"
   },
   {
     "id": "spa",
-    "name": "Español"
+    "name": "Español (América Latina) - Spanish"
   },
   {
     "id": "spa_es",
-    "name": "Español (España)"
+    "name": "Español (España) - Spanish (Spain)"
   },
   {
     "id": "swe",
-    "name": "Svenska"
+    "name": "Svenska - Swedish"
   },
   {
     "id": "swh",
-    "name": "Kiswahili"
+    "name": "Kiswahili - Swahili"
   },
   {
     "id": "zho",
-    "name": "简体中文"
+    "name": "简体中文 - Chinese (Simplified)"
   }
 ]
