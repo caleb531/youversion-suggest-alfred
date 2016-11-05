@@ -1,11 +1,12 @@
 # yvs.copy_ref
 # coding=utf-8
 
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
+
 import sys
-import yvs.shared as shared
 from HTMLParser import HTMLParser
+
+import yvs.shared as shared
 
 # The base for all Bible reference URLs
 BASE_REF_URL = 'https://www.bible.com/bible/{ref_uid}'

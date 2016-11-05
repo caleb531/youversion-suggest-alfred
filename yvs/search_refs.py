@@ -2,11 +2,12 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+
 import sys
 import urllib
-import yvs.shared as shared
 from HTMLParser import HTMLParser
 
+import yvs.shared as shared
 
 REF_URL_PREFIX = '/bible/'
 

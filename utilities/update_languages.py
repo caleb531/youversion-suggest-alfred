@@ -3,8 +3,10 @@
 # This language utility updates all existing Bible data files
 
 from __future__ import unicode_literals
+
 import glob
 import re
+
 from update_language import update_language
 
 

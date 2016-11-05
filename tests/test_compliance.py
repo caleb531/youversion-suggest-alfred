@@ -1,10 +1,11 @@
 # tests.test_compliance
 
-import nose.tools as nose
 import glob
 import json
-import jsonschema
 import os.path
+
+import jsonschema
+import nose.tools as nose
 import pep8
 import radon.complexity as radon
 

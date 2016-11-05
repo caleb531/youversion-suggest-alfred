@@ -2,17 +2,17 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import os
-import os.path
+
 import hashlib
 import json
+import os
+import os.path
 import re
 import shutil
-import urllib2
 import unicodedata
+import urllib2
 from gzip import GzipFile
 from StringIO import StringIO
-
 
 # Unique identifier for the workflow
 WORKFLOW_UID = 'com.calebevans.youversionsuggest'

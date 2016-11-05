@@ -1,14 +1,16 @@
 # tests.test_shared
 
 from __future__ import unicode_literals
-import tests
-import yvs.shared as yvs
-import nose.tools as nose
+
 from gzip import GzipFile
 from StringIO import StringIO
-from mock import Mock, NonCallableMock, patch
-from tests.decorators import use_user_prefs
 
+import nose.tools as nose
+from mock import Mock, NonCallableMock, patch
+
+import tests
+import yvs.shared as yvs
+from tests.decorators import use_user_prefs
 
 with open('tests/html/psa.23.html') as html_file:
     html_content = html_file.read()

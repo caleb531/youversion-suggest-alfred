@@ -2,16 +2,18 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+
 import hashlib
 import json
 import os
 import os.path
+
 import nose.tools as nose
+from mock import Mock, NonCallableMock, patch
+
 import tests
 import yvs.search_refs as yvs
-from mock import Mock, NonCallableMock, patch
 from tests.decorators import redirect_stdout
-
 
 with open('tests/html/search.html') as html_file:
     patch_urlopen = patch(

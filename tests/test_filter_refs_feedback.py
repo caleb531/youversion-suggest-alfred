@@ -1,8 +1,11 @@
 # tests.test_filter_refs_feedback
 
 from __future__ import unicode_literals
+
 import json
+
 import nose.tools as nose
+
 import yvs.filter_refs as yvs
 from tests import set_up, tear_down
 

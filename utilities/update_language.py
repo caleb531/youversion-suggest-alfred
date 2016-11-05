@@ -5,9 +5,11 @@
 # file)
 
 from __future__ import unicode_literals
+
 import argparse
-import yvs.shared as shared
 from operator import itemgetter
+
+import yvs.shared as shared
 from add_language import add_language
 
 

@@ -1,7 +1,9 @@
 # tests.test_filter_refs_shorthand
 
 from __future__ import unicode_literals
+
 import nose.tools as nose
+
 import yvs.filter_refs as yvs
 from tests import set_up, tear_down
 

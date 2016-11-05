@@ -3,7 +3,9 @@
 import os
 import os.path
 import shutil
+
 import nose.tools as nose
+
 import yvs.clear_cache as yvs
 from tests import set_up, tear_down
 

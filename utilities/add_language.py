@@ -6,17 +6,18 @@
 # already-supported language
 
 from __future__ import unicode_literals
+
 import argparse
 import io
 import itertools
 import json
 import os
 import re
+from operator import itemgetter
+
 import utilities.book_parser as book_parser
 import utilities.language_parser as language_parser
 import utilities.version_parser as version_parser
-from operator import itemgetter
-
 
 # Parameters for structuring JSON data
 JSON_PARAMS = {

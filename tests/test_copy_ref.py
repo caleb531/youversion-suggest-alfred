@@ -1,12 +1,13 @@
 # tests.test_copy_ref
 
 from __future__ import unicode_literals
-import tests
-import yvs.copy_ref as yvs
+
 import nose.tools as nose
 from mock import Mock, NonCallableMock, patch
-from tests.decorators import redirect_stdout, use_user_prefs
 
+import tests
+import yvs.copy_ref as yvs
+from tests.decorators import redirect_stdout, use_user_prefs
 
 with open('tests/html/psa.23.html') as html_file:
     patch_urlopen = patch(

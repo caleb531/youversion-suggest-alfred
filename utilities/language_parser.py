@@ -2,8 +2,10 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import yvs.shared as shared
+
 from HTMLParser import HTMLParser
+
+import yvs.shared as shared
 
 
 # Finds on the YouVersion website the language name associated with the given

@@ -2,8 +2,10 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+
 import json
 import sys
+
 import yvs.shared as shared
 
 
