@@ -1,6 +1,8 @@
 # tests.test_compliance
 
 import glob
+import isort
+import itertools
 import json
 import os.path
 
@@ -60,3 +62,18 @@ def test_headers():
             fail_msg = '{} does not contain utf-8 declaration'.format(
                 os.path.relpath(module_path, 'yvs'))
             yield nose.assert_equal, second_line, '# coding=utf-8', fail_msg
+
+
+def test_import_order():
+    """All source file imports should be properly ordered/formatted."""
+    file_paths = itertools.chain(
+        glob.iglob('yvs/*.py'),
+        glob.iglob('tests/*.py'))
+    for file_path in file_paths:
+        with open(file_path, 'r') as file_obj:
+            file_contents = file_obj.read()
+        len_change = isort.SortImports(
+            file_contents=file_contents).length_change
+        fail_msg = '{} imports are not compliant'.format(
+            file_path)
+        yield nose.assert_equal, len_change, 0, fail_msg
