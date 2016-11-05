@@ -1,86 +1,86 @@
 [
   {
-    "id": "ar",
+    "id": "arb",
     "name": "العربية"
   },
   {
-    "id": "bg",
+    "id": "bul",
     "name": "Български език"
   },
   {
-    "id": "de",
+    "id": "deu",
     "name": "Deutsch"
   },
   {
-    "id": "en",
+    "id": "eng",
     "name": "English"
   },
   {
-    "id": "es",
-    "name": "Español"
-  },
-  {
-    "id": "es_ES",
-    "name": "Español (España)"
-  },
-  {
-    "id": "fa",
+    "id": "pes",
     "name": "فارسی"
   },
   {
-    "id": "fi",
+    "id": "fin",
     "name": "Suomi"
   },
   {
-    "id": "fr",
+    "id": "fra",
     "name": "Français"
   },
   {
-    "id": "hi",
+    "id": "hin",
     "name": "हिन्दी"
   },
   {
-    "id": "it",
+    "id": "ita",
     "name": "Italiano"
   },
   {
-    "id": "ja",
+    "id": "jpn",
     "name": "日本語"
   },
   {
-    "id": "ko",
+    "id": "kor",
     "name": "한국어"
   },
   {
-    "id": "nl",
+    "id": "nld",
     "name": "Nederlands"
   },
   {
-    "id": "pl",
+    "id": "pol",
     "name": "Polski"
   },
   {
-    "id": "pt",
+    "id": "por",
     "name": "Português (Brasil)"
   },
   {
-    "id": "pt_PT",
+    "id": "por_pt",
     "name": "Português (Portugal)"
   },
   {
-    "id": "ru",
+    "id": "rus",
     "name": "Русский"
   },
   {
-    "id": "sv",
+    "id": "spa",
+    "name": "Español"
+  },
+  {
+    "id": "spa_es",
+    "name": "Español (España)"
+  },
+  {
+    "id": "swe",
     "name": "Svenska"
   },
   {
-    "id": "sw",
+    "id": "swh",
     "name": "Kiswahili"
   },
   {
-    "id": "zh_CN",
+    "id": "zho",
     "name": "简体中文"
   }
 ]

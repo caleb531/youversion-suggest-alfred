@@ -35,6 +35,7 @@ def test_json():
     """All JSON files should comply with the respective schemas"""
     schemas = {
         'schema-languages': 'yvs/data/languages.json',
+        'schema-language-id-map': 'yvs/data/language-id-map.json',
         'schema-defaults': 'yvs/data/defaults.json',
         'schema-chapters': 'yvs/data/bible/chapters.json',
         'schema-bible': 'yvs/data/bible/language-*.json'

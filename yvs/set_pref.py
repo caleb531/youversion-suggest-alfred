@@ -22,7 +22,7 @@ def set_pref(pref_id, value_id):
 
     # If new language is set, ensure that preferred version is updated also
     if pref_id == 'language':
-        bible = shared.get_bible_data(language=value_id)
+        bible = shared.get_bible_data(language_id=value_id)
         user_prefs['version'] = bible['default_version']
 
     shared.set_user_prefs(user_prefs)

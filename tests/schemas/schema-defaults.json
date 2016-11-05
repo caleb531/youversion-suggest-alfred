@@ -6,7 +6,7 @@
     "language": {
       "description": "The preferred language to use for all Bible references",
       "type": "string",
-      "pattern": "^[a-z]{2}(_[A-Z]{2})?$"
+      "pattern": "^[a-z]{3}(_[a-z]{2,3})?$"
     },
     "version": {
       "description": "The preferred version (in the current preferred language) to use as the default for Bible references",
