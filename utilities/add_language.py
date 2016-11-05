@@ -12,7 +12,6 @@ import io
 import itertools
 import json
 import os
-import re
 from operator import itemgetter
 
 import utilities.book_parser as book_parser
@@ -28,15 +27,13 @@ JSON_PARAMS = {
 }
 
 
-# Parses the language name from the given category header string
-def get_language_name(text):
+# Retrieve the language name from the YouVersion website
+def get_language_name(language_id):
 
-    patt = r'^\s*(.+?)(?:\s*\((\d+)\)\s*)$'
-    matches = re.search(patt, text, flags=re.UNICODE)
-    if matches:
-        return matches.group(1)
-    else:
-        return None
+    print('Retrieving language data...')
+    language_name = language_parser.get_language_name(language_id)
+    if not language_name:
+        raise RuntimeError('Cannot retrieve language data. Aborting.')
 
 
 # Returns a copy of the given version list with duplicates removed
@@ -57,8 +54,6 @@ def get_versions(language_id, max_version_id):
     print('Retrieving version data...')
 
     versions = version_parser.get_versions(language_id)
-    if not versions:
-        raise RuntimeError('Cannot find the given language. Aborting.')
 
     # Exclude versions whose numerical ID exceeds a certain limit (if defined)
     if max_version_id:
@@ -162,13 +157,14 @@ def update_language_list(language_id, language_name):
 # Adds to the worklow support for the language with the given parameters
 def add_language(language_id, default_version, max_version_id):
 
+    language_name = get_language_name(language_id)
+
     bible = get_bible_data(
         language_id,
         default_version,
         max_version_id)
     save_bible_data(language_id, bible)
 
-    language_name = language_parser.get_language_name(language_id)
     update_language_list(language_id, language_name)
 
 
