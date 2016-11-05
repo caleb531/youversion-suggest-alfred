@@ -20,4 +20,3 @@ python-termstyle==0.1.10
 radon==1.4.0
 rednose==1.2.1
 six==1.10.0
-wheel==0.24.0
