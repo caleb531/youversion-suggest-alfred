@@ -60,8 +60,12 @@ def get_language_name(language_id):
 
     language_id = language_id.replace('-', '_')
 
-    page_html = shared.get_url_content(
-        'https://www.bible.com/languages'.format(language_id))
+    entry_key = 'languages.html'
+    page_html = shared.get_cache_entry_content(entry_key)
+    if page_html is None:
+        page_html = shared.get_url_content(
+            'https://www.bible.com/languages'.format(language_id))
+        shared.add_cache_entry(entry_key, page_html)
 
     parser = LanguageParser(language_id)
     parser.feed(page_html)
