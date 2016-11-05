@@ -7,6 +7,8 @@ import nose.tools as nose
 from gzip import GzipFile
 from StringIO import StringIO
 from mock import Mock, NonCallableMock, patch
+from tests.decorators import use_user_prefs
+
 
 with open('tests/html/psa.23.html') as html_file:
     html_content = html_file.read()
@@ -53,3 +55,14 @@ def test_get_url_content_compressed(request):
     with patch('urllib2.urlopen', return_value=response_mock):
         url_content = yvs.get_url_content(url).encode('utf-8')
         nose.assert_equal(url_content, html_content)
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'es', 'version': 197})
+def test_upgrade_language_id():
+    """should upgrade ISO-639-1 language ID to ISO-639-3 variant"""
+    bible = yvs.get_bible_data('es')
+    nose.assert_equal(bible['default_version'], 128)
+    prefs = yvs.get_user_prefs()
+    nose.assert_equal(prefs['language'], 'spa')
+    nose.assert_equal(prefs['version'], 197)
