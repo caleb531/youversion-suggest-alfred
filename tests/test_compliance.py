@@ -1,11 +1,10 @@
 # tests.test_compliance
 
 import glob
-import isort
-import itertools
 import json
 import os.path
 
+import isort
 import jsonschema
 import nose.tools as nose
 import pep8
@@ -66,17 +65,15 @@ def test_headers():
 
 def test_import_order():
     """All source file imports should be properly ordered/formatted."""
-    file_paths = itertools.chain(
-        glob.iglob('yvs/*.py'),
-        glob.iglob('tests/*.py'))
+    file_paths = glob.iglob('*/*.py')
     for file_path in file_paths:
         with open(file_path, 'r') as file_obj:
             file_contents = file_obj.read()
-        len_change = isort.SortImports(
-            file_contents=file_contents).length_change
+        new_file_contents = isort.SortImports(
+            file_contents=file_contents).output
         fail_msg = '{} imports are not compliant'.format(
             file_path)
-        yield nose.assert_equal, len_change, 0, fail_msg
+        yield nose.assert_equal, new_file_contents, file_contents, fail_msg
 
 
 def test_language_id_correspondence():
