@@ -5,9 +5,9 @@ import os.path
 import shutil
 import tempfile
 
-import yvs.shared as yvs
 from mock import patch
 
+import yvs.shared as yvs
 
 temp_dir = tempfile.gettempdir()
 local_data_dir_patcher = patch(
