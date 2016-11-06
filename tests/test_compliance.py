@@ -77,3 +77,15 @@ def test_import_order():
         fail_msg = '{} imports are not compliant'.format(
             file_path)
         yield nose.assert_equal, len_change, 0, fail_msg
+
+
+def test_language_id_correspondence():
+    """Language IDs in language.json should have a corresponding data file"""
+    with open('yvs/data/languages.json', 'r') as languages_file:
+        languages = json.load(languages_file)
+    for language in languages:
+        nose.assert_true(
+            os.path.exists(os.path.join(
+                'yvs', 'data',
+                'bible', 'language-{}.json'.format(language['id']))),
+            'language-{}.json does not exist'.format(language['id']))
