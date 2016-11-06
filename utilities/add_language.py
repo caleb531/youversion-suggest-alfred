@@ -34,6 +34,7 @@ def get_language_name(language_id):
     language_name = language_parser.get_language_name(language_id)
     if not language_name:
         raise RuntimeError('Cannot retrieve language data. Aborting.')
+    return language_name
 
 
 # Returns a copy of the given version list with duplicates removed
