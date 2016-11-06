@@ -150,10 +150,16 @@ def get_ref_content(ref):
     return ref_content
 
 
-def main(ref_uid):
+# Retrieves entire reference (header and content) to be copied
+def get_copied_ref(ref_uid):
 
     ref = shared.get_ref_object(ref_uid)
-    print(get_ref_content(ref).encode('utf-8'), end=''.encode('utf-8'))
+    return get_ref_content(ref).encode('utf-8')
+
+
+def main(ref_uid):
+
+    print(get_copied_ref(ref_uid).encode('utf-8'), end=''.encode('utf-8'))
 
 
 if __name__ == '__main__':

@@ -26,81 +26,65 @@ def tear_down():
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_copy_chapter(out):
+def test_copy_chapter():
     """should copy reference content for chapter"""
-    yvs.main('111/psa.23')
-    ref_content = out.getvalue()
+    ref_content = yvs.get_copied_ref('111/psa.23')
     nose.assert_regexp_matches(ref_content, 'Lorem')
     nose.assert_regexp_matches(ref_content, 'nunc nulla')
     nose.assert_regexp_matches(ref_content, 'fermentum')
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_copy_verse(out):
+def test_copy_verse():
     """should copy reference content for verse"""
-    yvs.main('111/psa.23.2')
-    ref_content = out.getvalue()
+    ref_content = yvs.get_copied_ref('111/psa.23.2')
     nose.assert_not_regexp_matches(ref_content, 'Lorem')
     nose.assert_regexp_matches(ref_content, 'nunc nulla')
     nose.assert_not_regexp_matches(ref_content, 'fermentum')
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_copy_verse_range(out):
+def test_copy_verse_range():
     """should copy reference content for verse range"""
-    yvs.main('111/psa.23.1-2')
-    ref_content = out.getvalue()
+    ref_content = yvs.get_copied_ref('111/psa.23.1-2')
     nose.assert_regexp_matches(ref_content, 'Lorem')
     nose.assert_regexp_matches(ref_content, 'nunc nulla')
     nose.assert_not_regexp_matches(ref_content, 'fermentum')
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_header(out):
+def test_header():
     """should prepend reference header to copied string"""
-    yvs.main('59/psa.23')
-    ref_content = out.getvalue()
+    ref_content = yvs.get_copied_ref('59/psa.23')
     nose.assert_regexp_matches(ref_content, r'^Psalm 23 \(ESV\)')
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
 @use_user_prefs({'language': 'spa', 'version': 128})
-def test_header_language(out):
+def test_header_language():
     """reference header should reflect chosen language"""
-    yvs.main('128/psa.23')
-    ref_content = out.getvalue()
+    ref_content = yvs.get_copied_ref('128/psa.23')
     nose.assert_regexp_matches(ref_content, r'^Salmos 23 \(NVI\)')
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_charref_dec(out):
+def test_charref_dec():
     """should evaluate decimal character references"""
-    yvs.main('111/psa.23')
-    ref_content = out.getvalue().decode('utf-8')
+    ref_content = yvs.get_copied_ref('111/psa.23').decode('utf-8')
     nose.assert_regexp_matches(ref_content, r'\u201cLorem ipsum\u201d')
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_charref_hex(out):
+def test_charref_hex():
     """should evaluate hexadecimal character references"""
-    yvs.main('111/psa.23')
-    ref_content = out.getvalue().decode('utf-8')
+    ref_content = yvs.get_copied_ref('111/psa.23').decode('utf-8')
     nose.assert_regexp_matches(ref_content, r'\u203a Nunc sem leo')
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_whitespace_words(out):
+def test_whitespace_words():
     """should handle spaces appropriately"""
-    yvs.main('111/psa.23')
-    ref_content = out.getvalue()
+    ref_content = yvs.get_copied_ref('111/psa.23')
     nose.assert_regexp_matches(ref_content, 'adipiscing elit.',
                                'should respect content consisting of spaces')
     nose.assert_regexp_matches(ref_content, 'consectetur adipiscing',
@@ -108,11 +92,9 @@ def test_whitespace_words(out):
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_whitespace_lines(out):
+def test_whitespace_lines():
     """should add line breaks where appropriate"""
-    yvs.main('111/psa.23')
-    ref_content = out.getvalue()
+    ref_content = yvs.get_copied_ref('111/psa.23')
     nose.assert_regexp_matches(ref_content, r'Psalm 23 \(NIV\)\n\n\S',
                                'should add two line breaks after header')
     nose.assert_regexp_matches(ref_content, r'amet,\nconsectetur',
@@ -129,44 +111,45 @@ def test_whitespace_lines(out):
 
 @nose.with_setup(set_up, tear_down)
 @patch('yvs.shared.get_url_content', return_value='abc')
-@redirect_stdout
-def test_url_always_chapter(out, get_url_content):
+def test_url_always_chapter(get_url_content):
     """should always fetch HTML from chapter URL"""
-    yvs.main('59/psa.23.2')
+    yvs.get_copied_ref('59/psa.23.2')
     get_url_content.assert_called_once_with(
         'https://www.bible.com/bible/59/psa.23')
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_cache_url_content(out):
+def test_cache_url_content():
     """should cache chapter URL content after first fetch"""
-    yvs.main('59/psa.23.2')
+    yvs.get_copied_ref('59/psa.23.2')
     with patch('urllib2.Request') as request:
-        yvs.main('59/psa.23.3')
+        yvs.get_copied_ref('59/psa.23.3')
         request.assert_not_called()
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_cache_ref_content(out):
+def test_cache_ref_content():
     """should cache reference content after first parse"""
     query_str = '59/psa.23.2'
-    yvs.main(query_str)
-    fetched_content = out.getvalue()
-    out.seek(0)
-    out.truncate(0)
+    fetched_content = yvs.get_copied_ref(query_str)
     with patch('yvs.copy_ref.ReferenceParser') as referenceParser:
-        yvs.main(query_str)
-        cached_content = out.getvalue()
+        cached_content = yvs.get_copied_ref(query_str)
         nose.assert_equal(cached_content, fetched_content)
         referenceParser.assert_not_called()
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_nonexistent_verse(out):
+def test_nonexistent_verse():
     """should return empty string for nonexistent verses"""
-    yvs.main('111/psa.23.9')
-    ref_content = out.getvalue().decode('utf-8')
+    ref_content = yvs.get_copied_ref('111/psa.23.9')
     nose.assert_equal(ref_content, '')
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_main(out):
+    ref_uid = '59/ps.23'
+    ref_content = yvs.get_copied_ref(ref_uid)
+    yvs.main(ref_uid)
+    main_ref_content = out.getvalue()
+    nose.assert_equal(main_ref_content, ref_content)
