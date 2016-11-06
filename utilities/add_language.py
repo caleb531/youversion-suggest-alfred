@@ -17,6 +17,7 @@ from operator import itemgetter
 import utilities.book_parser as book_parser
 import utilities.language_parser as language_parser
 import utilities.version_parser as version_parser
+import yvs.shared as yvs
 
 # Parameters for structuring JSON data
 JSON_PARAMS = {
@@ -70,7 +71,8 @@ def get_versions(language_id, max_version_id):
 # Retrieves a list of chapter counts for each book
 def get_chapter_data():
 
-    chapter_data_path = os.path.join('yvs', 'data', 'bible', 'chapters.json')
+    chapter_data_path = os.path.join(
+        yvs.PACKAGED_DATA_DIR_PATH, 'bible', 'chapters.json')
     with open(chapter_data_path, 'r') as chapter_data_file:
         chapter_data = json.load(chapter_data_file)
 
@@ -130,7 +132,7 @@ def write_json_unicode(json_object, json_file):
 def save_bible_data(language_id, bible):
 
     bible_path = os.path.join(
-        'yvs', 'data', 'bible',
+        yvs.PACKAGED_DATA_DIR_PATH, 'bible',
         'language-{}.json'.format(language_id))
     with io.open(bible_path, 'w', encoding='utf-8') as bible_file:
         write_json_unicode(bible, bible_file)
@@ -141,7 +143,7 @@ def update_language_list(language_id, language_name):
 
     print('Updating language list...')
 
-    langs_path = os.path.join('yvs', 'data', 'languages.json')
+    langs_path = os.path.join(yvs.PACKAGED_DATA_DIR_PATH, 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
         langs = json.load(langs_file)
         langs[:] = [lang for lang in langs if lang['id'] != language_id]
