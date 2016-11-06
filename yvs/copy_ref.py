@@ -139,8 +139,11 @@ def get_ref_content(ref):
         parser.feed(chapter_html)
         # Format reference content by removing superfluous whitespace and such
         ref_content = shared.format_ref_content(''.join(parser.content_parts))
-        # Prepend reference header that identifies reference
-        ref_content = ''.join((shared.get_full_ref(ref), '\n\n', ref_content))
+        # Prepend reference header that identifies reference (if content is
+        # non-empty)
+        if ref_content:
+            ref_content = ''.join((
+                shared.get_full_ref(ref), '\n\n', ref_content))
 
         shared.add_cache_entry(entry_key, ref_content)
 

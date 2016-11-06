@@ -161,3 +161,12 @@ def test_cache_ref_content(out):
         cached_content = out.getvalue()
         nose.assert_equal(cached_content, fetched_content)
         referenceParser.assert_not_called()
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_nonexistent_verse(out):
+    """should return empty string for nonexistent verses"""
+    yvs.main('111/psa.23.9')
+    ref_content = out.getvalue().decode('utf-8')
+    nose.assert_equal(ref_content, '')
