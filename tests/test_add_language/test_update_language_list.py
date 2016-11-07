@@ -18,13 +18,15 @@ from tests.test_add_language.decorators import redirect_stdout
 @redirect_stdout
 def test_update_languge_list_add(out):
     """should add new languages to language list"""
-    add_lang.update_language_list('kln', 'Klingon')
+    kln_language_id = 'kln'
+    kln_language_name = 'Klingon'
+    add_lang.update_language_list(kln_language_id, kln_language_name)
     langs_path = os.path.join(yvs.PACKAGED_DATA_DIR_PATH, 'languages.json')
     with open(langs_path, 'r') as langs_file:
         langs = json.load(langs_file)
-        klingon_lang = None
+        kln_lang = None
         for lang in langs:
-            if lang['id'] == 'kln':
-                klingon_lang = lang
-        nose.assert_is_not_none(klingon_lang)
-        nose.assert_equal(klingon_lang['name'], 'Klingon')
+            if lang['id'] == kln_language_id:
+                kln_lang = lang
+        nose.assert_is_not_none(kln_lang)
+        nose.assert_equal(kln_lang['name'], kln_language_name)
