@@ -17,12 +17,14 @@ def get_pref_defs(user_prefs):
         {
             'id': 'language',
             'name': 'Language',
-            'values': shared.get_languages()
+            'values': shared.get_languages(),
+            'description': 'Set your preferred language for Bible content'
         },
         {
             'id': 'version',
             'name': 'Version',
-            'values': shared.get_versions(user_prefs['language'])
+            'values': shared.get_versions(user_prefs['language']),
+            'description': 'Set the default version for Bible content'
         }
     ]
 
@@ -45,8 +47,7 @@ def get_pref_result(pref_def, user_prefs):
 
     result['uid'] = 'yvs-{}'.format(pref_def['id'])
     result['title'] = pref_def['name']
-    result['subtitle'] = 'Set your preferred {}'.format(
-        pref_def['name'].lower())
+    result['subtitle'] = pref_def['description']
     if value is not None:
         result['subtitle'] += ' (currently {})'.format(value['name'])
     result['autocomplete'] = '{} '.format(pref_def['id'].replace('_', ''))
