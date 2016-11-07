@@ -65,22 +65,11 @@ def get_versions(language_id, max_version_id):
     return unique_versions
 
 
-# Retrieves a list of chapter counts for each book
-def get_chapter_data():
-
-    chapter_data_path = os.path.join(
-        yvs.PACKAGED_DATA_DIR_PATH, 'bible', 'chapters.json')
-    with open(chapter_data_path, 'r') as chapter_data_file:
-        chapter_data = json.load(chapter_data_file)
-
-    return chapter_data
-
-
 # Retrieves a list of books available in this language
 def get_books(default_version):
 
     books = []
-    chapter_data = get_chapter_data()
+    chapter_data = yvs.get_chapter_data()
 
     books = book_parser.get_books(default_version)
     if not books:
