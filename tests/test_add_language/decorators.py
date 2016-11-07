@@ -4,8 +4,6 @@ import sys
 from functools import wraps
 from StringIO import StringIO
 
-from mock import patch
-
 
 def redirect_stdout(func):
     """temporarily redirect stdout to new output stream"""
@@ -19,14 +17,3 @@ def redirect_stdout(func):
         finally:
             sys.stdout = original_stdout
     return wrapper
-
-
-def use_user_prefs(user_prefs):
-    """temporarily use the given values for user preferences"""
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            with patch('yvs.shared.get_user_prefs', return_value=user_prefs):
-                return func(*args, **kwargs)
-        return wrapper
-    return decorator
