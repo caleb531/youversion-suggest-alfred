@@ -7,6 +7,7 @@ import tempfile
 
 from mock import patch
 
+import tests
 import yvs.shared as yvs
 
 temp_dir = tempfile.gettempdir()
@@ -23,6 +24,7 @@ def set_up():
             orig_packaged_data_dir_path, yvs.PACKAGED_DATA_DIR_PATH)
     except shutil.Error:
         pass
+    tests.set_up()
 
 
 def tear_down():
@@ -31,17 +33,4 @@ def tear_down():
     except OSError:
         pass
     packaged_data_dir_path_patcher.stop()
-
-
-def redirect_stdout(func):
-    """temporarily redirect stdout to new output stream"""
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        original_stdout = sys.stdout
-        out = StringIO()
-        try:
-            sys.stdout = out
-            return func(out, *args, **kwargs)
-        finally:
-            sys.stdout = original_stdout
-    return wrapper
+    tests.tear_down()
