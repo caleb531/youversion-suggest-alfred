@@ -90,8 +90,8 @@ def get_bible_data(language_id, default_version=None, max_version_id=None):
 
     bible = {}
     bible['versions'] = get_versions(
-        language_id,
-        max_version_id)
+        language_id=language_id,
+        max_version_id=max_version_id)
 
     # If no explicit default version is given, use version with smallest ID
     if not default_version:
@@ -102,7 +102,7 @@ def get_bible_data(language_id, default_version=None, max_version_id=None):
             'Given default version does not exist in language. Aborting.')
 
     bible['default_version'] = default_version
-    bible['books'] = get_books(default_version)
+    bible['books'] = get_books(default_version=default_version)
     return bible
 
 
