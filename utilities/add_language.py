@@ -86,7 +86,7 @@ def get_books(default_version):
 
 # Constructs object representing all Bible data for a particular version
 # This data includes the list of books, list of versions, and default version
-def get_bible_data(language_id, default_version, max_version_id):
+def get_bible_data(language_id, default_version=None, max_version_id=None):
 
     bible = {}
     bible['versions'] = get_versions(
