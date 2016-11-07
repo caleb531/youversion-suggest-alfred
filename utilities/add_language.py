@@ -50,7 +50,7 @@ def get_unique_versions(versions):
 
 
 # Retrieves a list of dictionaries representing Bible versions
-def get_versions(language_id, max_version_id):
+def get_versions(language_id, max_version_id=None):
 
     versions = version_parser.get_versions(language_id)
 
