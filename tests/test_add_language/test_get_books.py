@@ -55,3 +55,11 @@ def test_get_books_url(get_url_content):
     add_lang.get_books(default_version)
     get_url_content.assert_called_once_with(
         'https://www.bible.com/bible/{}/jhn.1'.format(default_version))
+
+
+@nose.with_setup(set_up, tear_down)
+@patch('yvs.shared.get_url_content', return_value='abc')
+def test_get_books_nonexistent(get_url_content):
+    """should raise error when book list cannot be found"""
+    with nose.assert_raises(RuntimeError):
+        add_lang.get_books(default_version=123)

@@ -47,3 +47,10 @@ def test_get_language_name_cache():
         language_name = add_lang.get_language_name('fra')
         request.assert_not_called()
         nose.assert_equal(language_name, 'Français - French')
+
+
+@nose.with_setup(set_up, tear_down)
+def test_get_language_name_nonexistent():
+    """should raise error when language name cannot be found"""
+    with nose.assert_raises(RuntimeError):
+        add_lang.get_language_name(language_id='xyz')

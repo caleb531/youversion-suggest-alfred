@@ -53,6 +53,8 @@ def get_unique_versions(versions):
 def get_versions(language_id, max_version_id=None):
 
     versions = version_parser.get_versions(language_id)
+    if not versions:
+        raise RuntimeError('Cannot retrieve version data. Aborting.')
 
     # Exclude versions whose numerical ID exceeds a certain limit (if defined)
     if max_version_id:

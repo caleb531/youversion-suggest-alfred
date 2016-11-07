@@ -80,3 +80,11 @@ def test_get_versions_url(get_url_content):
     add_lang.get_versions(language_id)
     get_url_content.assert_called_once_with(
         'https://www.bible.com/languages/{}'.format(language_id))
+
+
+@nose.with_setup(set_up, tear_down)
+@patch('yvs.shared.get_url_content', return_value='abc')
+def test_get_versions_nonexistent(get_url_content):
+    """should raise error when version list cannot be found"""
+    with nose.assert_raises(RuntimeError):
+        add_lang.get_versions(language_id='xyz')
