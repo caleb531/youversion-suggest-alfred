@@ -31,7 +31,6 @@ JSON_PARAMS = {
 # Retrieve the language name from the YouVersion website
 def get_language_name(language_id):
 
-    print('Retrieving language data...')
     language_name = language_parser.get_language_name(language_id)
     if not language_name:
         raise RuntimeError('Cannot retrieve language data. Aborting.')
@@ -52,8 +51,6 @@ def get_unique_versions(versions):
 
 # Retrieves a list of dictionaries representing Bible versions
 def get_versions(language_id, max_version_id):
-
-    print('Retrieving version data...')
 
     versions = version_parser.get_versions(language_id)
 
@@ -81,8 +78,6 @@ def get_chapter_data():
 
 # Retrieves a list of books available in this language
 def get_books(default_version):
-
-    print('Retrieving book data...')
 
     books = []
     chapter_data = get_chapter_data()
@@ -141,8 +136,6 @@ def save_bible_data(language_id, bible):
 # Adds this language's details (name, code) to the list of supported languages
 def update_language_list(language_id, language_name):
 
-    print('Updating language list...')
-
     langs_path = os.path.join(yvs.PACKAGED_DATA_DIR_PATH, 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
         langs = json.load(langs_file)
@@ -160,14 +153,17 @@ def update_language_list(language_id, language_name):
 # Adds to the worklow support for the language with the given parameters
 def add_language(language_id, default_version, max_version_id):
 
+    print('Fetching language data...')
     language_name = get_language_name(language_id)
 
+    print('Adding Bible data...')
     bible = get_bible_data(
         language_id,
         default_version,
         max_version_id)
     save_bible_data(language_id, bible)
 
+    print('Updating language list...')
     update_language_list(language_id, language_name)
 
 

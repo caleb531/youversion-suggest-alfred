@@ -11,12 +11,10 @@ import nose.tools as nose
 import yvs.shared as yvs
 import utilities.add_language as add_lang
 from tests.test_add_language import set_up, tear_down
-from tests.test_add_language.decorators import redirect_stdout
 
 
 @nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_update_languge_list_add(out):
+def test_update_languge_list_add():
     """should add new languages to language list"""
     kln_language_id = 'kln'
     kln_language_name = 'Klingon'
