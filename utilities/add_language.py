@@ -106,8 +106,8 @@ def get_bible_data(language_id, default_version=None, max_version_id=None):
     return bible
 
 
-# Writes the given JSON data to a file as Unicode
-def write_json_unicode(json_object, json_file):
+# Writes the given JSON object to a file
+def write_json(json_object, json_file):
 
     json_str = json.dumps(json_object, **JSON_PARAMS)
     json_file.write(json_str)
@@ -121,7 +121,7 @@ def save_bible_data(language_id, bible):
         yvs.PACKAGED_DATA_DIR_PATH, 'bible',
         'language-{}.json'.format(language_id))
     with io.open(bible_path, 'w', encoding='utf-8') as bible_file:
-        write_json_unicode(bible, bible_file)
+        write_json(bible, bible_file)
 
 
 # Adds this language's details (name, code) to the list of supported languages
@@ -138,7 +138,7 @@ def update_language_list(language_id, language_name):
         langs.sort(key=itemgetter('id'))
         langs_file.truncate(0)
         langs_file.seek(0)
-        write_json_unicode(langs, langs_file)
+        write_json(langs, langs_file)
 
 
 # Adds to the worklow support for the language with the given parameters
