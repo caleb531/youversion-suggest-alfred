@@ -180,15 +180,18 @@ def parse_cli_args():
 
 def main():
 
-    cli_args = parse_cli_args()
-    print('Adding language \'{}\' data...'.format(
-        cli_args.language_id))
-    add_language(
-        cli_args.language_id.replace('-', '_'),
-        cli_args.default_version,
-        cli_args.max_version_id)
-    print('Added language \'{}\' data!'.format(
-        cli_args.language_id))
+    try:
+        cli_args = parse_cli_args()
+        print('Adding language \'{}\' data...'.format(
+            cli_args.language_id))
+        add_language(
+            cli_args.language_id.replace('-', '_'),
+            cli_args.default_version,
+            cli_args.max_version_id)
+        print('Added language \'{}\' data!'.format(
+            cli_args.language_id))
+    except KeyboardInterrupt:
+        pass
 
 if __name__ == '__main__':
     main()
