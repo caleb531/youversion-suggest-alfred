@@ -35,8 +35,7 @@ class VersionParser(HTMLParser):
 def get_versions(language_id):
 
     page_html = shared.get_url_content(
-        'https://www.bible.com/languages/{}'.format(
-            language_id.replace('-', '_')))
+        'https://www.bible.com/languages/{}'.format(language_id))
 
     parser = VersionParser()
     parser.feed(page_html)

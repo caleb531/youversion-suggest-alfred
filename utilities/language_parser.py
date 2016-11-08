@@ -60,8 +60,6 @@ class LanguageParser(HTMLParser):
 # Retrieves the language with
 def get_language_name(language_id):
 
-    language_id = language_id.replace('-', '_')
-
     entry_key = 'languages.html'
     page_html = shared.get_cache_entry_content(entry_key)
     if page_html is None:
