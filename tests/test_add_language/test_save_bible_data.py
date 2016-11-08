@@ -37,13 +37,14 @@ def test_save_bible_data_new():
 @nose.with_setup(set_up, tear_down)
 def test_save_bible_data_existing():
     """should update Bible data in existing data file"""
+    bible_file_path = os.path.join(
+        yvs.PACKAGED_DATA_DIR_PATH, 'bible',
+        'language-{}.json'.format(LANGUAGE_ID))
+    with open(bible_file_path, 'w') as bible_file:
+        json.dump(BIBLE, bible_file)
     new_bible = copy.deepcopy(BIBLE)
     new_bible['default_version'] = 154
-    bible_file_path = os.path.join(
-        yvs.PACKAGED_DATA_DIR_PATH, 'bible', 'languageLANGUAGE_IDjson')
-    with open(bible_file_path, 'w') as bible_file:
-        json.dump(new_bible, bible_file)
-    add_lang.save_bible_data(language_id=LANGUAGE_ID, bible=BIBLE)
+    add_lang.save_bible_data(language_id=LANGUAGE_ID, bible=new_bible)
     nose.assert_true(os.path.exists(bible_file_path))
     with open(bible_file_path, 'r') as bible_file:
         saved_bible = json.load(bible_file)
