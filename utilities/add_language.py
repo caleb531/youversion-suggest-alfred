@@ -142,7 +142,7 @@ def update_language_list(language_id, language_name):
 
 
 # Adds to the worklow support for the language with the given parameters
-def add_language(language_id, default_version, max_version_id):
+def add_language(language_id, default_version=None, max_version_id=None):
 
     print('Fetching language data...')
     language_name = get_language_name(language_id)
