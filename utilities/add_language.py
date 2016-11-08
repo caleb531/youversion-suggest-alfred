@@ -144,17 +144,17 @@ def update_language_list(language_id, language_name):
 # Adds to the worklow support for the language with the given parameters
 def add_language(language_id, default_version=None, max_version_id=None):
 
-    print('Fetching language data...')
+    print('- Fetching language data...')
     language_name = get_language_name(language_id)
 
-    print('Adding Bible data...')
+    print('- Adding Bible data...')
     bible = get_bible_data(
         language_id,
         default_version,
         max_version_id)
     save_bible_data(language_id, bible)
 
-    print('Updating language list...')
+    print('- Updating language list...')
     update_language_list(language_id, language_name)
 
 
