@@ -31,7 +31,6 @@ JSON_PARAMS = {
 # Retrieve the language name from the YouVersion website
 def get_language_name(language_id):
 
-    print('Retrieving language data...')
     language_name = language_parser.get_language_name(language_id)
     if not language_name:
         raise RuntimeError('Cannot retrieve language data. Aborting.')
@@ -51,11 +50,11 @@ def get_unique_versions(versions):
 
 
 # Retrieves a list of dictionaries representing Bible versions
-def get_versions(language_id, max_version_id):
-
-    print('Retrieving version data...')
+def get_versions(language_id, max_version_id=None):
 
     versions = version_parser.get_versions(language_id)
+    if not versions:
+        raise RuntimeError('Cannot retrieve version data. Aborting.')
 
     # Exclude versions whose numerical ID exceeds a certain limit (if defined)
     if max_version_id:
@@ -68,24 +67,11 @@ def get_versions(language_id, max_version_id):
     return unique_versions
 
 
-# Retrieves a list of chapter counts for each book
-def get_chapter_data():
-
-    chapter_data_path = os.path.join(
-        yvs.PACKAGED_DATA_DIR_PATH, 'bible', 'chapters.json')
-    with open(chapter_data_path, 'r') as chapter_data_file:
-        chapter_data = json.load(chapter_data_file)
-
-    return chapter_data
-
-
 # Retrieves a list of books available in this language
 def get_books(default_version):
 
-    print('Retrieving book data...')
-
     books = []
-    chapter_data = get_chapter_data()
+    chapter_data = yvs.get_chapter_data()
 
     books = book_parser.get_books(default_version)
     if not books:
@@ -100,12 +86,12 @@ def get_books(default_version):
 
 # Constructs object representing all Bible data for a particular version
 # This data includes the list of books, list of versions, and default version
-def get_bible_data(language_id, default_version, max_version_id):
+def get_bible_data(language_id, default_version=None, max_version_id=None):
 
     bible = {}
     bible['versions'] = get_versions(
-        language_id,
-        max_version_id)
+        language_id=language_id,
+        max_version_id=max_version_id)
 
     # If no explicit default version is given, use version with smallest ID
     if not default_version:
@@ -116,12 +102,12 @@ def get_bible_data(language_id, default_version, max_version_id):
             'Given default version does not exist in language. Aborting.')
 
     bible['default_version'] = default_version
-    bible['books'] = get_books(default_version)
+    bible['books'] = get_books(default_version=default_version)
     return bible
 
 
-# Writes the given JSON data to a file as Unicode
-def write_json_unicode(json_object, json_file):
+# Writes the given JSON object to a file
+def write_json(json_object, json_file):
 
     json_str = json.dumps(json_object, **JSON_PARAMS)
     json_file.write(json_str)
@@ -135,13 +121,11 @@ def save_bible_data(language_id, bible):
         yvs.PACKAGED_DATA_DIR_PATH, 'bible',
         'language-{}.json'.format(language_id))
     with io.open(bible_path, 'w', encoding='utf-8') as bible_file:
-        write_json_unicode(bible, bible_file)
+        write_json(bible, bible_file)
 
 
 # Adds this language's details (name, code) to the list of supported languages
 def update_language_list(language_id, language_name):
-
-    print('Updating language list...')
 
     langs_path = os.path.join(yvs.PACKAGED_DATA_DIR_PATH, 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
@@ -154,20 +138,23 @@ def update_language_list(language_id, language_name):
         langs.sort(key=itemgetter('id'))
         langs_file.truncate(0)
         langs_file.seek(0)
-        write_json_unicode(langs, langs_file)
+        write_json(langs, langs_file)
 
 
 # Adds to the worklow support for the language with the given parameters
-def add_language(language_id, default_version, max_version_id):
+def add_language(language_id, default_version=None, max_version_id=None):
 
+    print('- Fetching language data...')
     language_name = get_language_name(language_id)
 
+    print('- Adding Bible data...')
     bible = get_bible_data(
         language_id,
         default_version,
         max_version_id)
     save_bible_data(language_id, bible)
 
+    print('- Updating language list...')
     update_language_list(language_id, language_name)
 
 
@@ -193,15 +180,18 @@ def parse_cli_args():
 
 def main():
 
-    cli_args = parse_cli_args()
-    print('Adding language \'{}\' data...'.format(
-        cli_args.language_id))
-    add_language(
-        cli_args.language_id.replace('-', '_'),
-        cli_args.default_version,
-        cli_args.max_version_id)
-    print('Added language \'{}\' data!'.format(
-        cli_args.language_id))
+    try:
+        cli_args = parse_cli_args()
+        print('Adding language \'{}\' data...'.format(
+            cli_args.language_id))
+        add_language(
+            cli_args.language_id.replace('-', '_'),
+            cli_args.default_version,
+            cli_args.max_version_id)
+        print('Added language \'{}\' data!'.format(
+            cli_args.language_id))
+    except KeyboardInterrupt:
+        pass
 
 if __name__ == '__main__':
     main()

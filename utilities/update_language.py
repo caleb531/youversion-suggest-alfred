@@ -44,8 +44,11 @@ def update_language(language_id):
 
 def main():
 
-    cli_args = parse_cli_args()
-    update_language(cli_args.language_id)
+    try:
+        cli_args = parse_cli_args()
+        update_language(cli_args.language_id)
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == '__main__':
