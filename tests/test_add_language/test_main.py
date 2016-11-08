@@ -1,4 +1,4 @@
-# tests.test_add_language.test_save_bible_data
+# tests.test_add_language.test_main
 # coding=utf-8
 
 from __future__ import unicode_literals
