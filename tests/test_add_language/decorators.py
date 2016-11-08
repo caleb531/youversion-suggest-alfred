@@ -1,4 +1,4 @@
-# tests.decorators
+# tests.test_add_language.decorators
 
 import sys
 from functools import wraps

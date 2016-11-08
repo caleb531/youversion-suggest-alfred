@@ -1,4 +1,4 @@
-# tests.test_add_language.test_update_language_list
+# tests.test_add_language.test_get_bible_data
 
 from __future__ import unicode_literals
 
