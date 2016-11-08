@@ -51,6 +51,17 @@ def test_get_bible_data_default_version_implicit(get_versions, get_books):
 @nose.with_setup(set_up, tear_down)
 @patch('utilities.add_language.get_books', return_value=BOOKS)
 @patch('utilities.add_language.get_versions', return_value=VERSIONS)
+def test_get_bible_data_default_version_nonexistent(get_versions, get_books):
+    """should raise error if given default version does not exist in list"""
+    language_id = 'spa'
+    default_version = 999
+    with nose.assert_raises(RuntimeError):
+        add_lang.get_bible_data(language_id, default_version)
+
+
+@nose.with_setup(set_up, tear_down)
+@patch('utilities.add_language.get_books', return_value=BOOKS)
+@patch('utilities.add_language.get_versions', return_value=VERSIONS)
 def test_get_bible_data_max_version_id(get_versions, get_books):
     """should consider maximum version ID when building Bible data"""
     language_id = 'spa'
