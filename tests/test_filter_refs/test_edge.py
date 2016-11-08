@@ -1,4 +1,4 @@
-# tests.test_filter_refs_edge
+# tests.test_filter_refs.test_edge
 # coding=utf-8
 
 from __future__ import unicode_literals

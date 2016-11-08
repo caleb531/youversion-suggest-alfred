@@ -1,4 +1,4 @@
-# tests.test_filter_refs_feedback
+# tests.test_filter_refs.test_feedback
 
 from __future__ import unicode_literals
 

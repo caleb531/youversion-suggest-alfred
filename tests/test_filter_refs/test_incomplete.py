@@ -1,4 +1,4 @@
-# tests.test_filter_refs_incomplete
+# tests.test_filter_refs.test_incomplete
 
 from __future__ import unicode_literals
 

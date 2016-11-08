@@ -1,4 +1,4 @@
-# tests.test_filter_refs_prefs
+# tests.test_filter_refs.test_prefs
 # coding=utf-8
 
 from __future__ import unicode_literals

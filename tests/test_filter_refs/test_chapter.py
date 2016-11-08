@@ -1,4 +1,4 @@
-# tests.test_filter_refs_chapter
+# tests.test_filter_refs.test_chapter
 
 from __future__ import unicode_literals
 
