@@ -23,11 +23,12 @@ def test_add_language(out, get_language_name, get_bible_data, save_bible_data,
     language_id = 'swe'
     default_version = 33
     max_version_id = 500
-    add_lang.add_language(
-        language_id, default_version, max_version_id)
+    add_lang.add_language(language_id, default_version, max_version_id)
     get_language_name.assert_called_once_with(language_id)
     get_bible_data.assert_called_once_with(
-        language_id, default_version, max_version_id)
+        language_id=language_id,
+        default_version=default_version,
+        max_version_id=max_version_id)
     update_language_list.assert_called_once_with(
         language_id, get_language_name.return_value)
 
@@ -49,7 +50,8 @@ def test_parse_cli_args():
 def test_main(out, add_language):
     """main function should pass correct arguments to add_language"""
     add_lang.main()
-    add_language.assert_called_once_with('swe', 33, 500)
+    add_language.assert_called_once_with(
+        language_id='swe', default_version=33, max_version_id=500)
 
 
 @patch('sys.argv', [add_lang.__file__, 'spa-es'])
@@ -58,7 +60,8 @@ def test_main(out, add_language):
 def test_main_format_language_id_dash(out, add_language):
     """main function should properly format language IDs containing dashes"""
     add_lang.main()
-    add_language.assert_called_once_with('spa_es', None, None)
+    add_language.assert_called_once_with(
+        language_id='spa_es', default_version=None, max_version_id=None)
 
 
 @patch('utilities.add_language.add_language', side_effect=KeyboardInterrupt)

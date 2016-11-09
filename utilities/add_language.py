@@ -149,9 +149,9 @@ def add_language(language_id, default_version=None, max_version_id=None):
 
     print('- Adding Bible data...')
     bible = get_bible_data(
-        language_id,
-        default_version,
-        max_version_id)
+        language_id=language_id,
+        default_version=default_version,
+        max_version_id=max_version_id)
     save_bible_data(language_id, bible)
 
     print('- Updating language list...')
@@ -185,9 +185,9 @@ def main():
         print('Adding language \'{}\' data...'.format(
             cli_args.language_id))
         add_language(
-            cli_args.language_id.replace('-', '_'),
-            cli_args.default_version,
-            cli_args.max_version_id)
+            language_id=cli_args.language_id.replace('-', '_'),
+            default_version=cli_args.default_version,
+            max_version_id=cli_args.max_version_id)
         print('Added language \'{}\' data!'.format(
             cli_args.language_id))
     except KeyboardInterrupt:
