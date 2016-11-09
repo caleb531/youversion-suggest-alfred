@@ -52,6 +52,15 @@ def test_main(out, add_language):
     add_language.assert_called_once_with('swe', 33, 500)
 
 
+@patch('sys.argv', [add_lang.__file__, 'spa-es'])
+@patch('utilities.add_language.add_language')
+@redirect_stdout
+def test_main_format_language_id_dash(out, add_language):
+    """main function should properly format language IDs containing dashes"""
+    add_lang.main()
+    add_language.assert_called_once_with('spa_es', None, None)
+
+
 @patch('utilities.add_language.add_language', side_effect=KeyboardInterrupt)
 @patch('utilities.add_language.parse_cli_args')
 @redirect_stdout
