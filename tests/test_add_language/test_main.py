@@ -45,7 +45,8 @@ def test_parse_cli_args():
 @patch('sys.argv', [add_lang.__file__, 'swe',
                     '--default-version', '33', '--max-version-id', '500'])
 @patch('utilities.add_language.add_language')
-def test_main(add_language):
+@redirect_stdout
+def test_main(out, add_language):
     """main function should pass correct arguments to add_language"""
     add_lang.main()
     add_language.assert_called_once_with('swe', 33, 500)
@@ -53,6 +54,7 @@ def test_main(add_language):
 
 @patch('utilities.add_language.add_language', side_effect=KeyboardInterrupt)
 @patch('utilities.add_language.parse_cli_args')
-def test_main_keyboardinterrupt(parse_cli_args, add_language):
+@redirect_stdout
+def test_main_keyboardinterrupt(out, parse_cli_args, add_language):
     """main function should quit gracefully when ^C is pressed"""
     nose.assert_is_none(add_lang.main())
