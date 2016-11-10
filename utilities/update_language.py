@@ -10,7 +10,7 @@ import argparse
 from operator import itemgetter
 
 import yvs.shared as shared
-from add_language import add_language
+from utilities.add_language import add_language
 
 
 # Parses all command-line arguments
@@ -35,9 +35,9 @@ def update_language(language_id):
     print('Updating language \'{}\' data...'.format(
         language_id))
     add_language(
-        language_id,
-        default_version,
-        max_version_id)
+        language_id=language_id,
+        default_version=default_version,
+        max_version_id=max_version_id)
     print('Updated language \'{}\' data!'.format(
         language_id))
 
@@ -46,7 +46,7 @@ def main():
 
     try:
         cli_args = parse_cli_args()
-        update_language(cli_args.language_id)
+        update_language(language_id=cli_args.language_id)
     except KeyboardInterrupt:
         pass
 
