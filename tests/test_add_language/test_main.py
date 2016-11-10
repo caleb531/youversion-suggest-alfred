@@ -35,16 +35,6 @@ def test_add_language(out, get_language_name, get_bible_data, save_bible_data,
 
 @patch('sys.argv', [add_lang.__file__, 'swe',
                     '--default-version', '33', '--max-version-id', '500'])
-def test_parse_cli_args():
-    """should parse command line arguments"""
-    cli_args = add_lang.parse_cli_args()
-    nose.assert_equal(cli_args.language_id, 'swe')
-    nose.assert_equal(cli_args.default_version, 33)
-    nose.assert_equal(cli_args.max_version_id, 500)
-
-
-@patch('sys.argv', [add_lang.__file__, 'swe',
-                    '--default-version', '33', '--max-version-id', '500'])
 @patch('utilities.add_language.add_language')
 @redirect_stdout
 def test_main(out, add_language):
