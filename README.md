@@ -116,7 +116,7 @@ list, please [submit an issue on
 GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
 following details:
 
-- The name and ISO-639 code of the language from [this
+- The name and ISO 639 code of the language from [this
 list](https://www.bible.com/languages)
 
 - The name of the YouVersion-supported Bible version to use as the default for

@@ -60,7 +60,7 @@ def create_local_cache_dirs():
         pass
 
 
-# Upgrades language ID from ISO-639-1 code to ISO-639-3 code (if necessary)
+# Upgrades language ID from ISO 639-1 code to ISO 639-3 code (if necessary)
 def upgrade_language_id(language_id):
 
     id_map_path = os.path.join(PACKAGED_DATA_DIR_PATH, 'language-id-map.json')

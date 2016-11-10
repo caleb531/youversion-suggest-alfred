@@ -62,7 +62,7 @@ def test_get_url_content_compressed(request):
 @nose.with_setup(set_up, tear_down)
 @use_user_prefs({'language': 'es', 'version': 197})
 def test_upgrade_language_id():
-    """should upgrade ISO-639-1 language ID to ISO-639-3 variant"""
+    """should upgrade ISO 639-1 language ID to ISO 639-3 variant"""
     bible = yvs.get_bible_data('es')
     nose.assert_equal(bible['default_version'], 128)
     prefs = yvs.get_user_prefs()

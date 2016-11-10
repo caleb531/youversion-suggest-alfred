@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "description": "A mapping between ISO-639-1 and ISO-639-3 language codes",
+  "description": "A mapping between ISO 639-1 and ISO 639-3 language codes",
   "type": "object",
   "patternProperties": {
     "^[a-z]{2}(_[A-Z]{2})?$": {
-      "description": "The ISO-639-3 code corresponding to this ISO-639-1 code",
+      "description": "The ISO 639-3 code corresponding to this ISO 639-1 code",
       "type": "string",
       "pattern": "^[a-z]{3}(_[a-z]{2,3})?$"
     }
