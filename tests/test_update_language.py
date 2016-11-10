@@ -39,6 +39,6 @@ def test_main(out, update_language):
        side_effect=KeyboardInterrupt)
 @patch('utilities.update_language.parse_cli_args')
 @redirect_stdout_unicode
-def test_main_keyboardinterrupt(out, parse_cli_args, add_language):
+def test_main_keyboardinterrupt(out, parse_cli_args, update_language):
     """main function should quit gracefully when ^C is pressed"""
     nose.assert_is_none(update_lang.main())
