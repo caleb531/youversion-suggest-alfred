@@ -54,6 +54,16 @@ def test_main_format_language_id_dash(out, add_language):
         language_id='spa_es', default_version=None, max_version_id=None)
 
 
+@patch('sys.argv', [add_lang.__file__, 'spa_ES'])
+@patch('utilities.add_language.add_language')
+@redirect_stdout_unicode
+def test_main_format_language_id_case(out, add_language):
+    """main function should properly format language IDs with mixed case"""
+    add_lang.main()
+    add_language.assert_called_once_with(
+        language_id='spa_es', default_version=None, max_version_id=None)
+
+
 @patch('utilities.add_language.add_language', side_effect=KeyboardInterrupt)
 @patch('utilities.add_language.parse_cli_args')
 @redirect_stdout_unicode

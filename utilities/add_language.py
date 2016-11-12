@@ -185,7 +185,7 @@ def main():
         print('Adding language \'{}\' data...'.format(
             cli_args.language_id))
         add_language(
-            language_id=cli_args.language_id.replace('-', '_'),
+            language_id=cli_args.language_id.replace('-', '_').lower(),
             default_version=cli_args.default_version,
             max_version_id=cli_args.max_version_id)
         print('Added language \'{}\' data!'.format(
