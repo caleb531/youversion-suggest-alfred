@@ -146,6 +146,13 @@ def test_nonexistent_verse():
 
 
 @nose.with_setup(set_up, tear_down)
+def test_unicode_content():
+    """should return copied reference content as Unicode"""
+    ref_content = yvs.get_copied_ref('111/psa.23')
+    nose.assert_is_instance(ref_content, unicode)
+
+
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_main(out):
     """main function should output copied reference content"""

@@ -155,7 +155,7 @@ def get_ref_content(ref):
 def get_copied_ref(ref_uid):
 
     ref = shared.get_ref_object(ref_uid)
-    return get_ref_content(ref).encode('utf-8')
+    return get_ref_content(ref)
 
 
 def main(ref_uid):
