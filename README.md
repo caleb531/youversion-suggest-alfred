@@ -87,27 +87,27 @@ your preferred language.
 
 Currently, YouVersion Suggest supports the following languages:
 
-- Arabic (ar)
-- Bulgarian (bg)
-- Dutch (nl)
-- English (en)
-- Finnish (fi)
-- French (fr)
-- German (de)
-- Hindi (hi)
-- Italian (it)
-- Japanese (ja)
-- Korean (ko)
-- Persian (fa)
-- Polish (pl)
-- Portuguese (pt)
-- Portuguese - Portugal (pt-PT)
-- Russian (ru)
-- Simplified Chinese (zh-CN)
-- Spanish (es)
-- Spanish - Spain (es-ES)
-- Swahili (sw)
-- Swedish (sv)
+- Arabic (arb)
+- Bulgarian (bul)
+- Dutch (nld)
+- English (eng)
+- Finnish (fin)
+- French (fra)
+- German (deu)
+- Hindi (hin)
+- Italian (ita)
+- Japanese (jpn)
+- Korean (kor)
+- Persian (pes)
+- Polish (pol)
+- Portuguese (por)
+- Portuguese - Portugal (por-PT)
+- Russian (rus)
+- Simplified Chinese (zho)
+- Spanish (spa)
+- Spanish - Spain (spa-ES)
+- Swahili (swh)
+- Swedish (swe)
 
 #### Requesting language support
 
@@ -117,7 +117,7 @@ GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
 following details:
 
 - The name and ISO 639 code of the language from [this
-list](https://www.bible.com/languages)
+list](https://www.bible.com/languages) (*e.g.* spa-ES)
 
 - The name of the YouVersion-supported Bible version to use as the default for
 this language; click the language name on the page linked above to view the
