@@ -47,7 +47,7 @@ def test_main(out, add_language):
 @patch('sys.argv', [add_lang.__file__, 'spa-es'])
 @patch('utilities.add_language.add_language')
 @redirect_stdout_unicode
-def test_main_format_language_id_dash(out, add_language):
+def test_main_normalize_language_id_dash(out, add_language):
     """main function should properly format language IDs containing dashes"""
     add_lang.main()
     add_language.assert_called_once_with(
@@ -57,7 +57,7 @@ def test_main_format_language_id_dash(out, add_language):
 @patch('sys.argv', [add_lang.__file__, 'spa_ES'])
 @patch('utilities.add_language.add_language')
 @redirect_stdout_unicode
-def test_main_format_language_id_case(out, add_language):
+def test_main_normalize_language_id_case(out, add_language):
     """main function should properly format language IDs with mixed case"""
     add_lang.main()
     add_language.assert_called_once_with(

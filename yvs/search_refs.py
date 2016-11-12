@@ -63,7 +63,7 @@ class SearchResultParser(HTMLParser):
                 self.in_heading = False
             elif self.in_content and tag == 'p':
                 self.in_content = False
-                self.current_result['subtitle'] = shared.format_ref_content(
+                self.current_result['subtitle'] = shared.normalize_ref_content(
                     self.current_result['subtitle'])
 
     # Handles verse content
@@ -97,7 +97,7 @@ def get_search_html(query_str):
 # Parses actual reference content from reference HTML
 def get_result_list(query_str):
 
-    query_str = shared.format_query_str(query_str)
+    query_str = shared.normalize_query_str(query_str)
     html = get_search_html(query_str)
     parser = SearchResultParser()
     parser.feed(html)
@@ -106,7 +106,8 @@ def get_result_list(query_str):
 
 def main(query_str):
 
-    entry_key = 'yvsearch {}.json'.format(shared.format_query_str(query_str))
+    entry_key = 'yvsearch {}.json'.format(
+        shared.normalize_query_str(query_str))
     feedback_str = shared.get_cache_entry_content(entry_key)
     if feedback_str is None:
 

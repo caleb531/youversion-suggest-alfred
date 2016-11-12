@@ -320,8 +320,8 @@ def clear_cache():
 # Query-related functions
 
 
-# Simplifies the format of the query string
-def format_query_str(query_str):
+# Normalizes the format of the query string
+def normalize_query_str(query_str):
 
     query_str = query_str.lower()
     # Normalize all Unicode characters
@@ -401,8 +401,8 @@ def get_ref_url(ref_uid):
     return REF_URL_TEMPLATE.format(ref=ref_uid)
 
 
-# Simplifies format of reference content by removing unnecessary whitespace
-def format_ref_content(ref_content):
+# Normalizes format of reference content by removing superfluous whitespace
+def normalize_ref_content(ref_content):
 
     # Collapse consecutive spaces into a single space
     ref_content = re.sub(r' {2,}', ' ', ref_content)

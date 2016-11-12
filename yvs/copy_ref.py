@@ -138,7 +138,8 @@ def get_ref_content(ref):
         parser = ReferenceParser(ref)
         parser.feed(chapter_html)
         # Format reference content by removing superfluous whitespace and such
-        ref_content = shared.format_ref_content(''.join(parser.content_parts))
+        ref_content = shared.normalize_ref_content(
+            ''.join(parser.content_parts))
         # Prepend reference header that identifies reference (if content is
         # non-empty)
         if ref_content:

@@ -70,7 +70,7 @@ def guess_version(versions, version_query):
 
 
 # Formats book name by removing non-alphanumeric characters
-def format_book_name(book_name):
+def normalize_book_name(book_name):
 
     book_name = book_name.lower()
     # Remove all non-alphanumeric characters
@@ -90,7 +90,7 @@ def get_matching_books(books, query):
     for i in xrange(len(query['book']), 0, -1):
         book_query = query['book'][:i]
         for book in books:
-            book_name = format_book_name(book['name'])
+            book_name = normalize_book_name(book['name'])
             if book_name.startswith(book_query):
                 matching_books.append(book)
         # Stop if all possible matching books have been found
@@ -158,7 +158,7 @@ def get_result(book, query, chosen_version):
 # Retrieves search resylts matching the given query
 def get_result_list(query_str):
 
-    query_str = shared.format_query_str(query_str)
+    query_str = shared.normalize_query_str(query_str)
     query = get_query_object(query_str)
     results = []
 
