@@ -148,7 +148,8 @@ def test_nonexistent_verse():
 @nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_main(out):
-    ref_uid = '59/ps.23'
+    """main function should output copied reference content"""
+    ref_uid = '59/psa.23'
     ref_content = yvs.get_copied_ref(ref_uid)
     yvs.main(ref_uid)
     main_ref_content = out.getvalue()
