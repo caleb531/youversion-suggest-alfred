@@ -2,6 +2,9 @@
 
 from __future__ import unicode_literals
 
+import hashlib
+import os
+import os.path
 from gzip import GzipFile
 from StringIO import StringIO
 
@@ -10,7 +13,7 @@ from mock import Mock, NonCallableMock, patch
 
 import tests
 import yvs.shared as yvs
-from tests.decorators import use_user_prefs
+from tests.decorators import redirect_stdout, use_user_prefs
 
 with open('tests/html/psa.23.html') as html_file:
     html_content = html_file.read()
@@ -68,3 +71,30 @@ def test_upgrade_language_id():
     prefs = yvs.get_user_prefs()
     nose.assert_equal(prefs['language'], 'spa')
     nose.assert_equal(prefs['version'], 197)
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_cache_housekeeping(out):
+    """should purge oldest entry when cache grows too large"""
+    entry_key = 'a'
+    num_entries = yvs.MAX_NUM_CACHE_ENTRIES + 2
+    purged_entry_checksum = hashlib.sha1(('a' * 1).encode('utf-8')).hexdigest()
+    last_entry_checksum = hashlib.sha1(
+        ('a' * num_entries).encode('utf-8')).hexdigest()
+    nose.assert_false(
+        os.path.exists(yvs.get_cache_entry_dir_path()),
+        'local cache entry directory exists')
+    for i in range(num_entries):
+        yvs.add_cache_entry(entry_key, 'blah blah')
+        entry_key += 'a'
+    entry_checksums = os.listdir(yvs.get_cache_entry_dir_path())
+    nose.assert_equal(len(entry_checksums), yvs.MAX_NUM_CACHE_ENTRIES)
+    nose.assert_not_in(purged_entry_checksum, entry_checksums)
+    nose.assert_in(last_entry_checksum, entry_checksums)
+    with open(yvs.get_cache_manifest_path(), 'r') as manifest_file:
+        entry_checksums = manifest_file.read().splitlines()
+        nose.assert_equal(
+            len(entry_checksums), yvs.MAX_NUM_CACHE_ENTRIES)
+        nose.assert_not_in(purged_entry_checksum, entry_checksums)
+        nose.assert_in(last_entry_checksum, entry_checksums)

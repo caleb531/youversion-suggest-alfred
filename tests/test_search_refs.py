@@ -3,10 +3,7 @@
 
 from __future__ import unicode_literals
 
-import hashlib
 import json
-import os
-import os.path
 
 import nose.tools as nose
 from mock import Mock, NonCallableMock, patch
@@ -128,25 +125,3 @@ def test_cache_feedback_results(out):
         cached_content = out.getvalue()
         nose.assert_equal(cached_content, fetched_content)
         request.assert_not_called()
-
-
-@nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_cache_housekeeping(out):
-    """should purge oldest entry when cache grows too large"""
-    query_str = 'a'
-    num_entries = 101
-    purged_entry_checksum = hashlib.sha1('yvsearch {}.json'.format(
-        'a' * 1).encode('utf-8')).hexdigest()
-    last_entry_checksum = hashlib.sha1('yvsearch {}.json'.format(
-        'a' * num_entries).encode('utf-8')).hexdigest()
-    nose.assert_false(
-        os.path.exists(yvs.shared.get_cache_entry_dir_path()),
-        'local cache entry directory exists')
-    for i in range(num_entries):
-        yvs.main(query_str)
-        query_str += 'a'
-    entry_checksums = os.listdir(yvs.shared.get_cache_entry_dir_path())
-    nose.assert_equal(len(entry_checksums), 100)
-    nose.assert_not_in(purged_entry_checksum, entry_checksums)
-    nose.assert_in(last_entry_checksum, entry_checksums)
