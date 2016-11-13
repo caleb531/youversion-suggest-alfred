@@ -64,7 +64,7 @@ def create_local_cache_dirs():
 def upgrade_language_id(language_id):
 
     id_map_path = os.path.join(PACKAGED_DATA_DIR_PATH, 'language-id-map.json')
-    with open(id_map_path, 'r+') as id_map_file:
+    with open(id_map_path, 'r') as id_map_file:
         id_map = json.load(id_map_file)
         if language_id in id_map:
             user_prefs = get_user_prefs()
