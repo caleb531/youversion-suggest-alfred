@@ -267,6 +267,20 @@ def get_cache_manifest_path():
     return os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
 
 
+# Purge all expired entries in the cache
+def purge_expired_cache_entries(manifest_file):
+    # Read checksums from manifest; splitlines(True) preserves newlines
+    entry_checksums = manifest_file.read().splitlines(True)
+    # Purge the oldest entry if the cache is too large
+    if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
+        old_entry_checksum = entry_checksums[0].rstrip()
+        manifest_file.truncate(0)
+        manifest_file.seek(0)
+        manifest_file.writelines(entry_checksums[1:])
+        os.remove(os.path.join(
+            get_cache_entry_dir_path(), old_entry_checksum))
+
+
 # Adds to the cache a new entry with the given content
 def add_cache_entry(entry_key, entry_content):
 
@@ -284,16 +298,7 @@ def add_cache_entry(entry_key, entry_content):
         manifest_file.write(entry_checksum)
         manifest_file.write('\n')
         manifest_file.seek(0)
-        # Read checksums from manifest; splitlines(True) preserves newlines
-        entry_checksums = manifest_file.read().splitlines(True)
-        # Purge the oldest entry if the cache is too large
-        if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
-            old_entry_checksum = entry_checksums[0].rstrip()
-            manifest_file.truncate(0)
-            manifest_file.seek(0)
-            manifest_file.writelines(entry_checksums[1:])
-            os.remove(os.path.join(
-                get_cache_entry_dir_path(), old_entry_checksum))
+        purge_expired_cache_entries(manifest_file)
 
 
 # Retrieves the unmodified content of a cache entry
