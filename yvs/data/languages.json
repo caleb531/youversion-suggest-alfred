@@ -82,5 +82,9 @@
   {
     "id": "zho",
     "name": "简体中文 - Chinese (Simplified)"
+  },
+  {
+    "id": "zho_tw",
+    "name": "繁體中文 - Chinese (Traditional)"
   }
 ]

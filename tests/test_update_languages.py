@@ -12,17 +12,15 @@ from tests.decorators import redirect_stdout_unicode
 
 
 @nose.with_setup(set_up, tear_down)
-@patch('sys.argv', [update_langs.__file__, 'swe'])
 @patch('utilities.update_languages.update_language')
 @redirect_stdout_unicode
 def test_update_languages(out, update_language):
     """should perform all necessary steps to update all languages"""
     update_langs.update_languages()
-    nose.assert_equal(update_language.call_count, 21)
+    nose.assert_equal(update_language.call_count, 22)
 
 
 @nose.with_setup(set_up, tear_down)
-@patch('sys.argv', [update_langs.__file__, 'swe'])
 @patch('utilities.update_languages.update_languages')
 @redirect_stdout_unicode
 def test_main(out, update_languages):

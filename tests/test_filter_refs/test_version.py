@@ -1,4 +1,5 @@
 # tests.test_filter_refs.test_version
+# coding=utf-8
 
 from __future__ import unicode_literals
 
@@ -16,6 +17,15 @@ def test_numbered():
     results = yvs.get_result_list('lucas 4:8 rvr1')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Lucas 4:8 (RVR1960)')
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'zho_tw', 'version': 46})
+def test_non_ascii():
+    """should match versions containing non-ASCII characters"""
+    results = yvs.get_result_list('路加 4:8 cunp-上')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], '路加福音 4:8 (CUNP-上帝)')
 
 
 @nose.with_setup(set_up, tear_down)

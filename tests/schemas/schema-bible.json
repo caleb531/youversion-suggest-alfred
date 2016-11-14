@@ -41,8 +41,7 @@
           },
           "name": {
             "description": "The acronym for this version",
-            "type": "string",
-            "pattern": "^[A-Z]+[0-9]*$"
+            "type": "string"
           }
         },
         "required": ["id", "name"],

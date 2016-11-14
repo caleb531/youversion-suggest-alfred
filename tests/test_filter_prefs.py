@@ -16,7 +16,7 @@ from tests.decorators import redirect_stdout, use_user_prefs
 def test_show_languages():
     """should show all languages if no value is given"""
     results = yvs.get_result_list('language')
-    nose.assert_equal(len(results), 21)
+    nose.assert_equal(len(results), 22)
 
 
 @nose.with_setup(set_up, tear_down)
