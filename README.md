@@ -100,7 +100,7 @@ Currently, YouVersion Suggest supports the following languages:
 - Korean (ko)
 - Persian (fa)
 - Polish (pl)
-- Portuguese - Brazil (pt)
+- Portuguese (pt)
 - Portuguese - Portugal (pt-PT)
 - Russian (ru)
 - Simplified Chinese (zh-CN)

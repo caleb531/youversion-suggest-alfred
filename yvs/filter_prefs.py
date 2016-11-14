@@ -6,7 +6,6 @@ import json
 import re
 import sys
 import yvs.shared as shared
-from functools import partial
 
 
 # Returns a list of definition objects for all available preferences
@@ -16,12 +15,12 @@ def get_pref_defs(user_prefs):
         {
             'id': 'language',
             'name': 'Language',
-            'values': shared.get_languages
+            'values': shared.get_languages()
         },
         {
             'id': 'version',
             'name': 'Version',
-            'values': partial(shared.get_versions, user_prefs['language'])
+            'values': shared.get_versions(user_prefs['language'])
         }
     ]
 
@@ -29,7 +28,7 @@ def get_pref_defs(user_prefs):
 # Get the value object with the given ID for the given preference
 def get_pref_value(pref_def, value_id):
 
-    values = pref_def['values']()
+    values = pref_def['values']
     for value in values:
         if value['id'] == value_id:
             return value
@@ -57,7 +56,7 @@ def get_pref_result(pref_def, user_prefs):
 # Retrieves Alfred result list of all available values for this preference
 def get_value_result_list(user_prefs, pref_def, query_str):
 
-    values = pref_def['values']()
+    values = pref_def['values']
     results = []
 
     for value in values:

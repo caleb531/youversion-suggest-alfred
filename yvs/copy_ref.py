@@ -1,6 +1,7 @@
 # yvs.copy_ref
 # coding=utf-8
 
+from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 import yvs.shared as shared
@@ -36,9 +37,9 @@ class ReferenceParser(HTMLParser):
     def reset(self):
         HTMLParser.reset(self)
         self.depth = 0
-        self.in_block = None
-        self.in_verse = None
-        self.in_verse_content = None
+        self.in_block = False
+        self.in_verse = False
+        self.in_verse_content = False
         self.block_depth = None
         self.verse_depth = None
         self.content_depth = None
@@ -148,7 +149,7 @@ def get_ref_content(ref):
 def main(ref_uid):
 
     ref = shared.get_ref_object(ref_uid)
-    print(get_ref_content(ref).encode('utf-8'))
+    print(get_ref_content(ref).encode('utf-8'), end=''.encode('utf-8'))
 
 
 if __name__ == '__main__':
