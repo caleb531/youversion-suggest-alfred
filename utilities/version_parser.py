@@ -16,19 +16,51 @@ class VersionParser(HTMLParser):
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
         HTMLParser.reset(self)
+        self.depth = 0
+        self.in_version = False
+        self.version_depth = 0
         self.versions = []
+        self.version_content_parts = []
 
     # Detects the start of a version link
     def handle_starttag(self, tag, attrs):
         attr_dict = dict(attrs)
+        self.depth += 1
         if 'href' in attr_dict:
             patt = r'(?<=/versions/)(\d+)-([a-z]+\d*)'
             matches = re.search(patt, attr_dict['href'], flags=re.UNICODE)
             if matches:
+                self.in_version = True
+                self.version_depth = self.depth
                 self.versions.append({
-                    'id': int(matches.group(1)),
-                    'name': matches.group(2).upper(),
+                    'id': int(matches.group(1))
                 })
+
+    # Parse the version name from the accumulated version content
+    def get_version_name(self):
+        version_content = ''.join(self.version_content_parts).strip()
+        matches = re.search(r'\(\s*(.*?)\s*\)', version_content)
+        return matches.group(1)
+
+    # Detects the end of a version link
+    def handle_endtag(self, tag):
+        if self.in_version and self.depth == self.version_depth:
+            self.in_version = False
+            self.versions[-1]['name'] = self.get_version_name().strip()
+            # Empty the list containing the version name parts
+            del self.version_content_parts[:]
+        self.depth -= 1
+
+    # Handles the version name contained within the current version link
+    def handle_data(self, content):
+        if self.in_version:
+            self.version_content_parts.append(content)
+
+    # Handles all HTML entities within the version name
+    def handle_charref(self, name):
+        if self.in_version:
+            char = shared.eval_html_charref(name)
+            self.version_content_parts.append(char)
 
 
 # Retrieves all versions listed on the chapter page in the given language code

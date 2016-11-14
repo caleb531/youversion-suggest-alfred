@@ -30,7 +30,7 @@ def tear_down():
 def test_get_versions():
     """should fetch version list in proper format"""
     versions = add_lang.get_versions(language_id='deu')
-    nose.assert_equal(len(versions), 4)
+    nose.assert_equal(len(versions), 5)
     nose.assert_list_equal(versions, [
         {
             'id': 8,
@@ -45,8 +45,12 @@ def test_get_versions():
             'name': 'RV1885'
         },
         {
+            'id': 207,
+            'name': 'WEB-上帝'
+        },
+        {
             'id': 206,
-            'name': 'WEB'
+            'name': 'WEB-神'
         }
     ])
 
@@ -55,7 +59,8 @@ def test_get_versions():
 def test_get_versions_max_version_id():
     """should limit versions returned by given maximum version ID"""
     versions = add_lang.get_versions(language_id='deu', max_version_id=500)
-    nose.assert_equal(len(versions), 3)
+    nose.assert_equal(len(versions), 4)
+    print(versions[-1]['name'])
     nose.assert_list_equal(versions, [
         {
             'id': 8,
@@ -66,8 +71,12 @@ def test_get_versions_max_version_id():
             'name': 'RV1885'
         },
         {
+            'id': 207,
+            'name': 'WEB-上帝'
+        },
+        {
             'id': 206,
-            'name': 'WEB'
+            'name': 'WEB-神'
         }
     ])
 
