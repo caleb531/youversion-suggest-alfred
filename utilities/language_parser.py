@@ -42,7 +42,6 @@ class LanguageParser(HTMLParser):
             self.language_name = ''.join(self.language_name_parts).strip()
             # Empty the list containing the language name parts
             del self.language_name_parts[:]
-            # Stop parsing HTML now that the language name has been found
         self.depth -= 1
 
     # Handles the language name contained within the current language link
