@@ -63,16 +63,17 @@ def create_local_cache_dirs():
 # Upgrades language ID from ISO 639-1 code to ISO 639-3 code (if necessary)
 def upgrade_language_id(language_id):
 
-    id_map_path = os.path.join(PACKAGED_DATA_DIR_PATH, 'language-id-map.json')
-    with open(id_map_path, 'r') as id_map_file:
-        id_map = json.load(id_map_file)
-        if language_id in id_map:
+    if re.search(r'^[a-z]{2}(_[A-Z]{2})?$', language_id):
+        id_map_path = os.path.join(
+            PACKAGED_DATA_DIR_PATH, 'language-id-map.json')
+        with open(id_map_path, 'r') as id_map_file:
+            id_map = json.load(id_map_file)
             user_prefs = get_user_prefs()
             user_prefs['language'] = id_map[language_id]
             set_user_prefs(user_prefs)
             return id_map[language_id]
-        else:
-            return language_id
+    else:
+        return language_id
 
 
 # Retrieves bible data object (books, versions, etc.) for the given language
