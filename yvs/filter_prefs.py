@@ -56,6 +56,17 @@ def get_pref_result(pref_def, user_prefs):
     return result
 
 
+# Returns True if the given query string matches the given preference name;
+# otherwise, returns False
+def query_matches_value_title(pref_value, query_str):
+    matches = re.search(r'\b{}'.format(
+        re.escape(query_str)), pref_value, flags=re.IGNORECASE)
+    if matches:
+        return True
+    else:
+        return False
+
+
 # Retrieves Alfred result list of all available values for this preference
 def get_value_result_list(user_prefs, pref_def, query_str):
 
@@ -90,7 +101,8 @@ def get_value_result_list(user_prefs, pref_def, query_str):
 
         # Show all results if query string is empty
         # Otherwise, only show results whose titles begin with query
-        if not query_str or result['title'].lower().startswith(query_str):
+        if not query_str or query_matches_value_title(
+                result['title'], query_str):
             results.append(result)
 
     if not results:

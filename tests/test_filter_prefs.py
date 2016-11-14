@@ -22,7 +22,7 @@ def test_show_languages():
 @nose.with_setup(set_up, tear_down)
 def test_filter_languages():
     """should filter available languages if value is given"""
-    results = yvs.get_result_list('language español')
+    results = yvs.get_result_list('language span')
     nose.assert_equal(len(results), 2)
     nose.assert_equal(results[0]['uid'], 'yvs-language-spa')
     nose.assert_equal(
