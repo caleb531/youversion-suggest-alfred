@@ -3,18 +3,17 @@
 
 from __future__ import unicode_literals
 
-from HTMLParser import HTMLParser
-
 import yvs.shared as shared
+from yvs.yv_parser import YVParser
 
 
 # Finds on the YouVersion website the ID and name of every Bible book in a
 # particular Bible version
-class BookParser(HTMLParser):
+class BookParser(YVParser):
 
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
-        HTMLParser.reset(self)
+        YVParser.reset(self)
         self.depth = 0
         self.in_book = False
         self.book_depth = 0
@@ -42,15 +41,9 @@ class BookParser(HTMLParser):
         self.depth -= 1
 
     # Handles the book name contained within the current book link
-    def handle_data(self, content):
+    def handle_data(self, data):
         if self.in_book:
-            self.book_name_parts.append(content)
-
-    # Handles all HTML entities within the book name
-    def handle_charref(self, name):
-        if self.in_book:
-            char = shared.eval_html_charref(name)
-            self.book_name_parts.append(char)
+            self.book_name_parts.append(data)
 
 
 # Retrieves all books listed on the chapter page in the given default version

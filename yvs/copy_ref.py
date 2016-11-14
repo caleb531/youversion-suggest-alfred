@@ -4,9 +4,9 @@
 from __future__ import print_function, unicode_literals
 
 import sys
-from HTMLParser import HTMLParser
 
 import yvs.shared as shared
+from yvs.yv_parser import YVParser
 
 # The base for all Bible reference URLs
 BASE_REF_URL = 'https://www.bible.com/bible/{ref_uid}'
@@ -17,13 +17,13 @@ BLOCK_ELEMS = {'b', 'p', 'm'}
 BREAK_ELEMS = {'li1', 'q1', 'q2'}
 
 
-# An basic HTML parser class which receives HTML from the page for a YouVersion
+# An HTML parser which receives HTML from the page for a YouVersion
 # Bible reference and parses it to construct a shareable plain text reference
-class ReferenceParser(HTMLParser):
+class ReferenceParser(YVParser):
 
     # Associates the given reference object with this parser instance
     def __init__(self, ref):
-        HTMLParser.__init__(self)
+        YVParser.__init__(self)
         if 'verse' in ref:
             # If reference is a verse or verse range, set the correct range of
             # verses to copy
@@ -36,7 +36,7 @@ class ReferenceParser(HTMLParser):
 
     # Resets parser variables (implicitly called when parser is instantiated)
     def reset(self):
-        HTMLParser.reset(self)
+        YVParser.reset(self)
         self.depth = 0
         self.in_block = False
         self.in_verse = False
@@ -92,15 +92,9 @@ class ReferenceParser(HTMLParser):
         self.depth -= 1
 
     # Handles verse content
-    def handle_data(self, content):
+    def handle_data(self, data):
         if self.is_in_verse_content():
-            self.content_parts.append(content)
-
-    # Handles all non-ASCII characters encoded as HTML entities
-    def handle_charref(self, name):
-        if self.is_in_verse_content():
-            char = shared.eval_html_charref(name)
-            self.content_parts.append(char)
+            self.content_parts.append(data)
 
 
 # Retrieves the UID of the chapter to which this reference belongs
