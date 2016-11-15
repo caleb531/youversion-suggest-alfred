@@ -5,9 +5,9 @@ from __future__ import unicode_literals
 
 import sys
 import urllib
-from HTMLParser import HTMLParser
 
 import yvs.shared as shared
+from yvs.yv_parser import YVParser
 
 REF_URL_PREFIX = '/bible/'
 
@@ -19,11 +19,11 @@ def get_uid_from_url(url):
 
 
 # Parser for search result HTML
-class SearchResultParser(HTMLParser):
+class SearchResultParser(YVParser):
 
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
-        HTMLParser.reset(self)
+        YVParser.reset(self)
         self.in_ref = False
         self.in_heading = False
         self.in_content = False
@@ -67,21 +67,12 @@ class SearchResultParser(HTMLParser):
                     self.current_result['subtitle'])
 
     # Handles verse content
-    def handle_data(self, content):
+    def handle_data(self, data):
         if self.in_ref:
             if self.in_heading:
-                self.current_result['title'] += content
+                self.current_result['title'] += data
             elif self.in_content:
-                self.current_result['subtitle'] += content
-
-    # Handles all non-ASCII characters encoded as HTML entities
-    def handle_charref(self, name):
-        if self.in_ref:
-            char = shared.eval_html_charref(name)
-            if self.in_heading:
-                self.current_result['title'] += char
-            elif self.in_content:
-                self.current_result['subtitle'] += char
+                self.current_result['subtitle'] += data
 
 
 # Retrieves HTML for reference with the given ID

@@ -3,23 +3,22 @@
 
 from __future__ import unicode_literals
 
-from HTMLParser import HTMLParser
-
 import yvs.shared as shared
+from yvs.yv_parser import YVParser
 
 
 # Finds on the YouVersion website the language name associated with the given
 # language code
-class LanguageParser(HTMLParser):
+class LanguageParser(YVParser):
 
     # Associates the given language ID with this parser instance
     def __init__(self, language_id):
-        HTMLParser.__init__(self)
+        YVParser.__init__(self)
         self.language_url_suffix = '/languages/{}'.format(language_id)
 
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
-        HTMLParser.reset(self)
+        YVParser.reset(self)
         self.depth = 0
         self.in_language = False
         self.language_depth = 0
@@ -45,15 +44,9 @@ class LanguageParser(HTMLParser):
         self.depth -= 1
 
     # Handles the language name contained within the current language link
-    def handle_data(self, content):
+    def handle_data(self, data):
         if self.in_language:
-            self.language_name_parts.append(content)
-
-    # Handles all HTML entities within the language name
-    def handle_charref(self, name):
-        if self.in_language:
-            char = shared.eval_html_charref(name)
-            self.language_name_parts.append(char)
+            self.language_name_parts.append(data)
 
 
 # Retrieves the language with

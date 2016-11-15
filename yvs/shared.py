@@ -12,6 +12,7 @@ import shutil
 import unicodedata
 import urllib2
 from gzip import GzipFile
+from htmlentitydefs import name2codepoint
 from StringIO import StringIO
 
 # Unique identifier for the workflow
@@ -446,6 +447,9 @@ def eval_html_charref(name):
     if name[0] == 'x':
         # Handle hexadecimal character references
         return unichr(int(name[1:], 16))
-    else:
+    elif name.isdigit():
         # Handle decimal character references
         return unichr(int(name))
+    else:
+        # Otherwise, assume character reference is a named reference
+        return unichr(name2codepoint[name])

@@ -4,18 +4,18 @@
 from __future__ import unicode_literals
 
 import re
-from HTMLParser import HTMLParser
 
 import yvs.shared as shared
+from yvs.yv_parser import YVParser
 
 
 # Finds on the YouVersion website the ID and name of every Bible version in a
 # particular YouVersion-supported language
-class VersionParser(HTMLParser):
+class VersionParser(YVParser):
 
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
-        HTMLParser.reset(self)
+        YVParser.reset(self)
         self.depth = 0
         self.in_version = False
         self.version_depth = 0
@@ -52,15 +52,9 @@ class VersionParser(HTMLParser):
         self.depth -= 1
 
     # Handles the version name contained within the current version link
-    def handle_data(self, content):
+    def handle_data(self, data):
         if self.in_version:
-            self.version_content_parts.append(content)
-
-    # Handles all HTML entities within the version name
-    def handle_charref(self, name):
-        if self.in_version:
-            char = shared.eval_html_charref(name)
-            self.version_content_parts.append(char)
+            self.version_content_parts.append(data)
 
 
 # Retrieves all versions listed on the chapter page in the given language code
