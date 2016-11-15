@@ -29,3 +29,4 @@ include =
     yvs/set_pref.py
     yvs/shared.py
     yvs/view_ref.py
+    yvs/yv_parser.py

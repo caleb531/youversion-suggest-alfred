@@ -68,20 +68,6 @@ def test_header_language():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_charref_dec():
-    """should evaluate decimal character references"""
-    ref_content = yvs.get_copied_ref('111/psa.23').decode('utf-8')
-    nose.assert_regexp_matches(ref_content, r'\u201cLorem ipsum\u201d')
-
-
-@nose.with_setup(set_up, tear_down)
-def test_charref_hex():
-    """should evaluate hexadecimal character references"""
-    ref_content = yvs.get_copied_ref('111/psa.23').decode('utf-8')
-    nose.assert_regexp_matches(ref_content, r'\u203a Nunc sem leo')
-
-
-@nose.with_setup(set_up, tear_down)
 def test_whitespace_words():
     """should handle spaces appropriately"""
     ref_content = yvs.get_copied_ref('111/psa.23')
