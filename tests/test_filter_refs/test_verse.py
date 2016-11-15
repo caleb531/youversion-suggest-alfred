@@ -69,3 +69,11 @@ def test_range_invalid():
     results = yvs.get_result_list('1 cor 13.4-3')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], '1 Corinthians 13:4 (NIV)')
+
+
+@nose.with_setup(set_up, tear_down)
+def test_zero_verse():
+    """should interpret verse zero as verse one"""
+    results = yvs.get_result_list('ps 23:0')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['title'], 'Psalm 23:1 (NIV)')
