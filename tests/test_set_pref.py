@@ -4,6 +4,8 @@
 from __future__ import unicode_literals
 
 import json
+import os
+import os.path
 
 import nose.tools as nose
 
@@ -48,3 +50,20 @@ def test_set_nonexistent(out):
     }))
     user_prefs = yvs.shared.get_user_prefs()
     nose.assert_not_in('foo', user_prefs)
+
+
+@nose.with_setup(set_up, tear_down)
+@redirect_stdout
+def test_set_language_clear_cache(out):
+    """should clear cache when setting language"""
+    nose.assert_true(
+        os.path.exists(yvs.shared.LOCAL_CACHE_DIR_PATH),
+        'local cache directory does not exist')
+    yvs.shared.add_cache_entry('foo', 'blah blah')
+    yvs.main(json.dumps({
+        'pref': {'id': 'language', 'name': 'Language'},
+        'value': {'id': 'spa', 'name': 'Español'}
+    }))
+    nose.assert_false(
+        os.path.exists(yvs.shared.LOCAL_CACHE_DIR_PATH),
+        'local cache directory exists')

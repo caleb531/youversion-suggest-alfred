@@ -26,6 +26,7 @@ def set_pref(pref_id, value_id):
     if pref_id == 'language':
         bible = shared.get_bible_data(language_id=value_id)
         user_prefs['version'] = bible['default_version']
+        shared.clear_cache()
 
     shared.set_user_prefs(user_prefs)
 
