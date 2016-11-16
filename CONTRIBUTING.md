@@ -24,8 +24,10 @@ versions available for the language
 
 ## Contributing code
 
-Pull requests for bug fixes or new features are always welcome. Please be sure
-to add or update unit tests as appropriate.
+Pull requests for bug fixes and new features are always welcome. Please be sure
+to add or update unit tests as appropriate. All pull requests must be made to
+`develop` or an existing feature branch; PRs made directly to `master` will be
+closed.
 
 ### Configuring a virtualenv
 
