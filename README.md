@@ -110,20 +110,6 @@ Currently, YouVersion Suggest supports the following languages:
 - Swedish (swe)
 - Traditional Chinese (zho-TW)
 
-#### Requesting language support
-
-If you would like to see YouVersion Suggest support a language not in the above
-list, please [submit an issue on
-GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
-following details:
-
-- The name and ISO 639 code of the language from [this
-list](https://www.bible.com/languages) (*e.g.* spa-ES)
-
-- The name of the YouVersion-supported Bible version to use as the default for
-this language; click the language name on the page linked above to view the
-versions available for the language
-
 ### Setting your preferred version
 
 You may also set your preferred version (translation) used for Bible references
