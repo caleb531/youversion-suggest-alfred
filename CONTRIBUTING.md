@@ -55,6 +55,25 @@ also pass `--rednose` for colored test output):
 nosetests --rednose
 ```
 
+## Code coverage
+
+The project currently boasts 100% code coverage across all source files.
+Contributions are expected to maintain this high standard. You can view the
+current coverage report via the `coverage` command:
+
+```bash
+coverage run -m nose --rednose
+coverage report
+```
+
+If the coverage is ever less than 100%, you can generate and view a detailed
+HTML view of the coverage report like so:
+
+```bash
+coverage html
+open htmlcov/index.html
+```
+
 ### Language storage
 
 Every language supported by YouVersion Suggest is identified by an ISO 639-3
