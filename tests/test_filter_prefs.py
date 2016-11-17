@@ -46,7 +46,7 @@ def test_filter_languages():
 def test_show_versions():
     """should show all versions if no value is given"""
     results = yvs.get_result_list('version')
-    nose.assert_equal(len(results), 13)
+    nose.assert_greater(len(results), 10)
 
 
 @nose.with_setup(set_up, tear_down)

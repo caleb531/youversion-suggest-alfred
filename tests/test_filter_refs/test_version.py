@@ -51,7 +51,7 @@ def test_whitespace():
 @nose.with_setup(set_up, tear_down)
 def test_partial():
     """should match versions by partial name"""
-    results = yvs.get_result_list('luke 4:8 e')
+    results = yvs.get_result_list('luke 4:8 es')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Luke 4:8 (ESV)')
 
