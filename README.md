@@ -90,6 +90,8 @@ Currently, YouVersion Suggest supports the following languages:
 - Arabic (arb)
 - Bulgarian (bul)
 - Dutch (nld)
+- Chinese - Simplified (zho)
+- Chinese - Traditional (zho-TW)
 - English (eng)
 - Finnish (fin)
 - French (fra)
@@ -103,12 +105,10 @@ Currently, YouVersion Suggest supports the following languages:
 - Portuguese (por)
 - Portuguese - Portugal (por-PT)
 - Russian (rus)
-- Simplified Chinese (zho)
 - Spanish (spa)
 - Spanish - Spain (spa-ES)
 - Swahili (swh)
 - Swedish (swe)
-- Traditional Chinese (zho-TW)
 
 ### Setting your preferred version
 
