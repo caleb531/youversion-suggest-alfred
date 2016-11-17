@@ -3,6 +3,8 @@
 
 from __future__ import unicode_literals
 
+import glob
+
 import nose.tools as nose
 from mock import patch
 
@@ -17,7 +19,9 @@ from tests.decorators import redirect_stdout_unicode
 def test_update_languages(out, update_language):
     """should perform all necessary steps to update all languages"""
     update_langs.update_languages()
-    nose.assert_equal(update_language.call_count, 22)
+    nose.assert_equal(
+        update_language.call_count,
+        len(glob.glob('yvs/data/bible/language-*.json')))
 
 
 @nose.with_setup(set_up, tear_down)
