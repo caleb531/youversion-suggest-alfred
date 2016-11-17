@@ -264,16 +264,32 @@
   "default_version": 128,
   "versions": [
     {
+      "id": 222,
+      "name": "BHTI"
+    },
+    {
       "id": 28,
       "name": "BLPH"
+    },
+    {
+      "id": 411,
+      "name": "DHH"
     },
     {
       "id": 52,
       "name": "DHHD"
     },
     {
+      "id": 1076,
+      "name": "JBS"
+    },
+    {
       "id": 89,
       "name": "LBLA"
+    },
+    {
+      "id": 753,
+      "name": "NBD"
     },
     {
       "id": 103,
