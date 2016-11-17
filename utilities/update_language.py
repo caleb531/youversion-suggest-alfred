@@ -7,7 +7,6 @@
 from __future__ import unicode_literals
 
 import argparse
-from operator import itemgetter
 
 import yvs.shared as shared
 from utilities.add_language import add_language
@@ -30,14 +29,12 @@ def update_language(language_id):
 
     bible = shared.get_bible_data(language_id)
     default_version = bible['default_version']
-    max_version_id = max(bible['versions'], key=itemgetter('id'))['id']
 
     print('Updating language \'{}\' data...'.format(
         language_id))
     add_language(
         language_id=language_id,
-        default_version=default_version,
-        max_version_id=max_version_id)
+        default_version=default_version)
     print('Updated language \'{}\' data!'.format(
         language_id))
 

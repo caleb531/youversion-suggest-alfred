@@ -29,7 +29,7 @@ def tear_down():
 @nose.with_setup(set_up, tear_down)
 def test_get_versions():
     """should fetch version list in proper format"""
-    versions = add_lang.get_versions(language_id='deu')
+    versions = add_lang.get_versions('deu')
     nose.assert_equal(len(versions), 5)
     nose.assert_list_equal(versions, [
         {
@@ -39,32 +39,6 @@ def test_get_versions():
         {
             'id': 877,
             'name': 'NBH'
-        },
-        {
-            'id': 477,
-            'name': 'RV1885'
-        },
-        {
-            'id': 207,
-            'name': 'WEB-上帝'
-        },
-        {
-            'id': 206,
-            'name': 'WEB-神'
-        }
-    ])
-
-
-@nose.with_setup(set_up, tear_down)
-def test_get_versions_max_version_id():
-    """should limit versions returned by given maximum version ID"""
-    versions = add_lang.get_versions(language_id='deu', max_version_id=500)
-    nose.assert_equal(len(versions), 4)
-    print(versions[-1]['name'])
-    nose.assert_list_equal(versions, [
-        {
-            'id': 8,
-            'name': 'AMPC'
         },
         {
             'id': 477,
@@ -96,4 +70,4 @@ def test_get_versions_url(get_url_content):
 def test_get_versions_nonexistent(get_url_content):
     """should raise error when version list cannot be found"""
     with nose.assert_raises(RuntimeError):
-        add_lang.get_versions(language_id='xyz')
+        add_lang.get_versions('xyz')
