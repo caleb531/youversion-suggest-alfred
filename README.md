@@ -29,7 +29,7 @@ range of verses) with just a few keystrokes.
 
 - `yvfilter luke` => Luke
 - `yvfilter eph 3` => Ephesians 3
-- `yvfilter 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+- `yvfilter 1t3es` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
 - `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
 - `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
 - `yvfilter relevations 7` => Revelation 7

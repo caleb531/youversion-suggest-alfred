@@ -50,16 +50,11 @@ def get_unique_versions(versions):
 
 
 # Retrieves a list of dictionaries representing Bible versions
-def get_versions(language_id, max_version_id=None):
+def get_versions(language_id):
 
     versions = version_parser.get_versions(language_id)
     if not versions:
         raise RuntimeError('Cannot retrieve version data. Aborting.')
-
-    # Exclude versions whose numerical ID exceeds a certain limit (if defined)
-    if max_version_id:
-        versions[:] = [version for version in versions
-                       if version['id'] <= max_version_id]
 
     versions.sort(key=itemgetter('name'))
     unique_versions = get_unique_versions(versions)
@@ -86,12 +81,10 @@ def get_books(default_version):
 
 # Constructs object representing all Bible data for a particular version
 # This data includes the list of books, list of versions, and default version
-def get_bible_data(language_id, default_version=None, max_version_id=None):
+def get_bible_data(language_id, default_version=None):
 
     bible = {}
-    bible['versions'] = get_versions(
-        language_id=language_id,
-        max_version_id=max_version_id)
+    bible['versions'] = get_versions(language_id)
 
     # If no explicit default version is given, use version with smallest ID
     if not default_version:
@@ -142,7 +135,7 @@ def update_language_list(language_id, language_name):
 
 
 # Adds to the worklow support for the language with the given parameters
-def add_language(language_id, default_version=None, max_version_id=None):
+def add_language(language_id, default_version=None):
 
     print('- Fetching language data...')
     language_name = get_language_name(language_id)
@@ -150,8 +143,7 @@ def add_language(language_id, default_version=None, max_version_id=None):
     print('- Adding Bible data...')
     bible = get_bible_data(
         language_id=language_id,
-        default_version=default_version,
-        max_version_id=max_version_id)
+        default_version=default_version)
     save_bible_data(language_id, bible)
 
     print('- Updating language list...')
@@ -170,10 +162,6 @@ def parse_cli_args():
         '--default-version',
         type=int,
         help='the default version to use for this language')
-    parser.add_argument(
-        '--max-version-id',
-        type=int,
-        help='the upper limit to which Bible version IDs are constrained')
 
     return parser.parse_args()
 
@@ -186,8 +174,7 @@ def main():
             cli_args.language_id))
         add_language(
             language_id=cli_args.language_id.replace('-', '_').lower(),
-            default_version=cli_args.default_version,
-            max_version_id=cli_args.max_version_id)
+            default_version=cli_args.default_version)
         print('Added language \'{}\' data!'.format(
             cli_args.language_id))
     except KeyboardInterrupt:

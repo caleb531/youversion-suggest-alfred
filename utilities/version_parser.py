@@ -39,7 +39,7 @@ class VersionParser(YVParser):
     # Parse the version name from the accumulated version content
     def get_version_name(self):
         version_content = ''.join(self.version_content_parts).strip()
-        matches = re.search(r'\(\s*(.*?)\s*\)', version_content)
+        matches = re.search(r'\(\s*([^\)]+)\s*\)\s*$', version_content)
         return matches.group(1)
 
     # Detects the end of a version link

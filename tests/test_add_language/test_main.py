@@ -22,26 +22,24 @@ def test_add_language(out, get_language_name, get_bible_data, save_bible_data,
     """should perform all necessary steps to add a language"""
     language_id = 'swe'
     default_version = 33
-    max_version_id = 500
-    add_lang.add_language(language_id, default_version, max_version_id)
+    add_lang.add_language(language_id, default_version)
     get_language_name.assert_called_once_with(language_id)
     get_bible_data.assert_called_once_with(
         language_id=language_id,
-        default_version=default_version,
-        max_version_id=max_version_id)
+        default_version=default_version)
     update_language_list.assert_called_once_with(
         language_id, get_language_name.return_value)
 
 
 @patch('sys.argv', [add_lang.__file__, 'swe',
-                    '--default-version', '33', '--max-version-id', '500'])
+                    '--default-version', '33'])
 @patch('utilities.add_language.add_language')
 @redirect_stdout_unicode
 def test_main(out, add_language):
     """main function should pass correct arguments to add_language"""
     add_lang.main()
     add_language.assert_called_once_with(
-        language_id='swe', default_version=33, max_version_id=500)
+        language_id='swe', default_version=33)
 
 
 @patch('sys.argv', [add_lang.__file__, 'spa-es'])
@@ -51,7 +49,7 @@ def test_main_normalize_language_id_dash(out, add_language):
     """main function should properly format language IDs containing dashes"""
     add_lang.main()
     add_language.assert_called_once_with(
-        language_id='spa_es', default_version=None, max_version_id=None)
+        language_id='spa_es', default_version=None)
 
 
 @patch('sys.argv', [add_lang.__file__, 'spa_ES'])
@@ -61,7 +59,7 @@ def test_main_normalize_language_id_case(out, add_language):
     """main function should properly format language IDs with mixed case"""
     add_lang.main()
     add_language.assert_called_once_with(
-        language_id='spa_es', default_version=None, max_version_id=None)
+        language_id='spa_es', default_version=None)
 
 
 @patch('utilities.add_language.add_language', side_effect=KeyboardInterrupt)

@@ -21,8 +21,7 @@ def test_update_language(out, add_language):
     update_lang.update_language(language_id)
     add_language.assert_called_once_with(
         language_id=language_id,
-        default_version=128,
-        max_version_id=197)
+        default_version=128)
 
 
 @nose.with_setup(set_up, tear_down)
