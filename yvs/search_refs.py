@@ -82,7 +82,13 @@ def get_search_html(query_str):
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
         urllib.quote_plus(query_str.encode('utf-8')), version)
 
-    return shared.get_url_content(url)
+    entry_key = '{}/{}.html'.format(version, query_str)
+    search_html = shared.get_cache_entry_content(entry_key)
+    if search_html is None:
+        search_html = shared.get_url_content(url)
+        shared.add_cache_entry(entry_key, search_html)
+
+    return search_html
 
 
 # Parses actual reference content from reference HTML
@@ -97,23 +103,15 @@ def get_result_list(query_str):
 
 def main(query_str):
 
-    entry_key = 'yvsearch {}.json'.format(
-        shared.normalize_query_str(query_str))
-    feedback_str = shared.get_cache_entry_content(entry_key)
-    if feedback_str is None:
+    results = get_result_list(query_str)
+    if not results:
+        results.append({
+            'title': 'No Results',
+            'subtitle': 'No references matching \'{}\''.format(query_str),
+            'valid': 'no'
+        })
 
-        results = get_result_list(query_str)
-        if not results:
-            results.append({
-                'title': 'No Results',
-                'subtitle': 'No references matching \'{}\''.format(query_str),
-                'valid': 'no'
-            })
-
-        feedback_str = shared.get_result_list_feedback_str(results)
-        shared.add_cache_entry(entry_key, feedback_str)
-
-    print(feedback_str.encode('utf-8'))
+    print(shared.get_result_list_feedback_str(results).encode('utf-8'))
 
 
 if __name__ == '__main__':

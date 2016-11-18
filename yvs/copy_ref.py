@@ -124,23 +124,17 @@ def get_chapter_html(ref):
 # Parses actual reference content from chapter HTML
 def get_ref_content(ref):
 
-    entry_key = '{}.txt'.format(ref['uid'])
-    ref_content = shared.get_cache_entry_content(entry_key)
-    if ref_content is None:
-
-        chapter_html = get_chapter_html(ref)
-        parser = ReferenceParser(ref)
-        parser.feed(chapter_html)
-        # Format reference content by removing superfluous whitespace and such
-        ref_content = shared.normalize_ref_content(
-            ''.join(parser.content_parts))
-        # Prepend reference header that identifies reference (if content is
-        # non-empty)
-        if ref_content:
-            ref_content = ''.join((
-                shared.get_full_ref(ref), '\n\n', ref_content))
-
-        shared.add_cache_entry(entry_key, ref_content)
+    chapter_html = get_chapter_html(ref)
+    parser = ReferenceParser(ref)
+    parser.feed(chapter_html)
+    # Format reference content by removing superfluous whitespace and such
+    ref_content = shared.normalize_ref_content(
+        ''.join(parser.content_parts))
+    # Prepend reference header that identifies reference (if content is
+    # non-empty)
+    if ref_content:
+        ref_content = ''.join((
+            shared.get_full_ref(ref), '\n\n', ref_content))
 
     return ref_content
 

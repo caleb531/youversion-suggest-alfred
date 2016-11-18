@@ -114,17 +114,6 @@ def test_cache_url_content():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_cache_ref_content():
-    """should cache reference content after first parse"""
-    query_str = '59/psa.23.2'
-    fetched_content = yvs.get_copied_ref(query_str)
-    with patch('yvs.copy_ref.ReferenceParser') as referenceParser:
-        cached_content = yvs.get_copied_ref(query_str)
-        nose.assert_equal(cached_content, fetched_content)
-        referenceParser.assert_not_called()
-
-
-@nose.with_setup(set_up, tear_down)
 def test_nonexistent_verse():
     """should return empty string for nonexistent verses"""
     ref_content = yvs.get_copied_ref('111/psa.23.9')

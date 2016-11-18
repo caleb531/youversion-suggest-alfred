@@ -85,6 +85,15 @@ def test_charref_dec_subtitle():
 
 
 @nose.with_setup(set_up, tear_down)
+def test_cache_url_content():
+    """should cache search URL content after first fetch"""
+    yvs.get_result_list('love others')
+    with patch('urllib2.Request') as request:
+        yvs.get_result_list('love others')
+        request.assert_not_called()
+
+
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_output(out):
     """should output result list JSON"""
@@ -109,19 +118,3 @@ def test_null_result(out, get_result_list):
     item = feedback['items'][0]
     nose.assert_equal(item['valid'], 'no')
     nose.assert_equal(item['title'], 'No Results')
-
-
-@nose.with_setup(set_up, tear_down)
-@redirect_stdout
-def test_cache_feedback_results(out):
-    """should cache final JSON results after first fetch and parse"""
-    query_str = 'love others'
-    yvs.main(query_str)
-    fetched_content = out.getvalue()
-    out.seek(0)
-    out.truncate(0)
-    with patch('urllib2.Request') as request:
-        yvs.main(query_str)
-        cached_content = out.getvalue()
-        nose.assert_equal(cached_content, fetched_content)
-        request.assert_not_called()
