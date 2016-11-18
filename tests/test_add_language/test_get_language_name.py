@@ -33,13 +33,6 @@ def test_get_language_name():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_get_language_name_charref():
-    """should resolve HTML entities in language name"""
-    language_name = add_lang.get_language_name('nhd')
-    nose.assert_equal(language_name, 'Avañe\'ẽ - Chiripá')
-
-
-@nose.with_setup(set_up, tear_down)
 def test_get_language_name_cache():
     """should cache languages HTML after initial fetch"""
     add_lang.get_language_name('spa')

@@ -68,23 +68,6 @@ def test_unicode_input(get_url_content):
 
 
 @nose.with_setup(set_up, tear_down)
-def test_charref_dec_title():
-    """should evaluate character references in result titles"""
-    results = yvs.get_result_list('love others')
-    nose.assert_equal(len(results), 3)
-    nose.assert_equal(results[0]['title'], 'Romans 13:8 (NIV) \u2665')
-
-
-@nose.with_setup(set_up, tear_down)
-def test_charref_dec_subtitle():
-    """should evaluate character references in result subtitles"""
-    results = yvs.get_result_list('love others')
-    nose.assert_equal(len(results), 3)
-    nose.assert_regexp_matches(
-        results[0]['subtitle'], '\u201cLorem ipsum\u201d')
-
-
-@nose.with_setup(set_up, tear_down)
 def test_cache_url_content():
     """should cache search URL content after first fetch"""
     yvs.get_result_list('love others')
