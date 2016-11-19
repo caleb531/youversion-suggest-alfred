@@ -1,90 +1,90 @@
 [
   {
-    "id": "ar",
-    "name": "العربية"
+    "id": "arb",
+    "name": "العربية - Arabic"
   },
   {
-    "id": "bg",
-    "name": "Български език"
+    "id": "bul",
+    "name": "български - Bulgarian"
   },
   {
-    "id": "de",
-    "name": "Deutsch"
+    "id": "deu",
+    "name": "Deutsch - German"
   },
   {
-    "id": "en",
+    "id": "eng",
     "name": "English"
   },
   {
-    "id": "es",
-    "name": "Español"
+    "id": "fin",
+    "name": "Suomi - Finnish"
   },
   {
-    "id": "es_ES",
-    "name": "Español (España)"
+    "id": "fra",
+    "name": "Français - French"
   },
   {
-    "id": "fa",
-    "name": "فارسی"
+    "id": "hin",
+    "name": "हिन्दी - Hindi"
   },
   {
-    "id": "fi",
-    "name": "Suomi"
+    "id": "ita",
+    "name": "Italiano - Italian"
   },
   {
-    "id": "fr",
-    "name": "Français"
+    "id": "jpn",
+    "name": "日本語 - Japanese"
   },
   {
-    "id": "hi",
-    "name": "हिन्दी"
+    "id": "kor",
+    "name": "한국어 - Korean"
   },
   {
-    "id": "it",
-    "name": "Italiano"
+    "id": "nld",
+    "name": "Nederlands - Dutch"
   },
   {
-    "id": "ja",
-    "name": "日本語"
+    "id": "pes",
+    "name": "فارسی - Farsi (Persian)"
   },
   {
-    "id": "ko",
-    "name": "한국어"
+    "id": "pol",
+    "name": "Polski - Polish"
   },
   {
-    "id": "nl",
-    "name": "Nederlands"
+    "id": "por",
+    "name": "Português (Brasil) - Portuguese (Brazil)"
   },
   {
-    "id": "pl",
-    "name": "Polski"
+    "id": "por_pt",
+    "name": "Português (Portugal) - Portuguese (Portugal)"
   },
   {
-    "id": "pt",
-    "name": "Português (Brasil)"
+    "id": "rus",
+    "name": "русский - Russian"
   },
   {
-    "id": "pt_PT",
-    "name": "Português (Portugal)"
+    "id": "spa",
+    "name": "Español (América Latina) - Spanish"
   },
   {
-    "id": "ru",
-    "name": "Русский"
+    "id": "spa_es",
+    "name": "Español (España) - Spanish (Spain)"
   },
   {
-    "id": "sv",
-    "name": "Svenska"
+    "id": "swe",
+    "name": "Svenska - Swedish"
   },
   {
-    "id": "sw",
-    "name": "Kiswahili"
+    "id": "swh",
+    "name": "Kiswahili - Swahili"
   },
   {
-    "id": "zh_CN",
-    "name": "简体中文"
+    "id": "zho",
+    "name": "简体中文 - Chinese (Simplified)"
   },
   {
-    "id": "zh_TW",
-    "name": "繁體中文"
+    "id": "zho_tw",
+    "name": "繁體中文 - Chinese (Traditional)"
   }
 ]

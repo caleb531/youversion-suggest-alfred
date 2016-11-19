@@ -1,11 +1,12 @@
 # yvs.copy_ref
 # coding=utf-8
 
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
+
 import sys
+
 import yvs.shared as shared
-from HTMLParser import HTMLParser
+from yvs.yv_parser import YVParser
 
 # The base for all Bible reference URLs
 BASE_REF_URL = 'https://www.bible.com/bible/{ref_uid}'
@@ -16,13 +17,13 @@ BLOCK_ELEMS = {'b', 'p', 'm'}
 BREAK_ELEMS = {'li1', 'q1', 'q2'}
 
 
-# An basic HTML parser class which receives HTML from the page for a YouVersion
+# An HTML parser which receives HTML from the page for a YouVersion
 # Bible reference and parses it to construct a shareable plain text reference
-class ReferenceParser(HTMLParser):
+class ReferenceParser(YVParser):
 
     # Associates the given reference object with this parser instance
     def __init__(self, ref):
-        HTMLParser.__init__(self)
+        YVParser.__init__(self)
         if 'verse' in ref:
             # If reference is a verse or verse range, set the correct range of
             # verses to copy
@@ -35,14 +36,14 @@ class ReferenceParser(HTMLParser):
 
     # Resets parser variables (implicitly called when parser is instantiated)
     def reset(self):
-        HTMLParser.reset(self)
+        YVParser.reset(self)
         self.depth = 0
         self.in_block = False
         self.in_verse = False
         self.in_verse_content = False
-        self.block_depth = None
-        self.verse_depth = None
-        self.content_depth = None
+        self.block_depth = 0
+        self.verse_depth = 0
+        self.content_depth = 0
         self.verse_num = None
         self.content_parts = []
 
@@ -91,15 +92,9 @@ class ReferenceParser(HTMLParser):
         self.depth -= 1
 
     # Handles verse content
-    def handle_data(self, content):
+    def handle_data(self, data):
         if self.is_in_verse_content():
-            self.content_parts.append(content)
-
-    # Handles all non-ASCII characters encoded as HTML entities
-    def handle_charref(self, name):
-        if self.is_in_verse_content():
-            char = shared.eval_html_charref(name)
-            self.content_parts.append(char)
+            self.content_parts.append(data)
 
 
 # Retrieves the UID of the chapter to which this reference belongs
@@ -129,27 +124,31 @@ def get_chapter_html(ref):
 # Parses actual reference content from chapter HTML
 def get_ref_content(ref):
 
-    entry_key = '{}.txt'.format(ref['uid'])
-    ref_content = shared.get_cache_entry_content(entry_key)
-    if ref_content is None:
-
-        chapter_html = get_chapter_html(ref)
-        parser = ReferenceParser(ref)
-        parser.feed(chapter_html)
-        # Format reference content by removing superfluous whitespace and such
-        ref_content = shared.format_ref_content(''.join(parser.content_parts))
-        # Prepend reference header that identifies reference
-        ref_content = ''.join((shared.get_full_ref(ref), '\n\n', ref_content))
-
-        shared.add_cache_entry(entry_key, ref_content)
+    chapter_html = get_chapter_html(ref)
+    parser = ReferenceParser(ref)
+    parser.feed(chapter_html)
+    # Format reference content by removing superfluous whitespace and such
+    ref_content = shared.normalize_ref_content(
+        ''.join(parser.content_parts))
+    # Prepend reference header that identifies reference (if content is
+    # non-empty)
+    if ref_content:
+        ref_content = ''.join((
+            shared.get_full_ref(ref), '\n\n', ref_content))
 
     return ref_content
 
 
-def main(ref_uid):
+# Retrieves entire reference (header and content) to be copied
+def get_copied_ref(ref_uid):
 
     ref = shared.get_ref_object(ref_uid)
-    print(get_ref_content(ref).encode('utf-8'), end=''.encode('utf-8'))
+    return get_ref_content(ref)
+
+
+def main(ref_uid):
+
+    print(get_copied_ref(ref_uid).encode('utf-8'), end=''.encode('utf-8'))
 
 
 if __name__ == '__main__':

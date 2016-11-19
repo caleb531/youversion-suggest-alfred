@@ -1,19 +1,21 @@
 # tests.test_compliance
 
-import nose.tools as nose
 import glob
 import json
-import jsonschema
 import os.path
-import pep8
+
+import isort
+import jsonschema
+import nose.tools as nose
+import pycodestyle
 import radon.complexity as radon
 
 
-def test_pep8():
-    """All source and test files should comply with pep8"""
+def test_pycodestyle():
+    """All source and test files should comply with PEP 8"""
     file_paths = glob.iglob('*/*.py')
     for file_path in file_paths:
-        style_guide = pep8.StyleGuide(quiet=True)
+        style_guide = pycodestyle.StyleGuide(quiet=True)
         total_errors = style_guide.input_file(file_path)
         fail_msg = '{} does not comply with PEP 8'.format(file_path)
         yield nose.assert_equal, total_errors, 0, fail_msg
@@ -35,6 +37,7 @@ def test_json():
     """All JSON files should comply with the respective schemas"""
     schemas = {
         'schema-languages': 'yvs/data/languages.json',
+        'schema-language-id-map': 'yvs/data/language-id-map.json',
         'schema-defaults': 'yvs/data/defaults.json',
         'schema-chapters': 'yvs/data/bible/chapters.json',
         'schema-bible': 'yvs/data/bible/language-*.json'
@@ -58,3 +61,28 @@ def test_headers():
             fail_msg = '{} does not contain utf-8 declaration'.format(
                 os.path.relpath(module_path, 'yvs'))
             yield nose.assert_equal, second_line, '# coding=utf-8', fail_msg
+
+
+def test_import_order():
+    """All source file imports should be properly ordered/formatted."""
+    file_paths = glob.iglob('*/*.py')
+    for file_path in file_paths:
+        with open(file_path, 'r') as file_obj:
+            file_contents = file_obj.read()
+        new_file_contents = isort.SortImports(
+            file_contents=file_contents).output
+        fail_msg = '{} imports are not compliant'.format(
+            file_path)
+        yield nose.assert_equal, new_file_contents, file_contents, fail_msg
+
+
+def test_language_id_correspondence():
+    """Language IDs in language.json should have a corresponding data file"""
+    with open('yvs/data/languages.json', 'r') as languages_file:
+        languages = json.load(languages_file)
+    for language in languages:
+        nose.assert_true(
+            os.path.exists(os.path.join(
+                'yvs', 'data',
+                'bible', 'language-{}.json'.format(language['id']))),
+            'language-{}.json does not exist'.format(language['id']))

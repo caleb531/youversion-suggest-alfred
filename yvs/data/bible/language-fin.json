@@ -1,0 +1,283 @@
+{
+  "books": [
+    {
+      "id": "gen",
+      "name": "Genesis"
+    },
+    {
+      "id": "exo",
+      "name": "Exodus"
+    },
+    {
+      "id": "lev",
+      "name": "Leviticus"
+    },
+    {
+      "id": "num",
+      "name": "Numbers"
+    },
+    {
+      "id": "deu",
+      "name": "Deuteronomy"
+    },
+    {
+      "id": "jos",
+      "name": "Joshua"
+    },
+    {
+      "id": "jdg",
+      "name": "Judges"
+    },
+    {
+      "id": "rut",
+      "name": "Ruth"
+    },
+    {
+      "id": "1sa",
+      "name": "1 Samuel"
+    },
+    {
+      "id": "2sa",
+      "name": "2 Samuel"
+    },
+    {
+      "id": "1ki",
+      "name": "1 Kings"
+    },
+    {
+      "id": "2ki",
+      "name": "2 Kings"
+    },
+    {
+      "id": "1ch",
+      "name": "1 Chronicles"
+    },
+    {
+      "id": "2ch",
+      "name": "2 Chronicles"
+    },
+    {
+      "id": "ezr",
+      "name": "Ezra"
+    },
+    {
+      "id": "neh",
+      "name": "Nehemiah"
+    },
+    {
+      "id": "est",
+      "name": "Esther (Hebrew)"
+    },
+    {
+      "id": "job",
+      "name": "Job"
+    },
+    {
+      "id": "psa",
+      "name": "Psalms"
+    },
+    {
+      "id": "pro",
+      "name": "Proverbs"
+    },
+    {
+      "id": "ecc",
+      "name": "Ecclesiastes"
+    },
+    {
+      "id": "sng",
+      "name": "Song of Songs"
+    },
+    {
+      "id": "isa",
+      "name": "Isaiah"
+    },
+    {
+      "id": "jer",
+      "name": "Jeremiah"
+    },
+    {
+      "id": "lam",
+      "name": "Lamentations"
+    },
+    {
+      "id": "ezk",
+      "name": "Ezekiel"
+    },
+    {
+      "id": "dan",
+      "name": "Daniel (Hebrew)"
+    },
+    {
+      "id": "hos",
+      "name": "Hosea"
+    },
+    {
+      "id": "jol",
+      "name": "Joel"
+    },
+    {
+      "id": "amo",
+      "name": "Amos"
+    },
+    {
+      "id": "oba",
+      "name": "Obadiah"
+    },
+    {
+      "id": "jon",
+      "name": "Jonah"
+    },
+    {
+      "id": "mic",
+      "name": "Micah"
+    },
+    {
+      "id": "hab",
+      "name": "Habakkuk"
+    },
+    {
+      "id": "zep",
+      "name": "Zephaniah"
+    },
+    {
+      "id": "hag",
+      "name": "Haggai"
+    },
+    {
+      "id": "zec",
+      "name": "Zechariah"
+    },
+    {
+      "id": "mal",
+      "name": "Malachi"
+    },
+    {
+      "id": "mat",
+      "name": "Matthew"
+    },
+    {
+      "id": "mrk",
+      "name": "Mark"
+    },
+    {
+      "id": "luk",
+      "name": "Luke"
+    },
+    {
+      "id": "jhn",
+      "name": "John"
+    },
+    {
+      "id": "act",
+      "name": "Acts"
+    },
+    {
+      "id": "rom",
+      "name": "Romans"
+    },
+    {
+      "id": "1co",
+      "name": "1 Corinthians"
+    },
+    {
+      "id": "2co",
+      "name": "2 Corinthians"
+    },
+    {
+      "id": "gal",
+      "name": "Galatians"
+    },
+    {
+      "id": "eph",
+      "name": "Ephesians"
+    },
+    {
+      "id": "php",
+      "name": "Philippians"
+    },
+    {
+      "id": "col",
+      "name": "Colossians"
+    },
+    {
+      "id": "1th",
+      "name": "1 Thessalonians"
+    },
+    {
+      "id": "2th",
+      "name": "2 Thessalonians"
+    },
+    {
+      "id": "1ti",
+      "name": "1 Timothy"
+    },
+    {
+      "id": "2ti",
+      "name": "2 Timothy"
+    },
+    {
+      "id": "tit",
+      "name": "Titus"
+    },
+    {
+      "id": "phm",
+      "name": "Philemon"
+    },
+    {
+      "id": "heb",
+      "name": "Hebrews"
+    },
+    {
+      "id": "jas",
+      "name": "James"
+    },
+    {
+      "id": "1pe",
+      "name": "1 Peter"
+    },
+    {
+      "id": "2pe",
+      "name": "2 Peter"
+    },
+    {
+      "id": "1jn",
+      "name": "1 John"
+    },
+    {
+      "id": "2jn",
+      "name": "2 John"
+    },
+    {
+      "id": "3jn",
+      "name": "3 John"
+    },
+    {
+      "id": "jud",
+      "name": "Jude"
+    },
+    {
+      "id": "rev",
+      "name": "Revelation"
+    }
+  ],
+  "default_version": 330,
+  "versions": [
+    {
+      "id": 365,
+      "name": "FB38"
+    },
+    {
+      "id": 330,
+      "name": "FB92"
+    },
+    {
+      "id": 60,
+      "name": "FI1776"
+    },
+    {
+      "id": 61,
+      "name": "FINPR"
+    }
+  ]
+}
