@@ -2,11 +2,12 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+
 import sys
 import urllib
-import yvs.shared as shared
-from HTMLParser import HTMLParser
 
+import yvs.shared as shared
+from yvs.yv_parser import YVParser
 
 REF_URL_PREFIX = '/bible/'
 
@@ -18,11 +19,11 @@ def get_uid_from_url(url):
 
 
 # Parser for search result HTML
-class SearchResultParser(HTMLParser):
+class SearchResultParser(YVParser):
 
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
-        HTMLParser.reset(self)
+        YVParser.reset(self)
         self.in_ref = False
         self.in_heading = False
         self.in_content = False
@@ -62,25 +63,16 @@ class SearchResultParser(HTMLParser):
                 self.in_heading = False
             elif self.in_content and tag == 'p':
                 self.in_content = False
-                self.current_result['subtitle'] = shared.format_ref_content(
+                self.current_result['subtitle'] = shared.normalize_ref_content(
                     self.current_result['subtitle'])
 
     # Handles verse content
-    def handle_data(self, content):
+    def handle_data(self, data):
         if self.in_ref:
             if self.in_heading:
-                self.current_result['title'] += content
+                self.current_result['title'] += data
             elif self.in_content:
-                self.current_result['subtitle'] += content
-
-    # Handles all non-ASCII characters encoded as HTML entities
-    def handle_charref(self, name):
-        if self.in_ref:
-            char = shared.eval_html_charref(name)
-            if self.in_heading:
-                self.current_result['title'] += char
-            elif self.in_content:
-                self.current_result['subtitle'] += char
+                self.current_result['subtitle'] += data
 
 
 # Retrieves HTML for reference with the given ID
@@ -90,13 +82,19 @@ def get_search_html(query_str):
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
         urllib.quote_plus(query_str.encode('utf-8')), version)
 
-    return shared.get_url_content(url)
+    entry_key = '{}/{}.html'.format(version, query_str)
+    search_html = shared.get_cache_entry_content(entry_key)
+    if search_html is None:
+        search_html = shared.get_url_content(url)
+        shared.add_cache_entry(entry_key, search_html)
+
+    return search_html
 
 
 # Parses actual reference content from reference HTML
 def get_result_list(query_str):
 
-    query_str = shared.format_query_str(query_str)
+    query_str = shared.normalize_query_str(query_str)
     html = get_search_html(query_str)
     parser = SearchResultParser()
     parser.feed(html)
@@ -105,22 +103,15 @@ def get_result_list(query_str):
 
 def main(query_str):
 
-    entry_key = 'yvsearch {}.json'.format(shared.format_query_str(query_str))
-    feedback_str = shared.get_cache_entry_content(entry_key)
-    if feedback_str is None:
+    results = get_result_list(query_str)
+    if not results:
+        results.append({
+            'title': 'No Results',
+            'subtitle': 'No references matching \'{}\''.format(query_str),
+            'valid': 'no'
+        })
 
-        results = get_result_list(query_str)
-        if not results:
-            results.append({
-                'title': 'No Results',
-                'subtitle': 'No references matching \'{}\''.format(query_str),
-                'valid': 'no'
-            })
-
-        feedback_str = shared.get_result_list_feedback_str(results)
-        shared.add_cache_entry(entry_key, feedback_str)
-
-    print(feedback_str.encode('utf-8'))
+    print(shared.get_result_list_feedback_str(results).encode('utf-8'))
 
 
 if __name__ == '__main__':

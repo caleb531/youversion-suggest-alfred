@@ -1,8 +1,9 @@
 # tests.test_view_ref
 
 import nose.tools as nose
-import yvs.view_ref as yvs
 from mock import patch
+
+import yvs.view_ref as yvs
 from tests import set_up, tear_down
 
 

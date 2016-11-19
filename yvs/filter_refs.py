@@ -2,8 +2,10 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+
 import re
 import sys
+
 import yvs.shared as shared
 
 
@@ -37,11 +39,11 @@ def get_query_object(query_str):
 
     chapter_match = ref_matches.group(2)
     if chapter_match:
-        query['chapter'] = int(chapter_match)
+        query['chapter'] = max(int(chapter_match), 1)
 
         verse_match = ref_matches.group(3)
         if verse_match:
-            query['verse'] = int(verse_match)
+            query['verse'] = max(int(verse_match), 1)
 
             endverse_match = ref_matches.group(4)
             if endverse_match:
@@ -68,7 +70,7 @@ def guess_version(versions, version_query):
 
 
 # Formats book name by removing non-alphanumeric characters
-def format_book_name(book_name):
+def normalize_book_name(book_name):
 
     book_name = book_name.lower()
     # Remove all non-alphanumeric characters
@@ -88,7 +90,7 @@ def get_matching_books(books, query):
     for i in xrange(len(query['book']), 0, -1):
         book_query = query['book'][:i]
         for book in books:
-            book_name = format_book_name(book['name'])
+            book_name = normalize_book_name(book['name'])
             if book_name.startswith(book_query):
                 matching_books.append(book)
         # Stop if all possible matching books have been found
@@ -156,7 +158,7 @@ def get_result(book, query, chosen_version):
 # Retrieves search resylts matching the given query
 def get_result_list(query_str):
 
-    query_str = shared.format_query_str(query_str)
+    query_str = shared.normalize_query_str(query_str)
     query = get_query_object(query_str)
     results = []
 

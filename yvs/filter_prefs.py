@@ -2,9 +2,11 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+
 import json
 import re
 import sys
+
 import yvs.shared as shared
 
 
@@ -15,12 +17,14 @@ def get_pref_defs(user_prefs):
         {
             'id': 'language',
             'name': 'Language',
-            'values': shared.get_languages()
+            'values': shared.get_languages(),
+            'description': 'Set your preferred language for Bible content'
         },
         {
             'id': 'version',
             'name': 'Version',
-            'values': shared.get_versions(user_prefs['language'])
+            'values': shared.get_versions(user_prefs['language']),
+            'description': 'Set the default version for Bible content'
         }
     ]
 
@@ -43,14 +47,24 @@ def get_pref_result(pref_def, user_prefs):
 
     result['uid'] = 'yvs-{}'.format(pref_def['id'])
     result['title'] = pref_def['name']
-    result['subtitle'] = 'Set your preferred {}'.format(
-        pref_def['name'].lower())
+    result['subtitle'] = pref_def['description']
     if value is not None:
         result['subtitle'] += ' (currently {})'.format(value['name'])
     result['autocomplete'] = '{} '.format(pref_def['id'].replace('_', ''))
     result['valid'] = 'no'
 
     return result
+
+
+# Returns True if the given query string matches the given preference name;
+# otherwise, returns False
+def query_matches_value_title(pref_value, query_str):
+    matches = re.search(r'\b{}'.format(
+        re.escape(query_str)), pref_value, flags=re.IGNORECASE)
+    if matches:
+        return True
+    else:
+        return False
 
 
 # Retrieves Alfred result list of all available values for this preference
@@ -87,7 +101,8 @@ def get_value_result_list(user_prefs, pref_def, query_str):
 
         # Show all results if query string is empty
         # Otherwise, only show results whose titles begin with query
-        if not query_str or result['title'].lower().startswith(query_str):
+        if not query_str or query_matches_value_title(
+                result['title'], query_str):
             results.append(result)
 
     if not results:
@@ -110,22 +125,22 @@ def get_pref_matches(query_str):
 
 
 # Simplify the given preference key for comparison with a query string
-def format_pref_key(pref_key):
+def normalize_pref_key(pref_key):
 
     return pref_key.replace('_', '').lower()
 
 
 # Format the query string specifically for this script filter
-def format_query_str(query_str):
+def normalize_query_str(query_str):
 
-    return shared.format_query_str(query_str.replace('_', ''))
+    return shared.normalize_query_str(query_str.replace('_', ''))
 
 
 # Retrieves result list of available preferences, filtered by the given query
 def get_pref_result_list(user_prefs, pref_defs, pref_key_query_str=''):
 
     return [get_pref_result(pref_def, user_prefs) for pref_def in
-            pref_defs if format_pref_key(pref_def['id']).startswith(
+            pref_defs if normalize_pref_key(pref_def['id']).startswith(
                 pref_key_query_str)]
 
 
@@ -135,7 +150,7 @@ def get_result_list(query_str):
 
     user_prefs = shared.get_user_prefs()
     pref_defs = get_pref_defs(user_prefs)
-    query_str = format_query_str(query_str)
+    query_str = normalize_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
 
@@ -146,7 +161,7 @@ def get_result_list(query_str):
 
         for pref_def in pref_defs:
             # If key name in query exactly matches a preference key name
-            if format_pref_key(pref_def['id']) == pref_key_query_str:
+            if normalize_pref_key(pref_def['id']) == pref_key_query_str:
                 # Get list of available values for the given preference
                 results = get_value_result_list(
                     user_prefs, pref_def, pref_value_query_str)

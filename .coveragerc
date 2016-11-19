@@ -14,6 +14,12 @@ exclude_lines =
 
 # Only check coverage for source files
 include =
+    utilities/add_language.py
+    utilities/book_parser.py
+    utilities/language_parser.py
+    utilities/version_parser.py
+    utilities/update_language.py
+    utilities/update_languages.py
     yvs/clear_cache.py
     yvs/copy_ref.py
     yvs/filter_prefs.py
@@ -23,3 +29,4 @@ include =
     yvs/set_pref.py
     yvs/shared.py
     yvs/view_ref.py
+    yvs/yv_parser.py

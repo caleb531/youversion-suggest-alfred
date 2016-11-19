@@ -2,15 +2,18 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
-import os
-import os.path
+
 import hashlib
 import json
+import os
+import os.path
 import re
 import shutil
-import urllib2
 import unicodedata
-
+import urllib2
+from gzip import GzipFile
+from htmlentitydefs import name2codepoint
+from StringIO import StringIO
 
 # Unique identifier for the workflow
 WORKFLOW_UID = 'com.calebevans.youversionsuggest'
@@ -58,11 +61,30 @@ def create_local_cache_dirs():
         pass
 
 
+# Upgrades language ID from ISO 639-1 code to ISO 639-3 code (if necessary)
+def upgrade_language_id(language_id):
+
+    if re.search(r'^[a-z]{2}(_[A-Z]{2})?$', language_id):
+        id_map_path = os.path.join(
+            PACKAGED_DATA_DIR_PATH, 'language-id-map.json')
+        with open(id_map_path, 'r') as id_map_file:
+            id_map = json.load(id_map_file)
+            user_prefs = get_user_prefs()
+            user_prefs['language'] = id_map[language_id]
+            set_user_prefs(user_prefs)
+            return id_map[language_id]
+    else:
+        return language_id
+
+
 # Retrieves bible data object (books, versions, etc.) for the given language
-def get_bible_data(language):
+def get_bible_data(language_id):
+
+    language_id = upgrade_language_id(language_id)
 
     bible_data_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'bible', 'language-{}.json'.format(language))
+        PACKAGED_DATA_DIR_PATH, 'bible',
+        'language-{}.json'.format(language_id))
     with open(bible_data_path, 'r') as bible_data_file:
         return json.load(bible_data_file)
 
@@ -93,9 +115,9 @@ def get_version(versions, version_id):
 
 
 # Retrieves a list of all supported versions for the given language
-def get_versions(language):
+def get_versions(language_id):
 
-    bible = get_bible_data(language)
+    bible = get_bible_data(language_id)
     return bible['versions']
 
 
@@ -247,6 +269,20 @@ def get_cache_manifest_path():
     return os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
 
 
+# Purge all expired entries in the cache
+def purge_expired_cache_entries(manifest_file):
+    # Read checksums from manifest; splitlines(True) preserves newlines
+    entry_checksums = manifest_file.read().splitlines(True)
+    # Purge the oldest entry if the cache is too large
+    if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
+        old_entry_checksum = entry_checksums[0].rstrip()
+        manifest_file.truncate(0)
+        manifest_file.seek(0)
+        manifest_file.writelines(entry_checksums[1:])
+        os.remove(os.path.join(
+            get_cache_entry_dir_path(), old_entry_checksum))
+
+
 # Adds to the cache a new entry with the given content
 def add_cache_entry(entry_key, entry_content):
 
@@ -264,16 +300,7 @@ def add_cache_entry(entry_key, entry_content):
         manifest_file.write(entry_checksum)
         manifest_file.write('\n')
         manifest_file.seek(0)
-        # Read checksums from manifest; splitlines(True) preserves newlines
-        entry_checksums = manifest_file.read().splitlines(True)
-        # Purge the oldest entry if the cache is too large
-        if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
-            old_entry_checksum = entry_checksums[0].rstrip()
-            manifest_file.truncate(0)
-            manifest_file.seek(0)
-            manifest_file.writelines(entry_checksums[1:])
-            os.remove(os.path.join(
-                get_cache_entry_dir_path(), old_entry_checksum))
+        purge_expired_cache_entries(manifest_file)
 
 
 # Retrieves the unmodified content of a cache entry
@@ -300,8 +327,8 @@ def clear_cache():
 # Query-related functions
 
 
-# Simplifies the format of the query string
-def format_query_str(query_str):
+# Normalizes the format of the query string
+def normalize_query_str(query_str):
 
     query_str = query_str.lower()
     # Normalize all Unicode characters
@@ -381,8 +408,8 @@ def get_ref_url(ref_uid):
     return REF_URL_TEMPLATE.format(ref=ref_uid)
 
 
-# Simplifies format of reference content by removing unnecessary whitespace
-def format_ref_content(ref_content):
+# Normalizes format of reference content by removing superfluous whitespace
+def normalize_ref_content(ref_content):
 
     # Collapse consecutive spaces into a single space
     ref_content = re.sub(r' {2,}', ' ', ref_content)
@@ -398,9 +425,20 @@ def format_ref_content(ref_content):
 # Retrieves HTML contents of the given URL as a Unicode string
 def get_url_content(url):
 
-    request = urllib2.Request(url, headers={'User-Agent': USER_AGENT})
-    connection = urllib2.urlopen(request)
-    return connection.read().decode('utf-8')
+    request = urllib2.Request(url, headers={
+        'User-Agent': USER_AGENT,
+        'Accept-Encoding': 'gzip, deflate'
+    })
+    response = urllib2.urlopen(request)
+    url_content = response.read()
+
+    # Decompress response body if gzipped
+    if response.info().get('Content-Encoding') == 'gzip':
+        str_buf = StringIO(url_content)
+        with GzipFile(fileobj=str_buf, mode='rb') as gzip_file:
+            url_content = gzip_file.read()
+
+    return url_content.decode('utf-8')
 
 
 # Evaluates HTML character reference to its respective Unicode character
@@ -409,6 +447,9 @@ def eval_html_charref(name):
     if name[0] == 'x':
         # Handle hexadecimal character references
         return unichr(int(name[1:], 16))
-    else:
+    elif name.isdigit():
         # Handle decimal character references
         return unichr(int(name))
+    else:
+        # Otherwise, assume character reference is a named reference
+        return unichr(name2codepoint[name])

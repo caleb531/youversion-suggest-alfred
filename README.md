@@ -29,7 +29,7 @@ range of verses) with just a few keystrokes.
 
 - `yvfilter luke` => Luke
 - `yvfilter eph 3` => Ephesians 3
-- `yvfilter 1t3e` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
+- `yvfilter 1t3es` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
 - `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
 - `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
 - `yvfilter relevations 7` => Revelation 7
@@ -87,41 +87,28 @@ your preferred language.
 
 Currently, YouVersion Suggest supports the following languages:
 
-- Arabic (ar)
-- Bulgarian (bg)
-- Dutch (nl)
-- English (en)
-- Finnish (fi)
-- French (fr)
-- German (de)
-- Hindi (hi)
-- Italian (it)
-- Japanese (ja)
-- Korean (ko)
-- Persian (fa)
-- Polish (pl)
-- Portuguese (pt)
-- Portuguese - Portugal (pt-PT)
-- Russian (ru)
-- Simplified Chinese (zh-CN)
-- Spanish (es)
-- Spanish - Spain (es-ES)
-- Swahili (sw)
-- Swedish (sv)
-
-#### Requesting language support
-
-If you would like to see YouVersion Suggest support a language not in the above
-list, please [submit an issue on
-GitHub](https://github.com/caleb531/youversion-suggest/issues) with the
-following details:
-
-- The name and ISO-639 code of the language from [this
-list](https://www.bible.com/languages)
-
-- The name of the YouVersion-supported Bible version to use as the default for
-this language; click the language name on the page linked above to view the
-versions available for the language
+- Arabic (arb)
+- Bulgarian (bul)
+- Dutch (nld)
+- Chinese - Simplified (zho)
+- Chinese - Traditional (zho-TW)
+- English (eng)
+- Finnish (fin)
+- French (fra)
+- German (deu)
+- Hindi (hin)
+- Italian (ita)
+- Japanese (jpn)
+- Korean (kor)
+- Persian (pes)
+- Polish (pol)
+- Portuguese (por)
+- Portuguese - Portugal (por-PT)
+- Russian (rus)
+- Spanish (spa)
+- Spanish - Spain (spa-ES)
+- Swahili (swh)
+- Swedish (swe)
 
 ### Setting your preferred version
 

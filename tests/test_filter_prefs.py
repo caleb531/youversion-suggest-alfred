@@ -2,8 +2,12 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+
+import glob
 import json
+
 import nose.tools as nose
+
 import yvs.filter_prefs as yvs
 from tests import set_up, tear_down
 from tests.decorators import redirect_stdout, use_user_prefs
@@ -13,34 +17,36 @@ from tests.decorators import redirect_stdout, use_user_prefs
 def test_show_languages():
     """should show all languages if no value is given"""
     results = yvs.get_result_list('language')
-    nose.assert_equal(len(results), 22)
+    nose.assert_equal(
+        len(results), len(glob.glob('yvs/data/bible/language-*.json')))
 
 
 @nose.with_setup(set_up, tear_down)
 def test_filter_languages():
     """should filter available languages if value is given"""
-    results = yvs.get_result_list('language español')
+    results = yvs.get_result_list('language span')
     nose.assert_equal(len(results), 2)
-    nose.assert_equal(results[0]['uid'], 'yvs-language-es')
-    nose.assert_equal(results[0]['title'], 'Español')
+    nose.assert_equal(results[0]['uid'], 'yvs-language-spa')
+    nose.assert_equal(
+        results[0]['title'], 'Español (América Latina) - Spanish')
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
             'name': 'Language'
         },
         'value': {
-            'id': 'es',
-            'name': 'Español'
+            'id': 'spa',
+            'name': 'Español (América Latina) - Spanish'
         }
     })
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'es', 'version': 128})
+@use_user_prefs({'language': 'spa', 'version': 128})
 def test_show_versions():
     """should show all versions if no value is given"""
     results = yvs.get_result_list('version')
-    nose.assert_equal(len(results), 13)
+    nose.assert_greater(len(results), 10)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -106,7 +112,7 @@ def test_non_alphanumeric():
     """should ignore all non-alphanumeric characters"""
     results = yvs.get_result_list('!language@it#')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Italiano')
+    nose.assert_equal(results[0]['title'], 'Italiano - Italian')
 
 
 @nose.with_setup(set_up, tear_down)
@@ -144,7 +150,7 @@ def test_filter_preferences_show_current():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'en', 'version': 999})
+@use_user_prefs({'language': 'eng', 'version': 999})
 def test_filter_preferences_no_show_invalid_current():
     """should show current values for all preferences"""
     results = yvs.get_result_list('')
