@@ -45,6 +45,15 @@ def test_get_url_content(request):
 
 
 @nose.with_setup(set_up, tear_down)
+@patch('urllib2.urlopen')
+@patch('urllib2.Request')
+def test_get_url_content_timeout(request, urlopen):
+    """should timeout URL content request after 3 seconds"""
+    yvs.get_url_content('https://www.bible.com/bible/59/psa.23')
+    urlopen.assert_called_once_with(request.return_value, timeout=3)
+
+
+@nose.with_setup(set_up, tear_down)
 @patch('urllib2.Request')
 def test_get_url_content_compressed(request):
     """should automatically decompress compressed URL content"""

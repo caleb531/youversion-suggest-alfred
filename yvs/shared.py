@@ -39,6 +39,8 @@ REF_URL_TEMPLATE = 'https://www.bible.com/bible/{ref}'
 
 # The user agent used for HTTP requests sent to the YouVersion website
 USER_AGENT = 'YouVersion Suggest'
+# The number of seconds to wait before timing out an HTTP request connection
+REQUEST_CONNECTION_TIMEOUT = 3
 
 
 # Creates the directory (and any nonexistent parent directories) where this
@@ -429,7 +431,7 @@ def get_url_content(url):
         'User-Agent': USER_AGENT,
         'Accept-Encoding': 'gzip, deflate'
     })
-    response = urllib2.urlopen(request)
+    response = urllib2.urlopen(request, timeout=REQUEST_CONNECTION_TIMEOUT)
     url_content = response.read()
 
     # Decompress response body if gzipped
