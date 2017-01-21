@@ -14,7 +14,7 @@ BASE_REF_URL = 'https://www.bible.com/bible/{ref_uid}'
 # Elements that should be surrounded by blank lines
 BLOCK_ELEMS = {'b', 'p', 'm'}
 # Elements that should trigger a line break
-BREAK_ELEMS = {'li1', 'q1', 'q2'}
+BREAK_ELEMS = {'li1', 'q1', 'q2', 'qc'}
 
 
 # An HTML parser which receives HTML from the page for a YouVersion
