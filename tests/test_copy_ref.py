@@ -87,6 +87,8 @@ def test_whitespace_lines():
                                'should add newline before each p block')
     nose.assert_regexp_matches(ref_content, r'erat.\n\n\S',
                                'should add newline after each p block')
+    nose.assert_regexp_matches(ref_content, r'orci,\ndapibus',
+                               'should add newline between each qc block')
     nose.assert_regexp_matches(ref_content, r'nec\nfermentum',
                                'should add newline between each q block')
     nose.assert_regexp_matches(ref_content, r'elit.\n\nUt',
