@@ -407,7 +407,7 @@ def get_full_ref(ref):
 
 # Builds the URL used to view the reference with the given UID
 def get_ref_url(ref_uid):
-    return REF_URL_TEMPLATE.format(ref=ref_uid)
+    return REF_URL_TEMPLATE.format(ref=ref_uid.upper())
 
 
 # Normalizes format of reference content by removing superfluous whitespace

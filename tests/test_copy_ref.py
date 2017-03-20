@@ -103,7 +103,7 @@ def test_url_always_chapter(get_url_content):
     """should always fetch HTML from chapter URL"""
     yvs.get_copied_ref('59/psa.23.2')
     get_url_content.assert_called_once_with(
-        'https://www.bible.com/bible/59/psa.23')
+        'https://www.bible.com/bible/59/PSA.23')
 
 
 @nose.with_setup(set_up, tear_down)

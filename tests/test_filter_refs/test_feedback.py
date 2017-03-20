@@ -30,7 +30,7 @@ def test_structure():
     nose.assert_equal(item['uid'], result['uid'])
     nose.assert_equal(item['arg'], result['arg'])
     nose.assert_equal(
-        item['quicklookurl'], 'https://www.bible.com/bible/111/mat.6.34')
+        item['quicklookurl'], 'https://www.bible.com/bible/111/MAT.6.34')
     nose.assert_equal(item['valid'], 'yes')
     nose.assert_equal(item['title'], 'Matthew 6:34 (NIV)')
     nose.assert_equal(item['text']['copy'], result['title'])
