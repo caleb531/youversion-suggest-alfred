@@ -8,9 +8,6 @@ import sys
 import yvs.shared as shared
 from yvs.yv_parser import YVParser
 
-# The base for all Bible reference URLs
-BASE_REF_URL = 'https://www.bible.com/bible/{ref_uid}'
-
 # Elements that should be surrounded by blank lines
 BLOCK_ELEMS = {'b', 'p', 'm'}
 # Elements that should trigger a line break
@@ -110,7 +107,7 @@ def get_ref_chapter_uid(ref):
 def get_chapter_html(ref):
 
     chapter_uid = get_ref_chapter_uid(ref)
-    url = BASE_REF_URL.format(ref_uid=chapter_uid)
+    url = shared.get_ref_url(ref_uid=chapter_uid)
 
     entry_key = '{}.html'.format(chapter_uid)
     chapter_html = shared.get_cache_entry_content(entry_key)
