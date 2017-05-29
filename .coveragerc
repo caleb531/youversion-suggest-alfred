@@ -24,6 +24,7 @@ include =
     yvs/copy_ref.py
     yvs/filter_prefs.py
     yvs/filter_refs.py
+    yvs/get_ref_id.py
     yvs/get_ref_url.py
     yvs/search_ref.py
     yvs/search_refs.py
