@@ -264,6 +264,10 @@
   "default_version": 128,
   "versions": [
     {
+      "id": 1715,
+      "name": "BDO1573"
+    },
+    {
       "id": 222,
       "name": "BHTI"
     },
@@ -314,6 +318,10 @@
     {
       "id": 147,
       "name": "RVES"
+    },
+    {
+      "id": 1718,
+      "name": "RVR09"
     },
     {
       "id": 149,
