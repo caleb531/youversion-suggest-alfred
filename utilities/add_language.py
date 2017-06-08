@@ -75,6 +75,8 @@ def get_books(default_version):
     # Ensure that returned books are recognized by the workflow (where the
     # workflow only recognizes books within the Biblical canon)
     books[:] = [book for book in books if book['id'] in chapter_data]
+    if len(books) == 0:
+        raise RuntimeError('Book data is empty. Aborting.')
 
     return books
 
