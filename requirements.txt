@@ -1,5 +1,6 @@
-alfred-workflow-packager==1.1.0
-biplist==1.0.1
+alfred-workflow-packager==1.2.0
+appdirs==1.4.3
+biplist==1.0.2
 colorama==0.3.7
 configparser==3.5.0
 coverage==4.2
@@ -9,15 +10,17 @@ flake8-polyfill==1.0.1
 funcsigs==1.0.2
 functools32==3.2.3.post2
 isort==4.2.5
-jsonschema==2.5.1
+jsonschema==2.6.0
 mando==0.3.3
 mccabe==0.5.2
 mock==2.0.0
 nose==1.3.7
+packaging==16.8
 pbr==1.10.0
 pep8-naming==0.4.1
 pycodestyle==2.2.0
 pyflakes==1.3.0
+pyparsing==2.2.0
 python-termstyle==0.1.10
 radon==1.4.2
 rednose==1.2.1
