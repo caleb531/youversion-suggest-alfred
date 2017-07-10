@@ -264,28 +264,28 @@
   "default_version": 129,
   "versions": [
     {
-      "id": 1608,
-      "name": "ARA"
+      "id": 129,
+      "name": "NVI"
     },
     {
-      "id": 212,
-      "name": "ARC95"
+      "id": 200,
+      "name": "VFL"
     },
     {
       "id": 211,
       "name": "NTLH"
     },
     {
-      "id": 129,
-      "name": "NVI"
+      "id": 212,
+      "name": "ARC95"
     },
     {
       "id": 277,
       "name": "TB10"
     },
     {
-      "id": 200,
-      "name": "VFL"
+      "id": 1608,
+      "name": "ARA"
     }
   ]
 }

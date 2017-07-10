@@ -264,10 +264,6 @@
   "default_version": 132,
   "versions": [
     {
-      "id": 319,
-      "name": "NBG"
-    },
-    {
       "id": 132,
       "name": "PBG"
     },
@@ -278,6 +274,10 @@
     {
       "id": 138,
       "name": "PUBG"
+    },
+    {
+      "id": 319,
+      "name": "NBG"
     }
   ]
 }

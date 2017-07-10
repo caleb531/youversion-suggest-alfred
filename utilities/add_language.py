@@ -56,7 +56,7 @@ def get_versions(language_id):
     if not versions:
         raise RuntimeError('Cannot retrieve version data. Aborting.')
 
-    versions.sort(key=itemgetter('name'))
+    versions.sort(key=itemgetter('id'))
     unique_versions = get_unique_versions(versions)
 
     return unique_versions

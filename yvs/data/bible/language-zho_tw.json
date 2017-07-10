@@ -264,12 +264,16 @@
   "default_version": 46,
   "versions": [
     {
-      "id": 1392,
-      "name": "CCB"
-    },
-    {
       "id": 40,
       "name": "CNV"
+    },
+    {
+      "id": 46,
+      "name": "CUNP-神"
+    },
+    {
+      "id": 139,
+      "name": "RCUV"
     },
     {
       "id": 312,
@@ -280,12 +284,8 @@
       "name": "CUNP-上帝"
     },
     {
-      "id": 46,
-      "name": "CUNP-神"
-    },
-    {
-      "id": 139,
-      "name": "RCUV"
+      "id": 1392,
+      "name": "CCB"
     }
   ]
 }

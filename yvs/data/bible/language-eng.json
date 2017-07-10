@@ -264,8 +264,8 @@
   "default_version": 111,
   "versions": [
     {
-      "id": 1588,
-      "name": "AMP"
+      "id": 1,
+      "name": "KJV"
     },
     {
       "id": 8,
@@ -284,56 +284,16 @@
       "name": "CEB"
     },
     {
-      "id": 303,
-      "name": "CEVDCUS06"
-    },
-    {
-      "id": 294,
-      "name": "CEVUK00"
-    },
-    {
-      "id": 392,
-      "name": "CEVUS06"
-    },
-    {
-      "id": 1275,
-      "name": "CJB"
-    },
-    {
       "id": 42,
       "name": "CPDV"
-    },
-    {
-      "id": 1713,
-      "name": "CSB"
-    },
-    {
-      "id": 478,
-      "name": "DARBY"
     },
     {
       "id": 55,
       "name": "DRC1752"
     },
     {
-      "id": 406,
-      "name": "ERV"
-    },
-    {
       "id": 59,
       "name": "ESV"
-    },
-    {
-      "id": 296,
-      "name": "GNB"
-    },
-    {
-      "id": 416,
-      "name": "GNBDC"
-    },
-    {
-      "id": 431,
-      "name": "GNBDK"
     },
     {
       "id": 68,
@@ -348,48 +308,16 @@
       "name": "GW"
     },
     {
-      "id": 1047,
-      "name": "GWC"
-    },
-    {
       "id": 72,
       "name": "HCSB"
-    },
-    {
-      "id": 1359,
-      "name": "ICB"
-    },
-    {
-      "id": 1077,
-      "name": "JUB"
-    },
-    {
-      "id": 1,
-      "name": "KJV"
-    },
-    {
-      "id": 546,
-      "name": "KJVA"
     },
     {
       "id": 90,
       "name": "LEB"
     },
     {
-      "id": 1171,
-      "name": "MEV"
-    },
-    {
-      "id": 1365,
-      "name": "MP1650"
-    },
-    {
       "id": 97,
       "name": "MSG"
-    },
-    {
-      "id": 463,
-      "name": "NABRE"
     },
     {
       "id": 100,
@@ -428,8 +356,20 @@
       "name": "OJB"
     },
     {
-      "id": 477,
-      "name": "RV1885"
+      "id": 206,
+      "name": "WEB"
+    },
+    {
+      "id": 294,
+      "name": "CEVUK00"
+    },
+    {
+      "id": 296,
+      "name": "GNB"
+    },
+    {
+      "id": 303,
+      "name": "CEVDCUS06"
     },
     {
       "id": 314,
@@ -440,24 +380,84 @@
       "name": "TS2009"
     },
     {
-      "id": 206,
-      "name": "WEB"
+      "id": 392,
+      "name": "CEVUS06"
+    },
+    {
+      "id": 406,
+      "name": "ERV"
+    },
+    {
+      "id": 416,
+      "name": "GNBDC"
+    },
+    {
+      "id": 431,
+      "name": "GNBDK"
+    },
+    {
+      "id": 463,
+      "name": "NABRE"
+    },
+    {
+      "id": 477,
+      "name": "RV1885"
+    },
+    {
+      "id": 478,
+      "name": "DARBY"
+    },
+    {
+      "id": 546,
+      "name": "KJVA"
+    },
+    {
+      "id": 821,
+      "name": "YLT98"
+    },
+    {
+      "id": 1047,
+      "name": "GWC"
+    },
+    {
+      "id": 1077,
+      "name": "JUB"
+    },
+    {
+      "id": 1171,
+      "name": "MEV"
     },
     {
       "id": 1204,
       "name": "WEBBE"
     },
     {
-      "id": 1209,
-      "name": "WMB"
-    },
-    {
       "id": 1207,
       "name": "WMBBE"
     },
     {
-      "id": 821,
-      "name": "YLT98"
+      "id": 1209,
+      "name": "WMB"
+    },
+    {
+      "id": 1275,
+      "name": "CJB"
+    },
+    {
+      "id": 1359,
+      "name": "ICB"
+    },
+    {
+      "id": 1365,
+      "name": "MP1650"
+    },
+    {
+      "id": 1588,
+      "name": "AMP"
+    },
+    {
+      "id": 1713,
+      "name": "CSB"
     }
   ]
 }

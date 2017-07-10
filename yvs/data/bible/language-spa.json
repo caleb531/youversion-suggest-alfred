@@ -264,36 +264,16 @@
   "default_version": 128,
   "versions": [
     {
-      "id": 1715,
-      "name": "BDO1573"
-    },
-    {
-      "id": 222,
-      "name": "BHTI"
-    },
-    {
       "id": 28,
       "name": "BLPH"
-    },
-    {
-      "id": 411,
-      "name": "DHH"
     },
     {
       "id": 52,
       "name": "DHHD"
     },
     {
-      "id": 1076,
-      "name": "JBS"
-    },
-    {
       "id": 89,
       "name": "LBLA"
-    },
-    {
-      "id": 753,
-      "name": "NBD"
     },
     {
       "id": 103,
@@ -308,20 +288,12 @@
       "name": "NVI"
     },
     {
-      "id": 197,
-      "name": "PDT"
-    },
-    {
       "id": 146,
       "name": "RVC"
     },
     {
       "id": 147,
       "name": "RVES"
-    },
-    {
-      "id": 1718,
-      "name": "RVR09"
     },
     {
       "id": 149,
@@ -338,6 +310,34 @@
     {
       "id": 178,
       "name": "TLAD"
+    },
+    {
+      "id": 197,
+      "name": "PDT"
+    },
+    {
+      "id": 222,
+      "name": "BHTI"
+    },
+    {
+      "id": 411,
+      "name": "DHH"
+    },
+    {
+      "id": 753,
+      "name": "NBD"
+    },
+    {
+      "id": 1076,
+      "name": "JBS"
+    },
+    {
+      "id": 1715,
+      "name": "BDO1573"
+    },
+    {
+      "id": 1718,
+      "name": "RVR09"
     }
   ]
 }

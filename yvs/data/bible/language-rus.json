@@ -112,6 +112,26 @@
   "default_version": 45,
   "versions": [
     {
+      "id": 45,
+      "name": "CSLAV"
+    },
+    {
+      "id": 143,
+      "name": "НРП"
+    },
+    {
+      "id": 145,
+      "name": "RUVZ"
+    },
+    {
+      "id": 167,
+      "name": "SYNOD"
+    },
+    {
+      "id": 201,
+      "name": "RSP"
+    },
+    {
       "id": 313,
       "name": "BTI"
     },
@@ -120,40 +140,20 @@
       "name": "CARS"
     },
     {
-      "id": 840,
-      "name": "CARSA"
-    },
-    {
-      "id": 853,
-      "name": "CARST"
+      "id": 400,
+      "name": "SYNO"
     },
     {
       "id": 480,
       "name": "CASS"
     },
     {
-      "id": 45,
-      "name": "CSLAV"
+      "id": 840,
+      "name": "CARSA"
     },
     {
-      "id": 201,
-      "name": "RSP"
-    },
-    {
-      "id": 145,
-      "name": "RUVZ"
-    },
-    {
-      "id": 400,
-      "name": "SYNO"
-    },
-    {
-      "id": 167,
-      "name": "SYNOD"
-    },
-    {
-      "id": 143,
-      "name": "НРП"
+      "id": 853,
+      "name": "CARST"
     }
   ]
 }

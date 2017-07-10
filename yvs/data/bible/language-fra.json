@@ -264,10 +264,6 @@
   "default_version": 21,
   "versions": [
     {
-      "id": 504,
-      "name": "BCC1923"
-    },
-    {
       "id": 21,
       "name": "BDS"
     },
@@ -306,6 +302,10 @@
     {
       "id": 152,
       "name": "S21"
+    },
+    {
+      "id": 504,
+      "name": "BCC1923"
     }
   ]
 }

@@ -264,24 +264,8 @@
   "default_version": 53,
   "versions": [
     {
-      "id": 210,
-      "name": "BLP"
-    },
-    {
-      "id": 214,
-      "name": "BTI"
-    },
-    {
       "id": 53,
       "name": "DHHE"
-    },
-    {
-      "id": 442,
-      "name": "DHHED"
-    },
-    {
-      "id": 1637,
-      "name": "NVI"
     },
     {
       "id": 147,
@@ -294,6 +278,22 @@
     {
       "id": 150,
       "name": "RVR95"
+    },
+    {
+      "id": 210,
+      "name": "BLP"
+    },
+    {
+      "id": 214,
+      "name": "BTI"
+    },
+    {
+      "id": 442,
+      "name": "DHHED"
+    },
+    {
+      "id": 1637,
+      "name": "NVI"
     }
   ]
 }
