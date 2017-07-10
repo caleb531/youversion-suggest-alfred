@@ -63,3 +63,12 @@ def test_get_books_nonexistent(get_url_content):
     """should raise error when book list cannot be found"""
     with nose.assert_raises(RuntimeError):
         add_lang.get_books(default_version=123)
+
+
+@nose.with_setup(set_up, tear_down)
+@patch('yvs.shared.get_url_content', return_value=html_content)
+@patch('yvs.shared.get_chapter_data', return_value={})
+def test_get_books_empty(get_chapter_data, get_url_content):
+    """should raise error when book list is empty"""
+    with nose.assert_raises(RuntimeError):
+        add_lang.get_books(default_version=123)
