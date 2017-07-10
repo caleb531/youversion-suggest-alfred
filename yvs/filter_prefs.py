@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import json
 import re
 import sys
+from operator import itemgetter
 
 import yvs.shared as shared
 
@@ -23,7 +24,9 @@ def get_pref_defs(user_prefs):
         {
             'id': 'version',
             'name': 'Version',
-            'values': shared.get_versions(user_prefs['language']),
+            'values': sorted(
+                shared.get_versions(user_prefs['language']),
+                key=itemgetter('name')),
             'description': 'Set the default version for Bible content'
         }
     ]
