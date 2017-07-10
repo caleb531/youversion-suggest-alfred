@@ -18,7 +18,7 @@ def get_ref_matches(query_str):
         chapter=r'(\d+)\s?',
         verse=r'(\d+)\s?',
         endverse=r'(\d+)?\s?',
-        version=r'([a-z]+\d*)?.*?')
+        version=r'([^\W\d_](?:[^\W\d_]\d*|\s)*)?.*?')
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
@@ -51,7 +51,7 @@ def get_query_object(query_str):
 
         version_match = ref_matches.group(5)
         if version_match:
-            query['version'] = version_match.lstrip().upper()
+            query['version'] = shared.normalize_query_str(version_match)
 
     return query
 
@@ -63,7 +63,8 @@ def guess_version(versions, version_query):
     # found (if a matching version even exists)
     for i in xrange(len(version_query), 0, -1):
         for version in versions:
-            if version['name'].startswith(version_query[:i]):
+            if (shared.normalize_query_str(
+                  version['name']).startswith(version_query[:i])):
                 return version
 
     return None
