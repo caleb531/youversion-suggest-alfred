@@ -37,20 +37,20 @@ def test_get_versions():
             'name': 'AMPC'
         },
         {
-            'id': 877,
-            'name': 'NBH'
-        },
-        {
-            'id': 477,
-            'name': 'RV1885'
+            'id': 206,
+            'name': 'WEB-神'
         },
         {
             'id': 207,
             'name': 'WEB-上帝'
         },
         {
-            'id': 206,
-            'name': 'WEB-神'
+            'id': 477,
+            'name': 'RV1885'
+        },
+        {
+            'id': 877,
+            'name': 'NBH'
         }
     ])
 

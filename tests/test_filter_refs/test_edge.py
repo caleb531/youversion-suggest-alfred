@@ -27,9 +27,9 @@ def test_non_alphanumeric():
 @nose.with_setup(set_up, tear_down)
 def test_whitespace():
     """should ignore excessive whitespace"""
-    results = yvs.get_result_list('  romans  8  28  a  ')
+    results = yvs.get_result_list('  romans  8  28  nl  ')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['title'], 'Romans 8:28 (AMP)')
+    nose.assert_equal(results[0]['title'], 'Romans 8:28 (NLT)')
 
 
 @nose.with_setup(set_up, tear_down)
