@@ -24,7 +24,6 @@ def test_numbered():
 def test_non_ascii():
     """should match versions containing non-ASCII characters"""
     results = yvs.get_result_list('路加 4:8 cunp-上')
-    print(yvs.shared.normalize_query_str('路加 4:8 cunp-上'))
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], '路加福音 4:8 (CUNP-上帝)')
 
