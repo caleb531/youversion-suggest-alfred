@@ -330,7 +330,7 @@ def clear_cache():
 
 
 # Normalizes the format of the query string
-def normalize_str(query_str):
+def normalize_query_str(query_str):
 
     query_str = query_str.lower()
     # Normalize all Unicode characters
