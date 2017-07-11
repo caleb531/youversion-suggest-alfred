@@ -94,7 +94,7 @@ def get_search_html(query_str):
 # Parses actual reference content from reference HTML
 def get_result_list(query_str):
 
-    query_str = shared.normalize_query_str(query_str)
+    query_str = shared.normalize_str(query_str)
     html = get_search_html(query_str)
     parser = SearchResultParser()
     parser.feed(html)

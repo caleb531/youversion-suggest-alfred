@@ -136,7 +136,7 @@ def normalize_pref_key(pref_key):
 # Format the query string specifically for this script filter
 def normalize_query_str(query_str):
 
-    return shared.normalize_query_str(query_str.replace('_', ''))
+    return shared.normalize_str(query_str.replace('_', ''))
 
 
 # Retrieves result list of available preferences, filtered by the given query
