@@ -13,7 +13,7 @@ from update_language import update_language
 # Updates the Bible data file for every stored language
 def update_languages():
 
-    for file_path in glob.iglob('yvs/data/bible/language-*.json'):
+    for file_path in glob.iglob('yvs/data/languages/language-*.json'):
         language_id = re.search('language-(.*?).json', file_path).group(1)
         update_language(language_id)
         print('')

@@ -4,7 +4,6 @@
   "resources": [
       "icon.png",
       "yvs/*.py",
-      "yvs/data/*.json",
-      "yvs/data/bible/*.json"
+      "yvs/data/*/*.json"
   ]
 }

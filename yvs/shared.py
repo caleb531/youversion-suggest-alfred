@@ -63,29 +63,11 @@ def create_local_cache_dirs():
         pass
 
 
-# Upgrades language ID from ISO 639-1 code to ISO 639-3 code (if necessary)
-def upgrade_language_id(language_id):
-
-    if re.search(r'^[a-z]{2}(_[A-Z]{2})?$', language_id):
-        id_map_path = os.path.join(
-            PACKAGED_DATA_DIR_PATH, 'language-id-map.json')
-        with open(id_map_path, 'r') as id_map_file:
-            id_map = json.load(id_map_file)
-            user_prefs = get_user_prefs()
-            user_prefs['language'] = id_map[language_id]
-            set_user_prefs(user_prefs)
-            return id_map[language_id]
-    else:
-        return language_id
-
-
 # Retrieves bible data object (books, versions, etc.) for the given language
 def get_bible_data(language_id):
 
-    language_id = upgrade_language_id(language_id)
-
     bible_data_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'bible',
+        PACKAGED_DATA_DIR_PATH, 'languages',
         'language-{}.json'.format(language_id))
     with open(bible_data_path, 'r') as bible_data_file:
         return json.load(bible_data_file)
@@ -95,7 +77,7 @@ def get_bible_data(language_id):
 def get_chapter_data():
 
     chapter_data_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'bible', 'chapters.json')
+        PACKAGED_DATA_DIR_PATH, 'languages', 'chapters.json')
     with open(chapter_data_path, 'r') as chapter_data_file:
         return json.load(chapter_data_file)
 
@@ -126,7 +108,8 @@ def get_versions(language_id):
 # Retrieves a list of all supported languages
 def get_languages():
 
-    languages_path = os.path.join(PACKAGED_DATA_DIR_PATH, 'languages.json')
+    languages_path = os.path.join(
+        PACKAGED_DATA_DIR_PATH, 'languages', 'languages.json')
     with open(languages_path, 'r') as languages_file:
         return json.load(languages_file)
 
@@ -189,7 +172,8 @@ def get_result_list_feedback_str(results):
 # Retrieves the path to the workflow's default user preferences file
 def get_default_user_prefs_path():
 
-    return os.path.join(PACKAGED_DATA_DIR_PATH, 'defaults.json')
+    return os.path.join(
+        PACKAGED_DATA_DIR_PATH, 'preferences', 'defaults.json')
 
 
 # Retrieves the default values for all workflow preferences

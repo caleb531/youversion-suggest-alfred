@@ -113,7 +113,7 @@ def write_json(json_object, json_file):
 def save_bible_data(language_id, bible):
 
     bible_path = os.path.join(
-        yvs.PACKAGED_DATA_DIR_PATH, 'bible',
+        yvs.PACKAGED_DATA_DIR_PATH, 'languages',
         'language-{}.json'.format(language_id))
     with io.open(bible_path, 'w', encoding='utf-8') as bible_file:
         write_json(bible, bible_file)
@@ -122,7 +122,8 @@ def save_bible_data(language_id, bible):
 # Adds this language's details (name, code) to the list of supported languages
 def update_language_list(language_id, language_name):
 
-    langs_path = os.path.join(yvs.PACKAGED_DATA_DIR_PATH, 'languages.json')
+    langs_path = os.path.join(
+        yvs.PACKAGED_DATA_DIR_PATH, 'languages', 'languages.json')
     with io.open(langs_path, 'r+', encoding='utf-8') as langs_file:
         langs = json.load(langs_file)
         langs[:] = [lang for lang in langs if lang['id'] != language_id]

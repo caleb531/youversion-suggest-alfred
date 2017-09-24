@@ -1,0 +1,3 @@
+[submodule "yvs/data"]
+	path = yvs/data
+	url = https://github.com/caleb531/youversion-suggest-data.git
