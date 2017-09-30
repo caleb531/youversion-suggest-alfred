@@ -61,7 +61,7 @@ class VersionParser(YVParser):
 def get_versions(language_id):
 
     page_html = shared.get_url_content(
-        'https://www.bible.com/bible/{}'.format(language_id))
+        'https://www.bible.com/languages/{}'.format(language_id))
 
     parser = VersionParser()
     parser.feed(page_html)

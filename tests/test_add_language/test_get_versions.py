@@ -62,7 +62,7 @@ def test_get_versions_url(get_url_content):
     language_id = 'nld'
     add_lang.get_versions(language_id)
     get_url_content.assert_called_once_with(
-        'https://www.bible.com/bible/{}'.format(language_id))
+        'https://www.bible.com/languages/{}'.format(language_id))
 
 
 @nose.with_setup(set_up, tear_down)
