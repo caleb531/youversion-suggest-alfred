@@ -79,9 +79,9 @@ open htmlcov/index.html
 Every language supported by YouVersion Suggest is identified by an ISO 639-3
 code (*e.g.* `nld`, `spa_es`). The IDs and native names of all supported
 languages are listed in a single manifest file
-(`yvs/data/languages/languages.json`). Each language also has a corresponding
-Bible data file, where book and version information is stored (*e.g.*
-`yvs/data/languages/language-spa_es.json`).
+(`yvs/data/bible/languages.json`). Each language also has a corresponding Bible
+data file, where book and version information is stored (*e.g.*
+`yvs/data/bible/language-spa_es.json`).
 
 ### Adding language support
 

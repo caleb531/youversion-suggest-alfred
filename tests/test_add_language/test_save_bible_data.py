@@ -25,7 +25,7 @@ BIBLE = {
 def test_save_bible_data_new():
     """should save Bible data to new data file if it doesn't exist"""
     bible_file_path = os.path.join(
-        yvs.PACKAGED_DATA_DIR_PATH, 'languages',
+        yvs.PACKAGED_DATA_DIR_PATH, 'bible',
         'language-{}.json'.format(LANGUAGE_ID))
     add_lang.save_bible_data(language_id=LANGUAGE_ID, bible=BIBLE)
     nose.assert_true(os.path.exists(bible_file_path))
@@ -38,7 +38,7 @@ def test_save_bible_data_new():
 def test_save_bible_data_existing():
     """should update Bible data in existing data file"""
     bible_file_path = os.path.join(
-        yvs.PACKAGED_DATA_DIR_PATH, 'languages',
+        yvs.PACKAGED_DATA_DIR_PATH, 'bible',
         'language-{}.json'.format(LANGUAGE_ID))
     with open(bible_file_path, 'w') as bible_file:
         json.dump(BIBLE, bible_file)

@@ -21,7 +21,7 @@ def test_update_languages(out, update_language):
     update_langs.update_languages()
     nose.assert_equal(
         update_language.call_count,
-        len(glob.glob('yvs/data/languages/language-*.json')))
+        len(glob.glob('yvs/data/bible/language-*.json')))
 
 
 @nose.with_setup(set_up, tear_down)

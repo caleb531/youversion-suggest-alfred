@@ -18,7 +18,7 @@ def test_show_languages():
     """should show all languages if no value is given"""
     results = yvs.get_result_list('language')
     nose.assert_equal(
-        len(results), len(glob.glob('yvs/data/languages/language-*.json')))
+        len(results), len(glob.glob('yvs/data/bible/language-*.json')))
 
 
 @nose.with_setup(set_up, tear_down)

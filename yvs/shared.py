@@ -67,7 +67,7 @@ def create_local_cache_dirs():
 def get_bible_data(language_id):
 
     bible_data_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'languages',
+        PACKAGED_DATA_DIR_PATH, 'bible',
         'language-{}.json'.format(language_id))
     with open(bible_data_path, 'r') as bible_data_file:
         return json.load(bible_data_file)
@@ -77,7 +77,7 @@ def get_bible_data(language_id):
 def get_chapter_data():
 
     chapter_data_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'languages', 'chapters.json')
+        PACKAGED_DATA_DIR_PATH, 'bible', 'chapters.json')
     with open(chapter_data_path, 'r') as chapter_data_file:
         return json.load(chapter_data_file)
 
@@ -109,7 +109,7 @@ def get_versions(language_id):
 def get_languages():
 
     languages_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'languages', 'languages.json')
+        PACKAGED_DATA_DIR_PATH, 'bible', 'languages.json')
     with open(languages_path, 'r') as languages_file:
         return json.load(languages_file)
 

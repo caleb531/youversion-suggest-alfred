@@ -36,10 +36,10 @@ def test_complexity():
 def test_json():
     """All JSON files should comply with the respective schemas"""
     schemas = {
-        'schema-languages': 'yvs/data/languages/languages.json',
+        'schema-languages': 'yvs/data/bible/languages.json',
         'schema-defaults': 'yvs/data/preferences/defaults.json',
-        'schema-chapters': 'yvs/data/languages/chapters.json',
-        'schema-bible': 'yvs/data/languages/language-*.json'
+        'schema-chapters': 'yvs/data/bible/chapters.json',
+        'schema-bible': 'yvs/data/bible/language-*.json'
     }
     for schema_name, data_path_pattern in schemas.iteritems():
         schema_path = 'tests/schemas/{}.json'.format(schema_name)
@@ -77,11 +77,11 @@ def test_import_order():
 
 def test_language_id_correspondence():
     """Language IDs in language.json should have a corresponding data file"""
-    with open('yvs/data/languages/languages.json', 'r') as languages_file:
+    with open('yvs/data/bible/languages.json', 'r') as languages_file:
         languages = json.load(languages_file)
     for language in languages:
         nose.assert_true(
             os.path.exists(os.path.join(
                 'yvs', 'data',
-                'languages', 'language-{}.json'.format(language['id']))),
+                'bible', 'language-{}.json'.format(language['id']))),
             'language-{}.json does not exist'.format(language['id']))

@@ -14,7 +14,7 @@ class LanguageParser(YVParser):
     # Associates the given language ID with this parser instance
     def __init__(self, language_id):
         YVParser.__init__(self)
-        self.language_url_suffix = '/languages/{}'.format(language_id)
+        self.language_url_suffix = '/bible/{}'.format(language_id)
 
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
