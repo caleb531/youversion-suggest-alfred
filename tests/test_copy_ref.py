@@ -64,7 +64,7 @@ def test_header():
 def test_header_language():
     """reference header should reflect chosen language"""
     ref_content = yvs.get_copied_ref('128/psa.23')
-    nose.assert_regexp_matches(ref_content, r'^Salmos 23 \(NVI\)')
+    nose.assert_regexp_matches(ref_content, r'^Salmo 23 \(NVI\)')
 
 
 @nose.with_setup(set_up, tear_down)
