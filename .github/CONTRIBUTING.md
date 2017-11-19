@@ -29,6 +29,15 @@ to add or update unit tests as appropriate. All pull requests must be made to
 `develop` or an existing feature branch; PRs made directly to `master` will be
 closed.
 
+### Cloning data submodule
+
+All of the Bible data used by YouVersion Suggest is sourced from a separate
+repository. You must pull this data down to properly run this project:
+
+```bash
+git submodule update --recursive --init
+```
+
 ### Configuring a virtualenv
 
 The dependencies for the project and best run inside a `virtualenv`. For
