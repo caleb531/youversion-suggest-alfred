@@ -3,8 +3,8 @@
 *Copyright 2014-2017 Caleb Evans*  
 *Released under the MIT license*
 
-[![Build Status](https://travis-ci.org/caleb531/youversion-suggest.svg?branch=master)](https://travis-ci.org/caleb531/youversion-suggest)
-[![Coverage Status](https://coveralls.io/repos/caleb531/youversion-suggest/badge.svg?branch=master)](https://coveralls.io/r/caleb531/youversion-suggest?branch=master)
+[![Build Status](https://travis-ci.org/caleb531/youversion-suggest-alfred.svg?branch=master)](https://travis-ci.org/caleb531/youversion-suggest-alfred)
+[![Coverage Status](https://coveralls.io/repos/caleb531/youversion-suggest-alfred/badge.svg?branch=master)](https://coveralls.io/r/caleb531/youversion-suggest-alfred?branch=master)
 
 YouVersion Suggest is an [Alfred](https://www.alfredapp.com/) workflow which
 allows you to search the online [YouVersion](https://www.youversion.com/) Bible
