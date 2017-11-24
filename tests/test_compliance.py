@@ -5,7 +5,6 @@ import json
 import os.path
 
 import isort
-import jsonschema
 import nose.tools as nose
 import pycodestyle
 import radon.complexity as radon
@@ -31,25 +30,6 @@ def test_complexity():
             fail_msg = '{} ({}) has a cyclomatic complexity of {}'.format(
                 block.name, file_path, block.complexity)
             yield nose.assert_less_equal, block.complexity, 10, fail_msg
-
-
-def test_json():
-    """All JSON files should comply with the respective schemas"""
-    schemas = {
-        'schema-languages': 'yvs/data/bible/languages.json',
-        'schema-defaults': 'yvs/data/preferences/defaults.json',
-        'schema-chapters': 'yvs/data/bible/chapters.json',
-        'schema-bible': 'yvs/data/bible/language-*.json'
-    }
-    for schema_name, data_path_pattern in schemas.iteritems():
-        schema_path = 'tests/schemas/{}.json'.format(schema_name)
-        with open(schema_path) as schema_file:
-            schema = json.load(schema_file)
-        data_paths = glob.iglob(data_path_pattern)
-        for data_path in data_paths:
-            with open(data_path) as data_file:
-                data = json.load(data_file)
-            yield jsonschema.validate, data, schema
 
 
 def test_headers():
