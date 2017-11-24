@@ -83,21 +83,24 @@ def normalize_book_name(book_name):
     return book_name
 
 
+# Split the given book name into substrings
+def split_book_name_into_parts(book_name):
+
+    book_words = normalize_book_name(book_name).split(' ')
+    return [' '.join(book_words[w:]) for w in range(len(book_words))]
+
+
 # Retrieves list of books matching the given query
 def get_matching_books(books, query):
 
     matching_books = []
 
-    for i in xrange(len(query['book']), 0, -1):
-        book_query = query['book'][:i]
-        for book in books:
-            book_name = normalize_book_name(book['name'])
-            if book_name.startswith(book_query):
+    for book in books:
+        book_name_words = split_book_name_into_parts(book['name'])
+        for book_word in book_name_words:
+            if book_word.startswith(query['book']):
                 matching_books.append(book)
-        # Stop if all possible matching books have been found
-        # for the current query
-        if matching_books:
-            break
+                break
 
     return matching_books
 
