@@ -22,12 +22,15 @@ list, please [submit an GitHub issue][issues-page] with the following details:
 this language; click the language name on the page linked above to view the
 versions available for the language
 
+If you're feeling adventurous, you may also try adding your own language using
+the language utility apart the data module. See the [youversion-suggest-data
+contributing guide][data-contributing-guide] for more information.
+
 ## Contributing code
 
 Pull requests for bug fixes and new features are always welcome. Please be sure
-to add or update unit tests as appropriate. All pull requests must be made to
-`develop` or an existing feature branch; PRs made directly to `master` will be
-closed.
+to add or update unit tests as appropriate. Follow the steps below to set up the
+repository for contributing.
 
 ### Cloning data submodule
 
@@ -83,35 +86,7 @@ coverage html
 open htmlcov/index.html
 ```
 
-### Language storage
-
-Every language supported by YouVersion Suggest is identified by an ISO 639-3
-code (*e.g.* `nld`, `spa_es`). The IDs and native names of all supported
-languages are listed in a single manifest file
-(`yvs/data/bible/languages.json`). Each language also has a corresponding Bible
-data file, where book and version information is stored (*e.g.*
-`yvs/data/bible/language-spa_es.json`).
-
-### Adding language support
-
-The project includes a special utility which substantially eases the task of
-adding language support to the workflow. The utility must be run as a module and
-must be provided the ISO 639-3 code of the language to add. YouVersion provides
-[a complete list][language-list] of the languages it supports with their
-respective language codes.
-
-```bash
-python -m utilities.add_language spa_es
-```
-
-You can also specify the numeric ID of the default version to use for this
-language. Note that any user can override this default by setting their own
-preferred version (via `yvset version`).
-
-```bash
-python -m utilities.add_language zho_tw --default-version 46
-```
-
-[issues-page]: https://github.com/caleb531/youversion-suggest/issues
+[issues-page]: https://github.com/caleb531/youversion-suggest-alfred/issues
 [language-list]: https://www.bible.com/languages
+[data-contributing-guide]: https://github.com/caleb531/youversion-suggest-data/blob/master/CONTRIBUTING.md
 [nose]: http://nose.readthedocs.io/en/latest/
