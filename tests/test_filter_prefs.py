@@ -25,7 +25,6 @@ def test_show_languages():
 def test_filter_languages():
     """should filter available languages if value is given"""
     results = yvs.get_result_list('language span')
-    nose.assert_equal(len(results), 2)
     nose.assert_equal(results[0]['uid'], 'yvs-language-spa')
     nose.assert_equal(
         results[0]['title'], 'Español (América Latina) - Spanish')
@@ -39,6 +38,7 @@ def test_filter_languages():
             'name': 'Español (América Latina) - Spanish'
         }
     })
+    nose.assert_equal(len(results), 2)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -53,7 +53,6 @@ def test_show_versions():
 def test_filter_versions():
     """should filter available versions if value is given"""
     results = yvs.get_result_list('version ni')
-    nose.assert_equal(len(results), 3)
     nose.assert_equal(results[0]['uid'], 'yvs-version-110')
     nose.assert_equal(results[0]['title'], 'NIRV')
     nose.assert_equal(json.loads(results[0]['arg']), {
@@ -66,6 +65,7 @@ def test_filter_versions():
             'name': 'NIRV'
         }
     })
+    nose.assert_equal(len(results), 3)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -79,18 +79,18 @@ def test_nonexistent_pref():
 def test_nonexistent_value():
     """should return null result for nonexistent value"""
     results = yvs.get_result_list('language xyz')
-    nose.assert_equal(len(results), 1)
     nose.assert_regexp_matches(results[0]['title'], 'No Results')
     nose.assert_equal(results[0]['valid'], 'no')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_current_value():
     """should not make preference's current value actionable"""
     results = yvs.get_result_list('language english')
-    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'English')
     nose.assert_equal(results[0]['valid'], 'no')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -111,8 +111,8 @@ def test_nonexistent_preference():
 def test_non_alphanumeric():
     """should ignore all non-alphanumeric characters"""
     results = yvs.get_result_list('!language@it#')
-    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Italiano - Italian')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -136,9 +136,9 @@ def test_preferences_autocompletion():
 def test_filter_preferences():
     """should filter available preferences if partial key name is given"""
     results = yvs.get_result_list('ver')
-    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-version')
     nose.assert_equal(results[0]['title'], 'Version')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)

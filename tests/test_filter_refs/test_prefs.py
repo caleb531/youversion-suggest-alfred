@@ -17,8 +17,8 @@ from tests.decorators import use_user_prefs
 def test_version_persistence():
     """should remember version preferences"""
     results = yvs.get_result_list('mat 4')
-    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Matthew 4 (ESV)')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -26,8 +26,8 @@ def test_version_persistence():
 def test_language_persistence():
     """should remember language preferences"""
     results = yvs.get_result_list('gá 4')
-    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Gálatas 4 (NVI)')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)

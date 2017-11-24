@@ -32,30 +32,30 @@ def tear_down():
 def test_result_titles():
     """should correctly parse result titles from HTML"""
     results = yvs.get_result_list('love others')
-    nose.assert_equal(len(results), 3)
     nose.assert_regexp_matches(results[0]['title'], r'^Romans 13:8 \(NIV\)')
     nose.assert_regexp_matches(results[1]['title'], r'^John 15:12 \(NIV\)')
     nose.assert_regexp_matches(results[2]['title'], r'^1 Peter 4:8 \(NIV\)')
+    nose.assert_equal(len(results), 3)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_result_subtitles():
     """should correctly parse result subtitles from HTML"""
     results = yvs.get_result_list('love others')
-    nose.assert_equal(len(results), 3)
     nose.assert_regexp_matches(results[0]['subtitle'], 'Lorem')
     nose.assert_regexp_matches(results[1]['subtitle'], 'consectetur')
     nose.assert_regexp_matches(results[2]['subtitle'], 'Ut aliquam')
+    nose.assert_equal(len(results), 3)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_result_arg():
     """should correctly parse result UID arguments from HTML"""
     results = yvs.get_result_list('love others')
-    nose.assert_equal(len(results), 3)
     nose.assert_equal(results[0]['arg'], '111/rom.13.8')
     nose.assert_equal(results[1]['arg'], '111/jhn.15.12')
     nose.assert_equal(results[2]['arg'], '111/1pe.4.8')
+    nose.assert_equal(len(results), 3)
 
 
 @nose.with_setup(set_up, tear_down)

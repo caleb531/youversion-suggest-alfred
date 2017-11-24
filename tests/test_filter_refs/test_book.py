@@ -13,8 +13,8 @@ from tests.decorators import use_user_prefs
 def test_partial():
     """should match books by partial name"""
     results = yvs.get_result_list('luk')
-    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Luke 1 (NIV)')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -24,27 +24,27 @@ def test_case():
     results = yvs.get_result_list(query_str)
     results_lower = yvs.get_result_list(query_str.lower())
     results_upper = yvs.get_result_list(query_str.upper())
-    nose.assert_equal(len(results), 1)
     nose.assert_list_equal(results_lower, results)
     nose.assert_list_equal(results_upper, results)
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_partial_ambiguous():
     """should match books by ambiguous partial name"""
     results = yvs.get_result_list('r')
-    nose.assert_equal(len(results), 3)
     nose.assert_equal(results[0]['title'], 'Ruth 1 (NIV)')
     nose.assert_equal(results[1]['title'], 'Romans 1 (NIV)')
     nose.assert_equal(results[2]['title'], 'Revelation 1 (NIV)')
+    nose.assert_equal(len(results), 3)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_numbered_partial():
     """should match numbered books by partial numbered name"""
     results = yvs.get_result_list('1 cor')
-    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], '1 Corinthians 1 (NIV)')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -58,11 +58,11 @@ def test_number_only():
 def test_nonnumbered_partial():
     """should match only non-numbered books by partial non-numbered name"""
     results = yvs.get_result_list('joh')
-    nose.assert_equal(len(results), 4)
     nose.assert_equal(results[0]['title'], 'John 1 (NIV)')
     nose.assert_equal(results[1]['title'], '1 John 1 (NIV)')
     nose.assert_equal(results[2]['title'], '2 John 1 (NIV)')
     nose.assert_equal(results[3]['title'], '3 John 1 (NIV)')
+    nose.assert_equal(len(results), 4)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -70,8 +70,8 @@ def test_nonnumbered_partial():
 def test_non_first_word():
     """should match word other than first word in book name"""
     results = yvs.get_result_list('la')
-    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['title'], 'Laulujen laulu 1 (FB92)')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -79,6 +79,7 @@ def test_id():
     """should use correct ID for books"""
     results = yvs.get_result_list('philippians')
     nose.assert_equal(results[0]['uid'], 'yvs-111/php.1')
+    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
