@@ -55,8 +55,8 @@ def test_number_only():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_nonnumbered_partial():
-    """should match only non-numbered books by partial non-numbered name"""
+def test_numbered_nonnumbered_partial():
+    """should match numbered and non-numbered books by partial name"""
     results = yvs.get_result_list('joh')
     nose.assert_equal(results[0]['title'], 'John 1 (NIV)')
     nose.assert_equal(results[1]['title'], '1 John 1 (NIV)')
