@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import re
 import sys
+from operator import itemgetter
 
 import yvs.shared as shared
 
@@ -95,13 +96,18 @@ def get_matching_books(books, query):
 
     matching_books = []
 
-    for book in books:
+    for b, book in enumerate(books):
         book_name_words = split_book_name_into_parts(book['name'])
-        for book_word in book_name_words:
+        for w, book_word in enumerate(book_name_words):
             if book_word.startswith(query['book']):
+                # Give more priority to book names that are matched sooner
+                # (e.g. if the query matched the first word of a book name, as
+                # opposed to the second or third word)
+                book['priority'] = ((w + 1) * 100) + b
                 matching_books.append(book)
                 break
 
+    matching_books.sort(key=itemgetter('priority'))
     return matching_books
 
 
