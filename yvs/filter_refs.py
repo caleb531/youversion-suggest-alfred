@@ -100,11 +100,14 @@ def get_matching_books(books, query):
         book_name_words = split_book_name_into_parts(book['name'])
         for w, book_word in enumerate(book_name_words):
             if book_word.startswith(query['book']):
-                # Give more priority to book names that are matched sooner
-                # (e.g. if the query matched the first word of a book name, as
-                # opposed to the second or third word)
-                book['priority'] = ((w + 1) * 100) + b
-                matching_books.append(book)
+                matching_books.append({
+                    'id': book['id'],
+                    'name': book['name'],
+                    # Give more priority to book names that are matched sooner
+                    # (e.g. if the query matched the first word of a book name,
+                    # as opposed to the second or third word)
+                    'priority': ((w + 1) * 100) + b
+                })
                 break
 
     matching_books.sort(key=itemgetter('priority'))
