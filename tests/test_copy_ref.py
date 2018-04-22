@@ -136,5 +136,5 @@ def test_main(out):
     ref_uid = '59/psa.23'
     ref_content = yvs.get_copied_ref(ref_uid)
     yvs.main(ref_uid)
-    main_ref_content = out.getvalue()
+    main_ref_content = out.getvalue().decode('utf-8')
     nose.assert_equal(main_ref_content, ref_content)
