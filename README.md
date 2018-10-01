@@ -97,6 +97,7 @@ Currently, YouVersion Suggest supports the following languages:
 - French (fra)
 - German (deu)
 - Hindi (hin)
+- Indonesian (ind)
 - Italian (ita)
 - Japanese (jpn)
 - Korean (kor)
