@@ -1,7 +1,7 @@
 # tests.test_get_ref_url
 # coding=utf-8
 
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 
 import nose.tools as nose
 

@@ -1,6 +1,6 @@
 # tests.test_copy_ref
 
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 
 import nose.tools as nose
 from mock import Mock, NonCallableMock, patch
