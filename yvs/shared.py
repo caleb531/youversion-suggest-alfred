@@ -371,8 +371,8 @@ def get_ref_object(ref_uid, user_prefs=None):
     return ref
 
 
-# Retrieves the full reference identifier from the shorthand reference UID
-def get_full_ref(ref):
+# Retrieves the basic reference identifier without the version abbreviation
+def get_basic_ref(ref):
 
     full_ref = '{book} {chapter}'.format(
         book=ref['book'],
@@ -384,9 +384,14 @@ def get_full_ref(ref):
     if 'endverse' in ref:
         full_ref += '-{endverse}'.format(endverse=ref['endverse'])
 
-    full_ref += ' ({version})'.format(version=ref['version'])
-
     return full_ref
+
+
+# Retrieves the full reference identifier from the shorthand reference UID
+def get_full_ref(ref):
+
+    return '{id} ({version})'.format(
+        id=get_basic_ref(ref), version=ref['version'])
 
 
 # Builds the URL used to view the reference with the given UID

@@ -119,7 +119,7 @@ def get_chapter_html(ref):
 
 
 # Parses actual reference content from chapter HTML
-def get_ref_content(ref):
+def get_ref_content(ref, format):
 
     chapter_html = get_chapter_html(ref)
     parser = ReferenceParser(ref)
@@ -127,20 +127,25 @@ def get_ref_content(ref):
     # Format reference content by removing superfluous whitespace and such
     ref_content = shared.normalize_ref_content(
         ''.join(parser.content_parts))
-    # Prepend reference header that identifies reference (if content is
-    # non-empty)
-    if ref_content:
-        ref_content = ''.join((
-            shared.get_full_ref(ref), '\n\n', ref_content))
 
-    return ref_content
+    if ref_content:
+        copied_content = format.format(
+            i=shared.get_basic_ref(ref),
+            v=ref['version'],
+            c=ref_content,
+            u=shared.get_ref_url(ref['uid']))
+        copied_content = copied_content.replace('\\n', '\n')
+        return copied_content
+    else:
+        return ''
 
 
 # Retrieves entire reference (header and content) to be copied
 def get_copied_ref(ref_uid):
 
+    user_prefs = shared.get_user_prefs()
     ref = shared.get_ref_object(ref_uid)
-    return get_ref_content(ref)
+    return get_ref_content(ref, format=user_prefs['refformat'])
 
 
 def main(ref_uid):
