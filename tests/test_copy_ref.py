@@ -61,7 +61,8 @@ def test_header():
 
 @nose.with_setup(set_up, tear_down)
 @use_user_prefs(
-    {'language': 'spa', 'version': 128, 'refformat': '{i} ({v})\n\n{c}'})
+    {'language': 'spa', 'version': 128,
+        'refformat': '{id} ({version})\n\n{content}'})
 def test_header_language():
     """reference header should reflect chosen language"""
     ref_content = yvs.get_copied_ref('128/psa.23')

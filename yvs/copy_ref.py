@@ -130,10 +130,10 @@ def get_ref_content(ref, ref_format):
 
     if ref_content:
         copied_content = ref_format.format(
-            i=shared.get_basic_ref(ref),
-            v=ref['version'],
-            c=ref_content,
-            u=shared.get_ref_url(ref['uid']))
+            id=shared.get_basic_ref(ref),
+            version=ref['version'],
+            content=ref_content,
+            url=shared.get_ref_url(ref['uid']))
         copied_content = copied_content.replace('\\n', '\n')
         return copied_content
     else:
