@@ -119,7 +119,7 @@ def get_chapter_html(ref):
 
 
 # Parses actual reference content from chapter HTML
-def get_ref_content(ref, format):
+def get_ref_content(ref, ref_format):
 
     chapter_html = get_chapter_html(ref)
     parser = ReferenceParser(ref)
@@ -129,7 +129,7 @@ def get_ref_content(ref, format):
         ''.join(parser.content_parts))
 
     if ref_content:
-        copied_content = format.format(
+        copied_content = ref_format.format(
             i=shared.get_basic_ref(ref),
             v=ref['version'],
             c=ref_content,
@@ -145,7 +145,7 @@ def get_copied_ref(ref_uid):
 
     user_prefs = shared.get_user_prefs()
     ref = shared.get_ref_object(ref_uid)
-    return get_ref_content(ref, format=user_prefs['refformat'])
+    return get_ref_content(ref, ref_format=user_prefs['refformat'])
 
 
 def main(ref_uid):
