@@ -349,7 +349,8 @@ def get_ref_object(ref_uid, user_prefs=None):
     }
 
     # Include book name using book ID and currently-set language
-    user_prefs = get_user_prefs()
+    if not user_prefs:
+        user_prefs = get_user_prefs()
     bible = get_bible_data(user_prefs['language'])
     book_name = get_book(bible['books'], ref['book_id'])
     ref['book'] = book_name

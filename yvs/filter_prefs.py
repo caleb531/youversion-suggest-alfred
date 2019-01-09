@@ -28,8 +28,44 @@ def get_pref_defs(user_prefs):
                 shared.get_versions(user_prefs['language']),
                 key=itemgetter('name')),
             'description': 'Set the default version for Bible content'
+        },
+        {
+            'id': 'refformat',
+            'name': 'Reference Format',
+            'values': get_ref_formats(user_prefs),
+            'description': 'Set the default format for copied Bible references'
         }
     ]
+
+
+# Get a list of all available ref formats
+def get_ref_formats(user_prefs):
+
+    ref_object = shared.get_ref_object(
+        '111/jhn.11.35', shared.get_default_user_prefs())
+    ref_format_values = [
+        {'id': '{id}\n{content}'},
+        {'id': '{id}\n\n{content}'},
+        {'id': '{id} {version}\n{content}'},
+        {'id': '{id} {version}\n\n{content}'},
+        {'id': '{id} ({version})\n{content}'},
+        {'id': '{id} ({version})\n\n{content}'},
+
+        {'id': '{content}\n{id}'},
+        {'id': '{content}\n{id} {version}'},
+        {'id': '{content}\n{id} ({version})'},
+        {'id': '{content}\n({id})'},
+        {'id': '{content}\n({id} {version})'},
+        {'id': '{content}\n({id})'},
+        {'id': '{content}\n({id} {version})'}
+    ]
+    for value in ref_format_values:
+        value['name'] = value['id'].format(
+            id=shared.get_basic_ref(ref_object),
+            version=ref_object['version'],
+            content='Jesus wept.')
+        value['name'] = value['name'].replace('\n', ' ¬ ').replace('  ', ' ')
+    return ref_format_values
 
 
 # Get the value object with the given ID for the given preference
