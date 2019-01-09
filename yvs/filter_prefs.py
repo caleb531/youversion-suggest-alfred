@@ -50,7 +50,6 @@ def get_ref_formats(user_prefs):
         {'id': '{id} {version}\n\n{content}'},
         {'id': '{id} ({version})\n{content}'},
         {'id': '{id} ({version})\n\n{content}'},
-
         {'id': '{content}\n{id}'},
         {'id': '{content}\n{id} {version}'},
         {'id': '{content}\n{id} ({version})'},
