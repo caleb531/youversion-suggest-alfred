@@ -380,6 +380,13 @@ def get_basic_ref_name(ref):
 
     return ref_name
 
+# Retrieves the full reference name with the version abbreviation
+def get_full_ref_name(ref):
+
+    return '{name} ({version})'.format(
+        name=get_basic_ref_name(ref),
+        version=ref['version'])
+
 
 # Builds the URL used to view the reference with the given UID
 def get_ref_url(ref_uid):

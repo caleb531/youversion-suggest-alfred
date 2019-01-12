@@ -3,6 +3,7 @@
 
 from __future__ import print_function, unicode_literals
 
+import json
 import sys
 
 import yvs.shared as shared
@@ -150,7 +151,14 @@ def get_copied_ref(ref_uid):
 
 def main(ref_uid):
 
-    print(get_copied_ref(ref_uid).encode('utf-8'), end=''.encode('utf-8'))
+    print(json.dumps({
+        'alfredworkflow': {
+            'arg': ref_uid,
+            'variables': {
+                'copied_ref': get_copied_ref(ref_uid)
+            }
+        }
+    }))
 
 
 if __name__ == '__main__':
