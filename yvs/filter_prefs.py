@@ -44,23 +44,23 @@ def get_ref_formats(user_prefs):
     ref_object = shared.get_ref_object(
         '111/jhn.11.35', shared.get_default_user_prefs())
     ref_format_values = [
-        {'id': '{id}\n{content}'},
-        {'id': '{id}\n\n{content}'},
-        {'id': '{id} {version}\n{content}'},
-        {'id': '{id} {version}\n\n{content}'},
-        {'id': '{id} ({version})\n{content}'},
-        {'id': '{id} ({version})\n\n{content}'},
-        {'id': '{content}\n{id}'},
-        {'id': '{content}\n{id} {version}'},
-        {'id': '{content}\n{id} ({version})'},
-        {'id': '{content}\n({id})'},
-        {'id': '{content}\n({id} {version})'},
-        {'id': '{content}\n({id})'},
-        {'id': '{content}\n({id} {version})'}
+        {'id': '{name}\n{content}'},
+        {'id': '{name}\n\n{content}'},
+        {'id': '{name} {version}\n{content}'},
+        {'id': '{name} {version}\n\n{content}'},
+        {'id': '{name} ({version})\n{content}'},
+        {'id': '{name} ({version})\n\n{content}'},
+        {'id': '{content}\n{name}'},
+        {'id': '{content}\n{name} {version}'},
+        {'id': '{content}\n{name} ({version})'},
+        {'id': '{content}\n({name})'},
+        {'id': '{content}\n({name} {version})'},
+        {'id': '{content}\n({name})'},
+        {'id': '{content}\n({name} {version})'}
     ]
     for value in ref_format_values:
         value['name'] = value['id'].format(
-            id=shared.get_basic_ref(ref_object),
+            name=shared.get_basic_ref_name(ref_object),
             version=ref_object['version'],
             content='Jesus wept.')
         value['name'] = value['name'].replace('\n', ' ¬ ').replace('  ', ' ')

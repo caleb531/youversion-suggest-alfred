@@ -151,7 +151,7 @@ def test_filter_preferences_show_current():
 
 @nose.with_setup(set_up, tear_down)
 @use_user_prefs({
-    'language': 'eng', 'version': 999, 'refformat': '{id}\n\n{content}'})
+    'language': 'eng', 'version': 999, 'refformat': '{name}\n\n{content}'})
 def test_filter_preferences_no_show_invalid_current():
     """should show current values for all preferences"""
     results = yvs.get_result_list('')

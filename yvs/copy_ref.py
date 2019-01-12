@@ -130,7 +130,7 @@ def get_ref_content(ref, ref_format):
 
     if ref_content:
         copied_content = ref_format.format(
-            id=shared.get_basic_ref(ref),
+            name=shared.get_basic_ref_name(ref),
             version=ref['version'],
             content=ref_content,
             url=shared.get_ref_url(ref['uid']))
