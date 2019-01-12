@@ -23,6 +23,20 @@ def get_ref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
+def normalize_query_str(query_str):
+
+    query_str = shared.normalize_query_str(query_str)
+    query_str = query_str.lower()
+    # Remove all non-alphanumeric characters
+    query_str = re.sub(r'[\W_]', ' ', query_str, flags=re.UNICODE)
+    # Parse shorthand reference notation
+    query_str = re.sub(r'(\d)(?=[a-z])', '\\1 ', query_str)
+    query_str = re.sub(r'\s+', ' ', query_str)
+    query_str = query_str.strip()
+
+    return query_str
+
+
 # Builds the query object from the given query string
 def get_query_object(query_str):
 
@@ -52,7 +66,7 @@ def get_query_object(query_str):
 
         version_match = ref_matches.group(5)
         if version_match:
-            query['version'] = shared.normalize_query_str(version_match)
+            query['version'] = normalize_query_str(version_match)
 
     return query
 
@@ -64,7 +78,7 @@ def guess_version(versions, version_query):
     # found (if a matching version even exists)
     for i in xrange(len(version_query), 0, -1):
         for version in versions:
-            if (shared.normalize_query_str(
+            if (normalize_query_str(
                   version['name']).startswith(version_query[:i])):
                 return version
 
@@ -171,7 +185,7 @@ def get_result(book, query, chosen_version):
 # Retrieves search resylts matching the given query
 def get_result_list(query_str):
 
-    query_str = shared.normalize_query_str(query_str)
+    query_str = normalize_query_str(query_str)
     query = get_query_object(query_str)
     results = []
 

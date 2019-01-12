@@ -108,14 +108,6 @@ def test_nonexistent_preference():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_non_alphanumeric():
-    """should ignore all non-alphanumeric characters"""
-    results = yvs.get_result_list('!language@it#')
-    nose.assert_equal(results[0]['title'], 'Italiano - Italian')
-    nose.assert_equal(len(results), 1)
-
-
-@nose.with_setup(set_up, tear_down)
 def test_show_all_preferences():
     """should show all available preferences if query is empty"""
     results = yvs.get_result_list('')

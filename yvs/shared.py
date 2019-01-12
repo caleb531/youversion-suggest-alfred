@@ -316,16 +316,11 @@ def clear_cache():
 # Normalizes the format of the query string
 def normalize_query_str(query_str):
 
-    query_str = query_str.lower()
     # Normalize all Unicode characters
     query_str = unicodedata.normalize('NFC', query_str)
-    # Remove all non-alphanumeric characters
-    query_str = re.sub(r'[\W_]', ' ', query_str, flags=re.UNICODE)
     # Remove extra whitespace
     query_str = query_str.strip()
     query_str = re.sub(r'\s+', ' ', query_str)
-    # Parse shorthand reference notation
-    query_str = re.sub(r'(\d)(?=[a-z])', '\\1 ', query_str)
 
     return query_str
 
