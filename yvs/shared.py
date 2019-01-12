@@ -331,7 +331,7 @@ def normalize_query_str(query_str):
 
 
 # Parses the given reference UID into a dictionary representing that reference
-def get_ref_object(ref_uid, user_prefs=None):
+def get_ref_object(ref_uid, user_prefs):
 
     patt = r'^{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?$'.format(
         version=r'(\d+)',
@@ -349,8 +349,6 @@ def get_ref_object(ref_uid, user_prefs=None):
     }
 
     # Include book name using book ID and currently-set language
-    if not user_prefs:
-        user_prefs = get_user_prefs()
     bible = get_bible_data(user_prefs['language'])
     book_name = get_book(bible['books'], ref['book_id'])
     ref['book'] = book_name
