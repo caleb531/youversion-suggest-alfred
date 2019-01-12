@@ -380,6 +380,7 @@ def get_basic_ref_name(ref):
 
     return ref_name
 
+
 # Retrieves the full reference name with the version abbreviation
 def get_full_ref_name(ref):
 
