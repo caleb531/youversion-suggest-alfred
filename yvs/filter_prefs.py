@@ -47,7 +47,7 @@ def get_ref_format_values(user_prefs):
         '{name} ({version})\n\n{content}',
         '{name} {version}\n\n{content}',
         '{content}\n\n{name} {version}',
-        '"{content}"\n\n{name} {version}'
+        '"{content}"\n{name} {version}'
     ]
     # Display the user's current preference in the list
     if user_prefs['refformat'] not in ref_formats:
