@@ -52,19 +52,26 @@ def get_ref_format_values(user_prefs):
     # Display the user's current preference in the list
     if user_prefs['refformat'] not in ref_formats:
         ref_formats.append(user_prefs['refformat'])
-    ref_format_values = []
-    for ref_format in ref_formats:
-        ref_format_value = {}
-        ref_format_value['id'] = ref_format
-        ref_format_value['name'] = ref_format.format(
+
+    return [get_ref_format_value(ref_format, ref_object)
+            for ref_format in ref_formats]
+
+
+def get_ref_format_value(ref_format, ref_object):
+
+    return {
+        'id': ref_format,
+        'name': ref_format.format(
             name=shared.get_basic_ref_name(ref_object),
             version=ref_object['version'],
             content='Jesus wept.',
             url=shared.get_ref_url(ref_object['uid']))
-        ref_format_value['name'] = ref_format_value['name'].replace(
-            '\n', ' ¬ ').replace('  ', ' ')
-        ref_format_values.append(ref_format_value)
-    return ref_format_values
+        .replace('\n', ' ¬ ')
+        # Since the above substitution adds whitespace to both sides of the
+        # return symbol, the whitespace needs to be collapsed in the case of
+        # consecutive return symbols
+        .replace('  ', ' ')
+    }
 
 
 # Get the value object with the given ID for the given preference
