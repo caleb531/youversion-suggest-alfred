@@ -84,7 +84,7 @@ def get_search_html(query_str):
 
     entry_key = '{}/{}.html'.format(version, query_str)
     search_html = shared.get_cache_entry_content(entry_key)
-    if search_html is None:
+    if not search_html:
         search_html = shared.get_url_content(url)
         shared.add_cache_entry(entry_key, search_html)
 

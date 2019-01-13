@@ -112,7 +112,7 @@ def get_chapter_html(ref):
 
     entry_key = '{}.html'.format(chapter_uid)
     chapter_html = shared.get_cache_entry_content(entry_key)
-    if chapter_html is None:
+    if not chapter_html:
         chapter_html = shared.get_url_content(url)
         shared.add_cache_entry(entry_key, chapter_html)
 
