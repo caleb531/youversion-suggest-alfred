@@ -135,7 +135,6 @@ def get_ref_content(ref, ref_format):
             version=ref['version'],
             content=ref_content,
             url=shared.get_ref_url(ref['uid']))
-        copied_content = copied_content.replace('\\n', '\n')
         return copied_content
     else:
         return ''
