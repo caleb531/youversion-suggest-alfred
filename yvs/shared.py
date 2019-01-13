@@ -155,15 +155,10 @@ def get_result_list_feedback_item(result):
 # Constructs an Alfred JSON string from the given result list
 def get_result_list_feedback_str(results):
 
-    feedback = {
-        'items': []
-    }
-
-    for result in results:
-
-        feedback['items'].append(get_result_list_feedback_item(result))
-
-    return json.dumps(feedback)
+    return json.dumps({
+        'items': [get_result_list_feedback_item(result)
+                  for result in results]
+    })
 
 
 # Functions for accessing/manipulating mutable preferences
