@@ -32,38 +32,38 @@ def get_pref_defs(user_prefs):
         {
             'id': 'refformat',
             'name': 'Reference Format',
-            'values': get_ref_formats(user_prefs),
+            'values': get_ref_format_values(user_prefs),
             'description': 'Set the default format for copied Bible references'
         }
     ]
 
 
 # Get a list of all available ref formats
-def get_ref_formats(user_prefs):
+def get_ref_format_values(user_prefs):
 
     ref_object = shared.get_ref_object(
         '111/jhn.11.35', shared.get_default_user_prefs())
-    ref_format_values = [
-        {'id': '{name}\n{content}'},
-        {'id': '{name}\n\n{content}'},
-        {'id': '{name} {version}\n{content}'},
-        {'id': '{name} {version}\n\n{content}'},
-        {'id': '{name} ({version})\n{content}'},
-        {'id': '{name} ({version})\n\n{content}'},
-        {'id': '{content}\n{name}'},
-        {'id': '{content}\n{name} {version}'},
-        {'id': '{content}\n{name} ({version})'},
-        {'id': '{content}\n({name})'},
-        {'id': '{content}\n({name} {version})'},
-        {'id': '{content}\n({name})'},
-        {'id': '{content}\n({name} {version})'}
+    ref_formats = [
+        '{name} ({version})\n\n{content}',
+        '{name} {version}\n\n{content}',
+        '{content}\n\n{name} {version}',
+        '"{content}"\n\n{name} {version}'
     ]
-    for value in ref_format_values:
-        value['name'] = value['id'].format(
+    # Display the user's current preference in the list
+    if user_prefs['refformat'] not in ref_formats:
+        ref_formats.append(user_prefs['refformat'])
+    ref_format_values = []
+    for ref_format in ref_formats:
+        ref_format_value = {}
+        ref_format_value['id'] = ref_format
+        ref_format_value['name'] = ref_format.format(
             name=shared.get_basic_ref_name(ref_object),
             version=ref_object['version'],
-            content='Jesus wept.')
-        value['name'] = value['name'].replace('\n', ' ¬ ').replace('  ', ' ')
+            content='Jesus wept.',
+            url=shared.get_ref_url(ref_object['uid']))
+        ref_format_value['name'] = ref_format_value['name'].replace(
+            '\n', ' ¬ ').replace('  ', ' ')
+        ref_format_values.append(ref_format_value)
     return ref_format_values
 
 

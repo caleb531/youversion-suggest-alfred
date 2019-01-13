@@ -42,7 +42,8 @@ def test_filter_languages():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'spa', 'version': 128})
+@use_user_prefs(
+    {'language': 'spa', 'version': 128, 'refformat': '{name}\n{content}'})
 def test_show_versions():
     """should show all versions if no value is given"""
     results = yvs.get_result_list('version')
