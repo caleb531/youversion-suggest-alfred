@@ -213,6 +213,7 @@ def extend_user_prefs(user_prefs, default_user_prefs):
 
     return user_prefs
 
+
 # Retrieves map of user preferences
 def get_user_prefs():
 
