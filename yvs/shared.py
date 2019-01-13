@@ -398,7 +398,7 @@ def normalize_ref_content(ref_content):
     # Collapse sequences of three or more newlines into two
     ref_content = re.sub(r'\n{3,}', '\n\n', ref_content)
     # Strip leading/trailing whitespace for entire reference
-    ref_content = re.sub(r'(^\s+)|(\s+$)', '', ref_content)
+    ref_content = ref_content.strip()
     # Strip leading/trailing whitespace for each paragraph
     ref_content = re.sub(r' ?\n ?', '\n', ref_content)
     return ref_content
