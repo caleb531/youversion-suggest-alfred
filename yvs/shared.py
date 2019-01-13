@@ -201,17 +201,17 @@ def set_user_prefs(user_prefs):
 # Extends user preferences with any missing keys
 def extend_user_prefs(user_prefs, default_user_prefs):
 
-    # If any keys in the preference defaults have been added or removed
-    if set(user_prefs.keys()) != set(default_user_prefs.keys()):
-        # Supply defaults for missing keys and remove non-standard keys
-        new_user_prefs = {}
-        for pref_key in default_user_prefs:
-            new_user_prefs[pref_key] = user_prefs.get(
-                pref_key, default_user_prefs[pref_key])
-        return new_user_prefs
-    else:
-        return user_prefs
+    # Add any missing preferences
+    for pref_key in default_user_prefs:
+        if pref_key not in user_prefs:
+            user_prefs[pref_key] = default_user_prefs[pref_key]
 
+    # Remove any obsolete preferences
+    for pref_key in user_prefs.keys():
+        if pref_key not in default_user_prefs:
+            del user_prefs[pref_key]
+
+    return user_prefs
 
 # Retrieves map of user preferences
 def get_user_prefs():
