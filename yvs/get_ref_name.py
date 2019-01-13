@@ -10,8 +10,8 @@ import yvs.shared as shared
 
 def main(ref_uid):
     user_prefs = shared.get_user_prefs()
-    ref_object = shared.get_ref_object(ref_uid, user_prefs)
-    print(shared.get_full_ref_name(ref_object).encode('utf-8'),
+    ref = shared.get_ref(ref_uid, user_prefs)
+    print(shared.get_full_ref_name(ref).encode('utf-8'),
           end=''.encode('utf-8'))
 
 

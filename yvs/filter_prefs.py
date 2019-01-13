@@ -41,7 +41,7 @@ def get_pref_defs(user_prefs):
 # Get a list of all available ref formats
 def get_ref_format_values(user_prefs):
 
-    ref_object = shared.get_ref_object(
+    ref = shared.get_ref(
         '111/jhn.11.35', shared.get_default_user_prefs())
     ref_formats = [
         '{name} ({version})\n\n{content}',
@@ -53,19 +53,19 @@ def get_ref_format_values(user_prefs):
     if user_prefs['refformat'] not in ref_formats:
         ref_formats.append(user_prefs['refformat'])
 
-    return [get_ref_format_value(ref_format, ref_object)
+    return [get_ref_format_value(ref_format, ref)
             for ref_format in ref_formats]
 
 
-def get_ref_format_value(ref_format, ref_object):
+def get_ref_format_value(ref_format, ref):
 
     return {
         'id': ref_format,
         'name': ref_format.format(
-            name=shared.get_basic_ref_name(ref_object),
-            version=ref_object['version'],
+            name=shared.get_basic_ref_name(ref),
+            version=ref['version'],
             content='Jesus wept.',
-            url=shared.get_ref_url(ref_object['uid']))
+            url=shared.get_ref_url(ref['uid']))
         .replace('\n', ' ¬ ')
         # Since the above substitution adds whitespace to both sides of the
         # return symbol, the whitespace needs to be collapsed in the case of

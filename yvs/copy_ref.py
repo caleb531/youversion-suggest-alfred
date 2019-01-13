@@ -144,8 +144,8 @@ def get_ref_content(ref, ref_format):
 def get_copied_ref(ref_uid):
 
     user_prefs = shared.get_user_prefs()
-    ref_object = shared.get_ref_object(ref_uid, user_prefs)
-    return get_ref_content(ref_object, ref_format=user_prefs['refformat'])
+    ref = shared.get_ref(ref_uid, user_prefs)
+    return get_ref_content(ref, ref_format=user_prefs['refformat'])
 
 
 def main(ref_uid):

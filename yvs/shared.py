@@ -327,7 +327,7 @@ def normalize_query_str(query_str):
 
 
 # Parses the given reference UID into a dictionary representing that reference
-def get_ref_object(ref_uid, user_prefs):
+def get_ref(ref_uid, user_prefs):
 
     patt = r'^{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?$'.format(
         version=r'(\d+)',
