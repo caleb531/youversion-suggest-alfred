@@ -184,8 +184,10 @@ def normalize_query_str(query_str):
 # Retrieves result list of available preferences, filtered by the given query
 def get_pref_result_list(user_prefs, pref_defs, pref_key_query_str=''):
 
-    return [get_pref_result(pref_def, user_prefs) for pref_def in
-            pref_defs if normalize_pref_key(pref_def['id']).startswith(
+    return [get_pref_result(pref_def, user_prefs) for pref_def in pref_defs
+            if normalize_pref_key(pref_def['id']).startswith(
+                pref_key_query_str)
+            or normalize_pref_key(pref_def['name']).startswith(
                 pref_key_query_str)]
 
 

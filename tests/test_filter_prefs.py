@@ -126,11 +126,20 @@ def test_preferences_autocompletion():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_filter_preferences():
-    """should filter available preferences if partial key name is given"""
+def test_filter_preferences_id():
+    """should filter available preferences if partial pref ID is given"""
     results = yvs.get_result_list('ver')
     nose.assert_equal(results[0]['uid'], 'yvs-version')
     nose.assert_equal(results[0]['title'], 'Version')
+    nose.assert_equal(len(results), 1)
+
+
+@nose.with_setup(set_up, tear_down)
+def test_filter_preferences_name():
+    """should filter available preferences if partial pref name is given"""
+    results = yvs.get_result_list('refe')
+    nose.assert_equal(results[0]['uid'], 'yvs-refformat')
+    nose.assert_equal(results[0]['title'], 'Reference Format')
     nose.assert_equal(len(results), 1)
 
 
