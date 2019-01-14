@@ -28,6 +28,7 @@ def test_filter_languages():
     nose.assert_equal(results[0]['uid'], 'yvs-language-spa')
     nose.assert_equal(
         results[0]['title'], 'Español (América Latina) - Spanish')
+    nose.assert_equal(results[0].get('valid', 'yes'), 'yes')
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
@@ -56,6 +57,7 @@ def test_filter_versions():
     results = yvs.get_result_list('version ni')
     nose.assert_equal(results[0]['uid'], 'yvs-version-110')
     nose.assert_equal(results[0]['title'], 'NIRV')
+    nose.assert_equal(results[0].get('valid', 'yes'), 'yes')
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'version',
@@ -88,6 +90,7 @@ def test_filter_refformats():
     nose.assert_equal(results[0]['uid'],
                       'yvs-refformat-{id}'.format(id=result_format_id))
     nose.assert_equal(results[0]['title'], result_title)
+    nose.assert_equal(results[0].get('valid', 'yes'), 'yes')
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'refformat',
