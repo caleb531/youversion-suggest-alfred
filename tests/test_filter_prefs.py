@@ -70,6 +70,58 @@ def test_filter_versions():
 
 
 @nose.with_setup(set_up, tear_down)
+@use_user_prefs(
+    {'language': 'spa', 'version': 128, 'refformat': '{name}\n{content}'})
+def test_show_refformats():
+    """should show all refformats if no value is given"""
+    results = yvs.get_result_list('refformat')
+    nose.assert_greater(len(results), 3)
+
+
+@nose.with_setup(set_up, tear_down)
+def test_filter_refformats():
+    """should filter available refformats if value is given"""
+    results = yvs.get_result_list('refformat http')
+    result_title = '"Jesus wept." ¬ John 11:35 NIV ¬ {url}'.format(
+        url=yvs.shared.get_ref_url('111/jhn.11.35'))
+    result_format_id = '"{content}"\n{name} {version}\n{url}'
+    nose.assert_equal(results[0]['uid'],
+                      'yvs-refformat-{id}'.format(id=result_format_id))
+    nose.assert_equal(results[0]['title'], result_title)
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'refformat',
+            'name': 'Reference Format'
+        },
+        'value': {
+            'id': result_format_id,
+            'name': result_title
+        }
+    })
+    nose.assert_equal(len(results), 1)
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'eng', 'version': 59, 'refformat': 'Z {content}'})
+def test_show_current_refformat():
+    """should show current refformat as an available value"""
+    results = yvs.get_result_list('refformat Z')
+    nose.assert_equal(results[0]['uid'], 'yvs-refformat-Z {content}')
+    nose.assert_equal(results[0]['title'], 'Z Jesus wept.')
+    nose.assert_equal(results[0]['valid'], 'no')
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'refformat',
+            'name': 'Reference Format'
+        },
+        'value': {
+            'id': 'Z {content}',
+            'name': 'Z Jesus wept.'
+        }
+    })
+
+
+@nose.with_setup(set_up, tear_down)
 def test_nonexistent_pref():
     """should not match nonexistent preference"""
     results = yvs.get_result_list('xyz')
