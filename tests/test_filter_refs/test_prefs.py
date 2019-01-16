@@ -54,3 +54,16 @@ def test_create_local_data_dir_silent_fail():
     nose.assert_true(
         os.path.exists(yvs.shared.LOCAL_DATA_DIR_PATH),
         'local data directory does not exist')
+
+
+@nose.with_setup(set_up, tear_down)
+def test_prettified_prefs_json():
+    yvs.shared.set_user_prefs({
+        'language': 'spa',
+        'version': 128,
+        'refformat': '{name}\n{content}'
+    })
+    with open(yvs.shared.get_user_prefs_path(), 'r') as user_prefs_file:
+        user_prefs_json = user_prefs_file.read()
+        nose.assert_in('\n  ', user_prefs_json,
+                       'User prefs JSON is not prettified')

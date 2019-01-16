@@ -190,7 +190,7 @@ def set_user_prefs(user_prefs):
     # Always ensure that the data directory (where prefrences reside) exists
     create_local_data_dir()
     with open(get_user_prefs_path(), 'w') as prefs_file:
-        json.dump(user_prefs, prefs_file)
+        json.dump(user_prefs, prefs_file, indent=2, separators=(',', ': '))
 
 
 # Extends user preferences with any missing keys
