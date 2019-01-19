@@ -33,7 +33,9 @@ def get_pref_defs(user_prefs):
             'id': 'refformat',
             'name': 'Reference Format',
             'values': get_ref_format_values(user_prefs),
-            'description': 'Set the default format for copied Bible references'
+            'description': 'Set the default format for copied Bible '
+                           'references',
+            'customizable': True
         }
     ]
 
@@ -144,6 +146,13 @@ def get_value_result_list(user_prefs, pref_def, query_str):
         else:
             result['subtitle'] = 'Set this as your preferred {}'.format(
                 pref_def['name'].lower())
+
+        # Allow user to customize the values of select preferences (e.g.
+        # refformat) by pressing TAB key
+        if pref_def.get('customizable', False):
+            result['autocomplete'] = '{key} {value}'.format(
+                key=pref_def['id'],
+                value=value['id'].replace('\n', '\\n'))
 
         # Show all results if query string is empty
         # Otherwise, only show results whose titles begin with query
