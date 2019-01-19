@@ -220,7 +220,7 @@ def main(query_str):
         results.append({
             'title': 'No Results',
             'subtitle': 'No references matching \'{}\''.format(query_str),
-            'valid': 'no'
+            'valid': False
         })
 
     print(shared.get_result_list_feedback_str(results))

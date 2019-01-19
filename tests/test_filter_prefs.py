@@ -28,7 +28,7 @@ def test_filter_languages():
     nose.assert_equal(results[0]['uid'], 'yvs-language-spa')
     nose.assert_equal(
         results[0]['title'], 'Español (América Latina) - Spanish')
-    nose.assert_equal(results[0].get('valid', 'yes'), 'yes')
+    nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
@@ -57,7 +57,7 @@ def test_filter_versions():
     results = yvs.get_result_list('version ni')
     nose.assert_equal(results[0]['uid'], 'yvs-version-110')
     nose.assert_equal(results[0]['title'], 'NIRV')
-    nose.assert_equal(results[0].get('valid', 'yes'), 'yes')
+    nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'version',
@@ -90,7 +90,7 @@ def test_filter_refformats():
     nose.assert_equal(results[0]['uid'],
                       'yvs-refformat-{id}'.format(id=result_format_id))
     nose.assert_equal(results[0]['title'], result_title)
-    nose.assert_equal(results[0].get('valid', 'yes'), 'yes')
+    nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'refformat',
@@ -111,7 +111,7 @@ def test_show_current_refformat():
     results = yvs.get_result_list('refformat Z')
     nose.assert_equal(results[0]['uid'], 'yvs-refformat-Z {content}')
     nose.assert_equal(results[0]['title'], 'Z Jesus wept.')
-    nose.assert_equal(results[0]['valid'], 'no')
+    nose.assert_equal(results[0]['valid'], False)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'refformat',
@@ -136,7 +136,7 @@ def test_nonexistent_value():
     """should return null result for nonexistent value"""
     results = yvs.get_result_list('language xyz')
     nose.assert_regexp_matches(results[0]['title'], 'No Results')
-    nose.assert_equal(results[0]['valid'], 'no')
+    nose.assert_equal(results[0]['valid'], False)
     nose.assert_equal(len(results), 1)
 
 
@@ -145,7 +145,7 @@ def test_current_value():
     """should not make preference's current value actionable"""
     results = yvs.get_result_list('language english')
     nose.assert_equal(results[0]['title'], 'English')
-    nose.assert_equal(results[0]['valid'], 'no')
+    nose.assert_equal(results[0]['valid'], False)
     nose.assert_equal(len(results), 1)
 
 
@@ -177,7 +177,7 @@ def test_preferences_autocompletion():
     for result in results:
         nose.assert_in('autocomplete', result)
         nose.assert_in('valid', result)
-        nose.assert_equal(result['valid'], 'no')
+        nose.assert_equal(result['valid'], False)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -239,7 +239,7 @@ def test_null_result(out):
     nose.assert_equal(len(feedback['items']), 1, 'result item is missing')
     item = feedback['items'][0]
     nose.assert_equal(item['title'], 'No Results')
-    nose.assert_equal(item['valid'], 'no')
+    nose.assert_equal(item['valid'], False)
 
 
 @nose.with_setup(set_up, tear_down)

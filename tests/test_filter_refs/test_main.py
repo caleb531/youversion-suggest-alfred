@@ -34,4 +34,4 @@ def test_null_result(out):
     nose.assert_equal(len(feedback['items']), 1, 'result item is missing')
     item = feedback['items'][0]
     nose.assert_equal(item['title'], 'No Results')
-    nose.assert_equal(item['valid'], 'no')
+    nose.assert_equal(item['valid'], False)

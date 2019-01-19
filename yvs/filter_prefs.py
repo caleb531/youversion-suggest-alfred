@@ -99,7 +99,7 @@ def get_pref_def_result(pref_def, user_prefs):
     if value is not None:
         result['subtitle'] += ' (currently {})'.format(value['name'])
     result['autocomplete'] = '{} '.format(pref_def['id'].replace('_', ''))
-    result['valid'] = 'no'
+    result['valid'] = False
 
     return result
 
@@ -137,7 +137,7 @@ def get_value_result(value, user_prefs, pref_def):
         # If this value is the current value, indicate such
         result['subtitle'] = 'This is already your preferred {}'.format(
             pref_def['name'].lower())
-        result['valid'] = 'no'
+        result['valid'] = False
     else:
         result['subtitle'] = 'Set this as your preferred {}'.format(
             pref_def['name'].lower())
@@ -164,7 +164,7 @@ def get_value_result_list(user_prefs, pref_def, query_str):
         results.append({
             'title': 'No Results',
             'subtitle': 'No values matching {}'.format(query_str),
-            'valid': 'no'
+            'valid': False
         })
 
     return results
@@ -244,7 +244,7 @@ def main(query_str):
         results.append({
             'title': 'No Results',
             'subtitle': 'No preferences matching \'{}\''.format(query_str),
-            'valid': 'no'
+            'valid': False
         })
 
     print(shared.get_result_list_feedback_str(results))
