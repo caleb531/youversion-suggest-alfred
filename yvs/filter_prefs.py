@@ -115,50 +115,50 @@ def query_matches_value_title(pref_value, query_str):
         return False
 
 
+# Get the result object for a single preference value
+def get_value_result(value, user_prefs, pref_def):
+
+    result = {
+        'uid': 'yvs-{}-{}'.format(pref_def['id'], value['id']),
+        'arg': json.dumps({
+            'pref': {
+                'id': pref_def['id'],
+                'name': pref_def['name']
+            },
+            'value': {
+                'id': value['id'],
+                'name': value['name']
+            }
+        }),
+        'title': value['name']
+    }
+
+    if value['id'] == user_prefs[pref_def['id']]:
+        # If this value is the current value, indicate such
+        result['subtitle'] = 'This is already your preferred {}'.format(
+            pref_def['name'].lower())
+        result['valid'] = 'no'
+    else:
+        result['subtitle'] = 'Set this as your preferred {}'.format(
+            pref_def['name'].lower())
+
+    # Allow user to customize the values of select preferences (e.g.
+    # refformat) by pressing TAB key
+    if pref_def.get('customizable', False):
+        result['autocomplete'] = '{key} {value}'.format(
+            key=pref_def['id'],
+            value=value['id'].replace('\n', '\\n'))
+
+    return result
+
+
 # Retrieves Alfred result list of all available values for this preference
 def get_value_result_list(user_prefs, pref_def, query_str):
 
-    values = pref_def['values']
-    results = []
-
-    for value in values:
-
-        result = {
-            'uid': 'yvs-{}-{}'.format(pref_def['id'], value['id']),
-            'arg': json.dumps({
-                'pref': {
-                    'id': pref_def['id'],
-                    'name': pref_def['name']
-                },
-                'value': {
-                    'id': value['id'],
-                    'name': value['name']
-                }
-            }),
-            'title': value['name']
-        }
-
-        if value['id'] == user_prefs[pref_def['id']]:
-            # If this value is the current value, indicate such
-            result['subtitle'] = 'This is already your preferred {}'.format(
-                pref_def['name'].lower())
-            result['valid'] = 'no'
-        else:
-            result['subtitle'] = 'Set this as your preferred {}'.format(
-                pref_def['name'].lower())
-
-        # Allow user to customize the values of select preferences (e.g.
-        # refformat) by pressing TAB key
-        if pref_def.get('customizable', False):
-            result['autocomplete'] = '{key} {value}'.format(
-                key=pref_def['id'],
-                value=value['id'].replace('\n', '\\n'))
-
-        # Show all results if query string is empty
-        # Otherwise, only show results whose titles begin with query
-        if not query_str or query_matches_value_title(
-                result['title'], query_str):
-            results.append(result)
+    results = [get_value_result(value, user_prefs, pref_def)
+               for value in pref_def['values']
+               if not query_str or query_matches_value_title(
+                   value['name'], query_str)]
 
     if not results:
         results.append({
