@@ -58,16 +58,11 @@ def test_set_language_clear_cache():
 @redirect_stdout
 def test_main(out, set_pref):
     """should pass preference data to setter"""
-    alfred_data = {
-        'alfredworkflow': {
-            'variables': {
-                'pref_id': 'language',
-                'pref_name': 'Language',
-                'value_id': 'spa',
-                'value_name': 'Español'
-            }
-        }
-    }
-    yvs.main(json.dumps(alfred_data))
+    yvs.main(json.dumps({
+        'pref': {'id': 'language', 'name': 'Language'},
+        'value': {'id': 'spa', 'name': 'Español'}
+    }))
     set_pref.assert_called_once_with('language', 'spa')
-    nose.assert_equal(json.loads(out.getvalue()), alfred_data)
+    success_message = out.getvalue()
+    nose.assert_in('language'.encode('utf-8'), success_message)
+    nose.assert_in('Español'.encode('utf-8'), success_message)

@@ -29,14 +29,14 @@ def test_filter_languages():
     nose.assert_equal(
         results[0]['title'], 'Español (América Latina) - Spanish')
     nose.assert_equal(results[0].get('valid', True), True)
-    nose.assert_equal(results[0]['arg'], {
-        'alfredworkflow': {
-            'variables': {
-                'pref_id': 'language',
-                'pref_name': 'Language',
-                'value_id': 'spa',
-                'value_name': 'Español (América Latina) - Spanish'
-            }
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'language',
+            'name': 'Language'
+        },
+        'value': {
+            'id': 'spa',
+            'name': 'Español (América Latina) - Spanish'
         }
     })
     nose.assert_equal(len(results), 2)
@@ -58,14 +58,14 @@ def test_filter_versions():
     nose.assert_equal(results[0]['uid'], 'yvs-version-110')
     nose.assert_equal(results[0]['title'], 'NIRV')
     nose.assert_equal(results[0].get('valid', True), True)
-    nose.assert_equal(results[0]['arg'], {
-        'alfredworkflow': {
-            'variables': {
-                'pref_id': 'version',
-                'pref_name': 'Version',
-                'value_id': 110,
-                'value_name': 'NIRV'
-            }
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'version',
+            'name': 'Version'
+        },
+        'value': {
+            'id': 110,
+            'name': 'NIRV'
         }
     })
     nose.assert_equal(len(results), 3)
@@ -91,14 +91,14 @@ def test_filter_refformats():
                       'yvs-refformat-{id}'.format(id=result_format_id))
     nose.assert_equal(results[0]['title'], result_title)
     nose.assert_equal(results[0].get('valid', True), True)
-    nose.assert_equal(results[0]['arg'], {
-        'alfredworkflow': {
-            'variables': {
-                'pref_id': 'refformat',
-                'pref_name': 'Reference Format',
-                'value_id': result_format_id,
-                'value_name': result_title
-            }
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'refformat',
+            'name': 'Reference Format'
+        },
+        'value': {
+            'id': result_format_id,
+            'name': result_title
         }
     })
     nose.assert_equal(len(results), 1)
@@ -112,14 +112,14 @@ def test_show_current_refformat():
     nose.assert_equal(results[0]['uid'], 'yvs-refformat-Z {content}')
     nose.assert_equal(results[0]['title'], 'Z Jesus wept.')
     nose.assert_equal(results[0]['valid'], False)
-    nose.assert_equal(results[0]['arg'], {
-        'alfredworkflow': {
-            'variables': {
-                'pref_id': 'refformat',
-                'pref_name': 'Reference Format',
-                'value_id': 'Z {content}',
-                'value_name': 'Z Jesus wept.'
-            }
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'refformat',
+            'name': 'Reference Format'
+        },
+        'value': {
+            'id': 'Z {content}',
+            'name': 'Z Jesus wept.'
         }
     })
 

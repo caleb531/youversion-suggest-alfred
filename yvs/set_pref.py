@@ -10,12 +10,10 @@ import yvs.shared as shared
 
 
 # Parse pref set data from the given JSON string
-def parse_pref_set_data_str(pref_set_data_str):
+def parse_pref_set_data(pref_set_data_str):
 
-    pref_set_data = json.loads(
-        pref_set_data_str)['alfredworkflow']['variables']
-    return [pref_set_data[key] for key in
-            ['pref_id', 'pref_name', 'value_id', 'value_name']]
+    pref_set_data = json.loads(pref_set_data_str)
+    return pref_set_data['pref'], pref_set_data['value']
 
 
 # Set the YouVersion Suggest preference with the given key
@@ -35,10 +33,10 @@ def set_pref(pref_id, value_id):
 
 def main(pref_set_data_str):
 
-    pref_id, pref_name, value_id, value_name = parse_pref_set_data_str(
-        pref_set_data_str)
-    set_pref(pref_id, value_id)
-    print(pref_set_data_str.encode('utf-8'))
+    pref, value = parse_pref_set_data(pref_set_data_str)
+    set_pref(pref['id'], value['id'])
+    print('Preferred {} set to {}'.format(
+        pref['name'].lower(), value['name']).encode('utf-8'))
 
 
 if __name__ == '__main__':
