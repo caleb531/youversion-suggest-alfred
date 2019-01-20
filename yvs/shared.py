@@ -314,6 +314,9 @@ def normalize_query_str(query_str):
 
     # Normalize all Unicode characters
     query_str = unicodedata.normalize('NFC', query_str)
+    query_str = query_str.lower()
+    # Remove all non-alphanumeric characters
+    query_str = re.sub(r'[\W_]', ' ', query_str, flags=re.UNICODE)
     # Remove extra whitespace
     query_str = query_str.strip()
     query_str = re.sub(r'\s+', ' ', query_str)

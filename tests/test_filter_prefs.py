@@ -43,6 +43,26 @@ def test_filter_languages():
 
 
 @nose.with_setup(set_up, tear_down)
+def test_filter_languages_non_latin():
+    """should filter non-latin language names"""
+    results = yvs.get_result_list('language 繁')
+    nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
+    nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
+    nose.assert_equal(results[0].get('valid', True), True)
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'language',
+            'name': 'Language'
+        },
+        'value': {
+            'id': 'zho_tw',
+            'name': '繁體中文 - Chinese (Traditional)'
+        }
+    })
+    nose.assert_equal(len(results), 1)
+
+
+@nose.with_setup(set_up, tear_down)
 @use_user_prefs(
     {'language': 'spa', 'version': 128, 'refformat': '{name}\n{content}'})
 def test_show_versions():
@@ -203,6 +223,26 @@ def test_filter_preferences_show_current():
 def test_filter_preference_entire_query():
     """should match available preference values using entire query string"""
     results = yvs.get_result_list('language chinese (traditional)')
+    nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
+    nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
+    nose.assert_equal(results[0].get('valid', True), True)
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'language',
+            'name': 'Language'
+        },
+        'value': {
+            'id': 'zho_tw',
+            'name': '繁體中文 - Chinese (Traditional)'
+        }
+    })
+    nose.assert_equal(len(results), 1)
+
+
+@nose.with_setup(set_up, tear_down)
+def test_filter_preference_ignore_special():
+    """should ignore special characters when matching preference values"""
+    results = yvs.get_result_list('language chinese traditional')
     nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
     nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
     nose.assert_equal(results[0].get('valid', True), True)

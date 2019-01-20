@@ -106,7 +106,7 @@ def get_pref_def_result(pref_def, user_prefs):
 # otherwise, returns False
 def query_matches_value_title(pref_value, query_str):
     matches = re.search(r'\b{}'.format(
-        re.escape(query_str)), pref_value, flags=re.IGNORECASE)
+        re.escape(query_str)), pref_value, flags=re.UNICODE | re.IGNORECASE)
     if matches:
         return True
     else:
@@ -149,7 +149,7 @@ def get_value_result_list(user_prefs, pref_def, query_str):
     results = [get_value_result(value, user_prefs, pref_def)
                for value in pref_def['values']
                if not query_str or query_matches_value_title(
-                   value['name'], query_str)]
+                   shared.normalize_query_str(value['name']), query_str)]
 
     if not results:
         results.append({
@@ -170,26 +170,14 @@ def get_pref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
-# Simplify the given preference key for comparison with a query string
-def normalize_pref_key(pref_key):
-
-    return pref_key.replace('_', '').lower()
-
-
-# Format the query string specifically for this script filter
-def normalize_query_str(query_str):
-
-    return shared.normalize_query_str(query_str.replace('_', ''))
-
-
 # Retrieves result list of available preferences, filtered by the given query
-def get_pref_result_list(user_prefs, pref_defs, pref_key_query_str=''):
+def get_pref_result_list(user_prefs, pref_defs, pref_key_query=''):
 
     return [get_pref_def_result(pref_def, user_prefs) for pref_def in pref_defs
-            if normalize_pref_key(pref_def['id']).startswith(
-                pref_key_query_str)
-            or normalize_pref_key(pref_def['name']).startswith(
-                pref_key_query_str)]
+            if shared.normalize_query_str(pref_def['id']).startswith(
+                pref_key_query)
+            or shared.normalize_query_str(pref_def['name']).startswith(
+                pref_key_query)]
 
 
 # Retrieves result list of preferences or their respective values (depending on
@@ -198,26 +186,26 @@ def get_result_list(query_str):
 
     user_prefs = shared.get_user_prefs()
     pref_defs = get_pref_defs(user_prefs)
-    query_str = normalize_query_str(query_str)
+    query_str = shared.normalize_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
 
     if pref_matches:
 
-        pref_key_query_str = pref_matches.group(1)
-        pref_value_query_str = pref_matches.group(2)
+        pref_key_query = pref_matches.group(1)
+        pref_value_query = pref_matches.group(2)
 
         for pref_def in pref_defs:
             # If key name in query exactly matches a preference key name
-            if normalize_pref_key(pref_def['id']) == pref_key_query_str:
+            if shared.normalize_query_str(pref_def['id']) == pref_key_query:
                 # Get list of available values for the given preference
                 results = get_value_result_list(
-                    user_prefs, pref_def, pref_value_query_str)
+                    user_prefs, pref_def, pref_value_query)
                 break
         # If no exact matches, filter list of available preferences by query
         if not results:
             results = get_pref_result_list(
-                user_prefs, pref_defs, pref_key_query_str)
+                user_prefs, pref_defs, pref_key_query)
 
     else:
 

@@ -26,9 +26,6 @@ def get_ref_matches(query_str):
 def normalize_query_str(query_str):
 
     query_str = shared.normalize_query_str(query_str)
-    query_str = query_str.lower()
-    # Remove all non-alphanumeric characters
-    query_str = re.sub(r'[\W_]', ' ', query_str, flags=re.UNICODE)
     # Parse shorthand reference notation
     query_str = re.sub(r'(\d)(?=[a-z])', '\\1 ', query_str)
     query_str = re.sub(r'\s+', ' ', query_str)
