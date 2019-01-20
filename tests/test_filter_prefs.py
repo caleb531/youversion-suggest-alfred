@@ -29,6 +29,7 @@ def test_filter_languages():
     nose.assert_equal(
         results[0]['title'], 'Español (América Latina) - Spanish')
     nose.assert_equal(results[0].get('valid', True), True)
+    nose.assert_equal(len(results), 2)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
@@ -39,13 +40,13 @@ def test_filter_languages():
             'name': 'Español (América Latina) - Spanish'
         }
     })
-    nose.assert_equal(len(results), 2)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_filter_languages_non_latin():
     """should filter non-latin language names"""
     results = yvs.get_result_list('language 繁')
+    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
     nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
     nose.assert_equal(results[0].get('valid', True), True)
@@ -59,7 +60,6 @@ def test_filter_languages_non_latin():
             'name': '繁體中文 - Chinese (Traditional)'
         }
     })
-    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -75,6 +75,7 @@ def test_show_versions():
 def test_filter_versions():
     """should filter available versions if value is given"""
     results = yvs.get_result_list('version ni')
+    nose.assert_equal(len(results), 3)
     nose.assert_equal(results[0]['uid'], 'yvs-version-110')
     nose.assert_equal(results[0]['title'], 'NIRV')
     nose.assert_equal(results[0].get('valid', True), True)
@@ -88,7 +89,6 @@ def test_filter_versions():
             'name': 'NIRV'
         }
     })
-    nose.assert_equal(len(results), 3)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -107,6 +107,7 @@ def test_filter_refformats():
     result_title = '"Jesus wept." ¬ John 11:35 NIV ¬ {url}'.format(
         url=yvs.shared.get_ref_url('111/jhn.11.35'))
     result_format_id = '"{content}"\n{name} {version}\n{url}'
+    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'],
                       'yvs-refformat-{id}'.format(id=result_format_id))
     nose.assert_equal(results[0]['title'], result_title)
@@ -121,7 +122,6 @@ def test_filter_refformats():
             'name': result_title
         }
     })
-    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -129,6 +129,7 @@ def test_filter_refformats():
 def test_show_current_refformat():
     """should show current refformat as an available value"""
     results = yvs.get_result_list('refformat Z')
+    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-refformat-Z {content}')
     nose.assert_equal(results[0]['title'], 'Z Jesus wept.')
     nose.assert_equal(results[0]['valid'], False)
@@ -197,24 +198,25 @@ def test_preferences_autocompletion():
 def test_filter_preferences_id():
     """should filter available preferences if partial pref ID is given"""
     results = yvs.get_result_list('reff')
+    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-refformat')
     nose.assert_equal(results[0]['title'], 'Reference Format')
-    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_filter_preferences_name():
     """should filter available preferences if partial pref name is given"""
     results = yvs.get_result_list('refe')
+    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-refformat')
     nose.assert_equal(results[0]['title'], 'Reference Format')
-    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_filter_preferences_show_current():
     """should show all preferences"""
     results = yvs.get_result_list('')
+    nose.assert_equal(len(results), 3)
     nose.assert_in('English', results[0]['subtitle'])
     nose.assert_in('NIV', results[1]['subtitle'])
 
@@ -223,6 +225,7 @@ def test_filter_preferences_show_current():
 def test_filter_preference_entire_query():
     """should match available preference values using entire query string"""
     results = yvs.get_result_list('language chinese (traditional)')
+    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
     nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
     nose.assert_equal(results[0].get('valid', True), True)
@@ -236,13 +239,13 @@ def test_filter_preference_entire_query():
             'name': '繁體中文 - Chinese (Traditional)'
         }
     })
-    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
 def test_filter_preference_ignore_special():
     """should ignore special characters when matching preference values"""
     results = yvs.get_result_list('language chinese traditional')
+    nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
     nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
     nose.assert_equal(results[0].get('valid', True), True)
@@ -256,7 +259,6 @@ def test_filter_preference_ignore_special():
             'name': '繁體中文 - Chinese (Traditional)'
         }
     })
-    nose.assert_equal(len(results), 1)
 
 
 @nose.with_setup(set_up, tear_down)
@@ -265,6 +267,7 @@ def test_filter_preference_ignore_special():
 def test_filter_preferences_no_show_invalid_current():
     """should show current values for all preferences"""
     results = yvs.get_result_list('')
+    nose.assert_equal(len(results), 3)
     nose.assert_in('currently', results[0]['subtitle'])
     nose.assert_not_in('currently', results[1]['subtitle'])
 
