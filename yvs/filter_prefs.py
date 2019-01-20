@@ -166,7 +166,7 @@ def get_pref_matches(query_str):
 
     patt = r'^{key}{value}.*?$'.format(
         key=r'(\w+)',
-        value=r'(?:\s?(\w+))?')
+        value=r'(?:\s?(.+))?')
     return re.search(patt, query_str, flags=re.UNICODE)
 
 

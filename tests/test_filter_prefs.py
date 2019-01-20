@@ -207,6 +207,26 @@ def test_filter_preferences_show_current():
 
 
 @nose.with_setup(set_up, tear_down)
+def test_filter_preference_entire_query():
+    """should match available preference values using entire query string"""
+    results = yvs.get_result_list('language chinese (traditional)')
+    nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
+    nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
+    nose.assert_equal(results[0].get('valid', True), True)
+    nose.assert_equal(json.loads(results[0]['arg']), {
+        'pref': {
+            'id': 'language',
+            'name': 'Language'
+        },
+        'value': {
+            'id': 'zho_tw',
+            'name': '繁體中文 - Chinese (Traditional)'
+        }
+    })
+    nose.assert_equal(len(results), 1)
+
+
+@nose.with_setup(set_up, tear_down)
 @use_user_prefs({
     'language': 'eng', 'version': 999, 'refformat': '{name}\n\n{content}'})
 def test_filter_preferences_no_show_invalid_current():
