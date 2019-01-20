@@ -33,9 +33,7 @@ def get_pref_defs(user_prefs):
             'id': 'refformat',
             'name': 'Reference Format',
             'values': get_ref_format_values(user_prefs),
-            'description': 'Set the default format for copied Bible '
-                           'references',
-            'customizable': True
+            'description': 'Set the default format for copied Bible references'
         }
     ]
 
@@ -141,13 +139,6 @@ def get_value_result(value, user_prefs, pref_def):
     else:
         result['subtitle'] = 'Set this as your preferred {}'.format(
             pref_def['name'].lower())
-
-    # Allow user to customize the values of select preferences (e.g.
-    # refformat) by pressing TAB key
-    if pref_def.get('customizable', False):
-        result['autocomplete'] = '{key} {value}'.format(
-            key=pref_def['id'],
-            value=value['id'].replace('\n', '\\n'))
 
     return result
 
