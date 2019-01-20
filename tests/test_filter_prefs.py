@@ -157,13 +157,6 @@ def test_invalid_query():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_nonexistent_preference():
-    """should show null result if preference matching query does not exist"""
-    results = yvs.get_result_list('xyz')
-    nose.assert_equal(len(results), 0)
-
-
-@nose.with_setup(set_up, tear_down)
 def test_show_all_preferences():
     """should show all available preferences if query is empty"""
     results = yvs.get_result_list('')
