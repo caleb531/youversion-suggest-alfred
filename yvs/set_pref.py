@@ -15,7 +15,7 @@ def parse_pref_set_data_str(pref_set_data_str):
     pref_set_data = json.loads(
         pref_set_data_str)['alfredworkflow']['variables']
     return [pref_set_data[key] for key in
-            ('pref_id', 'pref_name', 'value_id', 'value_name')]
+            ['pref_id', 'pref_name', 'value_id', 'value_name']]
 
 
 # Set the YouVersion Suggest preference with the given key
