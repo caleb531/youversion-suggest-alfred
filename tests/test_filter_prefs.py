@@ -214,7 +214,7 @@ def test_filter_preferences_name():
 
 @nose.with_setup(set_up, tear_down)
 def test_filter_preferences_show_current():
-    """should show all preferences"""
+    """should show current values for all preferences"""
     results = yvs.get_result_list('')
     nose.assert_equal(len(results), 3)
     nose.assert_in('English', results[0]['subtitle'])
@@ -265,7 +265,7 @@ def test_filter_preference_ignore_special():
 @use_user_prefs({
     'language': 'eng', 'version': 999, 'refformat': '{name}\n\n{content}'})
 def test_filter_preferences_no_show_invalid_current():
-    """should show current values for all preferences"""
+    """should not show invalid current preference values"""
     results = yvs.get_result_list('')
     nose.assert_equal(len(results), 3)
     nose.assert_in('currently', results[0]['subtitle'])
