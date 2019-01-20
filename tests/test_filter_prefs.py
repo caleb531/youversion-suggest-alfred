@@ -222,6 +222,17 @@ def test_filter_preferences_show_current():
 
 
 @nose.with_setup(set_up, tear_down)
+@use_user_prefs({
+    'language': 'eng', 'version': 999, 'refformat': '{name}\n\n{content}'})
+def test_filter_preferences_show_current_valid_only():
+    """should not show invalid current preference values"""
+    results = yvs.get_result_list('')
+    nose.assert_equal(len(results), 3)
+    nose.assert_in('currently', results[0]['subtitle'])
+    nose.assert_not_in('currently', results[1]['subtitle'])
+
+
+@nose.with_setup(set_up, tear_down)
 def test_filter_preference_entire_query():
     """should match available preference values using entire query string"""
     results = yvs.get_result_list('language chinese (traditional)')
@@ -259,17 +270,6 @@ def test_filter_preference_ignore_special():
             'name': '繁體中文 - Chinese (Traditional)'
         }
     })
-
-
-@nose.with_setup(set_up, tear_down)
-@use_user_prefs({
-    'language': 'eng', 'version': 999, 'refformat': '{name}\n\n{content}'})
-def test_filter_preferences_no_show_invalid_current():
-    """should not show invalid current preference values"""
-    results = yvs.get_result_list('')
-    nose.assert_equal(len(results), 3)
-    nose.assert_in('currently', results[0]['subtitle'])
-    nose.assert_not_in('currently', results[1]['subtitle'])
 
 
 @nose.with_setup(set_up, tear_down)
