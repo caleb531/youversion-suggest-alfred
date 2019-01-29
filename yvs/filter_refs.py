@@ -191,7 +191,7 @@ def get_result_list(query_str):
 
     user_prefs = shared.get_user_prefs()
     bible = shared.get_bible_data(user_prefs['language'])
-    chapters = shared.get_chapter_data()
+    book_metadata = shared.get_book_metadata()
     matching_books = get_matching_books(bible['books'], query)
 
     if 'chapter' not in query:
@@ -203,7 +203,7 @@ def get_result_list(query_str):
     for book in matching_books:
 
         # If given chapter does not exceed number of chapters in book
-        if query['chapter'] <= chapters[book['id']]:
+        if query['chapter'] <= book_metadata[book['id']]['chapters']:
 
             results.append(get_result(book, query, chosen_version))
 

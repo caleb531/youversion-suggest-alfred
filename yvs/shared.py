@@ -73,13 +73,13 @@ def get_bible_data(language_id):
         return json.load(bible_data_file)
 
 
-# Retrieves map of chapter counts for every book of the Bible
-def get_chapter_data():
+# Retrieves metadata for every book of the Bible, including chapter counts
+def get_book_metadata():
 
-    chapter_data_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'bible', 'chapters.json')
-    with open(chapter_data_path, 'r') as chapter_data_file:
-        return json.load(chapter_data_file)
+    book_metadata_path = os.path.join(
+        PACKAGED_DATA_DIR_PATH, 'bible', 'book-metadata.json')
+    with open(book_metadata_path, 'r') as book_metadata_file:
+        return json.load(book_metadata_file)
 
 
 # Retrieves name of first book whose id matches the given id
