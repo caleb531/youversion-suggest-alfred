@@ -24,9 +24,9 @@ def get_pref_defs(user_prefs):
         {
             'id': 'version',
             'name': 'Version',
-            'values': sorted(
-                shared.get_versions(user_prefs['language']),
-                key=itemgetter('name')),
+            'values': [get_version_value(version) for version in sorted(
+                       shared.get_versions(user_prefs['language']),
+                       key=itemgetter('name'))],
             'description': 'Set the default version for Bible content'
         },
         {
@@ -36,6 +36,15 @@ def get_pref_defs(user_prefs):
             'description': 'Set the default format for copied Bible references'
         }
     ]
+
+
+# Convert the given version object to a value object for use in the preferences
+# UI
+def get_version_value(version):
+    return {
+        'id': version['id'],
+        'name': '{} ({})'.format(version['full_name'], version['name'])
+    }
 
 
 # Get a list of all available ref formats

@@ -77,7 +77,8 @@ def test_filter_versions():
     results = yvs.get_result_list('version ni')
     nose.assert_equal(len(results), 3)
     nose.assert_equal(results[0]['uid'], 'yvs-version-110')
-    nose.assert_equal(results[0]['title'], 'NIRV')
+    nose.assert_equal(results[0]['title'],
+                      'New International Reader\'s Version (NIRV)')
     nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
@@ -86,7 +87,7 @@ def test_filter_versions():
         },
         'value': {
             'id': 110,
-            'name': 'NIRV'
+            'name': 'New International Reader\'s Version (NIRV)'
         }
     })
 
