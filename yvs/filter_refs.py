@@ -190,7 +190,7 @@ def get_result_list(query_str):
         return results
 
     user_prefs = shared.get_user_prefs()
-    bible = shared.get_bible_data(user_prefs['language'])
+    bible = shared.get_bible(user_prefs['language'])
     book_metadata = shared.get_book_metadata()
     matching_books = get_matching_books(bible['books'], query)
 

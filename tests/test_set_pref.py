@@ -21,7 +21,7 @@ def test_set_language():
     yvs.set_pref('language', 'spa')
     user_prefs = yvs.shared.get_user_prefs()
     nose.assert_equal(user_prefs['language'], 'spa')
-    bible = yvs.shared.get_bible_data(user_prefs['language'])
+    bible = yvs.shared.get_bible(user_prefs['language'])
     nose.assert_equal(user_prefs['version'], bible['default_version'])
 
 

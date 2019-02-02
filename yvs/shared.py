@@ -64,13 +64,13 @@ def create_local_cache_dirs():
 
 
 # Retrieves bible data object (books, versions, etc.) for the given language
-def get_bible_data(language_id):
+def get_bible(language_id):
 
-    bible_data_path = os.path.join(
+    bible_path = os.path.join(
         PACKAGED_DATA_DIR_PATH, 'bible',
-        'language-{}.json'.format(language_id))
-    with open(bible_data_path, 'r') as bible_data_file:
-        return json.load(bible_data_file)
+        'bible-{}.json'.format(language_id))
+    with open(bible_path, 'r') as bible_file:
+        return json.load(bible_file)
 
 
 # Retrieves metadata for every book of the Bible, including chapter counts
@@ -101,7 +101,7 @@ def get_version(versions, version_id):
 # Retrieves a list of all supported versions for the given language
 def get_versions(language_id):
 
-    bible = get_bible_data(language_id)
+    bible = get_bible(language_id)
     return bible['versions']
 
 
@@ -343,7 +343,7 @@ def get_ref(ref_uid, user_prefs):
     }
 
     # Include book name using book ID and currently-set language
-    bible = get_bible_data(user_prefs['language'])
+    bible = get_bible(user_prefs['language'])
     book_name = get_book(bible['books'], ref['book_id'])
     ref['book'] = book_name
 

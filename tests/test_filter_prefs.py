@@ -18,16 +18,16 @@ def test_show_languages():
     """should show all languages if no value is given"""
     results = yvs.get_result_list('language')
     nose.assert_equal(
-        len(results), len(glob.glob('yvs/data/bible/language-*.json')))
+        len(results), len(glob.glob('yvs/data/bible/bible-*.json')))
 
 
 @nose.with_setup(set_up, tear_down)
 def test_filter_languages():
     """should filter available languages if value is given"""
-    results = yvs.get_result_list('language span')
+    results = yvs.get_result_list('language esp')
     nose.assert_equal(results[0]['uid'], 'yvs-language-spa')
     nose.assert_equal(
-        results[0]['title'], 'Español (América Latina) - Spanish')
+        results[0]['title'], 'Español (América Latina)')
     nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(len(results), 2)
     nose.assert_equal(json.loads(results[0]['arg']), {
@@ -37,7 +37,7 @@ def test_filter_languages():
         },
         'value': {
             'id': 'spa',
-            'name': 'Español (América Latina) - Spanish'
+            'name': 'Español (América Latina)'
         }
     })
 
@@ -48,7 +48,7 @@ def test_filter_languages_non_latin():
     results = yvs.get_result_list('language 繁')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
-    nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
+    nose.assert_equal(results[0]['title'], '繁體中文')
     nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
@@ -57,7 +57,7 @@ def test_filter_languages_non_latin():
         },
         'value': {
             'id': 'zho_tw',
-            'name': '繁體中文 - Chinese (Traditional)'
+            'name': '繁體中文'
         }
     })
 
@@ -235,10 +235,10 @@ def test_filter_preferences_show_current_valid_only():
 @nose.with_setup(set_up, tear_down)
 def test_filter_preference_entire_query():
     """should match available preference values using entire query string"""
-    results = yvs.get_result_list('language chinese (traditional)')
+    results = yvs.get_result_list('language español (españa)')
     nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
-    nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
+    nose.assert_equal(results[0]['uid'], 'yvs-language-spa_es')
+    nose.assert_equal(results[0]['title'], 'Español (España)')
     nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
@@ -246,8 +246,8 @@ def test_filter_preference_entire_query():
             'name': 'Language'
         },
         'value': {
-            'id': 'zho_tw',
-            'name': '繁體中文 - Chinese (Traditional)'
+            'id': 'spa_es',
+            'name': 'Español (España)'
         }
     })
 
@@ -255,10 +255,10 @@ def test_filter_preference_entire_query():
 @nose.with_setup(set_up, tear_down)
 def test_filter_preference_ignore_special():
     """should ignore special characters when matching preference values"""
-    results = yvs.get_result_list('language chinese traditional')
+    results = yvs.get_result_list('language 繁體中文$$')
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
-    nose.assert_equal(results[0]['title'], '繁體中文 - Chinese (Traditional)')
+    nose.assert_equal(results[0]['title'], '繁體中文')
     nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
@@ -267,7 +267,7 @@ def test_filter_preference_ignore_special():
         },
         'value': {
             'id': 'zho_tw',
-            'name': '繁體中文 - Chinese (Traditional)'
+            'name': '繁體中文'
         }
     })
 
