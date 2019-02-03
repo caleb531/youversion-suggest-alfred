@@ -111,17 +111,6 @@ def get_pref_def_result(pref_def, user_prefs):
     return result
 
 
-# Returns True if the given query string matches the given preference name;
-# otherwise, returns False
-def query_matches_value_title(pref_value, query_str):
-    matches = re.search(r'\b{}'.format(
-        re.escape(query_str)), pref_value, flags=re.UNICODE | re.IGNORECASE)
-    if matches:
-        return True
-    else:
-        return False
-
-
 # Get the result object for a single preference value
 def get_value_result(value, user_prefs, pref_def):
 
@@ -152,13 +141,22 @@ def get_value_result(value, user_prefs, pref_def):
     return result
 
 
+# Return True of the given query string matches the given preference field;
+# otherwise, return False
+def if_query_str_matches(pref_field, query_str):
+    pref_field = shared.normalize_query_str(pref_field)
+    return all(re.search(r'(^|\s){}'.format(
+               re.escape(word)), pref_field, flags=re.UNICODE | re.IGNORECASE)
+               for word in query_str.split(' '))
+
+
 # Retrieves Alfred result list of all available values for this preference
 def get_value_result_list(user_prefs, pref_def, query_str):
 
     results = [get_value_result(value, user_prefs, pref_def)
                for value in pref_def['values']
-               if not query_str or query_matches_value_title(
-                   shared.normalize_query_str(value['name']), query_str)]
+               if not query_str
+               or if_query_str_matches(value['name'], query_str)]
 
     if not results:
         results.append({
@@ -183,10 +181,8 @@ def get_pref_matches(query_str):
 def get_pref_result_list(user_prefs, pref_defs, pref_key_query=''):
 
     return [get_pref_def_result(pref_def, user_prefs) for pref_def in pref_defs
-            if shared.normalize_query_str(pref_def['id']).startswith(
-                pref_key_query)
-            or shared.normalize_query_str(pref_def['name']).startswith(
-                pref_key_query)]
+            if if_query_str_matches(pref_def['id'], pref_key_query)
+            or if_query_str_matches(pref_def['name'], pref_key_query)]
 
 
 # Retrieves result list of preferences or their respective values (depending on

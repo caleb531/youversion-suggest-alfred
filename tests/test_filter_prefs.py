@@ -214,6 +214,15 @@ def test_filter_preferences_name():
 
 
 @nose.with_setup(set_up, tear_down)
+def test_filter_preferences_name_partial():
+    """should match partial pref name at word boundaries"""
+    results = yvs.get_result_list('version en st')
+    nose.assert_equal(len(results), 1)
+    nose.assert_equal(results[0]['uid'], 'yvs-version-59')
+    nose.assert_equal(results[0]['title'], 'English Standard Version (ESV)')
+
+
+@nose.with_setup(set_up, tear_down)
 def test_filter_preferences_show_current():
     """should show current values for all preferences"""
     results = yvs.get_result_list('')
