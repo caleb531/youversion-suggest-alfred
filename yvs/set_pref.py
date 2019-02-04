@@ -7,6 +7,7 @@ import json
 import sys
 
 import yvs.shared as shared
+import yvs.cache as cache
 
 
 # Parse pref set data from the given JSON string
@@ -26,7 +27,7 @@ def set_pref(pref_id, value_id):
     if pref_id == 'language':
         bible = shared.get_bible(language_id=value_id)
         user_prefs['version'] = bible['default_version']
-        shared.clear_cache()
+        cache.clear_cache()
 
     shared.set_user_prefs(user_prefs)
 

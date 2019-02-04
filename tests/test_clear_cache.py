@@ -15,15 +15,15 @@ def test_clear_cache():
     """should remove cache directory when cache is cleared"""
     yvs.main()
     nose.assert_false(
-        os.path.exists(yvs.shared.LOCAL_CACHE_DIR_PATH),
+        os.path.exists(yvs.cache.LOCAL_CACHE_DIR_PATH),
         'local cache directory exists')
 
 
 @nose.with_setup(set_up, tear_down)
 def test_clear_cache_silent_fail():
     """should fail silently if cache directory does not exist"""
-    shutil.rmtree(yvs.shared.LOCAL_CACHE_DIR_PATH)
+    shutil.rmtree(yvs.cache.LOCAL_CACHE_DIR_PATH)
     yvs.main()
     nose.assert_false(
-        os.path.exists(yvs.shared.LOCAL_CACHE_DIR_PATH),
+        os.path.exists(yvs.cache.LOCAL_CACHE_DIR_PATH),
         'local cache directory exists')

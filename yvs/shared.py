@@ -3,17 +3,11 @@
 
 from __future__ import unicode_literals
 
-import hashlib
 import json
 import os
 import os.path
 import re
-import shutil
 import unicodedata
-import urllib2
-from gzip import GzipFile
-from htmlentitydefs import name2codepoint
-from StringIO import StringIO
 
 # Unique identifier for the workflow
 WORKFLOW_UID = 'com.calebevans.youversionsuggest'
@@ -24,23 +18,11 @@ HOME_DIR_PATH = os.path.expanduser('~')
 LOCAL_DATA_DIR_PATH = os.path.join(
     HOME_DIR_PATH, 'Library', 'Application Support', 'Alfred 3',
     'Workflow Data', WORKFLOW_UID)
-# Path to the directory where this workflow stores volatile local data
-LOCAL_CACHE_DIR_PATH = os.path.join(
-    HOME_DIR_PATH, 'Library', 'Caches',
-    'com.runningwithcrayons.Alfred-3', 'Workflow Data', WORKFLOW_UID)
 # Path to the directory containing data files apart of the packaged workflow
 PACKAGED_DATA_DIR_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
 
-# The maximum number of cache entries to store
-MAX_NUM_CACHE_ENTRIES = 100
-
 # The template used to build the URL for a Bible reference
 REF_URL_TEMPLATE = 'https://www.bible.com/bible/{ref}'
-
-# The user agent used for HTTP requests sent to the YouVersion website
-USER_AGENT = 'YouVersion Suggest'
-# The number of seconds to wait before timing out an HTTP request connection
-REQUEST_CONNECTION_TIMEOUT = 3
 
 
 # Creates the directory (and any nonexistent parent directories) where this
@@ -49,16 +31,6 @@ def create_local_data_dir():
 
     try:
         os.makedirs(LOCAL_DATA_DIR_PATH)
-    except OSError:
-        pass
-
-
-# Creates the directory (and any nonexistent parent directories) where this
-# workflow stores volatile local data (i.e. cache data)
-def create_local_cache_dirs():
-
-    try:
-        os.makedirs(get_cache_entry_dir_path())
     except OSError:
         pass
 
@@ -223,89 +195,6 @@ def get_user_prefs():
         return default_user_prefs
 
 
-# Functions for accessing/manipulating cache data
-
-
-# Calculates the unique SHA1 checksum used as the filename for a cache entry
-def get_cache_entry_checksum(entry_key):
-
-    return hashlib.sha1(entry_key.encode('utf-8')).hexdigest()
-
-
-# Retrieves the local filepath for a cache entry
-def get_cache_entry_path(entry_key):
-
-    entry_checksum = get_cache_entry_checksum(entry_key)
-    return os.path.join(get_cache_entry_dir_path(), entry_checksum)
-
-
-# Retrieves the path to the directory where all cache entries are stored
-def get_cache_entry_dir_path():
-
-    return os.path.join(LOCAL_CACHE_DIR_PATH, 'entries')
-
-
-# Retrieves the path to the manifest file listing all cache entries
-def get_cache_manifest_path():
-
-    return os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
-
-
-# Purge all expired entries in the cache
-def purge_expired_cache_entries(manifest_file):
-    # Read checksums from manifest; splitlines(True) preserves newlines
-    entry_checksums = manifest_file.read().splitlines(True)
-    # Purge the oldest entry if the cache is too large
-    if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
-        old_entry_checksum = entry_checksums[0].rstrip()
-        manifest_file.truncate(0)
-        manifest_file.seek(0)
-        manifest_file.writelines(entry_checksums[1:])
-        os.remove(os.path.join(
-            get_cache_entry_dir_path(), old_entry_checksum))
-
-
-# Adds to the cache a new entry with the given content
-def add_cache_entry(entry_key, entry_content):
-
-    create_local_cache_dirs()
-
-    # Write entry content to entry file
-    entry_path = get_cache_entry_path(entry_key)
-    with open(entry_path, 'w') as entry_file:
-        entry_file.write(entry_content.encode('utf-8'))
-
-    entry_checksum = os.path.basename(entry_path)
-    cache_manifest_path = get_cache_manifest_path()
-    with open(cache_manifest_path, 'a+') as manifest_file:
-        # Write the new entry checksum to manifest file
-        manifest_file.write(entry_checksum)
-        manifest_file.write('\n')
-        manifest_file.seek(0)
-        purge_expired_cache_entries(manifest_file)
-
-
-# Retrieves the unmodified content of a cache entry
-def get_cache_entry_content(entry_key):
-
-    create_local_cache_dirs()
-    entry_path = get_cache_entry_path(entry_key)
-    try:
-        with open(entry_path, 'r') as entry_file:
-            return entry_file.read().decode('utf-8')
-    except IOError:
-        return None
-
-
-# Removes all cache entries and the directory itself
-def clear_cache():
-
-    try:
-        shutil.rmtree(LOCAL_CACHE_DIR_PATH)
-    except OSError:
-        pass
-
-
 # Query-related functions
 
 
@@ -405,36 +294,3 @@ def normalize_ref_content(ref_content):
     # Strip leading/trailing whitespace for each paragraph
     ref_content = re.sub(r' ?\n ?', '\n', ref_content)
     return ref_content
-
-
-# Retrieves HTML contents of the given URL as a Unicode string
-def get_url_content(url):
-
-    request = urllib2.Request(url, headers={
-        'User-Agent': USER_AGENT,
-        'Accept-Encoding': 'gzip, deflate'
-    })
-    response = urllib2.urlopen(request, timeout=REQUEST_CONNECTION_TIMEOUT)
-    url_content = response.read()
-
-    # Decompress response body if gzipped
-    if response.info().get('Content-Encoding') == 'gzip':
-        str_buf = StringIO(url_content)
-        with GzipFile(fileobj=str_buf, mode='rb') as gzip_file:
-            url_content = gzip_file.read()
-
-    return url_content.decode('utf-8')
-
-
-# Evaluates HTML character reference to its respective Unicode character
-def eval_html_charref(name):
-
-    if name[0] == 'x':
-        # Handle hexadecimal character references
-        return unichr(int(name[1:], 16))
-    elif name.isdigit():
-        # Handle decimal character references
-        return unichr(int(name))
-    else:
-        # Otherwise, assume character reference is a named reference
-        return unichr(name2codepoint[name])

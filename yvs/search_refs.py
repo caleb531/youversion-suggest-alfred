@@ -7,6 +7,8 @@ import sys
 import urllib
 
 import yvs.shared as shared
+import yvs.cache as cache
+import yvs.web as web
 from yvs.yv_parser import YVParser
 
 REF_URL_PREFIX = '/bible/'
@@ -83,10 +85,10 @@ def get_search_html(query_str):
         urllib.quote_plus(query_str.encode('utf-8')), version)
 
     entry_key = '{}/{}.html'.format(version, query_str)
-    search_html = shared.get_cache_entry_content(entry_key)
+    search_html = cache.get_cache_entry_content(entry_key)
     if not search_html:
-        search_html = shared.get_url_content(url)
-        shared.add_cache_entry(entry_key, search_html)
+        search_html = web.get_url_content(url)
+        cache.add_cache_entry(entry_key, search_html)
 
     return search_html
 

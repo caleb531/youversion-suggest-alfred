@@ -59,7 +59,7 @@ def test_result_arg():
 
 
 @nose.with_setup(set_up, tear_down)
-@patch('yvs.shared.get_url_content', return_value='abc')
+@patch('yvs.web.get_url_content', return_value='abc')
 def test_unicode_input(get_url_content):
     """should correctly handle non-ASCII characters in query string"""
     yvs.get_result_list('é')

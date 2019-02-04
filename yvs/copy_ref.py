@@ -7,6 +7,8 @@ import json
 import sys
 
 import yvs.shared as shared
+import yvs.cache as cache
+import yvs.web as web
 from yvs.yv_parser import YVParser
 
 # Elements that should be surrounded by blank lines
@@ -111,10 +113,10 @@ def get_chapter_html(ref):
     url = shared.get_ref_url(ref_uid=chapter_uid)
 
     entry_key = '{}.html'.format(chapter_uid)
-    chapter_html = shared.get_cache_entry_content(entry_key)
+    chapter_html = cache.get_cache_entry_content(entry_key)
     if not chapter_html:
-        chapter_html = shared.get_url_content(url)
-        shared.add_cache_entry(entry_key, chapter_html)
+        chapter_html = web.get_url_content(url)
+        cache.add_cache_entry(entry_key, chapter_html)
 
     return chapter_html
 

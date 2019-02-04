@@ -45,12 +45,12 @@ def test_set_nonexistent():
 def test_set_language_clear_cache():
     """should clear cache when setting language"""
     nose.assert_true(
-        os.path.exists(yvs.shared.LOCAL_CACHE_DIR_PATH),
+        os.path.exists(yvs.cache.LOCAL_CACHE_DIR_PATH),
         'local cache directory does not exist')
-    yvs.shared.add_cache_entry('foo', 'blah blah')
+    yvs.cache.add_cache_entry('foo', 'blah blah')
     yvs.set_pref('language', 'spa')
     nose.assert_false(
-        os.path.exists(yvs.shared.LOCAL_CACHE_DIR_PATH),
+        os.path.exists(yvs.cache.LOCAL_CACHE_DIR_PATH),
         'local cache directory exists')
 
 

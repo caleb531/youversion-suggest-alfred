@@ -102,7 +102,7 @@ def test_whitespace_lines():
 
 
 @nose.with_setup(set_up, tear_down)
-@patch('yvs.shared.get_url_content', return_value='abc')
+@patch('yvs.web.get_url_content', return_value='abc')
 def test_url_always_chapter(get_url_content):
     """should always fetch HTML from chapter URL"""
     yvs.get_copied_ref('59/psa.23.2')
