@@ -1,4 +1,6 @@
-# Functions for accessing/manipulating cache data
+# yvs.cache
+# coding=utf-8
+
 import hashlib
 import os
 import os.path
