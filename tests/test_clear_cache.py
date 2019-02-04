@@ -1,4 +1,5 @@
-# tests.test_clear_cache
+#!/usr/bin/env python
+# coding=utf-8
 
 import os
 import os.path
