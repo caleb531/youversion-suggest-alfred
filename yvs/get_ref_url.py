@@ -5,11 +5,11 @@ from __future__ import print_function, unicode_literals
 
 import sys
 
-import yvs.shared as shared
+import yvs.core as core
 
 
 def main(ref_uid):
-    print(shared.get_ref_url(ref_uid).encode('utf-8'), end=''.encode('utf-8'))
+    print(core.get_ref_url(ref_uid).encode('utf-8'), end=''.encode('utf-8'))
 
 
 if __name__ == '__main__':

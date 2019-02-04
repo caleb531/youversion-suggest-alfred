@@ -6,7 +6,7 @@ from __future__ import print_function, unicode_literals
 import json
 import sys
 
-import yvs.shared as shared
+import yvs.core as core
 import yvs.cache as cache
 import yvs.web as web
 from yvs.yv_parser import YVParser
@@ -110,7 +110,7 @@ def get_ref_chapter_uid(ref):
 def get_chapter_html(ref):
 
     chapter_uid = get_ref_chapter_uid(ref)
-    url = shared.get_ref_url(ref_uid=chapter_uid)
+    url = core.get_ref_url(ref_uid=chapter_uid)
 
     entry_key = '{}.html'.format(chapter_uid)
     chapter_html = cache.get_cache_entry_content(entry_key)
@@ -128,15 +128,15 @@ def get_ref_content(ref, ref_format):
     parser = ReferenceParser(ref)
     parser.feed(chapter_html)
     # Format reference content by removing superfluous whitespace and such
-    ref_content = shared.normalize_ref_content(
+    ref_content = core.normalize_ref_content(
         ''.join(parser.content_parts))
 
     if ref_content:
         copied_content = ref_format.format(
-            name=shared.get_basic_ref_name(ref),
+            name=core.get_basic_ref_name(ref),
             version=ref['version'],
             content=ref_content,
-            url=shared.get_ref_url(ref['uid']))
+            url=core.get_ref_url(ref['uid']))
         return copied_content
     else:
         return ''
@@ -145,8 +145,8 @@ def get_ref_content(ref, ref_format):
 # Retrieves entire reference (header and content) to be copied
 def get_copied_ref(ref_uid):
 
-    user_prefs = shared.get_user_prefs()
-    ref = shared.get_ref(ref_uid, user_prefs)
+    user_prefs = core.get_user_prefs()
+    ref = core.get_ref(ref_uid, user_prefs)
     return get_ref_content(ref, ref_format=user_prefs['refformat'])
 
 

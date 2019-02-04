@@ -7,7 +7,7 @@ import re
 import sys
 from operator import itemgetter
 
-import yvs.shared as shared
+import yvs.core as core
 
 
 # Parses the given query string into components of a Bible reference
@@ -25,7 +25,7 @@ def get_ref_matches(query_str):
 
 def normalize_query_str(query_str):
 
-    query_str = shared.normalize_query_str(query_str)
+    query_str = core.normalize_query_str(query_str)
     # Parse shorthand reference notation
     query_str = re.sub(r'(\d)(?=[a-z])', '\\1 ', query_str)
     query_str = re.sub(r'\s+', ' ', query_str)
@@ -134,7 +134,7 @@ def choose_best_version(user_prefs, bible, query):
         chosen_version = guess_version(bible['versions'], query['version'])
 
     if not chosen_version and 'version' in user_prefs:
-        chosen_version = shared.get_version(
+        chosen_version = core.get_version(
             bible['versions'], user_prefs['version'])
 
     return chosen_version
@@ -189,9 +189,9 @@ def get_result_list(query_str):
     if not query:
         return results
 
-    user_prefs = shared.get_user_prefs()
-    bible = shared.get_bible(user_prefs['language'])
-    book_metadata = shared.get_book_metadata()
+    user_prefs = core.get_user_prefs()
+    bible = core.get_bible(user_prefs['language'])
+    book_metadata = core.get_book_metadata()
     matching_books = get_matching_books(bible['books'], query)
 
     if 'chapter' not in query:
@@ -220,7 +220,7 @@ def main(query_str):
             'valid': False
         })
 
-    print(shared.get_result_list_feedback_str(results))
+    print(core.get_result_list_feedback_str(results))
 
 
 if __name__ == '__main__':

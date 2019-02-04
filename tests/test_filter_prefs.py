@@ -106,7 +106,7 @@ def test_filter_refformats():
     """should filter available refformats if value is given"""
     results = yvs.get_result_list('refformat http')
     result_title = '"Jesus wept." ¬ John 11:35 NIV ¬ {url}'.format(
-        url=yvs.shared.get_ref_url('111/jhn.11.35'))
+        url=yvs.core.get_ref_url('111/jhn.11.35'))
     result_format_id = '"{content}"\n{name} {version}\n{url}'
     nose.assert_equal(len(results), 1)
     nose.assert_equal(results[0]['uid'],
@@ -290,7 +290,7 @@ def test_main_output(out):
     yvs.main(query_str)
     output = out.getvalue().strip()
     results = yvs.get_result_list(query_str)
-    feedback = yvs.shared.get_result_list_feedback_str(results).strip()
+    feedback = yvs.core.get_result_list_feedback_str(results).strip()
     nose.assert_equal(output, feedback)
 
 
@@ -315,5 +315,5 @@ def test_feedback_show_all(out):
     yvs.main('')
     output = out.getvalue().strip()
     results = yvs.get_result_list('')
-    feedback = yvs.shared.get_result_list_feedback_str(results).strip()
+    feedback = yvs.core.get_result_list_feedback_str(results).strip()
     nose.assert_equal(output, feedback)

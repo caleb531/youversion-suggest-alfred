@@ -8,7 +8,7 @@ import re
 import sys
 from operator import itemgetter
 
-import yvs.shared as shared
+import yvs.core as core
 
 
 # Returns a list of definition objects for all available preferences
@@ -18,14 +18,14 @@ def get_pref_defs(user_prefs):
         {
             'id': 'language',
             'name': 'Language',
-            'values': shared.get_languages(),
+            'values': core.get_languages(),
             'description': 'Set your preferred language for Bible content'
         },
         {
             'id': 'version',
             'name': 'Version',
             'values': [get_version_value(version) for version in sorted(
-                       shared.get_versions(user_prefs['language']),
+                       core.get_versions(user_prefs['language']),
                        key=itemgetter('name'))],
             'description': 'Set the default version for Bible content'
         },
@@ -50,8 +50,8 @@ def get_version_value(version):
 # Get a list of all available ref formats
 def get_ref_format_values(user_prefs):
 
-    ref = shared.get_ref(
-        '111/jhn.11.35', shared.get_default_user_prefs())
+    ref = core.get_ref(
+        '111/jhn.11.35', core.get_default_user_prefs())
     ref_formats = [
         '{name} ({version})\n\n{content}',
         '{name} {version}\n\n{content}',
@@ -72,10 +72,10 @@ def get_ref_format_value(ref_format, ref):
     return {
         'id': ref_format,
         'name': ref_format.format(
-            name=shared.get_basic_ref_name(ref),
+            name=core.get_basic_ref_name(ref),
             version=ref['version'],
             content='Jesus wept.',
-            url=shared.get_ref_url(ref['uid']))
+            url=core.get_ref_url(ref['uid']))
         .replace('\n', ' ¬ ')
         # Since the above substitution adds whitespace to both sides of the
         # return symbol, the whitespace needs to be collapsed in the case of
@@ -144,7 +144,7 @@ def get_value_result(value, user_prefs, pref_def):
 # Return True of the given query string matches the given preference field;
 # otherwise, return False
 def if_query_str_matches(pref_field, query_str):
-    pref_field = shared.normalize_query_str(pref_field)
+    pref_field = core.normalize_query_str(pref_field)
     return all(re.search(r'(^|\s){}'.format(
                re.escape(word)), pref_field, flags=re.UNICODE | re.IGNORECASE)
                for word in query_str.split(' '))
@@ -189,9 +189,9 @@ def get_pref_result_list(user_prefs, pref_defs, pref_key_query=''):
 # the given query string)
 def get_result_list(query_str):
 
-    user_prefs = shared.get_user_prefs()
+    user_prefs = core.get_user_prefs()
     pref_defs = get_pref_defs(user_prefs)
-    query_str = shared.normalize_query_str(query_str)
+    query_str = core.normalize_query_str(query_str)
     pref_matches = get_pref_matches(query_str)
     results = []
 
@@ -202,7 +202,7 @@ def get_result_list(query_str):
 
         for pref_def in pref_defs:
             # If key name in query exactly matches a preference key name
-            if shared.normalize_query_str(pref_def['id']) == pref_key_query:
+            if core.normalize_query_str(pref_def['id']) == pref_key_query:
                 # Get list of available values for the given preference
                 results = get_value_result_list(
                     user_prefs, pref_def, pref_value_query)
@@ -231,7 +231,7 @@ def main(query_str):
             'valid': False
         })
 
-    print(shared.get_result_list_feedback_str(results))
+    print(core.get_result_list_feedback_str(results))
 
 
 if __name__ == '__main__':

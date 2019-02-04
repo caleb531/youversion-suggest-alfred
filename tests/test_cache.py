@@ -1,4 +1,4 @@
-# tests.test_shared
+# tests.test_core
 
 from __future__ import unicode_literals
 

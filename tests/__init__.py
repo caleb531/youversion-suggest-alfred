@@ -7,12 +7,12 @@ import tempfile
 
 from mock import patch
 
-import yvs.shared as shared
+import yvs.core as core
 import yvs.cache as cache
 
 temp_dir = tempfile.gettempdir()
 local_data_dir_patcher = patch(
-    'yvs.shared.LOCAL_DATA_DIR_PATH',
+    'yvs.core.LOCAL_DATA_DIR_PATH',
     os.path.join(temp_dir, 'yvs-data'))
 local_cache_dir_patcher = patch(
     'yvs.cache.LOCAL_CACHE_DIR_PATH',
@@ -22,7 +22,7 @@ local_cache_dir_patcher = patch(
 def set_up():
     local_data_dir_patcher.start()
     try:
-        os.mkdir(shared.LOCAL_DATA_DIR_PATH)
+        os.mkdir(core.LOCAL_DATA_DIR_PATH)
     except OSError:
         pass
     local_cache_dir_patcher.start()
@@ -39,7 +39,7 @@ def tear_down():
         pass
     local_cache_dir_patcher.stop()
     try:
-        shutil.rmtree(shared.LOCAL_DATA_DIR_PATH)
+        shutil.rmtree(core.LOCAL_DATA_DIR_PATH)
     except OSError:
         pass
     local_data_dir_patcher.stop()

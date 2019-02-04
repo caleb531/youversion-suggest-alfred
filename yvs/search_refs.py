@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import sys
 import urllib
 
-import yvs.shared as shared
+import yvs.core as core
 import yvs.cache as cache
 import yvs.web as web
 from yvs.yv_parser import YVParser
@@ -65,7 +65,7 @@ class SearchResultParser(YVParser):
                 self.in_heading = False
             elif self.in_content and tag == 'p':
                 self.in_content = False
-                self.current_result['subtitle'] = shared.normalize_ref_content(
+                self.current_result['subtitle'] = core.normalize_ref_content(
                     self.current_result['subtitle'])
 
     # Handles verse content
@@ -80,7 +80,7 @@ class SearchResultParser(YVParser):
 # Retrieves HTML for reference with the given ID
 def get_search_html(query_str):
 
-    version = shared.get_user_prefs()['version']
+    version = core.get_user_prefs()['version']
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
         urllib.quote_plus(query_str.encode('utf-8')), version)
 
@@ -96,7 +96,7 @@ def get_search_html(query_str):
 # Parses actual reference content from reference HTML
 def get_result_list(query_str):
 
-    query_str = shared.normalize_query_str(query_str)
+    query_str = core.normalize_query_str(query_str)
     html = get_search_html(query_str)
     parser = SearchResultParser()
     parser.feed(html)
@@ -113,7 +113,7 @@ def main(query_str):
             'valid': False
         })
 
-    print(shared.get_result_list_feedback_str(results).encode('utf-8'))
+    print(core.get_result_list_feedback_str(results).encode('utf-8'))
 
 
 if __name__ == '__main__':

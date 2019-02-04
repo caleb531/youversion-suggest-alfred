@@ -41,7 +41,7 @@ def use_user_prefs(user_prefs):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            with patch('yvs.shared.get_user_prefs', return_value=user_prefs):
+            with patch('yvs.core.get_user_prefs', return_value=user_prefs):
                 return func(*args, **kwargs)
         return wrapper
     return decorator

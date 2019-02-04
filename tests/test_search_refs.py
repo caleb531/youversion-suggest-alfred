@@ -84,7 +84,7 @@ def test_output(out):
     yvs.main(query_str)
     output = out.getvalue().strip()
     results = yvs.get_result_list(query_str)
-    feedback = yvs.shared.get_result_list_feedback_str(results).strip()
+    feedback = yvs.core.get_result_list_feedback_str(results).strip()
     nose.assert_equal(output, feedback)
 
 

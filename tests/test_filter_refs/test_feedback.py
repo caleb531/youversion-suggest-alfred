@@ -14,7 +14,7 @@ from tests import set_up, tear_down
 def test_validity():
     """should return syntactically-valid JSON"""
     results = yvs.get_result_list('john 3:16')
-    feedback_str = yvs.shared.get_result_list_feedback_str(results)
+    feedback_str = yvs.core.get_result_list_feedback_str(results)
     nose.assert_is_instance(json.loads(feedback_str), dict)
 
 
@@ -23,7 +23,7 @@ def test_structure():
     """JSON should match result list"""
     results = yvs.get_result_list('matthew 6:34')
     result = results[0]
-    feedback_str = yvs.shared.get_result_list_feedback_str(results)
+    feedback_str = yvs.core.get_result_list_feedback_str(results)
     feedback = json.loads(feedback_str)
     nose.assert_in('items', feedback, 'feedback object must have result items')
     item = feedback['items'][0]

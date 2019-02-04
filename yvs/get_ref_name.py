@@ -5,13 +5,13 @@ from __future__ import print_function, unicode_literals
 
 import sys
 
-import yvs.shared as shared
+import yvs.core as core
 
 
 def main(ref_uid):
-    user_prefs = shared.get_user_prefs()
-    ref = shared.get_ref(ref_uid, user_prefs)
-    print(shared.get_full_ref_name(ref).encode('utf-8'),
+    user_prefs = core.get_user_prefs()
+    ref = core.get_ref(ref_uid, user_prefs)
+    print(core.get_full_ref_name(ref).encode('utf-8'),
           end=''.encode('utf-8'))
 
 
