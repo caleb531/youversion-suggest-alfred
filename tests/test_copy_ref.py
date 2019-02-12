@@ -141,7 +141,7 @@ def test_main(out):
     ref_uid = '59/psa.23'
     ref_content = yvs.get_copied_ref(ref_uid)
     yvs.main(ref_uid)
-    main_json = json.loads(out.getvalue().decode('utf-8'))
+    main_json = json.loads(out.getvalue())
     nose.assert_equal(main_json, {
         'alfredworkflow': {
             'arg': ref_uid,
