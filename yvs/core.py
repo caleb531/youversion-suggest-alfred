@@ -223,12 +223,12 @@ def get_ref(ref_uid, user_prefs):
         verse=r'(\d+)',
         endverse=r'(?:-(\d+))?')
 
-    ref_uid_matches = re.match(patt, ref_uid)
+    ref_uid_match = re.match(patt, ref_uid)
     ref = {
         'uid': ref_uid,
-        'book_id': ref_uid_matches.group(2),
-        'version_id': int(ref_uid_matches.group(1)),
-        'chapter': int(ref_uid_matches.group(3))
+        'book_id': ref_uid_match.group(2),
+        'version_id': int(ref_uid_match.group(1)),
+        'chapter': int(ref_uid_match.group(3))
     }
 
     # Include book name using book ID and currently-set language
@@ -237,12 +237,12 @@ def get_ref(ref_uid, user_prefs):
     ref['book'] = book_name
 
     # Include verse number if it exists
-    verse_match = ref_uid_matches.group(4)
+    verse_match = ref_uid_match.group(4)
     if verse_match:
         ref['verse'] = int(verse_match)
 
     # Include end verse number if it exists
-    endverse_match = ref_uid_matches.group(5)
+    endverse_match = ref_uid_match.group(5)
     if endverse_match:
         ref['endverse'] = int(endverse_match)
 

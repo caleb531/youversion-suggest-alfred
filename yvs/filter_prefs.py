@@ -169,7 +169,7 @@ def get_value_result_list(user_prefs, pref_def, query_str):
 
 
 # Parses a preference key and optional value from the given query string
-def get_pref_matches(query_str):
+def get_pref_match(query_str):
 
     patt = r'^{key}{value}.*?$'.format(
         key=r'(\w+)',
@@ -192,22 +192,22 @@ def get_result_list(query_str):
     user_prefs = core.get_user_prefs()
     pref_defs = get_pref_defs(user_prefs)
     query_str = core.normalize_query_str(query_str)
-    pref_matches = get_pref_matches(query_str)
+    pref_match = get_pref_match(query_str)
     results = []
 
-    if pref_matches:
+    if pref_match:
 
-        pref_key_query = pref_matches.group(1)
-        pref_value_query = pref_matches.group(2)
+        pref_key_query = pref_match.group(1)
+        pref_value_query = pref_match.group(2)
 
         for pref_def in pref_defs:
-            # If key name in query exactly matches a preference key name
+            # If key name in query exactly match a preference key name
             if core.normalize_query_str(pref_def['id']) == pref_key_query:
                 # Get list of available values for the given preference
                 results = get_value_result_list(
                     user_prefs, pref_def, pref_value_query)
                 break
-        # If no exact matches, filter list of available preferences by query
+        # If no exact match, filter list of available preferences by query
         if not results:
             results = get_pref_result_list(
                 user_prefs, pref_defs, pref_key_query)

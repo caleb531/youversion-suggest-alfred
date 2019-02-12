@@ -11,7 +11,7 @@ import yvs.core as core
 
 
 # Parses the given query string into components of a Bible reference
-def get_ref_matches(query_str):
+def get_ref_match(query_str):
 
     # Pattern for parsing any bible reference
     patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
@@ -38,30 +38,30 @@ def normalize_query_str(query_str):
 def get_query_object(query_str):
 
     # Match section of the bible based on query
-    ref_matches = get_ref_matches(query_str)
+    ref_match = get_ref_match(query_str)
 
-    if not ref_matches:
+    if not ref_match:
         return None
 
     # Create query object for storing query data
     query = {}
 
-    book_match = ref_matches.group(1)
+    book_match = ref_match.group(1)
     query['book'] = book_match.rstrip()
 
-    chapter_match = ref_matches.group(2)
+    chapter_match = ref_match.group(2)
     if chapter_match:
         query['chapter'] = max(int(chapter_match), 1)
 
-        verse_match = ref_matches.group(3)
+        verse_match = ref_match.group(3)
         if verse_match:
             query['verse'] = max(int(verse_match), 1)
 
-            endverse_match = ref_matches.group(4)
+            endverse_match = ref_match.group(4)
             if endverse_match:
                 query['endverse'] = int(endverse_match)
 
-        version_match = ref_matches.group(5)
+        version_match = ref_match.group(5)
         if version_match:
             query['version'] = normalize_query_str(version_match)
 
