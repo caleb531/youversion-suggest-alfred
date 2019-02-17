@@ -51,11 +51,11 @@ def get_query_object(query_str):
 
     chapter_match = ref_match.group(2)
     if chapter_match:
-        query['chapter'] = max(int(chapter_match), 1)
+        query['chapter'] = max(1, int(chapter_match))
 
         verse_match = ref_match.group(3)
         if verse_match:
-            query['verse'] = max(int(verse_match), 1)
+            query['verse'] = max(1, int(verse_match))
 
             endverse_match = ref_match.group(4)
             if endverse_match:
