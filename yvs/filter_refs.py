@@ -141,32 +141,35 @@ def choose_best_version(user_prefs, bible, query):
 
 
 # Builds a single result item
-def get_result(book, query, chosen_version):
+def get_result(book, query, chosen_version, book_metadata_item):
+
+    chapter = min(query['chapter'], book_metadata_item['chapters'])
 
     result = {}
 
     # Find chapter if given
     result['uid'] = '{book}.{chapter}'.format(
         book=book['id'],
-        chapter=query['chapter'])
+        chapter=chapter)
     result['title'] = '{book} {chapter}'.format(
         book=book['name'],
-        chapter=query['chapter'])
+        chapter=chapter)
 
     if 'verse' in query:
 
+        verse = min(query['verse'], book_metadata_item['verses'][chapter - 1])
+
         # Find verse if given
-        result['uid'] += '.{verse}'.format(
-            verse=query['verse'])
-        result['title'] += ':{verse}'.format(
-            verse=query['verse'])
+        result['uid'] += '.{verse}'.format(verse=verse)
+        result['title'] += ':{verse}'.format(verse=verse)
 
     if 'endverse' in query and query['endverse'] > query['verse']:
 
-        result['uid'] += '-{verse}'.format(
-            verse=query['endverse'])
-        result['title'] += '-{verse}'.format(
-            verse=query['endverse'])
+        endverse = min(query['endverse'],
+                       book_metadata_item['verses'][chapter - 1])
+
+        result['uid'] += '-{verse}'.format(verse=endverse)
+        result['title'] += '-{verse}'.format(verse=endverse)
 
     result['arg'] = '{version}/{uid}'.format(
         version=chosen_version['id'],
@@ -202,10 +205,8 @@ def get_result_list(query_str):
     # Build result list from books matching the query
     for book in matching_books:
 
-        # If given chapter does not exceed number of chapters in book
-        if query['chapter'] <= book_metadata[book['id']]['chapters']:
-
-            results.append(get_result(book, query, chosen_version))
+        results.append(get_result(
+            book, query, chosen_version, book_metadata[book['id']]))
 
     return results
 

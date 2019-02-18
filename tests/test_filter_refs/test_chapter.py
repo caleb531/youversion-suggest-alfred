@@ -35,13 +35,6 @@ def test_id():
 
 
 @nose.with_setup(set_up, tear_down)
-def test_nonexistent():
-    """should not match nonexistent chapters"""
-    results = yvs.get_result_list('ps 160')
-    nose.assert_equal(len(results), 0)
-
-
-@nose.with_setup(set_up, tear_down)
 def test_zero_chapter():
     """should interpret chapter zero as chapter one"""
     results = yvs.get_result_list('ps 0')
