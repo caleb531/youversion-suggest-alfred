@@ -183,10 +183,9 @@ def get_result_list(query_str):
 
     query_str = normalize_query_str(query_str)
     query = get_query_object(query_str)
-    results = []
 
     if not query:
-        return results
+        return []
 
     user_prefs = core.get_user_prefs()
     bible = core.get_bible(user_prefs['language'])
@@ -197,13 +196,9 @@ def get_result_list(query_str):
 
     chosen_version = choose_best_version(user_prefs, bible, query)
 
-    # Build result list from books matching the query
-    for book in get_matching_books(bible['books'], query):
-
-        results.append(get_result(
-            book, query, chosen_version, book_metadata[book['id']]))
-
-    return results
+    # Build and return result list from books matching the query
+    return [get_result(book, query, chosen_version, book_metadata[book['id']])
+            for book in get_matching_books(bible['books'], query)]
 
 
 def main(query_str):
