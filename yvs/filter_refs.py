@@ -168,8 +168,8 @@ def get_result(book, query, chosen_version, book_metadata_item):
         endverse = min(query['endverse'],
                        book_metadata_item['verses'][chapter - 1])
 
-        result['uid'] += '-{verse}'.format(verse=endverse)
-        result['title'] += '-{verse}'.format(verse=endverse)
+        result['uid'] += '-{endverse}'.format(endverse=endverse)
+        result['title'] += '-{endverse}'.format(endverse=endverse)
 
     result['arg'] = '{version}/{uid}'.format(
         version=chosen_version['id'],
