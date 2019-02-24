@@ -53,17 +53,17 @@ def get_query_object(query_str):
     if chapter_match:
         query['chapter'] = max(1, int(chapter_match))
 
-        verse_match = ref_match.group(3)
-        if verse_match:
-            query['verse'] = max(1, int(verse_match))
+    verse_match = ref_match.group(3)
+    if verse_match:
+        query['verse'] = max(1, int(verse_match))
 
-            endverse_match = ref_match.group(4)
-            if endverse_match:
-                query['endverse'] = int(endverse_match)
+    endverse_match = ref_match.group(4)
+    if endverse_match:
+        query['endverse'] = int(endverse_match)
 
-        version_match = ref_match.group(5)
-        if version_match:
-            query['version'] = normalize_query_str(version_match)
+    version_match = ref_match.group(5)
+    if version_match:
+        query['version'] = normalize_query_str(version_match)
 
     return query
 
@@ -144,6 +144,7 @@ def choose_best_version(user_prefs, bible, query):
 def get_result(book, query, chosen_version, book_metadata_item):
 
     chapter = min(query['chapter'], book_metadata_item['chapters'])
+    last_verse = book_metadata_item['verses'][chapter - 1]
 
     result = {}
 
@@ -156,21 +157,15 @@ def get_result(book, query, chosen_version, book_metadata_item):
         chapter=chapter)
 
     if 'verse' in query:
-
-        verse = min(query['verse'], book_metadata_item['verses'][chapter - 1])
-
-        # Find verse if given
+        verse = min(query['verse'], last_verse)
         result['uid'] += '.{verse}'.format(verse=verse)
         result['title'] += ':{verse}'.format(verse=verse)
 
-        if 'endverse' in query:
-
-            endverse = min(query['endverse'],
-                           book_metadata_item['verses'][chapter - 1])
-
-            if endverse > verse:
-                result['uid'] += '-{endverse}'.format(endverse=endverse)
-                result['title'] += '-{endverse}'.format(endverse=endverse)
+    if 'endverse' in query:
+        endverse = min(query['endverse'], last_verse)
+        if endverse > verse:
+            result['uid'] += '-{endverse}'.format(endverse=endverse)
+            result['title'] += '-{endverse}'.format(endverse=endverse)
 
     result['arg'] = '{version}/{uid}'.format(
         version=chosen_version['id'],
