@@ -163,13 +163,14 @@ def get_result(book, query, chosen_version, book_metadata_item):
         result['uid'] += '.{verse}'.format(verse=verse)
         result['title'] += ':{verse}'.format(verse=verse)
 
-    if 'endverse' in query and query['endverse'] > query['verse']:
+        if 'endverse' in query:
 
-        endverse = min(query['endverse'],
-                       book_metadata_item['verses'][chapter - 1])
+            endverse = min(query['endverse'],
+                           book_metadata_item['verses'][chapter - 1])
 
-        result['uid'] += '-{endverse}'.format(endverse=endverse)
-        result['title'] += '-{endverse}'.format(endverse=endverse)
+            if endverse > verse:
+                result['uid'] += '-{endverse}'.format(endverse=endverse)
+                result['title'] += '-{endverse}'.format(endverse=endverse)
 
     result['arg'] = '{version}/{uid}'.format(
         version=chosen_version['id'],

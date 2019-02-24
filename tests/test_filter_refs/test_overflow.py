@@ -34,3 +34,11 @@ def test_endverse_overflow():
     nose.assert_equal(results[0]['title'], 'Amos 2:4-16 (NIV)')
     nose.assert_equal(results[1]['title'], 'Acts 2:4-47 (NIV)')
     nose.assert_equal(len(results), 2)
+
+
+@nose.with_setup(set_up, tear_down)
+def test_verse_and_endverse_overflow():
+    """should revert to single verse if verse and endverse are too high"""
+    results = yvs.get_result_list('ps 23.7-9')
+    nose.assert_equal(results[0]['title'], 'Psalm 23:6 (NIV)')
+    nose.assert_equal(len(results), 1)
