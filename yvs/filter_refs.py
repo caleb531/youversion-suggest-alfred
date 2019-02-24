@@ -99,7 +99,7 @@ def normalize_book_name(book_name):
 def split_book_name_into_parts(book_name):
 
     book_words = normalize_book_name(book_name).split(' ')
-    return [' '.join(book_words[w:]) for w in range(len(book_words))]
+    return (' '.join(book_words[w:]) for w in range(len(book_words)))
 
 
 # Retrieves list of books matching the given query
