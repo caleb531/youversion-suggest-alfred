@@ -195,7 +195,6 @@ def get_result_list(query_str):
     user_prefs = core.get_user_prefs()
     bible = core.get_bible(user_prefs['language'])
     book_metadata = core.get_book_metadata()
-    matching_books = get_matching_books(bible['books'], query)
 
     if 'chapter' not in query:
         query['chapter'] = 1
@@ -203,7 +202,7 @@ def get_result_list(query_str):
     chosen_version = choose_best_version(user_prefs, bible, query)
 
     # Build result list from books matching the query
-    for book in matching_books:
+    for book in get_matching_books(bible['books'], query):
 
         results.append(get_result(
             book, query, chosen_version, book_metadata[book['id']]))
