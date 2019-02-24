@@ -43,6 +43,8 @@ def get_pref_defs(user_prefs):
 def get_version_value(version):
     return {
         'id': version['id'],
+        # The title as displayed in the Alfred UI should be the full name of
+        # the version followed by its abbreviation
         'name': '{} ({})'.format(version['full_name'], version['name'])
     }
 
