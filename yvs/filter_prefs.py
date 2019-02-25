@@ -147,6 +147,8 @@ def get_value_result(value, user_prefs, pref_def):
 # otherwise, return False
 def if_query_str_matches(pref_field, query_str):
     pref_field = core.normalize_query_str(pref_field)
+    # Match preference field if every word in query string matches field name
+    # at some word boundary
     return all(re.search(r'(^|\s){}'.format(
                re.escape(word)), pref_field, flags=re.UNICODE | re.IGNORECASE)
                for word in query_str.split(' '))
