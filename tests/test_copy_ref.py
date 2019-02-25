@@ -56,6 +56,16 @@ def test_copy_verse_range():
 
 
 @nose.with_setup(set_up, tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 59,
+        'refformat': '"{content}"\n\n({name} {version})'})
+def test_refformat():
+    """should honor the chosen reference format"""
+    ref_content = yvs.get_copied_ref('59/psa.23.6')
+    nose.assert_equals(ref_content, '"Proin nulla orci,"\n\n(Psalm 23:6 ESV)')
+
+
+@nose.with_setup(set_up, tear_down)
 def test_header():
     """should prepend reference header to copied string"""
     ref_content = yvs.get_copied_ref('59/psa.23')
