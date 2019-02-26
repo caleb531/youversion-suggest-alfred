@@ -1,4 +1,4 @@
-# tests.test_filter_refs.test_prefs
+#!/usr/bin/env python
 # coding=utf-8
 
 from __future__ import print_function, unicode_literals
@@ -33,7 +33,7 @@ def test_language_persistence():
 @nose.with_setup(set_up, tear_down)
 def test_missing_prefs():
     """should supply missing preferences with defaults"""
-    yvs.shared.set_user_prefs({})
+    yvs.core.set_user_prefs({})
     results = yvs.get_result_list('mat 5.3')
     nose.assert_equal(len(results), 1)
 
@@ -49,8 +49,21 @@ def test_invalid_user_version():
 @nose.with_setup(set_up, tear_down)
 def test_create_local_data_dir_silent_fail():
     """should silently fail if local data directory already exists"""
-    yvs.shared.create_local_data_dir()
-    yvs.shared.create_local_data_dir()
+    yvs.core.create_local_data_dir()
+    yvs.core.create_local_data_dir()
     nose.assert_true(
-        os.path.exists(yvs.shared.LOCAL_DATA_DIR_PATH),
+        os.path.exists(yvs.core.LOCAL_DATA_DIR_PATH),
         'local data directory does not exist')
+
+
+@nose.with_setup(set_up, tear_down)
+def test_prettified_prefs_json():
+    yvs.core.set_user_prefs({
+        'language': 'spa',
+        'version': 128,
+        'refformat': '{name}\n{content}'
+    })
+    with open(yvs.core.get_user_prefs_path(), 'r') as user_prefs_file:
+        user_prefs_json = user_prefs_file.read()
+        nose.assert_in('\n  ', user_prefs_json,
+                       'User prefs JSON is not prettified')

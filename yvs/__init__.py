@@ -1,2 +1,2 @@
-# yvs.__init__
+#!/usr/bin/env python
 # coding=utf-8

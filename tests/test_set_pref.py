@@ -1,4 +1,4 @@
-# tests.test_set_pref
+#!/usr/bin/env python
 # coding=utf-8
 
 from __future__ import print_function, unicode_literals
@@ -19,9 +19,9 @@ from tests.decorators import redirect_stdout
 def test_set_language():
     """should set preferred language"""
     yvs.set_pref('language', 'spa')
-    user_prefs = yvs.shared.get_user_prefs()
+    user_prefs = yvs.core.get_user_prefs()
     nose.assert_equal(user_prefs['language'], 'spa')
-    bible = yvs.shared.get_bible_data(user_prefs['language'])
+    bible = yvs.core.get_bible(user_prefs['language'])
     nose.assert_equal(user_prefs['version'], bible['default_version'])
 
 
@@ -29,7 +29,7 @@ def test_set_language():
 def test_set_version():
     """should set preferred version"""
     yvs.set_pref('version', 59)
-    user_prefs = yvs.shared.get_user_prefs()
+    user_prefs = yvs.core.get_user_prefs()
     nose.assert_equal(user_prefs['version'], 59)
 
 
@@ -37,7 +37,7 @@ def test_set_version():
 def test_set_nonexistent():
     """should discard nonexistent preferences"""
     yvs.set_pref('foo', 'bar')
-    user_prefs = yvs.shared.get_user_prefs()
+    user_prefs = yvs.core.get_user_prefs()
     nose.assert_not_in('foo', user_prefs)
 
 
@@ -45,12 +45,12 @@ def test_set_nonexistent():
 def test_set_language_clear_cache():
     """should clear cache when setting language"""
     nose.assert_true(
-        os.path.exists(yvs.shared.LOCAL_CACHE_DIR_PATH),
+        os.path.exists(yvs.cache.LOCAL_CACHE_DIR_PATH),
         'local cache directory does not exist')
-    yvs.shared.add_cache_entry('foo', 'blah blah')
+    yvs.cache.add_cache_entry('foo', 'blah blah')
     yvs.set_pref('language', 'spa')
     nose.assert_false(
-        os.path.exists(yvs.shared.LOCAL_CACHE_DIR_PATH),
+        os.path.exists(yvs.cache.LOCAL_CACHE_DIR_PATH),
         'local cache directory exists')
 
 

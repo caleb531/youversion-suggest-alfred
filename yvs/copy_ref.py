@@ -1,11 +1,14 @@
-# yvs.copy_ref
+#!/usr/bin/env python
 # coding=utf-8
 
 from __future__ import print_function, unicode_literals
 
+import json
 import sys
 
-import yvs.shared as shared
+import yvs.core as core
+import yvs.cache as cache
+import yvs.web as web
 from yvs.yv_parser import YVParser
 
 # Elements that should be surrounded by blank lines
@@ -107,45 +110,56 @@ def get_ref_chapter_uid(ref):
 def get_chapter_html(ref):
 
     chapter_uid = get_ref_chapter_uid(ref)
-    url = shared.get_ref_url(ref_uid=chapter_uid)
+    url = core.get_ref_url(ref_uid=chapter_uid)
 
     entry_key = '{}.html'.format(chapter_uid)
-    chapter_html = shared.get_cache_entry_content(entry_key)
-    if chapter_html is None:
-        chapter_html = shared.get_url_content(url)
-        shared.add_cache_entry(entry_key, chapter_html)
+    chapter_html = cache.get_cache_entry_content(entry_key)
+    if not chapter_html:
+        chapter_html = web.get_url_content(url)
+        cache.add_cache_entry(entry_key, chapter_html)
 
     return chapter_html
 
 
 # Parses actual reference content from chapter HTML
-def get_ref_content(ref):
+def get_ref_content(ref, ref_format):
 
     chapter_html = get_chapter_html(ref)
     parser = ReferenceParser(ref)
     parser.feed(chapter_html)
     # Format reference content by removing superfluous whitespace and such
-    ref_content = shared.normalize_ref_content(
+    ref_content = core.normalize_ref_content(
         ''.join(parser.content_parts))
-    # Prepend reference header that identifies reference (if content is
-    # non-empty)
-    if ref_content:
-        ref_content = ''.join((
-            shared.get_full_ref(ref), '\n\n', ref_content))
 
-    return ref_content
+    if ref_content:
+        copied_content = ref_format.format(
+            name=core.get_basic_ref_name(ref),
+            version=ref['version'],
+            content=ref_content,
+            url=core.get_ref_url(ref['uid']))
+        return copied_content
+    else:
+        return ''
 
 
 # Retrieves entire reference (header and content) to be copied
 def get_copied_ref(ref_uid):
 
-    ref = shared.get_ref_object(ref_uid)
-    return get_ref_content(ref)
+    user_prefs = core.get_user_prefs()
+    ref = core.get_ref(ref_uid, user_prefs)
+    return get_ref_content(ref, ref_format=user_prefs['refformat'])
 
 
 def main(ref_uid):
 
-    print(get_copied_ref(ref_uid).encode('utf-8'), end=''.encode('utf-8'))
+    print(json.dumps({
+        'alfredworkflow': {
+            'arg': ref_uid,
+            'variables': {
+                'copied_ref': get_copied_ref(ref_uid)
+            }
+        }
+    }))
 
 
 if __name__ == '__main__':

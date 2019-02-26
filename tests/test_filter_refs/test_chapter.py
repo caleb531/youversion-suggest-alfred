@@ -1,4 +1,5 @@
-# tests.test_filter_refs.test_chapter
+#!/usr/bin/env python
+# coding=utf-8
 
 from __future__ import print_function, unicode_literals
 
@@ -31,13 +32,6 @@ def test_id():
     results = yvs.get_result_list('luke 4')
     nose.assert_equal(results[0]['uid'], 'yvs-111/luk.4')
     nose.assert_equal(len(results), 1)
-
-
-@nose.with_setup(set_up, tear_down)
-def test_nonexistent():
-    """should not match nonexistent chapters"""
-    results = yvs.get_result_list('ps 160')
-    nose.assert_equal(len(results), 0)
 
 
 @nose.with_setup(set_up, tear_down)

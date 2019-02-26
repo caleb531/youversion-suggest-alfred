@@ -1,4 +1,4 @@
-# yvs.filter_refs
+#!/usr/bin/env python
 # coding=utf-8
 
 from __future__ import print_function, unicode_literals
@@ -7,11 +7,11 @@ import re
 import sys
 from operator import itemgetter
 
-import yvs.shared as shared
+import yvs.core as core
 
 
 # Parses the given query string into components of a Bible reference
-def get_ref_matches(query_str):
+def get_ref_match(query_str):
 
     # Pattern for parsing any bible reference
     patt = '^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$'.format(
@@ -23,36 +23,47 @@ def get_ref_matches(query_str):
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
+def normalize_query_str(query_str):
+
+    query_str = core.normalize_query_str(query_str)
+    # Parse shorthand reference notation
+    query_str = re.sub(r'(\d)(?=[a-z])', '\\1 ', query_str)
+    query_str = re.sub(r'\s+', ' ', query_str)
+    query_str = query_str.strip()
+
+    return query_str
+
+
 # Builds the query object from the given query string
 def get_query_object(query_str):
 
     # Match section of the bible based on query
-    ref_matches = get_ref_matches(query_str)
+    ref_match = get_ref_match(query_str)
 
-    if not ref_matches:
+    if not ref_match:
         return None
 
     # Create query object for storing query data
     query = {}
 
-    book_match = ref_matches.group(1)
+    book_match = ref_match.group(1)
     query['book'] = book_match.rstrip()
 
-    chapter_match = ref_matches.group(2)
+    chapter_match = ref_match.group(2)
     if chapter_match:
-        query['chapter'] = max(int(chapter_match), 1)
+        query['chapter'] = max(1, int(chapter_match))
 
-        verse_match = ref_matches.group(3)
-        if verse_match:
-            query['verse'] = max(int(verse_match), 1)
+    verse_match = ref_match.group(3)
+    if verse_match:
+        query['verse'] = max(1, int(verse_match))
 
-            endverse_match = ref_matches.group(4)
-            if endverse_match:
-                query['endverse'] = int(endverse_match)
+    endverse_match = ref_match.group(4)
+    if endverse_match:
+        query['endverse'] = int(endverse_match)
 
-        version_match = ref_matches.group(5)
-        if version_match:
-            query['version'] = shared.normalize_query_str(version_match)
+    version_match = ref_match.group(5)
+    if version_match:
+        query['version'] = normalize_query_str(version_match)
 
     return query
 
@@ -64,7 +75,7 @@ def guess_version(versions, version_query):
     # found (if a matching version even exists)
     for i in xrange(len(version_query), 0, -1):
         for version in versions:
-            if (shared.normalize_query_str(
+            if (normalize_query_str(
                   version['name']).startswith(version_query[:i])):
                 return version
 
@@ -88,7 +99,7 @@ def normalize_book_name(book_name):
 def split_book_name_into_parts(book_name):
 
     book_words = normalize_book_name(book_name).split(' ')
-    return [' '.join(book_words[w:]) for w in range(len(book_words))]
+    return (' '.join(book_words[w:]) for w in range(len(book_words)))
 
 
 # Retrieves list of books matching the given query
@@ -123,39 +134,38 @@ def choose_best_version(user_prefs, bible, query):
         chosen_version = guess_version(bible['versions'], query['version'])
 
     if not chosen_version and 'version' in user_prefs:
-        chosen_version = shared.get_version(
+        chosen_version = core.get_version(
             bible['versions'], user_prefs['version'])
 
     return chosen_version
 
 
 # Builds a single result item
-def get_result(book, query, chosen_version):
+def get_result(book, query, chosen_version, book_metadata_item):
+
+    chapter = min(query['chapter'], book_metadata_item['chapters'])
+    last_verse = book_metadata_item['verses'][chapter - 1]
 
     result = {}
 
     # Find chapter if given
     result['uid'] = '{book}.{chapter}'.format(
         book=book['id'],
-        chapter=query['chapter'])
+        chapter=chapter)
     result['title'] = '{book} {chapter}'.format(
         book=book['name'],
-        chapter=query['chapter'])
+        chapter=chapter)
 
     if 'verse' in query:
+        verse = min(query['verse'], last_verse)
+        result['uid'] += '.{verse}'.format(verse=verse)
+        result['title'] += ':{verse}'.format(verse=verse)
 
-        # Find verse if given
-        result['uid'] += '.{verse}'.format(
-            verse=query['verse'])
-        result['title'] += ':{verse}'.format(
-            verse=query['verse'])
-
-    if 'endverse' in query and query['endverse'] > query['verse']:
-
-        result['uid'] += '-{verse}'.format(
-            verse=query['endverse'])
-        result['title'] += '-{verse}'.format(
-            verse=query['endverse'])
+    if 'endverse' in query:
+        endverse = min(query['endverse'], last_verse)
+        if endverse > verse:
+            result['uid'] += '-{endverse}'.format(endverse=endverse)
+            result['title'] += '-{endverse}'.format(endverse=endverse)
 
     result['arg'] = '{version}/{uid}'.format(
         version=chosen_version['id'],
@@ -171,32 +181,24 @@ def get_result(book, query, chosen_version):
 # Retrieves search resylts matching the given query
 def get_result_list(query_str):
 
-    query_str = shared.normalize_query_str(query_str)
+    query_str = normalize_query_str(query_str)
     query = get_query_object(query_str)
-    results = []
 
     if not query:
-        return results
+        return []
 
-    user_prefs = shared.get_user_prefs()
-    bible = shared.get_bible_data(user_prefs['language'])
-    chapters = shared.get_chapter_data()
-    matching_books = get_matching_books(bible['books'], query)
+    user_prefs = core.get_user_prefs()
+    bible = core.get_bible(user_prefs['language'])
+    book_metadata = core.get_book_metadata()
 
     if 'chapter' not in query:
         query['chapter'] = 1
 
     chosen_version = choose_best_version(user_prefs, bible, query)
 
-    # Build result list from books matching the query
-    for book in matching_books:
-
-        # If given chapter does not exceed number of chapters in book
-        if query['chapter'] <= chapters[book['id']]:
-
-            results.append(get_result(book, query, chosen_version))
-
-    return results
+    # Build and return result list from books matching the query
+    return [get_result(book, query, chosen_version, book_metadata[book['id']])
+            for book in get_matching_books(bible['books'], query)]
 
 
 def main(query_str):
@@ -206,10 +208,10 @@ def main(query_str):
         results.append({
             'title': 'No Results',
             'subtitle': 'No references matching \'{}\''.format(query_str),
-            'valid': 'no'
+            'valid': False
         })
 
-    print(shared.get_result_list_feedback_str(results))
+    print(core.get_result_list_feedback_str(results))
 
 
 if __name__ == '__main__':

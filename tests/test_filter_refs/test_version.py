@@ -1,4 +1,4 @@
-# tests.test_filter_refs.test_version
+#!/usr/bin/env python
 # coding=utf-8
 
 from __future__ import print_function, unicode_literals

@@ -1,6 +1,9 @@
-# tests.test_copy_ref
+#!/usr/bin/env python
+# coding=utf-8
 
 from __future__ import print_function, unicode_literals
+
+import json
 
 import nose.tools as nose
 from mock import Mock, NonCallableMock, patch
@@ -53,6 +56,16 @@ def test_copy_verse_range():
 
 
 @nose.with_setup(set_up, tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 59,
+        'refformat': '"{content}"\n\n({name} {version})'})
+def test_refformat():
+    """should honor the chosen reference format"""
+    ref_content = yvs.get_copied_ref('59/psa.23.6')
+    nose.assert_equals(ref_content, '"Proin nulla orci,"\n\n(Psalm 23:6 ESV)')
+
+
+@nose.with_setup(set_up, tear_down)
 def test_header():
     """should prepend reference header to copied string"""
     ref_content = yvs.get_copied_ref('59/psa.23')
@@ -60,7 +73,9 @@ def test_header():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'spa', 'version': 128})
+@use_user_prefs(
+    {'language': 'spa', 'version': 128,
+        'refformat': '{name} ({version})\n\n{content}'})
 def test_header_language():
     """reference header should reflect chosen language"""
     ref_content = yvs.get_copied_ref('128/psa.23')
@@ -98,7 +113,7 @@ def test_whitespace_lines():
 
 
 @nose.with_setup(set_up, tear_down)
-@patch('yvs.shared.get_url_content', return_value='abc')
+@patch('yvs.web.get_url_content', return_value='abc')
 def test_url_always_chapter(get_url_content):
     """should always fetch HTML from chapter URL"""
     yvs.get_copied_ref('59/psa.23.2')
@@ -136,5 +151,12 @@ def test_main(out):
     ref_uid = '59/psa.23'
     ref_content = yvs.get_copied_ref(ref_uid)
     yvs.main(ref_uid)
-    main_ref_content = out.getvalue().decode('utf-8')
-    nose.assert_equal(main_ref_content, ref_content)
+    main_json = json.loads(out.getvalue())
+    nose.assert_equal(main_json, {
+        'alfredworkflow': {
+            'arg': ref_uid,
+            'variables': {
+                'copied_ref': ref_content
+            }
+        }
+    })

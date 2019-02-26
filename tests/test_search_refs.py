@@ -1,4 +1,4 @@
-# tests.test_search_refs
+#!/usr/bin/env python
 # coding=utf-8
 
 from __future__ import print_function, unicode_literals
@@ -59,7 +59,7 @@ def test_result_arg():
 
 
 @nose.with_setup(set_up, tear_down)
-@patch('yvs.shared.get_url_content', return_value='abc')
+@patch('yvs.web.get_url_content', return_value='abc')
 def test_unicode_input(get_url_content):
     """should correctly handle non-ASCII characters in query string"""
     yvs.get_result_list('é')
@@ -84,7 +84,7 @@ def test_output(out):
     yvs.main(query_str)
     output = out.getvalue().strip()
     results = yvs.get_result_list(query_str)
-    feedback = yvs.shared.get_result_list_feedback_str(results).strip()
+    feedback = yvs.core.get_result_list_feedback_str(results).strip()
     nose.assert_equal(output, feedback)
 
 
@@ -99,5 +99,5 @@ def test_null_result(out, get_result_list):
     feedback = json.loads(feedback_str)
     nose.assert_equal(len(feedback['items']), 1, 'result item is missing')
     item = feedback['items'][0]
-    nose.assert_equal(item['valid'], 'no')
+    nose.assert_equal(item['valid'], False)
     nose.assert_equal(item['title'], 'No Results')

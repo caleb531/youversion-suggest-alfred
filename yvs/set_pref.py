@@ -1,4 +1,4 @@
-# yvs.set_pref
+#!/usr/bin/env python
 # coding=utf-8
 
 from __future__ import print_function, unicode_literals
@@ -6,7 +6,8 @@ from __future__ import print_function, unicode_literals
 import json
 import sys
 
-import yvs.shared as shared
+import yvs.core as core
+import yvs.cache as cache
 
 
 # Parse pref set data from the given JSON string
@@ -19,16 +20,16 @@ def parse_pref_set_data(pref_set_data_str):
 # Set the YouVersion Suggest preference with the given key
 def set_pref(pref_id, value_id):
 
-    user_prefs = shared.get_user_prefs()
+    user_prefs = core.get_user_prefs()
     user_prefs[pref_id] = value_id
 
     # If new language is set, ensure that preferred version is updated also
     if pref_id == 'language':
-        bible = shared.get_bible_data(language_id=value_id)
+        bible = core.get_bible(language_id=value_id)
         user_prefs['version'] = bible['default_version']
-        shared.clear_cache()
+        cache.clear_cache()
 
-    shared.set_user_prefs(user_prefs)
+    core.set_user_prefs(user_prefs)
 
 
 def main(pref_set_data_str):
