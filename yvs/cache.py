@@ -55,6 +55,7 @@ def get_cache_manifest_path():
 # Purge all expired entries in the cache
 def purge_expired_cache_entries(manifest_file):
     # Read checksums from manifest; splitlines(True) preserves newlines
+    manifest_file.seek(0)
     entry_checksums = manifest_file.read().splitlines(True)
     # Purge the oldest entry if the cache is too large
     if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
@@ -82,7 +83,6 @@ def add_cache_entry(entry_key, entry_content):
         # Write the new entry checksum to manifest file
         manifest_file.write(entry_checksum)
         manifest_file.write('\n')
-        manifest_file.seek(0)
         purge_expired_cache_entries(manifest_file)
 
 
