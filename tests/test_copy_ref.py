@@ -58,7 +58,8 @@ def test_copy_verse_range():
 @nose.with_setup(set_up, tear_down)
 @use_user_prefs(
     {'language': 'eng', 'version': 59,
-        'refformat': '"{content}"\n\n({name} {version})'})
+        'refformat': '"{content}"\n\n({name} {version})',
+        'versenumbers': False})
 def test_refformat():
     """should honor the chosen reference format"""
     ref_content = yvs.get_copied_ref('59/psa.23.6')
@@ -75,7 +76,8 @@ def test_header():
 @nose.with_setup(set_up, tear_down)
 @use_user_prefs(
     {'language': 'spa', 'version': 128,
-        'refformat': '{name} ({version})\n\n{content}'})
+        'refformat': '{name} ({version})\n\n{content}',
+        'versenumbers': False})
 def test_header_language():
     """reference header should reflect chosen language"""
     ref_content = yvs.get_copied_ref('128/psa.23')
@@ -110,6 +112,17 @@ def test_whitespace_lines():
                                'should add newlines around each li1 block')
     nose.assert_regexp_matches(ref_content, r'leo,\n\nhendrerit',
                                'should add two newlines for each b block')
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 111,
+        'refformat': '{name} ({version})\n\n{content}',
+        'versenumbers': True})
+def test_versenumbers():
+    """should honor the versenumbers preference"""
+    ref_content = yvs.get_copied_ref('111/psa.23')
+    nose.assert_regexp_matches(ref_content, r'5 fermentum')
 
 
 @nose.with_setup(set_up, tear_down)

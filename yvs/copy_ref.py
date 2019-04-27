@@ -22,7 +22,7 @@ BREAK_ELEMS = {'li1', 'q1', 'q2', 'qc'}
 class ReferenceParser(YVParser):
 
     # Associates the given reference object with this parser instance
-    def __init__(self, ref):
+    def __init__(self, ref, include_verse_numbers=False):
         YVParser.__init__(self)
         if 'verse' in ref:
             # If reference is a verse or verse range, set the correct range of
@@ -33,6 +33,7 @@ class ReferenceParser(YVParser):
             # Otherwise, assume reference is a chapter
             self.verse_start = 1
             self.verse_end = None
+        self.include_verse_numbers = include_verse_numbers
 
     # Resets parser variables (implicitly called when parser is instantiated)
     def reset(self):
@@ -40,19 +41,32 @@ class ReferenceParser(YVParser):
         self.depth = 0
         self.in_block = False
         self.in_verse = False
+        self.in_verse_label = False
         self.in_verse_content = False
         self.block_depth = 0
         self.verse_depth = 0
+        self.label_depth = 0
         self.content_depth = 0
         self.verse_num = None
         self.content_parts = []
 
-    # Returns True if parser is currently within the content of a verse to
-    # include (otherwise, returns False)
-    def is_in_verse_content(self):
-        return (self.in_verse and self.in_verse_content and
+    # Returns True if parser is currently within the a verse to include
+    # (otherwise, returns False)
+    def is_in_verse(self):
+        return (self.in_verse and
                 (self.verse_num >= self.verse_start and
                  (not self.verse_end or self.verse_num <= self.verse_end)))
+
+    # Returns True if parser is currently within the content of a verse to
+    # include
+    def is_in_verse_content(self):
+        return (self.is_in_verse() and self.in_verse_content)
+
+    # Returns True if parser is currently within the label of a verse to
+    # include (otherwise, returns False)
+    def is_in_verse_label(self):
+        return (self.is_in_verse() and self.include_verse_numbers and
+                self.in_verse_label)
 
     # Detects the start of blocks, breaks, verses, and verse content
     def handle_starttag(self, tag, attrs):
@@ -75,6 +89,9 @@ class ReferenceParser(YVParser):
                 self.in_verse = True
                 self.verse_depth = self.depth
                 self.verse_num = int(elem_class_names[1][1:])
+            if elem_class == 'label':
+                self.in_verse_label = True
+                self.label_depth = self.depth
             # Detect beginning of verse content (excludes footnotes)
             if elem_class == 'content':
                 self.in_verse_content = True
@@ -87,12 +104,16 @@ class ReferenceParser(YVParser):
             self.content_parts.append('\n')
         elif self.in_verse and self.depth == self.verse_depth:
             self.in_verse = False
+        elif self.in_verse_label and self.depth == self.label_depth:
+            self.in_verse_label = False
         elif self.in_verse_content and self.depth == self.content_depth:
             self.in_verse_content = False
         self.depth -= 1
 
-    # Handles verse content
+    # Handles verse labels and content
     def handle_data(self, data):
+        if self.is_in_verse_label():
+            self.content_parts.append(' {} '.format(data.strip()))
         if self.is_in_verse_content():
             self.content_parts.append(data)
 
@@ -122,10 +143,10 @@ def get_chapter_html(ref):
 
 
 # Parses actual reference content from chapter HTML
-def get_ref_content(ref, ref_format):
+def get_ref_content(ref, ref_format, include_verse_numbers):
 
     chapter_html = get_chapter_html(ref)
-    parser = ReferenceParser(ref)
+    parser = ReferenceParser(ref, include_verse_numbers)
     parser.feed(chapter_html)
     # Format reference content by removing superfluous whitespace and such
     ref_content = core.normalize_ref_content(
@@ -147,7 +168,10 @@ def get_copied_ref(ref_uid):
 
     user_prefs = core.get_user_prefs()
     ref = core.get_ref(ref_uid, user_prefs)
-    return get_ref_content(ref, ref_format=user_prefs['refformat'])
+    return get_ref_content(
+        ref,
+        ref_format=user_prefs['refformat'],
+        include_verse_numbers=user_prefs['versenumbers'])
 
 
 def main(ref_uid):

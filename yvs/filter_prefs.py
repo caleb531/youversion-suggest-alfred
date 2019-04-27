@@ -34,6 +34,13 @@ def get_pref_defs(user_prefs):
             'name': 'Reference Format',
             'values': get_ref_format_values(user_prefs),
             'description': 'Set the default format for copied Bible references'
+        },
+        {
+            'id': 'versenumbers',
+            'name': 'Include Verse Numbers?',
+            'values': get_include_verse_numbers_values(),
+            'description': 'Decide whether to include verse numbers in copied'
+                           'Bible content'
         }
     ]
 
@@ -84,6 +91,22 @@ def get_ref_format_value(ref_format, ref):
         # consecutive return symbols
         .replace('  ', ' ')
     }
+
+
+# Get a list of all available values for including verse numbers in copied
+# Bible content
+def get_include_verse_numbers_values():
+
+    return [
+        {
+            'id': True,
+            'name': 'Include Verse Numbers'
+        },
+        {
+            'id': False,
+            'name': 'Do Not Include Verse Numbers'
+        }
+    ]
 
 
 # Get the value object with the given ID for the given preference

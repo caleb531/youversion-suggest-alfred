@@ -226,18 +226,19 @@ def test_filter_preferences_name_partial():
 def test_filter_preferences_show_current():
     """should show current values for all preferences"""
     results = yvs.get_result_list('')
-    nose.assert_equal(len(results), 3)
+    nose.assert_equal(len(results), 4)
     nose.assert_in('English', results[0]['subtitle'])
     nose.assert_in('NIV', results[1]['subtitle'])
 
 
 @nose.with_setup(set_up, tear_down)
 @use_user_prefs({
-    'language': 'eng', 'version': 999, 'refformat': '{name}\n\n{content}'})
+    'language': 'eng', 'version': 999, 'refformat':
+    '{name}\n\n{content}', 'versenumbers': False})
 def test_filter_preferences_show_current_valid_only():
     """should not show invalid current preference values"""
     results = yvs.get_result_list('')
-    nose.assert_equal(len(results), 3)
+    nose.assert_equal(len(results), 4)
     nose.assert_in('currently', results[0]['subtitle'])
     nose.assert_not_in('currently', results[1]['subtitle'])
 
