@@ -18,29 +18,33 @@ def get_pref_defs(user_prefs):
         {
             'id': 'language',
             'name': 'Language',
+            'short_name': 'language',
             'values': core.get_languages(),
             'description': 'Set your preferred language for Bible content'
         },
         {
             'id': 'version',
             'name': 'Version',
+            'short_name': 'version',
             'values': [get_version_value(version) for version in sorted(
                        core.get_versions(user_prefs['language']),
                        key=itemgetter('name'))],
-            'description': 'Set the default version for Bible content'
+            'description': 'Set your preferred version for Bible content'
         },
         {
             'id': 'refformat',
             'name': 'Reference Format',
+            'short_name': 'reference format',
             'values': get_ref_format_values(user_prefs),
-            'description': 'Set the default format for copied Bible references'
+            'description': 'Set your preferred format for copied Bible'
+                           ' content'
         },
         {
             'id': 'versenumbers',
             'name': 'Include Verse Numbers?',
             'values': get_include_verse_numbers_values(),
-            'description': 'Decide whether to include verse numbers in copied'
-                           'Bible content'
+            'description': 'Choose whether to include verse numbers in copied'
+                           ' Bible content'
         }
     ]
 
@@ -100,11 +104,11 @@ def get_include_verse_numbers_values():
     return [
         {
             'id': True,
-            'name': 'Include Verse Numbers'
+            'name': 'Include'
         },
         {
             'id': False,
-            'name': 'Do Not Include Verse Numbers'
+            'name': 'Do Not Include'
         }
     ]
 
@@ -157,11 +161,11 @@ def get_value_result(value, user_prefs, pref_def):
     if value['id'] == user_prefs[pref_def['id']]:
         # If this value is the current value, indicate such
         result['subtitle'] = 'This is already your preferred {}'.format(
-            pref_def['name'].lower())
+            pref_def.get('short_name', 'setting'))
         result['valid'] = False
     else:
         result['subtitle'] = 'Set this as your preferred {}'.format(
-            pref_def['name'].lower())
+            pref_def.get('short_name', 'setting'))
 
     return result
 
