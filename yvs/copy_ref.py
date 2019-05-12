@@ -91,6 +91,7 @@ class ReferenceParser(YVParser):
                 self.verse_depth = self.depth
                 self.verse_nums = [int(class_name[1:])
                                    for class_name in elem_class_names[1:]]
+            # Detect label containing the associated verse number(s)
             if elem_class == 'label':
                 self.in_verse_label = True
                 self.label_depth = self.depth
