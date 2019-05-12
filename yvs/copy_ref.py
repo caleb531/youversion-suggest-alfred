@@ -14,7 +14,7 @@ from yvs.yv_parser import YVParser
 # Elements that should be surrounded by blank lines
 BLOCK_ELEMS = {'b', 'p', 'm'}
 # Elements that should trigger a line break
-BREAK_ELEMS = {'li1', 'q1', 'q2', 'qc'}
+BREAK_ELEMS = {'li1', 'q1', 'q2', 'qc', 'qm1', 'qm2'}
 
 
 # An HTML parser which receives HTML from the page for a YouVersion
