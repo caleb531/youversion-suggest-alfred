@@ -47,15 +47,16 @@ class ReferenceParser(YVParser):
         self.verse_depth = 0
         self.label_depth = 0
         self.content_depth = 0
-        self.verse_num = None
+        self.verse_nums = []
         self.content_parts = []
 
     # Returns True if parser is currently within the a verse to include
     # (otherwise, returns False)
     def is_in_verse(self):
-        return (self.in_verse and
-                (self.verse_num >= self.verse_start and
-                 (not self.verse_end or self.verse_num <= self.verse_end)))
+        return any(self.in_verse and
+                   (verse_num >= self.verse_start and
+                    (not self.verse_end or verse_num <= self.verse_end))
+                   for verse_num in self.verse_nums)
 
     # Returns True if parser is currently within the content of a verse to
     # include
@@ -88,7 +89,8 @@ class ReferenceParser(YVParser):
             if 'verse' in elem_class_names:
                 self.in_verse = True
                 self.verse_depth = self.depth
-                self.verse_num = int(elem_class_names[1][1:])
+                self.verse_nums = [int(class_name[1:])
+                                   for class_name in elem_class_names[1:]]
             if elem_class == 'label':
                 self.in_verse_label = True
                 self.label_depth = self.depth
