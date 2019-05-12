@@ -126,6 +126,50 @@ def test_versenumbers():
 
 
 @nose.with_setup(set_up, tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 97,
+        'refformat': '{name} ({version})\n\n{content}',
+        'versenumbers': True})
+def test_versenumbers_range():
+    """should handle verse range labels (used by versions like the MSG)"""
+    ref_content = yvs.get_copied_ref('111/psa.23.7-9')
+    nose.assert_regexp_matches(ref_content, r'7-9 dapibus et augue in,')
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 97,
+        'refformat': '{name} ({version})\n\n{content}',
+        'versenumbers': True})
+def test_versenumbers_range_start():
+    """should handle range labels when verse at start of range is given"""
+    ref_content = yvs.get_copied_ref('111/psa.23.7')
+    nose.assert_regexp_matches(ref_content, r'7-9 dapibus et augue in,')
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 97,
+        'refformat': '{name} ({version})\n\n{content}',
+        'versenumbers': True})
+def test_versenumbers_range_end():
+    """should handle range labels when verse at end of range is given"""
+    ref_content = yvs.get_copied_ref('111/psa.23.9')
+    nose.assert_regexp_matches(ref_content, r'7-9 dapibus et augue in,')
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 97,
+        'refformat': '{name} ({version})\n\n{content}',
+        'versenumbers': True})
+def test_versenumbers_range_middle():
+    """should handle range labels when verse in middle of range is given"""
+    ref_content = yvs.get_copied_ref('111/psa.23.8')
+    nose.assert_regexp_matches(ref_content, r'7-9 dapibus et augue in,')
+
+
+@nose.with_setup(set_up, tear_down)
 @patch('yvs.web.get_url_content', return_value='abc')
 def test_url_always_chapter(get_url_content):
     """should always fetch HTML from chapter URL"""
@@ -146,7 +190,7 @@ def test_cache_url_content():
 @nose.with_setup(set_up, tear_down)
 def test_nonexistent_verse():
     """should return empty string for nonexistent verses"""
-    ref_content = yvs.get_copied_ref('111/psa.23.9')
+    ref_content = yvs.get_copied_ref('111/psa.23.13')
     nose.assert_equal(ref_content, '')
 
 
