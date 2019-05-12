@@ -82,9 +82,9 @@ def test_output(out):
     """should output result list JSON"""
     query_str = 'love others'
     yvs.main(query_str)
-    output = out.getvalue().strip()
+    output = out.getvalue().rstrip()
     results = yvs.get_result_list(query_str)
-    feedback = yvs.core.get_result_list_feedback_str(results).strip()
+    feedback = yvs.core.get_result_list_feedback_str(results).rstrip()
     nose.assert_equal(output, feedback)
 
 
@@ -95,7 +95,7 @@ def test_null_result(out, get_result_list):
     """should output "No Results" JSON item for empty result list"""
     query_str = 'xyz'
     yvs.main(query_str)
-    feedback_str = out.getvalue().strip()
+    feedback_str = out.getvalue()
     feedback = json.loads(feedback_str)
     nose.assert_equal(len(feedback['items']), 1, 'result item is missing')
     item = feedback['items'][0]

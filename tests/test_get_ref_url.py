@@ -15,5 +15,5 @@ from tests.decorators import redirect_stdout
 def test_get_ref_url(out):
     """should get URL for given reference ID"""
     yvs.main('59/jhn.3.17')
-    output = out.getvalue().strip()
+    output = out.getvalue()
     nose.assert_equal(output, 'https://www.bible.com/bible/59/JHN.3.17')
