@@ -11,15 +11,15 @@ import yvs.cache as cache
 import yvs.web as web
 from yvs.yv_parser import YVParser
 
-# Elements that should be surrounded by blank lines
-BLOCK_ELEMS = {'b', 'p', 'm'}
-# Elements that should trigger a line break
-BREAK_ELEMS = {'li1', 'q1', 'q2', 'qc', 'qm1', 'qm2'}
-
 
 # An HTML parser which receives HTML from the page for a YouVersion
 # Bible reference and parses it to construct a shareable plain text reference
 class ReferenceParser(YVParser):
+
+    # Elements that should be surrounded by blank lines
+    block_elems = {'b', 'p', 'm'}
+    # Elements that should trigger a line break
+    break_elems = {'li1', 'q1', 'q2', 'qc', 'qm1', 'qm2'}
 
     # Associates the given reference object with this parser instance
     def __init__(self, ref, include_verse_numbers=False):
@@ -78,12 +78,12 @@ class ReferenceParser(YVParser):
             elem_class = attrs['class']
             elem_class_names = elem_class.split(' ')
             # Detect paragraph breaks between verses
-            if elem_class in BLOCK_ELEMS:
+            if elem_class in self.block_elems:
                 self.in_block = True
                 self.block_depth = self.depth
                 self.content_parts.append('\n\n')
             # Detect line breaks within a single verse
-            if elem_class in BREAK_ELEMS:
+            if elem_class in self.break_elems:
                 self.content_parts.append('\n')
             # Detect beginning of a single verse (may include footnotes)
             if 'verse' in elem_class_names:
