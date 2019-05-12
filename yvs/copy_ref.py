@@ -71,11 +71,11 @@ class ReferenceParser(YVParser):
 
     # Detects the start of blocks, breaks, verses, and verse content
     def handle_starttag(self, tag, attrs):
-        attr_dict = dict(attrs)
+        attrs = dict(attrs)
         # Keep track of element depth throughout entire document
         self.depth += 1
-        if 'class' in attr_dict:
-            elem_class = attr_dict['class']
+        if 'class' in attrs:
+            elem_class = attrs['class']
             elem_class_names = elem_class.split(' ')
             # Detect paragraph breaks between verses
             if elem_class in BLOCK_ELEMS:
