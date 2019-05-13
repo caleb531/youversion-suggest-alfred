@@ -3,7 +3,6 @@
 
 import urllib2
 from gzip import GzipFile
-from htmlentitydefs import name2codepoint
 from StringIO import StringIO
 
 # The user agent used for HTTP requests sent to the YouVersion website
@@ -29,17 +28,3 @@ def get_url_content(url):
             url_content = gzip_file.read()
 
     return url_content.decode('utf-8')
-
-
-# Evaluates HTML character reference to its respective Unicode character
-def eval_html_charref(name):
-
-    if name[0] == 'x':
-        # Handle hexadecimal character references
-        return unichr(int(name[1:], 16))
-    elif name.isdigit():
-        # Handle decimal character references
-        return unichr(int(name))
-    else:
-        # Otherwise, assume character reference is a named reference
-        return unichr(name2codepoint[name])
