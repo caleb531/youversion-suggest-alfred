@@ -36,8 +36,8 @@ def main(pref_set_data_str):
 
     pref, value = parse_pref_set_data(pref_set_data_str)
     set_pref(pref['id'], value['id'])
-    print('Preferred {} set to {}'.format(
-        pref['name'].lower(), value['name']).encode('utf-8'))
+    print('Preferred {} set to "{}"'.format(
+        pref['name'], value['name']).encode('utf-8'))
 
 
 if __name__ == '__main__':

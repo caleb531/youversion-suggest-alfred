@@ -33,7 +33,7 @@ def test_filter_languages():
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
-            'name': 'Language'
+            'name': 'language'
         },
         'value': {
             'id': 'spa',
@@ -53,7 +53,7 @@ def test_filter_languages_non_latin():
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
-            'name': 'Language'
+            'name': 'language'
         },
         'value': {
             'id': 'zho_tw',
@@ -83,7 +83,7 @@ def test_filter_versions():
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'version',
-            'name': 'Version'
+            'name': 'version'
         },
         'value': {
             'id': 110,
@@ -116,7 +116,7 @@ def test_filter_refformats():
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'refformat',
-            'name': 'Reference Format'
+            'name': 'reference format'
         },
         'value': {
             'id': result_format_id,
@@ -137,7 +137,7 @@ def test_show_current_refformat():
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'refformat',
-            'name': 'Reference Format'
+            'name': 'reference format'
         },
         'value': {
             'id': 'Z {content}',
@@ -254,7 +254,7 @@ def test_filter_preference_entire_query():
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
-            'name': 'Language'
+            'name': 'language'
         },
         'value': {
             'id': 'spa_es',
@@ -274,7 +274,7 @@ def test_filter_preference_ignore_special():
     nose.assert_equal(json.loads(results[0]['arg']), {
         'pref': {
             'id': 'language',
-            'name': 'Language'
+            'name': 'language'
         },
         'value': {
             'id': 'zho_tw',

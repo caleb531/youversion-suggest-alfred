@@ -59,7 +59,7 @@ def test_set_language_clear_cache():
 def test_main(out, set_pref):
     """should pass preference data to setter"""
     yvs.main(json.dumps({
-        'pref': {'id': 'language', 'name': 'Language'},
+        'pref': {'id': 'language', 'name': 'language'},
         'value': {'id': 'spa', 'name': 'Español'}
     }))
     set_pref.assert_called_once_with('language', 'spa')

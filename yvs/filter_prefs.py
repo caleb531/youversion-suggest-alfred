@@ -42,6 +42,7 @@ def get_pref_defs(user_prefs):
         {
             'id': 'versenumbers',
             'name': 'Include Verse Numbers?',
+            'short_name': 'verse numbers setting',
             'values': get_include_verse_numbers_values(),
             'description': 'Choose whether to include verse numbers in copied'
                            ' Bible content'
@@ -104,11 +105,11 @@ def get_include_verse_numbers_values():
     return [
         {
             'id': True,
-            'name': 'Include'
+            'name': 'Yes (include in copied content)'
         },
         {
             'id': False,
-            'name': 'Do Not Include'
+            'name': 'No (do not include in copied content)'
         }
     ]
 
@@ -148,7 +149,7 @@ def get_value_result(value, user_prefs, pref_def):
         'arg': json.dumps({
             'pref': {
                 'id': pref_def['id'],
-                'name': pref_def['name']
+                'name': pref_def['short_name']
             },
             'value': {
                 'id': value['id'],
@@ -161,11 +162,11 @@ def get_value_result(value, user_prefs, pref_def):
     if value['id'] == user_prefs[pref_def['id']]:
         # If this value is the current value, indicate such
         result['subtitle'] = 'This is already your preferred {}'.format(
-            pref_def.get('short_name', 'setting'))
+            pref_def.get('short_name'))
         result['valid'] = False
     else:
         result['subtitle'] = 'Set this as your preferred {}'.format(
-            pref_def.get('short_name', 'setting'))
+            pref_def.get('short_name'))
 
     return result
 
