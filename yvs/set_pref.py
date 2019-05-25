@@ -36,8 +36,18 @@ def main(pref_set_data_str):
 
     pref, value = parse_pref_set_data(pref_set_data_str)
     set_pref(pref['id'], value['id'])
-    print('Preferred {} set to "{}"'.format(
-        pref['name'], value['name']).encode('utf-8'))
+    print(json.dumps({
+        'alfredworkflow': {
+            # arg needs to be non-empty for the notification to show
+            'arg': value['id'],
+            'variables': {
+                'pref_id': pref['id'],
+                'pref_name': pref['name'],
+                'value_id': value['id'],
+                'value_name': value['name']
+            }
+        }
+    }))
 
 
 if __name__ == '__main__':

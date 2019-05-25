@@ -63,6 +63,13 @@ def test_main(out, set_pref):
         'value': {'id': 'spa', 'name': 'Español'}
     }))
     set_pref.assert_called_once_with('language', 'spa')
-    success_message = out.getvalue()
-    nose.assert_in('language'.encode('utf-8'), success_message)
-    nose.assert_in('Español'.encode('utf-8'), success_message)
+    pref_set_data = json.loads(out.getvalue())
+    nose.assert_not_equals(pref_set_data['alfredworkflow']['arg'], '')
+    nose.assert_equals(
+        pref_set_data['alfredworkflow']['variables']['pref_name'], 'language')
+    nose.assert_equals(
+        pref_set_data['alfredworkflow']['variables']['pref_id'], 'language')
+    nose.assert_equals(
+        pref_set_data['alfredworkflow']['variables']['value_id'], 'spa')
+    nose.assert_equals(
+        pref_set_data['alfredworkflow']['variables']['value_name'], 'Español')
