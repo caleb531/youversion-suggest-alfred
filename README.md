@@ -136,6 +136,11 @@ references. To do so, open the YouVersion Suggest workflow in Alfred Preferences
 and double-click the *Default Web Search* object. You can then choose a search
 engine to set as your preferred for YouVersion Suggest.
 
+### Showing verse numbers in copied Bible content
+
+You can choose whether or not to include verse numbers in copied Bible verses by
+typing `yvset versenumbers`.
+
 ## Disclaimer
 
 This project is not affiliated with YouVersion, and all Bible content is
