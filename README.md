@@ -10,8 +10,8 @@ YouVersion Suggest is an [Alfred](https://www.alfredapp.com/) workflow which
 allows you to search the online [YouVersion](https://www.youversion.com/) Bible
 quickly and conveniently.
 
-The workflow will be solely supporting Alfred 3 going forward, but the latest
-Alfred 2-compatible release (v5.0.0) will remain available here for your
+The workflow will be solely supporting Alfred 4 going forward, but the latest
+Alfred 3 and Alfred 2-compatible releases will remain available here for your
 convenience.
 
 ## Usage
@@ -47,8 +47,7 @@ reference to the clipboard
 Bible reference.
 
 - Pressing `shift` while a result is selected will preview the contents of the
-Bible reference without leaving the search results (new in v6.1.0; Alfred 3
-only)
+Bible reference without leaving the search results (new in v6.1.0)
 
 - Pressing `command-c` while a result is selected will copy to the clipboard the
 full Bible reference identifier, such as *1 Corinthians 13:4-7 (ESV)*
