@@ -93,6 +93,8 @@ def get_result_list_feedback_item(result):
     if 'arg' in result:
         item['arg'] = result['arg']
         item['quicklookurl'] = get_ref_url(item['arg'])
+    if 'variables' in result:
+        item['variables'] = result['variables']
     item['valid'] = result.get('valid', True)
 
     if 'uid' in result:

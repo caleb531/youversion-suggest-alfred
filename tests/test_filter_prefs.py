@@ -30,15 +30,11 @@ def test_filter_languages():
         results[0]['title'], 'Español (América Latina)')
     nose.assert_equal(results[0].get('valid', True), True)
     nose.assert_equal(len(results), 2)
-    nose.assert_equal(json.loads(results[0]['arg']), {
-        'pref': {
-            'id': 'language',
-            'name': 'language'
-        },
-        'value': {
-            'id': 'spa',
-            'name': 'Español (América Latina)'
-        }
+    nose.assert_equal(results[0]['variables'], {
+        'pref_id': 'language',
+        'pref_name': 'language',
+        'value_id': 'spa',
+        'value_name': 'Español (América Latina)'
     })
 
 
@@ -50,15 +46,11 @@ def test_filter_languages_non_latin():
     nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
     nose.assert_equal(results[0]['title'], '繁體中文')
     nose.assert_equal(results[0].get('valid', True), True)
-    nose.assert_equal(json.loads(results[0]['arg']), {
-        'pref': {
-            'id': 'language',
-            'name': 'language'
-        },
-        'value': {
-            'id': 'zho_tw',
-            'name': '繁體中文'
-        }
+    nose.assert_equal(results[0]['variables'], {
+        'pref_id': 'language',
+        'pref_name': 'language',
+        'value_id': 'zho_tw',
+        'value_name': '繁體中文'
     })
 
 
@@ -80,15 +72,11 @@ def test_filter_versions():
     nose.assert_equal(results[0]['title'],
                       'New International Reader\'s Version (NIRV)')
     nose.assert_equal(results[0].get('valid', True), True)
-    nose.assert_equal(json.loads(results[0]['arg']), {
-        'pref': {
-            'id': 'version',
-            'name': 'version'
-        },
-        'value': {
-            'id': 110,
-            'name': 'New International Reader\'s Version (NIRV)'
-        }
+    nose.assert_equal(results[0]['variables'], {
+        'pref_id': 'version',
+        'pref_name': 'version',
+        'value_id': 110,
+        'value_name': 'New International Reader\'s Version (NIRV)'
     })
 
 
@@ -113,15 +101,11 @@ def test_filter_refformats():
                       'yvs-refformat-{id}'.format(id=result_format_id))
     nose.assert_equal(results[0]['title'], result_title)
     nose.assert_equal(results[0].get('valid', True), True)
-    nose.assert_equal(json.loads(results[0]['arg']), {
-        'pref': {
-            'id': 'refformat',
-            'name': 'reference format'
-        },
-        'value': {
-            'id': result_format_id,
-            'name': result_title
-        }
+    nose.assert_equal(results[0]['variables'], {
+        'pref_id': 'refformat',
+        'pref_name': 'reference format',
+        'value_id': result_format_id,
+        'value_name': result_title
     })
 
 
@@ -134,15 +118,11 @@ def test_show_current_refformat():
     nose.assert_equal(results[0]['uid'], 'yvs-refformat-Z {content}')
     nose.assert_equal(results[0]['title'], 'Z Jesus wept.')
     nose.assert_equal(results[0]['valid'], False)
-    nose.assert_equal(json.loads(results[0]['arg']), {
-        'pref': {
-            'id': 'refformat',
-            'name': 'reference format'
-        },
-        'value': {
-            'id': 'Z {content}',
-            'name': 'Z Jesus wept.'
-        }
+    nose.assert_equal(results[0]['variables'], {
+        'pref_id': 'refformat',
+        'pref_name': 'reference format',
+        'value_id': 'Z {content}',
+        'value_name': 'Z Jesus wept.'
     })
 
 
@@ -251,15 +231,11 @@ def test_filter_preference_entire_query():
     nose.assert_equal(results[0]['uid'], 'yvs-language-spa_es')
     nose.assert_equal(results[0]['title'], 'Español (España)')
     nose.assert_equal(results[0].get('valid', True), True)
-    nose.assert_equal(json.loads(results[0]['arg']), {
-        'pref': {
-            'id': 'language',
-            'name': 'language'
-        },
-        'value': {
-            'id': 'spa_es',
-            'name': 'Español (España)'
-        }
+    nose.assert_equal(results[0]['variables'], {
+        'pref_id': 'language',
+        'pref_name': 'language',
+        'value_id': 'spa_es',
+        'value_name': 'Español (España)'
     })
 
 
@@ -271,15 +247,11 @@ def test_filter_preference_ignore_special():
     nose.assert_equal(results[0]['uid'], 'yvs-language-zho_tw')
     nose.assert_equal(results[0]['title'], '繁體中文')
     nose.assert_equal(results[0].get('valid', True), True)
-    nose.assert_equal(json.loads(results[0]['arg']), {
-        'pref': {
-            'id': 'language',
-            'name': 'language'
-        },
-        'value': {
-            'id': 'zho_tw',
-            'name': '繁體中文'
-        }
+    nose.assert_equal(results[0]['variables'], {
+        'pref_id': 'language',
+        'pref_name': 'language',
+        'value_id': 'zho_tw',
+        'value_name': '繁體中文'
     })
 
 

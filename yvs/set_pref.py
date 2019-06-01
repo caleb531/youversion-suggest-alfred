@@ -4,17 +4,10 @@
 from __future__ import print_function, unicode_literals
 
 import json
-import sys
+import os
 
 import yvs.core as core
 import yvs.cache as cache
-
-
-# Parse pref set data from the given JSON string
-def parse_pref_set_data(pref_set_data_str):
-
-    pref_set_data = json.loads(pref_set_data_str)
-    return pref_set_data['pref'], pref_set_data['value']
 
 
 # Set the YouVersion Suggest preference with the given key
@@ -32,23 +25,22 @@ def set_pref(pref_id, value_id):
     core.set_user_prefs(user_prefs)
 
 
-def main(pref_set_data_str):
+def main(variables):
 
-    pref, value = parse_pref_set_data(pref_set_data_str)
-    set_pref(pref['id'], value['id'])
+    set_pref(variables['pref_id'], variables['value_id'])
     print(json.dumps({
         'alfredworkflow': {
             # arg needs to be non-empty for the notification to show
-            'arg': value['id'],
-            'variables': {
-                'pref_id': pref['id'],
-                'pref_name': pref['name'],
-                'value_id': value['id'],
-                'value_name': value['name']
-            }
+            'arg': variables['value_id'],
+            'variables': variables
         }
     }))
 
 
 if __name__ == '__main__':
-    main(sys.argv[1].decode('utf-8'))
+    main({
+        'pref_id': os.environ['pref_id'],
+        'pref_name': os.environ['pref_name'],
+        'value_id': os.environ['value_id'],
+        'value_name': os.environ['value_name']
+    })

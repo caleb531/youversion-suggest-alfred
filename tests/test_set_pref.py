@@ -58,18 +58,20 @@ def test_set_language_clear_cache():
 @redirect_stdout
 def test_main(out, set_pref):
     """should pass preference data to setter"""
-    yvs.main(json.dumps({
-        'pref': {'id': 'language', 'name': 'language'},
-        'value': {'id': 'spa', 'name': 'Español'}
-    }))
+    yvs.main({
+        'pref_id': 'language',
+        'pref_name': 'language',
+        'value_id': 'spa',
+        'value_name': 'Español'
+    })
     set_pref.assert_called_once_with('language', 'spa')
-    pref_set_data = json.loads(out.getvalue())
-    nose.assert_not_equals(pref_set_data['alfredworkflow']['arg'], '')
+    alfred_json = json.loads(out.getvalue())
+    nose.assert_not_equals(alfred_json['alfredworkflow']['arg'], '')
     nose.assert_equals(
-        pref_set_data['alfredworkflow']['variables']['pref_name'], 'language')
+        alfred_json['alfredworkflow']['variables']['pref_name'], 'language')
     nose.assert_equals(
-        pref_set_data['alfredworkflow']['variables']['pref_id'], 'language')
+        alfred_json['alfredworkflow']['variables']['pref_id'], 'language')
     nose.assert_equals(
-        pref_set_data['alfredworkflow']['variables']['value_id'], 'spa')
+        alfred_json['alfredworkflow']['variables']['value_id'], 'spa')
     nose.assert_equals(
-        pref_set_data['alfredworkflow']['variables']['value_name'], 'Español')
+        alfred_json['alfredworkflow']['variables']['value_name'], 'Español')

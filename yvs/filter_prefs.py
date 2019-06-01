@@ -3,7 +3,6 @@
 
 from __future__ import print_function, unicode_literals
 
-import json
 import re
 import sys
 from operator import itemgetter
@@ -146,16 +145,12 @@ def get_value_result(value, user_prefs, pref_def):
 
     result = {
         'uid': 'yvs-{}-{}'.format(pref_def['id'], value['id']),
-        'arg': json.dumps({
-            'pref': {
-                'id': pref_def['id'],
-                'name': pref_def['short_name']
-            },
-            'value': {
-                'id': value['id'],
-                'name': value['name']
-            }
-        }),
+        'variables': {
+            'pref_id': pref_def['id'],
+            'pref_name': pref_def['short_name'],
+            'value_id': value['id'],
+            'value_name': value['name']
+        },
         'title': value['name']
     }
 
