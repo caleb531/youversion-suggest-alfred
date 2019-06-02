@@ -119,6 +119,8 @@ def get_matching_books(books, query):
                     # (e.g. if the query matched the first word of a book name,
                     # as opposed to the second or third word)
                     'priority': ((w + 1) * 100) + b,
+                    # Store the metadata for the respective book (e.g. chapter
+                    # count) on this matching book object for convenience
                     'metadata': book_metadata[book['id']]
                 })
                 break
