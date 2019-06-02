@@ -106,6 +106,7 @@ def split_book_name_into_parts(book_name):
 def get_matching_books(books, query):
 
     matching_books = []
+    book_metadata = core.get_book_metadata()
 
     for b, book in enumerate(books):
         book_name_words = split_book_name_into_parts(book['name'])
@@ -117,7 +118,8 @@ def get_matching_books(books, query):
                     # Give more priority to book names that are matched sooner
                     # (e.g. if the query matched the first word of a book name,
                     # as opposed to the second or third word)
-                    'priority': ((w + 1) * 100) + b
+                    'priority': ((w + 1) * 100) + b,
+                    'metadata': book_metadata[book['id']]
                 })
                 break
 
@@ -141,10 +143,10 @@ def choose_best_version(user_prefs, bible, query):
 
 
 # Builds a single result item
-def get_result(book, query, chosen_version, book_metadata_item):
+def get_result(book, query, chosen_version):
 
-    chapter = min(query['chapter'], book_metadata_item['chapters'])
-    last_verse = book_metadata_item['verses'][chapter - 1]
+    chapter = min(query['chapter'], book['metadata']['chapters'])
+    last_verse = book['metadata']['verses'][chapter - 1]
 
     result = {}
 
@@ -193,7 +195,6 @@ def get_result_list(query_str):
 
     user_prefs = core.get_user_prefs()
     bible = core.get_bible(user_prefs['language'])
-    book_metadata = core.get_book_metadata()
 
     if 'chapter' not in query:
         query['chapter'] = 1
@@ -201,7 +202,7 @@ def get_result_list(query_str):
     chosen_version = choose_best_version(user_prefs, bible, query)
 
     # Build and return result list from books matching the query
-    return [get_result(book, query, chosen_version, book_metadata[book['id']])
+    return [get_result(book, query, chosen_version)
             for book in get_matching_books(bible['books'], query)]
 
 
