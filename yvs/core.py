@@ -113,8 +113,7 @@ def get_result_list_feedback_item(result):
 def get_result_list_feedback_str(results):
 
     return json.dumps({
-        'items': [get_result_list_feedback_item(result)
-                  for result in results]
+        'items': [get_result_list_feedback_item(result) for result in results]
     })
 
 
