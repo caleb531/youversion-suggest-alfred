@@ -8,7 +8,6 @@ import os
 import os.path
 
 import nose.tools as nose
-from mock import patch
 
 import yvs.set_pref as yvs
 from tests import set_up, tear_down
@@ -54,24 +53,20 @@ def test_set_language_clear_cache():
         'local cache directory exists')
 
 
-@patch('yvs.set_pref.set_pref')
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
-def test_main(out, set_pref):
+def test_main(out):
     """should pass preference data to setter"""
-    yvs.main({
-        'pref_id': 'language',
-        'pref_name': 'language',
-        'value_id': 'spa',
-        'value_name': 'Español'
-    })
-    set_pref.assert_called_once_with('language', 'spa')
+    alfred_variables = {
+        'pref_id': 'version',
+        'pref_name': 'version',
+        'value_id': '107',
+        'value_name': 'New English Translation'
+    }
+    yvs.main(alfred_variables)
     alfred_json = json.loads(out.getvalue())
     nose.assert_not_equals(alfred_json['alfredworkflow']['arg'], '')
     nose.assert_equals(
-        alfred_json['alfredworkflow']['variables']['pref_name'], 'language')
-    nose.assert_equals(
-        alfred_json['alfredworkflow']['variables']['pref_id'], 'language')
-    nose.assert_equals(
-        alfred_json['alfredworkflow']['variables']['value_id'], 'spa')
-    nose.assert_equals(
-        alfred_json['alfredworkflow']['variables']['value_name'], 'Español')
+        alfred_json['alfredworkflow']['variables'], alfred_variables)
+    user_prefs = yvs.core.get_user_prefs()
+    nose.assert_equals(user_prefs['version'], 107)

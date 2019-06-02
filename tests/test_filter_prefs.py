@@ -33,7 +33,7 @@ def test_filter_languages():
     nose.assert_equal(results[0]['variables'], {
         'pref_id': 'language',
         'pref_name': 'language',
-        'value_id': 'spa',
+        'value_id': '"spa"',
         'value_name': 'Español (América Latina)'
     })
 
@@ -49,7 +49,7 @@ def test_filter_languages_non_latin():
     nose.assert_equal(results[0]['variables'], {
         'pref_id': 'language',
         'pref_name': 'language',
-        'value_id': 'zho_tw',
+        'value_id': '"zho_tw"',
         'value_name': '繁體中文'
     })
 
@@ -75,7 +75,7 @@ def test_filter_versions():
     nose.assert_equal(results[0]['variables'], {
         'pref_id': 'version',
         'pref_name': 'version',
-        'value_id': 110,
+        'value_id': '110',
         'value_name': 'New International Reader\'s Version (NIRV)'
     })
 
@@ -104,7 +104,7 @@ def test_filter_refformats():
     nose.assert_equal(results[0]['variables'], {
         'pref_id': 'refformat',
         'pref_name': 'reference format',
-        'value_id': result_format_id,
+        'value_id': json.dumps(result_format_id),
         'value_name': result_title
     })
 
@@ -121,7 +121,7 @@ def test_show_current_refformat():
     nose.assert_equal(results[0]['variables'], {
         'pref_id': 'refformat',
         'pref_name': 'reference format',
-        'value_id': 'Z {content}',
+        'value_id': '"Z {content}"',
         'value_name': 'Z Jesus wept.'
     })
 
@@ -234,7 +234,7 @@ def test_filter_preference_entire_query():
     nose.assert_equal(results[0]['variables'], {
         'pref_id': 'language',
         'pref_name': 'language',
-        'value_id': 'spa_es',
+        'value_id': '"spa_es"',
         'value_name': 'Español (España)'
     })
 
@@ -250,7 +250,7 @@ def test_filter_preference_ignore_special():
     nose.assert_equal(results[0]['variables'], {
         'pref_id': 'language',
         'pref_name': 'language',
-        'value_id': 'zho_tw',
+        'value_id': '"zho_tw"',
         'value_name': '繁體中文'
     })
 

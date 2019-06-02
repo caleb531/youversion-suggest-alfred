@@ -27,7 +27,9 @@ def set_pref(pref_id, value_id):
 
 def main(variables):
 
-    set_pref(variables['pref_id'], variables['value_id'])
+    # value_id needs to be parsed as JSON so we can preserve type data for
+    # proper serialization to the preferences file
+    set_pref(variables['pref_id'], json.loads(variables['value_id']))
     print(json.dumps({
         'alfredworkflow': {
             # arg needs to be non-empty for the notification to show
