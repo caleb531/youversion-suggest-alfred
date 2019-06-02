@@ -77,6 +77,26 @@ def test_cache_url_content():
 
 
 @nose.with_setup(set_up, tear_down)
+def test_structure():
+    """JSON should match result list"""
+    results = yvs.get_result_list('love others')
+    result = results[0]
+    feedback_str = yvs.core.get_result_list_feedback_str(results)
+    feedback = json.loads(feedback_str)
+    nose.assert_in('items', feedback, 'feedback object must have result items')
+    item = feedback['items'][0]
+    nose.assert_not_in('uid', item)
+    nose.assert_equal(item['arg'], result['arg'])
+    nose.assert_equal(
+        item['quicklookurl'], 'https://www.bible.com/bible/111/ROM.13.8')
+    nose.assert_equal(item['title'], 'Romans 13:8 (NIV) ♥')
+    nose.assert_equal(item['text']['copy'], result['title'])
+    nose.assert_equal(item['text']['largetype'], result['title'])
+    nose.assert_equal(item['subtitle'], result['subtitle'])
+    nose.assert_equal(item['icon']['path'], 'icon.png')
+
+
+@nose.with_setup(set_up, tear_down)
 @redirect_stdout
 def test_output(out):
     """should output result list JSON"""

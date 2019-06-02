@@ -170,6 +170,7 @@ def get_result(book, query, chosen_version, book_metadata_item):
     result['arg'] = '{version}/{uid}'.format(
         version=chosen_version['id'],
         uid=result['uid'])
+    result['quicklookurl'] = core.get_ref_url(result['arg'])
     result['uid'] = 'yvs-{}'.format(result['arg'])
     result['title'] += ' ({version})'.format(
         version=chosen_version['name'])

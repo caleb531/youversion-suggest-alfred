@@ -89,24 +89,7 @@ def get_languages():
 # Build the object for a single result list feedback item
 def get_result_list_feedback_item(result):
 
-    item = {}
-    if 'arg' in result:
-        item['arg'] = result['arg']
-        item['quicklookurl'] = get_ref_url(item['arg'])
-    if 'variables' in result:
-        item['variables'] = result['variables']
-    item['valid'] = result.get('valid', True)
-
-    if 'uid' in result:
-        item['uid'] = result['uid']
-    if 'autocomplete' in result:
-        item['autocomplete'] = result['autocomplete']
-
-    # Result title
-    item['title'] = result['title']
-    # Subtitle text shown under result title
-    item['subtitle'] = result['subtitle']
-    # Associated text to use when action is invoked
+    item = result.copy()
     item['text'] = {
         # Text copied to clipboard when cmd-c is invoked for this result
         'copy': result.get('copy', result['title']),

@@ -52,6 +52,8 @@ class SearchResultParser(YVParser):
                 self.in_heading = True
                 self.current_result['arg'] = get_uid_from_url(
                     attr_dict['href'])
+                self.current_result['quicklookurl'] = core.get_ref_url(
+                    self.current_result['arg'])
             # Detect beginning of search result content
             elif tag == 'p':
                 self.in_content = True
