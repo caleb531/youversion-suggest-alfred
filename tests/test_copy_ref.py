@@ -213,7 +213,8 @@ def test_main(out):
         'alfredworkflow': {
             'arg': ref_uid,
             'variables': {
-                'copied_ref': ref_content
+                'copied_ref': ref_content,
+                'full_ref_name': 'Psalm 23 (ESV)'
             }
         }
     })

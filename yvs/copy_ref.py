@@ -166,24 +166,32 @@ def get_ref_content(ref, ref_format, include_verse_numbers):
         return ''
 
 
-# Retrieves entire reference (header and content) to be copied
-def get_copied_ref(ref_uid):
-
-    user_prefs = core.get_user_prefs()
-    ref = core.get_ref(ref_uid, user_prefs)
+# Retrieves reference content using the given reference object and preferences
+def get_copied_ref_from_object(ref, user_prefs):
     return get_ref_content(
         ref,
         ref_format=user_prefs['refformat'],
         include_verse_numbers=user_prefs['versenumbers'])
 
 
+# Retrieves entire reference (header and content) to be copied
+def get_copied_ref(ref_uid):
+
+    user_prefs = core.get_user_prefs()
+    ref = core.get_ref(ref_uid, user_prefs)
+    return get_copied_ref_from_object(ref, user_prefs)
+
+
 def main(ref_uid):
 
+    user_prefs = core.get_user_prefs()
+    ref = core.get_ref(ref_uid, user_prefs)
     print(json.dumps({
         'alfredworkflow': {
             'arg': ref_uid,
             'variables': {
-                'copied_ref': get_copied_ref(ref_uid)
+                'copied_ref': get_copied_ref_from_object(ref, user_prefs),
+                'full_ref_name': core.get_full_ref_name(ref)
             }
         }
     }))
