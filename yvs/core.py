@@ -90,18 +90,17 @@ def get_languages():
 def get_result_list_feedback_item(result):
 
     item = result.copy()
-    item['text'] = {
-        # Text copied to clipboard when cmd-c is invoked for this result
-        'copy': result.get('copy', result['title']),
-        # Text shown when invoking Large Type for this result
-        'largetype': result.get('largetype', result['title'])
-    }
+
+    item['text'] = result.get('text', {}).copy()
+    # Text copied to clipboard when cmd-c is invoked for this result
+    item['text']['copy'] = item['text'].get('copy', result['title'])
+    # Text shown when invoking Large Type for this result
+    item['text']['largetype'] = item['text'].get('largetype', result['title'])
+
     # Use different args when different modifiers are pressed
-    item['mods'] = {
-        'ctrl': {
-            'arg': result['title']
-        }
-    }
+    item['mods'] = result.get('mods', {}).copy()
+    item['mods']['ctrl'] = item['mods'].get('ctrl', {'arg': result['title']})
+
     # Icon shown next to result text
     item['icon'] = {
         'path': 'icon.png'
