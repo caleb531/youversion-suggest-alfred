@@ -34,9 +34,9 @@ class SearchResultParser(YVParser):
 
     # Detects the start of search results, titles, reference content, etc.
     def handle_starttag(self, tag, attrs):
-        attr_dict = dict(attrs)
-        if 'class' in attr_dict:
-            elem_class = attr_dict['class']
+        attrs = dict(attrs)
+        if 'class' in attrs:
+            elem_class = attrs['class']
             # Detect beginning of search result
             if tag == 'li' and elem_class == 'reference':
                 self.in_ref = True
@@ -50,8 +50,7 @@ class SearchResultParser(YVParser):
             # Detect beginning of search result heading
             if tag == 'a':
                 self.in_heading = True
-                self.current_result['arg'] = get_uid_from_url(
-                    attr_dict['href'])
+                self.current_result['arg'] = get_uid_from_url(attrs['href'])
                 self.current_result['quicklookurl'] = core.get_ref_url(
                     self.current_result['arg'])
             # Detect beginning of search result content
