@@ -128,11 +128,11 @@ def get_copy_by_default_values():
     return [
         {
             'id': True,
-            'name': 'Yes (press Enter to copy, Cmd-Enter to view)'
+            'name': 'Yes (make Enter key copy to clipboard)'
         },
         {
             'id': False,
-            'name': 'No (press Enter to view, Cmd-Enter to copy)'
+            'name': 'No (make Cmd-Enter copy to clipboard)'
         }
     ]
 
