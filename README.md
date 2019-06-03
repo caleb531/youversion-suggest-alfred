@@ -144,6 +144,8 @@ typing `yvset versenumbers yes`.
 
 If you would prefer to just press `Enter` (without holding down the `command`
 key) to copy the content of a Bible reference, type `yvset copybydefault yes`.
+When this is enabled, you can still open the selected reference on the
+YouVersion website by holding down the `command` key.
 
 ## Disclaimer
 
