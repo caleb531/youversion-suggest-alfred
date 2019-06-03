@@ -138,7 +138,7 @@ engine to set as your preferred for YouVersion Suggest.
 ### Showing verse numbers in copied Bible content
 
 You can choose whether or not to include verse numbers in copied Bible verses by
-typing `yvset versenumbers`.
+typing `yvset versenumbers yes`.
 
 ### Making "Copy to Clipboard" the default action
 
