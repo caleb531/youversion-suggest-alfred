@@ -145,7 +145,7 @@ def choose_best_version(user_prefs, bible, query):
 
 
 # Builds a single result item
-def get_result(book, query, chosen_version):
+def get_result(book, query, chosen_version, user_prefs):
 
     chapter = min(query['chapter'], book['metadata']['chapters'])
     last_verse = book['metadata']['verses'][chapter - 1]
@@ -175,13 +175,25 @@ def get_result(book, query, chosen_version):
         version=chosen_version['id'],
         uid=result['uid'])
     result['variables'] = {
-        'ref_url': core.get_ref_url(result['arg'])
+        'ref_url': core.get_ref_url(result['arg']),
+        'copybydefault': str(user_prefs['copybydefault'])
     }
     result['quicklookurl'] = result['variables']['ref_url']
     result['uid'] = 'yvs-{}'.format(result['arg'])
     result['title'] += ' ({version})'.format(
         version=chosen_version['name'])
     result['subtitle'] = 'View on YouVersion'
+    result['mods'] = {
+        'cmd': {
+            'subtitle': 'Copy content to clipboard'
+        }
+    }
+
+    # Make "Copy" the default action (instead of "View") when the copybydefault
+    # preference is set to true
+    if user_prefs['copybydefault']:
+        result['subtitle'], result['mods']['cmd']['subtitle'] = \
+            result['mods']['cmd']['subtitle'], result['subtitle']
 
     return result
 
@@ -204,7 +216,7 @@ def get_result_list(query_str):
     chosen_version = choose_best_version(user_prefs, bible, query)
 
     # Build and return result list from books matching the query
-    return [get_result(book, query, chosen_version)
+    return [get_result(book, query, chosen_version, user_prefs)
             for book in get_matching_books(bible['books'], query)]
 
 

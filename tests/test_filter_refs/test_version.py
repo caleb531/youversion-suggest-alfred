@@ -11,7 +11,7 @@ from tests.decorators import use_user_prefs
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'spa', 'version': 128})
+@use_user_prefs({'language': 'spa', 'version': 128, 'copybydefault': False})
 def test_numbered():
     """should match versions ending in number by partial name"""
     results = yvs.get_result_list('lucas 4:8 rvr1')
@@ -20,7 +20,7 @@ def test_numbered():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'zho_tw', 'version': 46})
+@use_user_prefs({'language': 'zho_tw', 'version': 46, 'copybydefault': False})
 def test_non_ascii():
     """should match versions containing non-ASCII characters"""
     results = yvs.get_result_list('路加 4:8 cunp-上')

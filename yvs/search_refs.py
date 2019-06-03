@@ -23,6 +23,10 @@ def get_uid_from_url(url):
 # Parser for search result HTML
 class SearchResultParser(YVParser):
 
+    def __init__(self, user_prefs):
+        YVParser.__init__(self)
+        self.user_prefs = user_prefs
+
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
         YVParser.reset(self)
@@ -56,6 +60,16 @@ class SearchResultParser(YVParser):
                 }
                 self.current_result['quicklookurl'] = \
                     self.current_result['variables']['ref_url']
+                self.current_result['mods'] = {
+                    'cmd': {
+                        'subtitle': 'Copy content to clipboard'
+                    }
+                }
+                # Make "Copy" the default action (instead of "View") when the
+                # copybydefault preference is set to true
+                if self.user_prefs['copybydefault']:
+                    self.current_result['mods']['cmd']['subtitle'] = \
+                        'View on YouVersion'
             # Detect beginning of search result content
             elif tag == 'p':
                 self.in_content = True
@@ -82,13 +96,12 @@ class SearchResultParser(YVParser):
 
 
 # Retrieves HTML for reference with the given ID
-def get_search_html(query_str):
+def get_search_html(query_str, user_prefs):
 
-    version = core.get_user_prefs()['version']
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
-        urllib.quote_plus(query_str.encode('utf-8')), version)
+        urllib.quote_plus(query_str.encode('utf-8')), user_prefs['version'])
 
-    entry_key = '{}/{}.html'.format(version, query_str)
+    entry_key = '{}/{}.html'.format(user_prefs['version'], query_str)
     search_html = cache.get_cache_entry_content(entry_key)
     if not search_html:
         search_html = web.get_url_content(url)
@@ -101,8 +114,9 @@ def get_search_html(query_str):
 def get_result_list(query_str):
 
     query_str = core.normalize_query_str(query_str)
-    html = get_search_html(query_str)
-    parser = SearchResultParser()
+    user_prefs = core.get_user_prefs()
+    html = get_search_html(query_str, user_prefs)
+    parser = SearchResultParser(user_prefs)
     parser.feed(html)
     return parser.results
 

@@ -49,7 +49,7 @@ def test_trailing_alphanumeric():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'spa', 'version': 128})
+@use_user_prefs({'language': 'spa', 'version': 128, 'copybydefault': False})
 def test_unicode_accented():
     """should recognize accented Unicode characters"""
     results = yvs.get_result_list('é 3')
@@ -65,7 +65,7 @@ def test_unicode_normalization():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'deu', 'version': 51})
+@use_user_prefs({'language': 'deu', 'version': 51, 'copybydefault': False})
 def test_numbered_puncuation():
     """should match numbered books even if book name contains punctuation """
     results = yvs.get_result_list('1 ch')

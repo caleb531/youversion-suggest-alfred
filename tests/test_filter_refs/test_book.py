@@ -68,7 +68,7 @@ def test_numbered_nonnumbered_partial():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'fin', 'version': 330})
+@use_user_prefs({'language': 'fin', 'version': 330, 'copybydefault': False})
 def test_non_first_word():
     """should match word other than first word in book name"""
     results = yvs.get_result_list('la')

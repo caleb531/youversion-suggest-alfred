@@ -35,7 +35,7 @@ def test_version():
 
 
 @nose.with_setup(set_up, tear_down)
-@use_user_prefs({'language': 'zho_tw', 'version': 46})
+@use_user_prefs({'language': 'zho_tw', 'version': 46, 'copybydefault': False})
 def test_version_unicode():
     """should allow shorthand Unicode versions"""
     results = yvs.get_result_list('創世記1:3次經')
