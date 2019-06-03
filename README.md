@@ -140,6 +140,11 @@ engine to set as your preferred for YouVersion Suggest.
 You can choose whether or not to include verse numbers in copied Bible verses by
 typing `yvset versenumbers`.
 
+### Making "Copy to Clipboard" the default action
+
+If you would prefer to just press `Enter` (without holding down the `command`
+key) to copy the content of a Bible reference, type `yvset copybydefault yes`.
+
 ## Disclaimer
 
 This project is not affiliated with YouVersion, and all Bible content is
