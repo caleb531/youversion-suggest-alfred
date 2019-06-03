@@ -56,7 +56,8 @@ class SearchResultParser(YVParser):
                 self.in_heading = True
                 self.current_result['arg'] = get_uid_from_url(attrs['href'])
                 self.current_result['variables'] = {
-                    'ref_url': core.get_ref_url(self.current_result['arg'])
+                    'ref_url': core.get_ref_url(self.current_result['arg']),
+                    'copybydefault': str(self.user_prefs['copybydefault'])
                 }
                 self.current_result['quicklookurl'] = \
                     self.current_result['variables']['ref_url']
