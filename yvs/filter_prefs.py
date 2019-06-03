@@ -46,6 +46,14 @@ def get_pref_defs(user_prefs):
             'values': get_include_verse_numbers_values(),
             'description': 'Choose whether to include verse numbers in copied'
                            ' Bible content'
+        },
+        {
+            'id': 'copybydefault',
+            'name': 'Copy By Default?',
+            'short_name': 'copy setting',
+            'values': get_copy_by_default_values(),
+            'description': 'Choose whether to copy references to the clipboard'
+                           'without pressing the command key'
         }
     ]
 
@@ -110,6 +118,21 @@ def get_include_verse_numbers_values():
         {
             'id': False,
             'name': 'No (do not include in copied content)'
+        }
+    ]
+
+
+# Get a list of all available values for the "Copy By Default" preference
+def get_copy_by_default_values():
+
+    return [
+        {
+            'id': True,
+            'name': 'Yes (press Enter to copy, Cmd-Enter to view)'
+        },
+        {
+            'id': False,
+            'name': 'No (press Enter to view, Cmd-Enter to copy)'
         }
     ]
 
