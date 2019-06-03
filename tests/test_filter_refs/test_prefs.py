@@ -47,6 +47,28 @@ def test_invalid_user_version():
 
 
 @nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'eng', 'version': 111, 'copybydefault': False})
+def test_copy_by_default_false():
+    """should export correct data when "Copy By Default?" setting is false"""
+    results = yvs.get_result_list('mat 5.3')
+    nose.assert_equal(results[0]['variables']['copybydefault'], 'False')
+    nose.assert_equal(results[0]['subtitle'], 'View on YouVersion')
+    nose.assert_equal(
+        results[0]['mods']['cmd']['subtitle'], 'Copy content to clipboard')
+
+
+@nose.with_setup(set_up, tear_down)
+@use_user_prefs({'language': 'eng', 'version': 111, 'copybydefault': True})
+def test_copy_by_default_true():
+    """should export correct data when "Copy By Default?" setting is true"""
+    results = yvs.get_result_list('mat 5.3')
+    nose.assert_equal(results[0]['variables']['copybydefault'], 'True')
+    nose.assert_equal(results[0]['subtitle'], 'Copy content to clipboard')
+    nose.assert_equal(
+        results[0]['mods']['cmd']['subtitle'], 'View on YouVersion')
+
+
+@nose.with_setup(set_up, tear_down)
 def test_create_local_data_dir_silent_fail():
     """should silently fail if local data directory already exists"""
     yvs.core.create_local_data_dir()
