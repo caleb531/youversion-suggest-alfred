@@ -80,7 +80,7 @@ def test_cache_url_content():
 @use_user_prefs({'language': 'eng', 'version': 111, 'copybydefault': False})
 def test_copy_by_default_false():
     """should export correct data when "Copy By Default?" setting is false"""
-    results = yvs.get_result_list('mat 5.3')
+    results = yvs.get_result_list('love others')
     nose.assert_equal(results[0]['variables']['copybydefault'], 'False')
     nose.assert_equal(
         results[0]['subtitle'], '» “Lorem ipsum” dolor sit amet,')
@@ -92,7 +92,7 @@ def test_copy_by_default_false():
 @use_user_prefs({'language': 'eng', 'version': 111, 'copybydefault': True})
 def test_copy_by_default_true():
     """should export correct data when "Copy By Default?" setting is true"""
-    results = yvs.get_result_list('mat 5.3')
+    results = yvs.get_result_list('love others')
     nose.assert_equal(results[0]['variables']['copybydefault'], 'True')
     nose.assert_equal(
         results[0]['subtitle'], '» “Lorem ipsum” dolor sit amet,')
