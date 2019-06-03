@@ -32,8 +32,6 @@ def main(variables):
     set_pref(variables['pref_id'], json.loads(variables['value_id']))
     print(json.dumps({
         'alfredworkflow': {
-            # arg needs to be non-empty for the notification to show
-            'arg': variables['value_id'],
             'variables': variables
         }
     }))

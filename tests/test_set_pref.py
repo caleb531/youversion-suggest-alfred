@@ -65,7 +65,6 @@ def test_main(out):
     }
     yvs.main(alfred_variables)
     alfred_json = json.loads(out.getvalue())
-    nose.assert_not_equals(alfred_json['alfredworkflow']['arg'], '')
     nose.assert_equals(
         alfred_json['alfredworkflow']['variables'], alfred_variables)
     user_prefs = yvs.core.get_user_prefs()
