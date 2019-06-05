@@ -48,7 +48,7 @@ def test_get_url_content(request):
 def test_get_url_content_timeout(request, urlopen):
     """should timeout URL content request after 3 seconds"""
     web.get_url_content('https://www.bible.com/bible/59/psa.23')
-    urlopen.assert_called_once_with(request.return_value, timeout=3)
+    urlopen.assert_called_once_with(request.return_value, timeout=5)
 
 
 @nose.with_setup(set_up, tear_down)

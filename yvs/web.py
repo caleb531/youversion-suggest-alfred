@@ -8,7 +8,7 @@ from StringIO import StringIO
 # The user agent used for HTTP requests sent to the YouVersion website
 USER_AGENT = 'YouVersion Suggest'
 # The number of seconds to wait before timing out an HTTP request connection
-REQUEST_CONNECTION_TIMEOUT = 3
+REQUEST_CONNECTION_TIMEOUT = 5
 
 
 # Retrieves HTML contents of the given URL as a Unicode string
