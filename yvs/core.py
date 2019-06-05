@@ -19,7 +19,7 @@ LOCAL_DATA_DIR_PATH = os.path.join(
     HOME_DIR_PATH, 'Library', 'Application Support', 'Alfred',
     'Workflow Data', WORKFLOW_UID)
 # Path to the directory containing data files apart of the packaged workflow
-PACKAGED_DATA_DIR_PATH = os.path.join(os.getcwd(), 'yvs', 'data')
+PACKAGED_CODE_DIR_PATH = os.path.join(os.getcwd(), 'yvs')
 
 # The template used to build the URL for a Bible reference
 REF_URL_TEMPLATE = 'https://www.bible.com/bible/{ref}'
@@ -39,7 +39,7 @@ def create_local_data_dir():
 def get_bible(language_id):
 
     bible_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'bible',
+        PACKAGED_CODE_DIR_PATH, 'data', 'bible',
         'bible-{}.json'.format(language_id))
     with open(bible_path, 'r') as bible_file:
         return json.load(bible_file)
@@ -49,7 +49,7 @@ def get_bible(language_id):
 def get_book_metadata():
 
     book_metadata_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'bible', 'book-metadata.json')
+        PACKAGED_CODE_DIR_PATH, 'data', 'bible', 'book-metadata.json')
     with open(book_metadata_path, 'r') as book_metadata_file:
         return json.load(book_metadata_file)
 
@@ -81,7 +81,7 @@ def get_versions(language_id):
 def get_languages():
 
     languages_path = os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'bible', 'languages.json')
+        PACKAGED_CODE_DIR_PATH, 'data', 'bible', 'languages.json')
     with open(languages_path, 'r') as languages_file:
         return json.load(languages_file)
 
@@ -123,7 +123,7 @@ def get_result_list_feedback_str(results):
 def get_default_user_prefs_path():
 
     return os.path.join(
-        PACKAGED_DATA_DIR_PATH, 'preferences', 'defaults.json')
+        PACKAGED_CODE_DIR_PATH, 'preferences', 'defaults.json')
 
 
 # Retrieves the default values for all workflow preferences

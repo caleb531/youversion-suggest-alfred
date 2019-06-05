@@ -5,6 +5,6 @@
       "icon.png",
       "yvs/*.py",
       "yvs/data/bible/*.json",
-      "yvs/data/preferences/*.json"
+      "yvs/preferences/*.json"
   ]
 }
