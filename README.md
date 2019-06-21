@@ -109,6 +109,7 @@ Currently, YouVersion Suggest supports the following languages:
 - Spanish - Spain (spa-ES)
 - Swahili (swh)
 - Swedish (swe)
+- Vietnamese (vie)
 
 ### Setting your preferred version
 
