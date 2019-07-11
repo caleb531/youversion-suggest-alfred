@@ -99,6 +99,7 @@ Currently, YouVersion Suggest supports the following languages:
 - Indonesian (ind)
 - Italian (ita)
 - Japanese (jpn)
+- Khmer (khm)
 - Korean (kor)
 - Persian (pes)
 - Polish (pol)
