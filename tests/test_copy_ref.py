@@ -123,6 +123,7 @@ def test_versenumbers():
     """should honor the versenumbers preference"""
     ref_content = yvs.get_copied_ref('111/psa.23')
     nose.assert_regexp_matches(ref_content, r'5 fermentum')
+    nose.assert_not_regexp_matches(ref_content, r'#')
 
 
 @nose.with_setup(set_up, tear_down)
@@ -134,6 +135,7 @@ def test_versenumbers_range():
     """should handle verse range labels (used by versions like the MSG)"""
     ref_content = yvs.get_copied_ref('111/psa.23.7-9')
     nose.assert_regexp_matches(ref_content, r'7-9 dapibus et augue in,')
+    nose.assert_not_regexp_matches(ref_content, r'#')
 
 
 @nose.with_setup(set_up, tear_down)
@@ -145,6 +147,7 @@ def test_versenumbers_range_start():
     """should handle range labels when verse at start of range is given"""
     ref_content = yvs.get_copied_ref('111/psa.23.7')
     nose.assert_regexp_matches(ref_content, r'7-9 dapibus et augue in,')
+    nose.assert_not_regexp_matches(ref_content, r'#')
 
 
 @nose.with_setup(set_up, tear_down)
@@ -156,6 +159,7 @@ def test_versenumbers_range_end():
     """should handle range labels when verse at end of range is given"""
     ref_content = yvs.get_copied_ref('111/psa.23.9')
     nose.assert_regexp_matches(ref_content, r'7-9 dapibus et augue in,')
+    nose.assert_not_regexp_matches(ref_content, r'#')
 
 
 @nose.with_setup(set_up, tear_down)
@@ -167,6 +171,7 @@ def test_versenumbers_range_middle():
     """should handle range labels when verse in middle of range is given"""
     ref_content = yvs.get_copied_ref('111/psa.23.8')
     nose.assert_regexp_matches(ref_content, r'7-9 dapibus et augue in,')
+    nose.assert_not_regexp_matches(ref_content, r'#')
 
 
 @nose.with_setup(set_up, tear_down)

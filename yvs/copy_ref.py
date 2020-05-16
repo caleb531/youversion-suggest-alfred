@@ -43,6 +43,7 @@ class ReferenceParser(YVParser):
         self.in_verse = False
         self.in_verse_label = False
         self.in_verse_content = False
+        self.in_verse_note = False
         self.block_depth = 0
         self.verse_depth = 0
         self.label_depth = 0
@@ -61,13 +62,14 @@ class ReferenceParser(YVParser):
     # Returns True if parser is currently within the content of a verse to
     # include
     def is_in_verse_content(self):
-        return (self.is_in_verse() and self.in_verse_content)
+        return (self.is_in_verse() and self.in_verse_content
+                and not self.in_verse_note)
 
     # Returns True if parser is currently within the label of a verse to
     # include (otherwise, returns False)
     def is_in_verse_label(self):
         return (self.is_in_verse() and self.include_verse_numbers and
-                self.in_verse_label)
+                self.in_verse_label and not self.in_verse_note)
 
     # Detects the start of blocks, breaks, verses, and verse content
     def handle_starttag(self, tag, attrs):
@@ -99,6 +101,10 @@ class ReferenceParser(YVParser):
             if elem_class == 'content':
                 self.in_verse_content = True
                 self.content_depth = self.depth
+            # Detect footnotes and cross-references
+            if 'note' in elem_class:
+                self.in_verse_note = True
+                self.note_depth = self.depth
 
     # Detects the end of blocks, breaks, verses, and verse content
     def handle_endtag(self, tag):
@@ -111,6 +117,8 @@ class ReferenceParser(YVParser):
             self.in_verse_label = False
         elif self.in_verse_content and self.depth == self.content_depth:
             self.in_verse_content = False
+        elif self.in_verse_note and self.depth == self.note_depth:
+            self.in_verse_note = False
         self.depth -= 1
 
     # Handles verse labels and content
