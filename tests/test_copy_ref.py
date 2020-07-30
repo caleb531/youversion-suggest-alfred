@@ -1,12 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding=utf-8
-
-from __future__ import print_function, unicode_literals
 
 import json
 
 import nose.tools as nose
-from mock import Mock, NonCallableMock, patch
+from unittest.mock import Mock, NonCallableMock, patch
 
 import tests
 import yvs.copy_ref as yvs
@@ -14,7 +12,7 @@ from tests.decorators import redirect_stdout, use_user_prefs
 
 with open('tests/html/psa.23.html') as html_file:
     patch_urlopen = patch(
-        'urllib2.urlopen', return_value=NonCallableMock(
+        'urllib.request.urlopen', return_value=NonCallableMock(
             read=Mock(return_value=html_file.read())))
 
 
@@ -187,7 +185,7 @@ def test_url_always_chapter(get_url_content):
 def test_cache_url_content():
     """should cache chapter URL content after first fetch"""
     yvs.get_copied_ref('59/psa.23.2')
-    with patch('urllib2.Request') as request:
+    with patch('urllib.request.Request') as request:
         yvs.get_copied_ref('59/psa.23.3')
         request.assert_not_called()
 
@@ -203,7 +201,7 @@ def test_nonexistent_verse():
 def test_unicode_content():
     """should return copied reference content as Unicode"""
     ref_content = yvs.get_copied_ref('111/psa.23')
-    nose.assert_is_instance(ref_content, unicode)
+    nose.assert_is_instance(ref_content, str)
 
 
 @nose.with_setup(set_up, tear_down)
