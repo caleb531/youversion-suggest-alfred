@@ -63,14 +63,14 @@ def test_copy_verse_range():
 def test_refformat():
     """should honor the chosen reference format"""
     ref_content = yvs.get_copied_ref('59/psa.23.6')
-    nose.assert_equals(ref_content, '"Proin nulla orci,"\n\n(Psalm 23:6 ESV)')
+    nose.assert_equals(ref_content, '"Proin nulla orci,"\n\n(Psalms 23:6 ESV)')
 
 
 @nose.with_setup(set_up, tear_down)
 def test_header():
     """should prepend reference header to copied string"""
     ref_content = yvs.get_copied_ref('59/psa.23')
-    nose.assert_regexp_matches(ref_content, r'^Psalm 23 \(ESV\)')
+    nose.assert_regexp_matches(ref_content, r'^Psalms 23 \(ESV\)')
 
 
 @nose.with_setup(set_up, tear_down)
@@ -98,7 +98,7 @@ def test_whitespace_words():
 def test_whitespace_lines():
     """should add line breaks where appropriate"""
     ref_content = yvs.get_copied_ref('111/psa.23')
-    nose.assert_regexp_matches(ref_content, r'Psalm 23 \(NIV\)\n\n\S',
+    nose.assert_regexp_matches(ref_content, r'Psalms 23 \(NIV\)\n\n\S',
                                'should add two line breaks after header')
     nose.assert_regexp_matches(ref_content, r'amet,\nconsectetur',
                                'should add newline before each p block')
@@ -219,7 +219,7 @@ def test_main(out):
             'arg': ref_uid,
             'variables': {
                 'copied_ref': ref_content,
-                'full_ref_name': 'Psalm 23 (ESV)'
+                'full_ref_name': 'Psalms 23 (ESV)'
             }
         }
     })
