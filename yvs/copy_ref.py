@@ -94,11 +94,11 @@ class ReferenceParser(YVParser):
                 self.verse_nums = [int(class_name[1:])
                                    for class_name in elem_class_names[1:]]
             # Detect label containing the associated verse number(s)
-            if elem_class == 'label':
+            if 'label' in elem_class:
                 self.in_verse_label = True
                 self.label_depth = self.depth
             # Detect beginning of verse content (excludes footnotes)
-            if elem_class == 'content':
+            if 'content' in elem_class:
                 self.in_verse_content = True
                 self.content_depth = self.depth
             # Detect footnotes and cross-references
