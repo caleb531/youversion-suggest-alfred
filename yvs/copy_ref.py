@@ -76,35 +76,36 @@ class ReferenceParser(YVParser):
         attrs = dict(attrs)
         # Keep track of element depth throughout entire document
         self.depth += 1
-        if 'class' in attrs:
-            elem_class = attrs['class']
-            elem_class_names = elem_class.split(' ')
-            # Detect paragraph breaks between verses
-            if elem_class in self.block_elems:
-                self.in_block = True
-                self.block_depth = self.depth
-                self.content_parts.append('\n\n')
-            # Detect line breaks within a single verse
-            if elem_class in self.break_elems:
-                self.content_parts.append('\n')
-            # Detect beginning of a single verse (may include footnotes)
-            if 'verse' in elem_class_names:
-                self.in_verse = True
-                self.verse_depth = self.depth
-                self.verse_nums = [int(class_name[1:])
-                                   for class_name in elem_class_names[1:]]
-            # Detect label containing the associated verse number(s)
-            if 'label' in elem_class:
-                self.in_verse_label = True
-                self.label_depth = self.depth
-            # Detect beginning of verse content (excludes footnotes)
-            if 'content' in elem_class:
-                self.in_verse_content = True
-                self.content_depth = self.depth
-            # Detect footnotes and cross-references
-            if 'note' in elem_class:
-                self.in_verse_note = True
-                self.note_depth = self.depth
+        elem_class = attrs.get('class')
+        if not elem_class:
+            return
+        elem_class_names = elem_class.split(' ')
+        # Detect paragraph breaks between verses
+        if elem_class in self.block_elems:
+            self.in_block = True
+            self.block_depth = self.depth
+            self.content_parts.append('\n\n')
+        # Detect line breaks within a single verse
+        if elem_class in self.break_elems:
+            self.content_parts.append('\n')
+        # Detect beginning of a single verse (may include footnotes)
+        if 'verse' in elem_class_names:
+            self.in_verse = True
+            self.verse_depth = self.depth
+            self.verse_nums = [int(class_name[1:])
+                               for class_name in elem_class_names[1:]]
+        # Detect label containing the associated verse number(s)
+        if 'label' in elem_class:
+            self.in_verse_label = True
+            self.label_depth = self.depth
+        # Detect beginning of verse content (excludes footnotes)
+        if 'content' in elem_class:
+            self.in_verse_content = True
+            self.content_depth = self.depth
+        # Detect footnotes and cross-references
+        if 'note' in elem_class:
+            self.in_verse_note = True
+            self.note_depth = self.depth
 
     # Detects the end of blocks, breaks, verses, and verse content
     def handle_endtag(self, tag):
