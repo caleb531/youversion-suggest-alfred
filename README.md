@@ -3,7 +3,7 @@
 *Copyright 2014-2020 Caleb Evans*  
 *Released under the MIT license*
 
-[![Build Status](https://travis-ci.org/caleb531/youversion-suggest-alfred.svg?branch=master)](https://travis-ci.org/caleb531/youversion-suggest-alfred)
+[![Build Status](https://travis-ci.com/caleb531/youversion-suggest-alfred.svg?branch=master)](https://travis-ci.com/caleb531/youversion-suggest-alfred)
 [![Coverage Status](https://coveralls.io/repos/caleb531/youversion-suggest-alfred/badge.svg?branch=master)](https://coveralls.io/r/caleb531/youversion-suggest-alfred?branch=master)
 
 YouVersion Suggest is an [Alfred](https://www.alfredapp.com/) workflow which
