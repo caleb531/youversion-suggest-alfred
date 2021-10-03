@@ -77,7 +77,7 @@ def guess_version(versions, version_query):
             if normalized_version_name == version_query[:i]:
                 return version
     # Give partial matches lower precedence over exact matches
-    for i in xrange(len(version_query), 0, -1):
+    for i in range(len(version_query), 0, -1):
         for version in versions:
             normalized_version_name = normalize_query_str(version['name'])
             if (normalized_version_name.startswith(version_query[:i])):
