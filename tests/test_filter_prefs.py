@@ -195,9 +195,10 @@ def test_filter_preferences_name():
 def test_filter_preferences_name_partial():
     """should match partial pref name at word boundaries"""
     results = yvs.get_result_list('version en st')
-    nose.assert_equal(len(results), 1)
-    nose.assert_equal(results[0]['uid'], 'yvs-version-59')
-    nose.assert_equal(results[0]['title'], 'English Standard Version (ESV)')
+    nose.assert_equal(len(results), 2)
+    nose.assert_equal(results[1]['uid'], 'yvs-version-59')
+    nose.assert_equal(
+        results[1]['title'], 'English Standard Version 2016 (ESV)')
 
 
 @nose.with_setup(set_up, tear_down)
