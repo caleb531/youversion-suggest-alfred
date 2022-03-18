@@ -1,6 +1,6 @@
 # YouVersion Suggest
 
-*Copyright 2014-2020 Caleb Evans*  
+*Copyright 2014-2022 Caleb Evans*  
 *Released under the MIT license*
 
 [![Build Status](https://app.travis-ci.com/caleb531/youversion-suggest-alfred.svg?branch=master)](https://app.travis-ci.com/caleb531/youversion-suggest-alfred)
