@@ -4,54 +4,63 @@
 import json
 import os
 import os.path
+import unittest
 
-import nose.tools as nose
+from nose2.tools.decorators import with_setup, with_teardown
 
 import yvs.set_pref as yvs
 from tests import set_up, tear_down
 from tests.decorators import redirect_stdout
 
 
-@nose.with_setup(set_up, tear_down)
+case = unittest.TestCase()
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
 def test_set_language():
     """should set preferred language"""
     yvs.set_pref('language', 'spa')
     user_prefs = yvs.core.get_user_prefs()
-    nose.assert_equal(user_prefs['language'], 'spa')
+    case.assertEqual(user_prefs['language'], 'spa')
     bible = yvs.core.get_bible(user_prefs['language'])
-    nose.assert_equal(user_prefs['version'], bible['default_version'])
+    case.assertEqual(user_prefs['version'], bible['default_version'])
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 def test_set_version():
     """should set preferred version"""
     yvs.set_pref('version', 59)
     user_prefs = yvs.core.get_user_prefs()
-    nose.assert_equal(user_prefs['version'], 59)
+    case.assertEqual(user_prefs['version'], 59)
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 def test_set_nonexistent():
     """should discard nonexistent preferences"""
     yvs.set_pref('foo', 'bar')
     user_prefs = yvs.core.get_user_prefs()
-    nose.assert_not_in('foo', user_prefs)
+    case.assertNotIn('foo', user_prefs)
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 def test_set_language_clear_cache():
     """should clear cache when setting language"""
-    nose.assert_true(
+    case.assertTrue(
         os.path.exists(yvs.cache.LOCAL_CACHE_DIR_PATH),
         'local cache directory does not exist')
     yvs.cache.add_cache_entry('foo', 'blah blah')
     yvs.set_pref('language', 'spa')
-    nose.assert_false(
+    case.assertFalse(
         os.path.exists(yvs.cache.LOCAL_CACHE_DIR_PATH),
         'local cache directory exists')
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 @redirect_stdout
 def test_main(out):
     """should pass preference data to setter"""
@@ -63,7 +72,7 @@ def test_main(out):
     }
     yvs.main(alfred_variables)
     alfred_json = json.loads(out.getvalue())
-    nose.assert_equals(
+    case.assertEquals(
         alfred_json['alfredworkflow']['variables'], alfred_variables)
     user_prefs = yvs.core.get_user_prefs()
-    nose.assert_equals(user_prefs['version'], 107)
+    case.assertEquals(user_prefs['version'], 107)

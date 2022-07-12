@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
+import unittest
 from gzip import GzipFile
 from io import BytesIO
-
-import nose.tools as nose
 from unittest.mock import Mock, NonCallableMock, patch
+
+from nose2.tools.decorators import with_setup, with_teardown
 
 import tests
 import yvs.web as web
 
+case = unittest.TestCase()
 
 with open('tests/html/psa.23.html') as html_file:
     html_content = html_file.read()
@@ -28,7 +30,8 @@ def tear_down():
     tests.tear_down()
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 @patch('urllib.request.Request')
 def test_get_url_content(request):
     """should fetch uncompressed URL content"""
@@ -40,7 +43,8 @@ def test_get_url_content(request):
     })
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 @patch('urllib.request.urlopen')
 @patch('urllib.request.Request')
 def test_get_url_content_timeout(request, urlopen):
@@ -49,7 +53,8 @@ def test_get_url_content_timeout(request, urlopen):
     urlopen.assert_called_once_with(request.return_value, timeout=5)
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 @patch('urllib.request.Request')
 def test_get_url_content_compressed(request):
     """should automatically decompress compressed URL content"""
@@ -64,4 +69,4 @@ def test_get_url_content_compressed(request):
             get=Mock(return_value='gzip'))))
     with patch('urllib.request.urlopen', return_value=response_mock):
         url_content = web.get_url_content(url)
-        nose.assert_equal(url_content, html_content)
+        case.assertEqual(url_content, html_content)

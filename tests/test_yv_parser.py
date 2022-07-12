@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
-import nose.tools as nose
 from unittest.mock import Mock, NonCallableMock, patch
+
+from nose2.tools.decorators import with_setup, with_teardown
 
 import tests
 from yvs.yv_parser import YVParser
@@ -23,7 +24,8 @@ def tear_down():
     tests.tear_down()
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 @patch('yvs.yv_parser.YVParser.handle_data')
 def test_charref_name(handle_data):
     """should evaluate named character references"""
@@ -32,7 +34,8 @@ def test_charref_name(handle_data):
     handle_data.assert_called_once_with('°')
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 @patch('yvs.yv_parser.YVParser.handle_data')
 def test_charref_dec(handle_data):
     """should evaluate decimal character references"""
@@ -41,7 +44,8 @@ def test_charref_dec(handle_data):
     handle_data.assert_called_once_with('°')
 
 
-@nose.with_setup(set_up, tear_down)
+@with_setup(set_up)
+@with_teardown(tear_down)
 @patch('yvs.yv_parser.YVParser.handle_data')
 def test_charref_hex(handle_data):
     """should evaluate hexadecimal character references"""
