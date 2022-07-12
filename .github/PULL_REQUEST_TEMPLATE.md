@@ -2,6 +2,6 @@
 
 - [ ] Added/modified the appropriate unit tests
 - [ ] All unit tests pass
-    - `nosetests --rednose`
+    - `nose2`
 - [ ] Code coverage is at 100%
-    - `coverage run -m nose --rednose && coverage report`
+    - `coverage run -m nose2 && coverage report`
