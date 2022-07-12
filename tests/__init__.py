@@ -23,12 +23,12 @@ local_cache_dir_patcher = patch(
 def set_up():
     local_data_dir_patcher.start()
     try:
-        os.mkdir(core.LOCAL_DATA_DIR_PATH)
+        os.makedirs(core.LOCAL_DATA_DIR_PATH)
     except OSError:
         pass
     local_cache_dir_patcher.start()
     try:
-        os.mkdir(cache.LOCAL_CACHE_DIR_PATH)
+        os.makedirs(cache.LOCAL_CACHE_DIR_PATH)
     except OSError:
         pass
 
