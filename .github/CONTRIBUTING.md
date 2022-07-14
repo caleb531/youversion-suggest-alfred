@@ -59,12 +59,11 @@ pip install -r requirements.txt
 
 ### Running unit tests
 
-The project's unit tests are written using and managed under the [nose][nose]
-Python package. You can run all unit tests via the `nosetests` command (you can
-also pass `--rednose` for colored test output):
+The project's unit tests are written using and managed under the [nose2][nose2]
+Python package. You can run all unit tests via the `nose2` command.
 
 ```bash
-nosetests --rednose
+nose2
 ```
 
 ## Code coverage
@@ -74,7 +73,7 @@ Contributions are expected to maintain this high standard. You can view the
 current coverage report via the `coverage` command:
 
 ```bash
-coverage run -m nose --rednose
+coverage run -m nose2
 coverage report
 ```
 
@@ -89,4 +88,4 @@ open htmlcov/index.html
 [issues-page]: https://github.com/caleb531/youversion-suggest-alfred/issues
 [language-list]: https://www.bible.com/languages
 [data-contributing-guide]: https://github.com/caleb531/youversion-suggest-data/blob/master/CONTRIBUTING.md
-[nose]: http://nose.readthedocs.io/en/latest/
+[nose2]: https://docs.nose2.io/en/latest/
