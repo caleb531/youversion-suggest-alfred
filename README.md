@@ -10,8 +10,8 @@ YouVersion Suggest is an [Alfred](https://www.alfredapp.com/) workflow which
 allows you to search the online [YouVersion](https://www.youversion.com/) Bible
 quickly and conveniently.
 
-The workflow will be solely supporting Alfred 4 going forward, but the latest
-Alfred 3 and Alfred 2-compatible releases will remain available here for your
+The workflow will be solely supporting Alfred 5 going forward, but the latest
+releases for Alfred 4 and earlier will remain available here for your
 convenience.
 
 ## Usage
