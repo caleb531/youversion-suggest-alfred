@@ -51,7 +51,7 @@ def get_pref_defs(user_prefs):
             'short_name': 'copy setting',
             'values': get_copy_by_default_values(),
             'description': 'Choose whether to copy references to the clipboard'
-                           'without pressing the command key'
+                           ' without pressing the command key'
         }
     ]
 
