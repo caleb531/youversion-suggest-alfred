@@ -1,4 +1,4 @@
-# YouVersion Suggest
+# YouVersion Suggest for Alfred
 
 *Copyright 2014-2022 Caleb Evans*  
 *Released under the MIT license*
