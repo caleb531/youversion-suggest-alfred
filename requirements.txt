@@ -1,7 +1,7 @@
 alfred-workflow-packager==2.0.0
 attrs==21.4.0
 biplist==1.0.3
-coverage==6.3.2
+coverage==6.5.0
 flake8==4.0.1
 isort==5.10.1
 jsonschema==4.4.0
