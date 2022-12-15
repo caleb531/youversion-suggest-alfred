@@ -215,11 +215,11 @@ def test_filter_preferences_name():
 @with_teardown(tear_down)
 def test_filter_preferences_name_partial():
     """should match partial pref name at word boundaries"""
-    results = yvs.get_result_list('version en st')
-    case.assertEqual(len(results), 2)
-    case.assertEqual(results[1]['uid'], 'yvs-version-59')
+    results = yvs.get_result_list('version en sta')
+    case.assertEqual(len(results), 1)
+    case.assertEqual(results[0]['uid'], 'yvs-version-59')
     case.assertEqual(
-        results[1]['title'], 'English Standard Version 2016 (ESV)')
+        results[0]['title'], 'English Standard Version 2016 (ESV)')
 
 
 @with_setup(set_up)
