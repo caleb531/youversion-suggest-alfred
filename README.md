@@ -105,6 +105,7 @@ Currently, YouVersion Suggest supports the following languages:
 - Polish (pol)
 - Portuguese (por)
 - Portuguese - Portugal (por-PT)
+- Romanian (ron)
 - Russian (rus)
 - Spanish (spa)
 - Spanish - Spain (spa-ES)
