@@ -14,6 +14,28 @@ The workflow will be solely supporting Alfred 5 going forward, but the latest
 releases for Alfred 4 and earlier will remain available here for your
 convenience.
 
+## Installation
+
+To download the workflow, simply click one of the download links below. Please
+note that only the Alfred 5 version has all the latest features.
+
+[Download YouVersion Suggest (Alfred 5)][workflow-download-alfred5]
+
+[workflow-download-alfred5]: https://github.com/caleb531/youversion-suggest-alfred/raw/main/YouVersion%20Suggest%20(Alfred%205).alfredworkflow
+
+[Download YouVersion Suggest (Alfred 4)][workflow-download-alfred4]
+
+[workflow-download-alfred4]: https://github.com/caleb531/youversion-suggest-alfred/raw/main/YouVersion%20Suggest%20(Alfred%204).alfredworkflow
+
+### Command Line Tools
+
+If you are installing the workflow for the first time, you may be prompted to
+install Apple's Command Line Tools. These developer tools are required
+for the workflow to function, and fortunately, they have a much smaller size
+footprint than full-blown Xcode.
+
+![Prompt to install Apple's Command Line Tools](screenshot-clt-installer.png)
+
 ## Usage
 
 ### Filtering by reference
