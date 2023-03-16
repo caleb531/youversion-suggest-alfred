@@ -87,7 +87,7 @@ def get_ref_format_values(user_prefs):
         '"{content}"\n{name} {version}',
         '"{content}"\n{name} {version}\n{url}'
     ]
-    # Display the user's current preference in the list
+    # Display the user's current format in the list if it's custom
     if user_prefs['refformat'] not in ref_formats:
         ref_formats.append(user_prefs['refformat'])
 
