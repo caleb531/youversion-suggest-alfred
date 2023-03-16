@@ -1,6 +1,6 @@
 # YouVersion Suggest for Alfred
 
-*Copyright 2014-2022 Caleb Evans*  
+*Copyright 2014-2023 Caleb Evans*  
 *Released under the MIT license*
 
 [![tests](https://github.com/caleb531/youversion-suggest-alfred/actions/workflows/tests.yml/badge.svg)](https://github.com/caleb531/youversion-suggest-alfred/actions/workflows/tests.yml)
