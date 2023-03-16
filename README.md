@@ -165,6 +165,12 @@ engine to set as your preferred for YouVersion Suggest.
 You can choose whether or not to include verse numbers in copied Bible verses by
 typing `yvset versenumbers yes`.
 
+### Stripping line breaks in copied Bible content
+
+You can choose whether or not to strip line breaks from copied Bible content, so
+that the verses you copy appear all on one line (even if it's from a psalm, for
+example). To do this, type `yvset linebreaks no`.
+
 ### Making "Copy to Clipboard" the default action
 
 If you would prefer to just press `Enter` (without holding down the `command`

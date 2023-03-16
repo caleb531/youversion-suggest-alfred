@@ -106,7 +106,7 @@ def test_whitespace_words():
 
 @with_setup(set_up)
 @with_teardown(tear_down)
-def test_whitespace_lines():
+def test_linebreaks_yes():
     """should add line breaks where appropriate"""
     ref_content = yvs.get_copied_ref('111/psa.23')
     case.assertRegexpMatches(ref_content, r'Psalms 23 \(NIV\)\n\n\S',
@@ -123,6 +123,58 @@ def test_whitespace_lines():
                              'should add newlines around each li1 block')
     case.assertRegexpMatches(ref_content, r'leo,\n\nhendrerit',
                              'should add two newlines for each b block')
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 111,
+        'refformat': '{name} ({version})\n\n{content}',
+        'versenumbers': False, 'linebreaks': False})
+def test_linebreaks_no():
+    """should strip line breaks where appropriate"""
+    ref_content = yvs.get_copied_ref('111/psa.23')
+    case.assertRegexpMatches(ref_content, r'Psalms 23 \(NIV\)\n\n\S',
+                             'should still add two line breaks after header')
+    case.assertRegexpMatches(ref_content, r'amet, consectetur',
+                             'should not add newline before each p block')
+    case.assertRegexpMatches(ref_content, r'erat. \S',
+                             'should not add newline after each p block')
+    case.assertRegexpMatches(ref_content, r'orci, dapibus',
+                             'should not add newline between each qc block')
+    case.assertRegexpMatches(ref_content, r'nec fermentum',
+                             'should not add newline between each q block')
+    case.assertRegexpMatches(ref_content, r'elit. Ut',
+                             'should not add newlines around each li1 block')
+    case.assertRegexpMatches(ref_content, r'leo, hendrerit',
+                             'should not add two newlines for each b block')
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
+@use_user_prefs(
+    {'language': 'eng', 'version': 111,
+        'refformat': '{name} ({version})\n\n{content}',
+        'versenumbers': True, 'linebreaks': False})
+def test_linebreaks_no_versenumbers_yes():
+    """should display verse numbers correctly when stripping line breaks"""
+    ref_content = yvs.get_copied_ref('111/psa.23')
+    case.assertRegexpMatches(ref_content, r'\(NIV\)\n\n1 » “Lorem ipsum”',
+                             'should display number for verse 1')
+    case.assertRegexpMatches(ref_content, r'elit. 2 Ut',
+                             'should display number for verse 2')
+    case.assertRegexpMatches(ref_content, r'erat. 3 › Nunc',
+                             'should display number for verse 3')
+    case.assertRegexpMatches(ref_content, r'leo, 4 hendrerit',
+                             'should display number for verse 4')
+    case.assertRegexpMatches(ref_content, r'leo, 4 hendrerit',
+                             'should display number for verse 4')
+    case.assertRegexpMatches(ref_content, r'nec 5 fermentum',
+                             'should display number for verse 5')
+    case.assertRegexpMatches(ref_content, r'orci, 7-9 dapibus',
+                             'should display number for verses 7-9')
+    case.assertRegexpMatches(ref_content, r'augue in, 10 dictum',
+                             'should display number for verse 10')
 
 
 @with_setup(set_up)

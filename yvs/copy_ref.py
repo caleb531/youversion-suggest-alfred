@@ -20,7 +20,8 @@ class ReferenceParser(YVParser):
     break_elems = {'li1', 'q1', 'q2', 'qc', 'qm1', 'qm2'}
 
     # Associates the given reference object with this parser instance
-    def __init__(self, ref, include_verse_numbers=False):
+    def __init__(self, ref,
+                 include_verse_numbers=False, include_line_breaks=False):
         YVParser.__init__(self)
         if 'verse' in ref:
             # If reference is a verse or verse range, set the correct range of
@@ -162,11 +163,17 @@ def get_ref_content(ref, ref_format,
                     include_verse_numbers, include_line_breaks):
 
     chapter_html = get_chapter_html(ref)
-    parser = ReferenceParser(ref, include_verse_numbers=include_verse_numbers)
+    parser = ReferenceParser(
+        ref,
+        include_verse_numbers=include_verse_numbers,
+        include_line_breaks=include_line_breaks)
     parser.feed(chapter_html)
+    # If line breaks are disabled, strip them out
+    ref_content = ''.join(parser.content_parts)
+    if not include_line_breaks:
+        ref_content = ref_content.replace('\n', ' ')
     # Format reference content by removing superfluous whitespace and such
-    ref_content = core.normalize_ref_content(
-        ''.join(parser.content_parts))
+    ref_content = core.normalize_ref_content(ref_content)
 
     if ref_content:
         copied_content = ref_format.format(
