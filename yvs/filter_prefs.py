@@ -49,7 +49,7 @@ def get_pref_defs(user_prefs):
             'id': 'linebreaks',
             'name': 'Include Line Breaks?',
             'short_name': 'line breaks setting',
-            'values': get_include_verse_numbers_values(),
+            'values': get_include_line_breaks_values(),
             'description': 'Choose whether to include line breaks in copied'
                            ' Bible content'
         },
@@ -115,6 +115,22 @@ def get_ref_format_value(ref_format, ref):
 # Get a list of all available values for including verse numbers in copied
 # Bible content
 def get_include_verse_numbers_values():
+
+    return [
+        {
+            'id': True,
+            'name': 'Yes (include in copied content)'
+        },
+        {
+            'id': False,
+            'name': 'No (do not include in copied content)'
+        }
+    ]
+
+
+# Get a list of all available values for including line breaks in copied
+# Bible content
+def get_include_line_breaks_values():
 
     return [
         {
