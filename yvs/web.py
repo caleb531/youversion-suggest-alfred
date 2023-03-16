@@ -18,7 +18,9 @@ def get_url_content(url):
         'User-Agent': USER_AGENT,
         'Accept-Encoding': 'gzip, deflate'
     })
-    response = urllib.request.urlopen(request, timeout=REQUEST_CONNECTION_TIMEOUT)
+    response = urllib.request.urlopen(
+        request,
+        timeout=REQUEST_CONNECTION_TIMEOUT)
     url_content = response.read()
 
     # Decompress response body if gzipped
