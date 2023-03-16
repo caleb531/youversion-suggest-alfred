@@ -33,6 +33,7 @@ class ReferenceParser(YVParser):
             self.verse_start = 1
             self.verse_end = None
         self.include_verse_numbers = include_verse_numbers
+        self.include_line_breaks = include_line_breaks
 
     # Resets parser variables (implicitly called when parser is instantiated)
     def reset(self):
@@ -88,10 +89,12 @@ class ReferenceParser(YVParser):
         if elem_class in self.block_elems:
             self.in_block = True
             self.block_depth = self.depth
-            self.content_parts.append('\n\n')
+            self.content_parts.append(
+                '\n\n' if self.include_line_breaks else ' ')
         # Detect line breaks within a single verse
         if elem_class in self.break_elems:
-            self.content_parts.append('\n')
+            self.content_parts.append(
+                '\n' if self.include_line_breaks else ' ')
         # Detect beginning of a single verse (may include footnotes)
         if 'verse' in elem_class_names:
             self.in_verse = True
@@ -115,7 +118,8 @@ class ReferenceParser(YVParser):
     def handle_endtag(self, tag):
         if self.in_block and self.depth == self.block_depth:
             self.in_block = False
-            self.content_parts.append('\n')
+            self.content_parts.append(
+                '\n' if self.include_line_breaks else ' ')
         elif self.in_verse and self.depth == self.verse_depth:
             self.in_verse = False
         elif self.in_verse_label and self.depth == self.label_depth:
@@ -168,12 +172,8 @@ def get_ref_content(ref, ref_format,
         include_verse_numbers=include_verse_numbers,
         include_line_breaks=include_line_breaks)
     parser.feed(chapter_html)
-    # If line breaks are disabled, strip them out
-    ref_content = ''.join(parser.content_parts)
-    if not include_line_breaks:
-        ref_content = ref_content.replace('\n', ' ')
     # Format reference content by removing superfluous whitespace and such
-    ref_content = core.normalize_ref_content(ref_content)
+    ref_content = core.normalize_ref_content(''.join(parser.content_parts))
 
     if ref_content:
         copied_content = ref_format.format(
