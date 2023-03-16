@@ -46,6 +46,14 @@ def get_pref_defs(user_prefs):
                            ' Bible content'
         },
         {
+            'id': 'linebreaks',
+            'name': 'Include Line Breaks?',
+            'short_name': 'line breaks setting',
+            'values': get_include_verse_numbers_values(),
+            'description': 'Choose whether to include line breaks in copied'
+                           ' Bible content'
+        },
+        {
             'id': 'copybydefault',
             'name': 'Copy By Default?',
             'short_name': 'copy setting',

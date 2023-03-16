@@ -158,10 +158,11 @@ def get_chapter_html(ref):
 
 
 # Parses actual reference content from chapter HTML
-def get_ref_content(ref, ref_format, include_verse_numbers):
+def get_ref_content(ref, ref_format,
+                    include_verse_numbers, include_line_breaks):
 
     chapter_html = get_chapter_html(ref)
-    parser = ReferenceParser(ref, include_verse_numbers)
+    parser = ReferenceParser(ref, include_verse_numbers=include_verse_numbers)
     parser.feed(chapter_html)
     # Format reference content by removing superfluous whitespace and such
     ref_content = core.normalize_ref_content(
@@ -183,7 +184,8 @@ def get_copied_ref_from_object(ref, user_prefs):
     return get_ref_content(
         ref,
         ref_format=user_prefs['refformat'],
-        include_verse_numbers=user_prefs['versenumbers'])
+        include_verse_numbers=user_prefs['versenumbers'],
+        include_line_breaks=user_prefs['linebreaks'])
 
 
 # Retrieves entire reference (header and content) to be copied

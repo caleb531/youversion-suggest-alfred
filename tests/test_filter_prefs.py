@@ -227,7 +227,7 @@ def test_filter_preferences_name_partial():
 def test_filter_preferences_show_current():
     """should show current values for all preferences"""
     results = yvs.get_result_list('')
-    case.assertEqual(len(results), 5)
+    case.assertEqual(len(results), 6)
     case.assertIn('English', results[0]['subtitle'])
     case.assertIn('NIV', results[1]['subtitle'])
 
@@ -236,11 +236,12 @@ def test_filter_preferences_show_current():
 @with_teardown(tear_down)
 @use_user_prefs({
     'language': 'eng', 'version': 999, 'refformat':
-    '{name}\n\n{content}', 'versenumbers': False, 'copybydefault': False})
+    '{name}\n\n{content}', 'versenumbers': False, 'linebreaks': True,
+    'copybydefault': True})
 def test_filter_preferences_show_current_valid_only():
     """should not show invalid current preference values"""
     results = yvs.get_result_list('')
-    case.assertEqual(len(results), 5)
+    case.assertEqual(len(results), 6)
     case.assertIn('currently', results[0]['subtitle'])
     case.assertNotIn('currently', results[1]['subtitle'])
 
