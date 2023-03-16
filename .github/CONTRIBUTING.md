@@ -16,7 +16,7 @@ If you are submitting a bug report, please answer the following questions:
 If you would like to see YouVersion Suggest support a language not in the above
 list, please [submit an GitHub issue][issues-page] with the following details:
 
-- The name and ISO 639 code of the language from [this list][language-list] (*e.g.* spa_es)
+- The name and IETF language tag of the language from [this list][language-list] (*e.g.* spa_es)
 
 - The name of the YouVersion-supported Bible version to use as the default for
 this language; click the language name on the page linked above to view the
