@@ -40,7 +40,7 @@ class SearchResultParser(YVParser):
         if 'class' in attrs:
             elem_class = attrs['class']
             # Detect beginning of search result
-            if tag == 'li' and elem_class == 'reference':
+            if tag == 'a' and '/bible/' in attrs['href']:
                 self.in_ref = True
                 self.current_result = {
                     'arg': '',
@@ -70,17 +70,17 @@ class SearchResultParser(YVParser):
                     self.current_result['mods']['cmd']['subtitle'] = \
                         'View on YouVersion'
             # Detect beginning of search result content
-            elif tag == 'p':
+            elif elem_class == 'content':
                 self.in_content = True
 
     # Detects the end of search results, titles, reference content, etc.
     def handle_endtag(self, tag):
         if self.in_ref:
-            if tag == 'li':
+            if tag == 'p':
                 self.in_ref = False
             elif self.in_heading and tag == 'a':
                 self.in_heading = False
-            elif self.in_content and tag == 'p':
+            elif tag == 'span':
                 self.in_content = False
                 self.current_result['subtitle'] = core.normalize_ref_content(
                     self.current_result['subtitle'])
@@ -91,7 +91,7 @@ class SearchResultParser(YVParser):
             if self.in_heading:
                 self.current_result['title'] += data
             elif self.in_content:
-                self.current_result['subtitle'] += data
+                self.current_result['subtitle'] += ' ' + data
 
 
 # Retrieves HTML for reference with the given ID
