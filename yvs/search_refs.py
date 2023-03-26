@@ -40,54 +40,48 @@ class SearchResultParser(YVParser):
     def handle_starttag(self, tag, attrs):
         self.depth += 1
         attrs = dict(attrs)
-        if 'class' in attrs:
-            elem_class = attrs['class']
-            # Detect beginning of search result
-            if tag == 'a' and '/bible/' in attrs['href']:
-                self.in_ref = True
-                self.current_result = {
-                    'arg': '',
-                    'title': '',
-                    'subtitle': ''
+        # Detect beginning of search result
+        if tag == 'a' and '/bible/' in attrs.get('href'):
+            self.in_ref = True
+            self.current_result = {
+                'arg': '',
+                'title': '',
+                'subtitle': ''
+            }
+            self.results.append(self.current_result)
+            self.in_heading = True
+            self.current_result['arg'] = get_uid_from_url(attrs['href'])
+            self.current_result['variables'] = {
+                'ref_url': core.get_ref_url(self.current_result['arg']),
+                'copybydefault': str(self.user_prefs['copybydefault'])
+            }
+            self.current_result['quicklookurl'] = \
+                self.current_result['variables']['ref_url']
+            self.current_result['mods'] = {
+                'cmd': {
+                    'subtitle': 'Copy content to clipboard'
                 }
-                self.results.append(self.current_result)
-        if self.in_ref:
-            # Detect beginning of search result heading
-            if tag == 'a':
-                self.in_heading = True
-                self.current_result['arg'] = get_uid_from_url(attrs['href'])
-                self.current_result['variables'] = {
-                    'ref_url': core.get_ref_url(self.current_result['arg']),
-                    'copybydefault': str(self.user_prefs['copybydefault'])
-                }
-                self.current_result['quicklookurl'] = \
-                    self.current_result['variables']['ref_url']
-                self.current_result['mods'] = {
-                    'cmd': {
-                        'subtitle': 'Copy content to clipboard'
-                    }
-                }
-                # Make "Copy" the default action (instead of "View") when the
-                # copybydefault preference is set to true
-                if self.user_prefs['copybydefault']:
-                    self.current_result['mods']['cmd']['subtitle'] = \
-                        'View on YouVersion'
-            # Detect beginning of search result content
-            elif elem_class == 'content':
-                self.in_content = True
-                self.content_depth = self.depth
+            }
+            # Make "Copy" the default action (instead of "View") when the
+            # copybydefault preference is set to true
+            if self.user_prefs['copybydefault']:
+                self.current_result['mods']['cmd']['subtitle'] = \
+                    'View on YouVersion'
+        # Detect beginning of search result content
+        elif attrs.get('class') == 'content':
+            self.in_content = True
+            self.content_depth = self.depth
 
     # Detects the end of search results, titles, reference content, etc.
     def handle_endtag(self, tag):
-        if self.in_ref:
-            if tag == 'p':
-                self.in_ref = False
-                self.current_result['subtitle'] = core.normalize_ref_content(
-                    self.current_result['subtitle'])
-            elif self.in_heading and tag == 'a':
-                self.in_heading = False
-            elif tag == 'span' and self.depth == self.content_depth:
-                self.in_content = False
+        if self.in_ref and tag == 'p':
+            self.in_ref = False
+            self.current_result['subtitle'] = core.normalize_ref_content(
+                self.current_result['subtitle'])
+        elif self.in_heading and tag == 'a':
+            self.in_heading = False
+        elif self.in_content and tag == 'span' and self.depth == self.content_depth:
+            self.in_content = False
         self.depth -= 1
 
     # Handles verse content
