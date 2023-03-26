@@ -82,12 +82,12 @@ class SearchResultParser(YVParser):
         if self.in_ref:
             if tag == 'p':
                 self.in_ref = False
+                self.current_result['subtitle'] = core.normalize_ref_content(
+                    self.current_result['subtitle'])
             elif self.in_heading and tag == 'a':
                 self.in_heading = False
             elif tag == 'span' and self.depth == self.content_depth:
                 self.in_content = False
-                self.current_result['subtitle'] = core.normalize_ref_content(
-                    self.current_result['subtitle'])
         self.depth -= 1
 
     # Handles verse content
@@ -96,7 +96,7 @@ class SearchResultParser(YVParser):
             if self.in_heading:
                 self.current_result['title'] += data
             elif self.in_content:
-                self.current_result['subtitle'] += ' ' + data
+                self.current_result['subtitle'] += data
 
 
 # Retrieves HTML for reference with the given ID
