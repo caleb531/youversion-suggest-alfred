@@ -28,14 +28,17 @@ class SearchResultParser(YVParser):
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
         YVParser.reset(self)
+        self.depth = 0
         self.in_ref = False
         self.in_heading = False
         self.in_content = False
+        self.content_depth = 0
         self.results = []
         self.current_result = None
 
     # Detects the start of search results, titles, reference content, etc.
     def handle_starttag(self, tag, attrs):
+        self.depth += 1
         attrs = dict(attrs)
         if 'class' in attrs:
             elem_class = attrs['class']
@@ -72,6 +75,7 @@ class SearchResultParser(YVParser):
             # Detect beginning of search result content
             elif elem_class == 'content':
                 self.in_content = True
+                self.content_depth = self.depth
 
     # Detects the end of search results, titles, reference content, etc.
     def handle_endtag(self, tag):
@@ -80,10 +84,11 @@ class SearchResultParser(YVParser):
                 self.in_ref = False
             elif self.in_heading and tag == 'a':
                 self.in_heading = False
-            elif tag == 'span':
+            elif tag == 'span' and self.depth == self.content_depth:
                 self.in_content = False
                 self.current_result['subtitle'] = core.normalize_ref_content(
                     self.current_result['subtitle'])
+        self.depth -= 1
 
     # Handles verse content
     def handle_data(self, data):
