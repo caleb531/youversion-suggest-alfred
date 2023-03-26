@@ -66,7 +66,6 @@ def test_result_arg():
 
 @with_setup(set_up)
 @with_teardown(tear_down)
-@patch('yvs.web.get_url_content', return_value='abc')
 def test_unicode_input(get_url_content):
     """should correctly handle non-ASCII characters in query string"""
     yvs.get_result_list('é')
@@ -147,9 +146,42 @@ def test_output(out):
 @with_setup(set_up)
 @with_teardown(tear_down)
 @redirect_stdout
-@patch('yvs.search_refs.get_result_list', return_value=[])
-def test_null_result(out, get_result_list):
+@patch('yvs.web.get_url_content', return_value='')
+def test_null_result(out, get_url_content):
     """should output "No Results" JSON item for empty result list"""
+    query_str = 'xyz'
+    yvs.main(query_str)
+    feedback_str = out.getvalue()
+    feedback = json.loads(feedback_str)
+    case.assertEqual(len(feedback['items']), 1, 'result item is missing')
+    item = feedback['items'][0]
+    case.assertEqual(item['valid'], False)
+    case.assertEqual(item['title'], 'No Results')
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
+@redirect_stdout
+@patch('yvs.cache.get_cache_entry_content', return_value='')
+def test_revalidate_successfully_on_null_result(out, get_url_content):
+    """should re-fetch latest HTML when cached HTML can no longer be parsed"""
+    query_str = 'love others'
+    yvs.main(query_str)
+    output = out.getvalue().rstrip()
+    results = yvs.get_result_list(query_str)
+    feedback = yvs.core.get_result_list_feedback_str(results).rstrip()
+    case.assertEqual(output, feedback)
+    case.assertEqual(get_url_content.call_count, 2)
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
+@redirect_stdout
+@patch('yvs.web.get_url_content', return_value='')
+@patch('yvs.search_refs.SearchResultParser.feed',
+       side_effect=(Exception(), None))
+def test_null_result_on_error(out, get_url_content, feed):
+    """should output "No Results" JSON item even if parser errored"""
     query_str = 'xyz'
     yvs.main(query_str)
     feedback_str = out.getvalue()

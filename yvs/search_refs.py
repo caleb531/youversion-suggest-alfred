@@ -95,13 +95,21 @@ class SearchResultParser(YVParser):
 
 
 # Retrieves HTML for reference with the given ID
-def get_search_html(query_str, user_prefs):
+def get_search_html(query_str, user_prefs, revalidate=False):
 
     url = 'https://www.bible.com/search/bible?q={}&version_id={}'.format(
         urllib.parse.quote_plus(query_str), user_prefs['version'])
-
     entry_key = '{}/{}.html'.format(user_prefs['version'], query_str)
-    search_html = cache.get_cache_entry_content(entry_key)
+
+    # If revalidate is True, then we should skip lookup of cached HTML, fetch
+    # latest the HTML directly from server, and cache that new HTML
+    if revalidate:
+        search_html = None
+    else:
+        search_html = cache.get_cache_entry_content(entry_key)
+
+    # If revalidate is True OR if there is a cache-miss, then fetch the latest
+    # HTML from YouVersion
     if not search_html:
         search_html = web.get_url_content(url)
         cache.add_cache_entry(entry_key, search_html)
@@ -116,7 +124,23 @@ def get_result_list(query_str):
     user_prefs = core.get_user_prefs()
     html = get_search_html(query_str, user_prefs)
     parser = SearchResultParser(user_prefs)
-    parser.feed(html)
+    parser_exception = None
+
+    # Silently ignore exceptions encountered when parsing (in case the cached
+    # HTML is bad)
+    try:
+        parser.feed(html)
+    except Exception as exception:
+        parser.exception = exception
+
+    # If cached HTML returns no results, or if cached HTML produces an error
+    # while parsing, attempt to fetch the latest HTML from YouVersion (this is
+    # the 'revalidate' case)
+    if parser_exception or not parser.results:
+        parser.reset()
+        html = get_search_html(query_str, user_prefs, revalidate=True)
+        parser.feed(html)
+
     return parser.results
 
 
