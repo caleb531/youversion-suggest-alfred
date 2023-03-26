@@ -42,7 +42,7 @@ class SearchResultParser(YVParser):
         self.depth += 1
         attrs = dict(attrs)
         # Detect beginning of search result
-        if tag == 'a' and '/bible/' in attrs.get('href'):
+        if tag == 'a' and '/bible/' in attrs.get('href', ''):
             self.in_ref = True
             self.current_result = {
                 'arg': '',
