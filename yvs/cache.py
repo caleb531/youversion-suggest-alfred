@@ -14,7 +14,7 @@ LOCAL_CACHE_DIR_PATH = os.path.join(
     'com.runningwithcrayons.Alfred', 'Workflow Data', core.WORKFLOW_UID)
 
 # The maximum number of cache entries to store
-MAX_NUM_CACHE_ENTRIES = 100
+MAX_NUM_CACHE_ENTRIES = 50
 
 
 # Creates the directory (and any nonexistent parent directories) where this
