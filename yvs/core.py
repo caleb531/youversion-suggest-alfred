@@ -20,7 +20,7 @@ LOCAL_DATA_DIR_PATH = os.path.join(
 PACKAGED_CODE_DIR_PATH = os.path.join(os.getcwd(), 'yvs')
 
 # The template used to build the URL for a Bible reference
-REF_URL_TEMPLATE = 'https://www.bible.com/bible/{ref}'
+BASE_REF_URL = 'https://www.bible.com/bible/'
 
 
 # Creates the directory (and any nonexistent parent directories) where this
@@ -260,7 +260,7 @@ def get_full_ref_name(ref):
 
 # Builds the URL used to view the reference with the given UID
 def get_ref_url(ref_uid):
-    return REF_URL_TEMPLATE.format(ref=ref_uid.upper())
+    return BASE_REF_URL + ref_uid.upper()
 
 
 # Normalizes format of reference content by removing superfluous whitespace

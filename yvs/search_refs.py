@@ -9,13 +9,14 @@ import yvs.cache as cache
 import yvs.web as web
 from yvs.yv_parser import YVParser
 
-REF_URL_PREFIX = '/bible/'
-
 
 # Parses unique reference identifier from the given reference URL
 def get_uid_from_url(url):
 
-    return url.replace(REF_URL_PREFIX, '')
+    return (url
+            .replace(core.BASE_REF_URL, '')
+            # Handle case where origin may be absent from 'href' value
+            .replace(urllib.parse.urlparse(core.BASE_REF_URL).path, ''))
 
 
 # Parser for search result HTML
