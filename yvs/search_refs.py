@@ -5,7 +5,6 @@ import sys
 import urllib.parse
 
 import yvs.core as core
-import yvs.cache as cache
 import yvs.web as web
 from yvs.yv_parser import YVParser, get_and_parse_html
 
@@ -101,20 +100,10 @@ def get_search_html(query_str, user_prefs, revalidate=False):
         urllib.parse.quote_plus(query_str), user_prefs['version'])
     entry_key = '{}/{}.html'.format(user_prefs['version'], query_str)
 
-    # If revalidate is True, then we should skip lookup of cached HTML, fetch
-    # latest the HTML directly from server, and cache that new HTML
-    if revalidate:
-        search_html = None
-    else:
-        search_html = cache.get_cache_entry_content(entry_key)
-
-    # If revalidate is True OR if there is a cache-miss, then fetch the latest
-    # HTML from YouVersion
-    if not search_html:
-        search_html = web.get_url_content(url)
-        cache.add_cache_entry(entry_key, search_html)
-
-    return search_html
+    return web.get_url_content_with_caching(
+        url,
+        entry_key,
+        revalidate=revalidate)
 
 
 # Parses actual reference content from reference HTML

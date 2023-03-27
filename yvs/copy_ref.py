@@ -5,7 +5,6 @@ import json
 import sys
 
 import yvs.core as core
-import yvs.cache as cache
 import yvs.web as web
 from yvs.yv_parser import YVParser, get_and_parse_html
 
@@ -152,18 +151,12 @@ def get_chapter_html(ref, revalidate=False):
 
     chapter_uid = get_ref_chapter_uid(ref)
     url = core.get_ref_url(ref_uid=chapter_uid)
-
     entry_key = '{}.html'.format(chapter_uid)
-    if revalidate:
-        chapter_html = None
-    else:
-        chapter_html = cache.get_cache_entry_content(entry_key)
 
-    if not chapter_html:
-        chapter_html = web.get_url_content(url)
-        cache.add_cache_entry(entry_key, chapter_html)
-
-    return chapter_html
+    return web.get_url_content_with_caching(
+        url,
+        entry_key,
+        revalidate=revalidate)
 
 
 # Parses actual reference content from chapter HTML
