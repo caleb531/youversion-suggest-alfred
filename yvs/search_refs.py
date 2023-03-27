@@ -43,13 +43,13 @@ class SearchResultParser(YVParser):
         # Detect beginning of search result
         if tag == 'a' and '/bible/' in attrs.get('href', ''):
             self.in_ref = True
+            self.in_heading = True
             self.current_result = {
                 'arg': '',
                 'title': '',
                 'subtitle': ''
             }
             self.results.append(self.current_result)
-            self.in_heading = True
             self.current_result['arg'] = get_uid_from_url(attrs['href'])
             self.current_result['variables'] = {
                 'ref_url': core.get_ref_url(self.current_result['arg']),
