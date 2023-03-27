@@ -7,7 +7,7 @@ import sys
 import yvs.core as core
 import yvs.cache as cache
 import yvs.web as web
-from yvs.yv_parser import YVParser
+from yvs.yv_parser import YVParser, get_and_parse_html
 
 
 # An HTML parser which receives HTML from the page for a YouVersion
@@ -148,13 +148,17 @@ def get_ref_chapter_uid(ref):
 
 
 # Retrieves HTML for of the chapter to which the reference belongs
-def get_chapter_html(ref):
+def get_chapter_html(ref, revalidate=False):
 
     chapter_uid = get_ref_chapter_uid(ref)
     url = core.get_ref_url(ref_uid=chapter_uid)
 
     entry_key = '{}.html'.format(chapter_uid)
-    chapter_html = cache.get_cache_entry_content(entry_key)
+    if revalidate:
+        chapter_html = None
+    else:
+        chapter_html = cache.get_cache_entry_content(entry_key)
+
     if not chapter_html:
         chapter_html = web.get_url_content(url)
         cache.add_cache_entry(entry_key, chapter_html)
@@ -163,32 +167,37 @@ def get_chapter_html(ref):
 
 
 # Parses actual reference content from chapter HTML
-def get_ref_content(ref, ref_format,
-                    include_verse_numbers, include_line_breaks):
+def get_formatted_ref_content(ref, ref_format,
+                              include_verse_numbers, include_line_breaks):
 
-    chapter_html = get_chapter_html(ref)
     parser = ReferenceParser(
         ref,
         include_verse_numbers=include_verse_numbers,
         include_line_breaks=include_line_breaks)
-    parser.feed(chapter_html)
+
+    get_and_parse_html(
+        parser=parser,
+        html_getter=get_chapter_html,
+        html_getter_args=(ref,),
+        parser_results_attr='content_parts')
+
     # Format reference content by removing superfluous whitespace and such
     ref_content = core.normalize_ref_content(''.join(parser.content_parts))
 
     if ref_content:
-        copied_content = ref_format.format(
+        formatted_ref_content = ref_format.format(
             name=core.get_basic_ref_name(ref),
             version=ref['version'],
             content=ref_content,
             url=core.get_ref_url(ref['uid']))
-        return copied_content
+        return formatted_ref_content
     else:
         return ''
 
 
 # Retrieves reference content using the given reference object and preferences
 def get_copied_ref_from_object(ref, user_prefs):
-    return get_ref_content(
+    return get_formatted_ref_content(
         ref,
         ref_format=user_prefs['refformat'],
         include_verse_numbers=user_prefs['versenumbers'],

@@ -248,7 +248,7 @@ def test_versenumbers_range_middle():
 def test_url_always_chapter(get_url_content):
     """should always fetch HTML from chapter URL"""
     yvs.get_copied_ref('59/psa.23.2')
-    get_url_content.assert_called_once_with(
+    get_url_content.assert_called_with(
         'https://www.bible.com/bible/59/PSA.23')
 
 
@@ -276,6 +276,17 @@ def test_unicode_content():
     """should return copied reference content as Unicode"""
     ref_content = yvs.get_copied_ref('111/psa.23')
     case.assertIsInstance(ref_content, str)
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
+@patch('yvs.cache.get_cache_entry_content', return_value='<a>')
+@patch('yvs.web.get_url_content', side_effect=yvs.web.get_url_content)
+def test_revalidate(get_cache_entry_content, get_url_content):
+    """should re-fetch latest HTML when cached HTML can no longer be parsed"""
+    ref_content = yvs.get_copied_ref('111/psa.23.1')
+    case.assertNotEqual(ref_content, '')
+    case.assertEqual(get_url_content.call_count, 1)
 
 
 @with_setup(set_up)

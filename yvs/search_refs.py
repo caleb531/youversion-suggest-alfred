@@ -7,7 +7,7 @@ import urllib.parse
 import yvs.core as core
 import yvs.cache as cache
 import yvs.web as web
-from yvs.yv_parser import YVParser
+from yvs.yv_parser import YVParser, get_and_parse_html
 
 
 # Parses unique reference identifier from the given reference URL
@@ -122,24 +122,13 @@ def get_result_list(query_str):
 
     query_str = core.normalize_query_str(query_str)
     user_prefs = core.get_user_prefs()
-    html = get_search_html(query_str, user_prefs)
     parser = SearchResultParser(user_prefs)
-    parser_exception = None
 
-    # Silently ignore exceptions encountered when parsing (in case the cached
-    # HTML is bad)
-    try:
-        parser.feed(html)
-    except Exception as exception:
-        parser.exception = exception
-
-    # If cached HTML returns no results, or if cached HTML produces an error
-    # while parsing, attempt to fetch the latest HTML from YouVersion (this is
-    # the 'revalidate' case)
-    if parser_exception or not parser.results:
-        parser.reset()
-        html = get_search_html(query_str, user_prefs, revalidate=True)
-        parser.feed(html)
+    get_and_parse_html(
+        parser=parser,
+        html_getter=get_search_html,
+        html_getter_args=(query_str, user_prefs),
+        parser_results_attr='results')
 
     return parser.results
 

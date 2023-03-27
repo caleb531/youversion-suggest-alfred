@@ -132,6 +132,18 @@ def test_structure():
 
 @with_setup(set_up)
 @with_teardown(tear_down)
+@patch('yvs.cache.get_cache_entry_content', return_value='<a>')
+@patch('yvs.web.get_url_content', side_effect=yvs.web.get_url_content)
+def test_revalidate(get_cache_entry_content, get_url_content):
+    """should re-fetch latest HTML when cached HTML can no longer be parsed"""
+    query_str = 'love others'
+    results = yvs.get_result_list(query_str)
+    case.assertNotEqual(results, [])
+    case.assertEqual(get_url_content.call_count, 1)
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
 @redirect_stdout
 def test_output(out):
     """should output result list JSON"""
@@ -161,24 +173,11 @@ def test_null_result(out, get_url_content):
 
 @with_setup(set_up)
 @with_teardown(tear_down)
-@patch('yvs.cache.get_cache_entry_content', return_value='<a>')
-@patch('yvs.web.get_url_content', side_effect=yvs.web.get_url_content)
-def test_revalidate_successfully_on_null_result(get_cache_entry_content,
-                                                get_url_content):
-    """should re-fetch latest HTML when cached HTML can no longer be parsed"""
-    query_str = 'love others'
-    results = yvs.get_result_list(query_str)
-    case.assertNotEqual(results, [])
-    case.assertEqual(get_url_content.call_count, 1)
-
-
-@with_setup(set_up)
-@with_teardown(tear_down)
 @redirect_stdout
 @patch('yvs.web.get_url_content', return_value='')
 @patch('yvs.search_refs.SearchResultParser.feed',
        side_effect=(Exception(), None))
-def test_null_result_on_error(out, get_url_content, feed):
+def test_null_result_on_error(out, feed, get_url_content):
     """should output "No Results" JSON item even if parser errored"""
     query_str = 'xyz'
     yvs.main(query_str)
