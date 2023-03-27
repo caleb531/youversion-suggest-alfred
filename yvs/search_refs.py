@@ -68,7 +68,7 @@ class SearchResultParser(YVParser):
                 self.current_result['mods']['cmd']['subtitle'] = \
                     'View on YouVersion'
         # Detect beginning of search result content
-        elif attrs.get('class') == 'content':
+        elif self.in_ref and attrs.get('class') == 'content':
             self.in_content = True
             self.content_depth = self.depth
 
@@ -86,11 +86,10 @@ class SearchResultParser(YVParser):
 
     # Handles verse content
     def handle_data(self, data):
-        if self.in_ref:
-            if self.in_heading:
-                self.current_result['title'] += data
-            elif self.in_content:
-                self.current_result['subtitle'] += data
+        if self.in_heading:
+            self.current_result['title'] += data
+        elif self.in_content:
+            self.current_result['subtitle'] += data
 
 
 # Retrieves HTML for reference with the given ID
