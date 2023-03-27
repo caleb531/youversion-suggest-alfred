@@ -190,6 +190,7 @@ def get_formatted_ref_content(ref, ref_format,
 
 # Retrieves reference content using the given reference object and preferences
 def get_copied_ref_from_object(ref, user_prefs):
+
     return get_formatted_ref_content(
         ref,
         ref_format=user_prefs['refformat'],
