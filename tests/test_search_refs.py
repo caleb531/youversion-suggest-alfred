@@ -161,17 +161,15 @@ def test_null_result(out, get_url_content):
 
 @with_setup(set_up)
 @with_teardown(tear_down)
-@redirect_stdout
-@patch('yvs.cache.get_cache_entry_content', return_value='')
-def test_revalidate_successfully_on_null_result(out, get_cache_entry_content):
+@patch('yvs.cache.get_cache_entry_content', return_value='<a>')
+@patch('yvs.web.get_url_content', side_effect=yvs.web.get_url_content)
+def test_revalidate_successfully_on_null_result(get_cache_entry_content,
+                                                get_url_content):
     """should re-fetch latest HTML when cached HTML can no longer be parsed"""
     query_str = 'love others'
-    yvs.main(query_str)
-    output = out.getvalue().rstrip()
     results = yvs.get_result_list(query_str)
-    feedback = yvs.core.get_result_list_feedback_str(results).rstrip()
-    case.assertEqual(output, feedback)
-    case.assertEqual(get_cache_entry_content.call_count, 2)
+    case.assertNotEqual(results, [])
+    case.assertEqual(get_url_content.call_count, 1)
 
 
 @with_setup(set_up)
