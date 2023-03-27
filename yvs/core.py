@@ -7,15 +7,9 @@ import os.path
 import re
 import unicodedata
 
-# Unique identifier for the workflow
-WORKFLOW_UID = 'com.calebevans.youversionsuggest'
-
-# Path to the user's home directory
-HOME_DIR_PATH = os.path.expanduser('~')
-# Path to the directory where this workflow stores non-volatile local data
-LOCAL_DATA_DIR_PATH = os.path.join(
-    HOME_DIR_PATH, 'Library', 'Application Support', 'Alfred',
-    'Workflow Data', WORKFLOW_UID)
+# Path to the directory where this workflow stores non-volatile local data (this
+# will be overridden when running tests, so CI will still work fine)
+LOCAL_DATA_DIR_PATH = os.environ.get('alfred_workflow_data')
 # Path to the directory containing data files apart of the packaged workflow
 PACKAGED_CODE_DIR_PATH = os.path.join(os.getcwd(), 'yvs')
 
