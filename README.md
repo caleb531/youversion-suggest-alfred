@@ -34,7 +34,7 @@ install Apple's Command Line Tools. These developer tools are required
 for the workflow to function, and fortunately, they have a much smaller size
 footprint than full-blown Xcode.
 
-![Prompt to install Apple's Command Line Tools](screenshot-clt-installer.png)
+<img src="screenshot-clt-installer.png" alt="Prompt to install Apple's Command Line Tools" width="461" />
 
 ## Usage
 
