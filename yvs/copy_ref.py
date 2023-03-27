@@ -6,12 +6,11 @@ import sys
 
 import yvs.core as core
 import yvs.web as web
-from yvs.yv_parser import YVParser, get_and_parse_html
 
 
 # An HTML parser which receives HTML from the page for a YouVersion
 # Bible reference and parses it to construct a shareable plain text reference
-class ReferenceParser(YVParser):
+class ReferenceParser(web.YVParser):
 
     # Elements that should be surrounded by blank lines
     block_elems = {'b', 'p', 'm'}
@@ -21,7 +20,7 @@ class ReferenceParser(YVParser):
     # Associates the given reference object with this parser instance
     def __init__(self, ref,
                  include_verse_numbers=False, include_line_breaks=False):
-        YVParser.__init__(self)
+        super().__init__()
         if 'verse' in ref:
             # If reference is a verse or verse range, set the correct range of
             # verses to copy
@@ -36,7 +35,7 @@ class ReferenceParser(YVParser):
 
     # Resets parser variables (implicitly called when parser is instantiated)
     def reset(self):
-        YVParser.reset(self)
+        super().reset()
         self.depth = 0
         self.in_block = False
         self.in_verse = False
@@ -168,7 +167,7 @@ def get_formatted_ref_content(ref, ref_format,
         include_verse_numbers=include_verse_numbers,
         include_line_breaks=include_line_breaks)
 
-    get_and_parse_html(
+    web.get_and_parse_html(
         parser=parser,
         html_getter=get_chapter_html,
         html_getter_args=(ref,),

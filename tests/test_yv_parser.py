@@ -6,7 +6,7 @@ from unittest.mock import Mock, NonCallableMock, patch
 from nose2.tools.decorators import with_setup, with_teardown
 
 import tests
-from yvs.yv_parser import YVParser
+from yvs.web import YVParser
 
 with open('tests/html/psa.23.html') as html_file:
     patch_urlopen = patch(
@@ -26,7 +26,7 @@ def tear_down():
 
 @with_setup(set_up)
 @with_teardown(tear_down)
-@patch('yvs.yv_parser.YVParser.handle_data')
+@patch('yvs.web.YVParser.handle_data')
 def test_charref_name(handle_data):
     """should evaluate named character references"""
     parser = YVParser()
@@ -36,7 +36,7 @@ def test_charref_name(handle_data):
 
 @with_setup(set_up)
 @with_teardown(tear_down)
-@patch('yvs.yv_parser.YVParser.handle_data')
+@patch('yvs.web.YVParser.handle_data')
 def test_charref_dec(handle_data):
     """should evaluate decimal character references"""
     parser = YVParser()
@@ -46,7 +46,7 @@ def test_charref_dec(handle_data):
 
 @with_setup(set_up)
 @with_teardown(tear_down)
-@patch('yvs.yv_parser.YVParser.handle_data')
+@patch('yvs.web.YVParser.handle_data')
 def test_charref_hex(handle_data):
     """should evaluate hexadecimal character references"""
     parser = YVParser()

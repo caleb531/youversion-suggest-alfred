@@ -6,7 +6,6 @@ import urllib.parse
 
 import yvs.core as core
 import yvs.web as web
-from yvs.yv_parser import YVParser, get_and_parse_html
 
 
 # Parses unique reference identifier from the given reference URL
@@ -19,15 +18,15 @@ def get_uid_from_url(url):
 
 
 # Parser for search result HTML
-class SearchResultParser(YVParser):
+class SearchResultParser(web.YVParser):
 
     def __init__(self, user_prefs):
-        YVParser.__init__(self)
+        super().__init__()
         self.user_prefs = user_prefs
 
     # Resets parser variables (implicitly called on instantiation)
     def reset(self):
-        YVParser.reset(self)
+        super().reset()
         self.depth = 0
         self.in_ref = False
         self.in_heading = False
@@ -112,7 +111,7 @@ def get_result_list(query_str):
     user_prefs = core.get_user_prefs()
     parser = SearchResultParser(user_prefs)
 
-    get_and_parse_html(
+    web.get_and_parse_html(
         parser=parser,
         html_getter=get_search_html,
         html_getter_args=(query_str, user_prefs),
