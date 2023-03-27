@@ -14,6 +14,7 @@ class YVParser(HTMLParser):
 # in a way that complements the caching mechanism built into this workflow; for
 # example,
 def get_and_parse_html(
+    *,
     parser,              # An instance of an HTMLParser subclass
     html_getter,         # A function that retrieves the HTML
                          # to parse; this function should accept a
