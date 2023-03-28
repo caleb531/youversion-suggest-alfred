@@ -30,8 +30,9 @@ class SearchResultParser(web.YVParser):
         self.depth = 0
         self.in_ref = False
         self.in_heading = False
-        self.in_content = False
-        self.content_depth = 0
+        self.in_verse = False
+        self.in_verse_content = False
+        self.verse_content_depth = 0
         self.results = []
         self.current_result = None
 
@@ -67,27 +68,32 @@ class SearchResultParser(web.YVParser):
                 self.current_result['mods']['cmd']['subtitle'] = \
                     'View on YouVersion'
         # Detect beginning of search result content
+        elif self.in_ref and tag == 'p':
+            self.in_verse = True
         elif self.in_ref and attrs.get('class') == 'content':
-            self.in_content = True
-            self.content_depth = self.depth
+            self.in_verse_content = True
+            self.verse_content_depth = self.depth
 
     # Detects the end of search results, titles, reference content, etc.
     def handle_endtag(self, tag):
         if self.in_ref and tag == 'p':
             self.in_ref = False
+            self.in_verse = False
             self.current_result['subtitle'] = core.normalize_ref_content(
                 self.current_result['subtitle'])
         elif self.in_heading and tag == 'a':
             self.in_heading = False
-        elif self.in_content and tag == 'span' and self.depth == self.content_depth:
-            self.in_content = False
+        elif self.in_verse_content and tag == 'span' and self.depth == self.verse_content_depth:
+            self.in_verse_content = False
         self.depth -= 1
 
     # Handles verse content
     def handle_data(self, data):
         if self.in_heading:
             self.current_result['title'] += data
-        elif self.in_content:
+        elif self.in_verse and data.strip() == ',':
+            self.current_result['subtitle'] += ' '
+        elif self.in_verse_content:
             self.current_result['subtitle'] += data
 
 
