@@ -2,6 +2,7 @@
 # coding=utf-8
 
 import json
+import re
 import sys
 
 import yvs.core as core
@@ -69,6 +70,22 @@ class ReferenceParser(web.YVParser):
         return (self.is_in_verse() and self.include_verse_numbers and
                 self.in_verse_label and not self.in_verse_note)
 
+    # Return True if the given class name matches one of the patterns defined in
+    # the supplied elements set; matching is done literally and on word
+    # boundaries (e.g. so the class "ChapterContent_q1__ZQPnV" matches if "q1"
+    # is in the elements set)
+    def class_matches_oneof(self, class_name, elems_set):
+        elems_union = '|'.join(elems_set)
+        # The normal regex word boundary (\b) considers underscores as part of
+        # the definition of a "word"; this will not work for us since the class
+        # names we are working with have underscore-delimited components, and we
+        # need to treat each of those components as distinct "words";
+        # fortunately, we can use negative lookbehinds/lookaheads to effectively
+        # implement a custom word boundary, per this blog post:
+        # <http://www.rexegg.com/regex-boundaries.html#diy>
+        word_patt = '[A-Za-z0-9]'
+        return bool(re.search(rf'(?<!{word_patt})({elems_union})(?!{word_patt})', class_name))
+
     # Detects the start of blocks, breaks, verses, and verse content
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -84,31 +101,31 @@ class ReferenceParser(web.YVParser):
             return
         elem_class_names = elem_class.split(' ')
         # Detect paragraph breaks between verses
-        if elem_class in self.block_elems:
+        if self.class_matches_oneof(elem_class, self.block_elems):
             self.in_block = True
             self.block_depth = self.depth
             self.content_parts.append(
                 '\n\n' if self.include_line_breaks else ' ')
         # Detect line breaks within a single verse
-        if elem_class in self.break_elems:
+        if self.class_matches_oneof(elem_class, self.break_elems):
             self.content_parts.append(
                 '\n' if self.include_line_breaks else ' ')
         # Detect beginning of a single verse (may include footnotes)
-        if 'verse' in elem_class_names:
+        if self.class_matches_oneof(elem_class, {'verse'}):
             self.in_verse = True
             self.verse_depth = self.depth
             self.verse_nums = [int(class_name[1:])
                                for class_name in elem_class_names[1:]]
         # Detect label containing the associated verse number(s)
-        if 'label' in elem_class:
+        if self.class_matches_oneof(elem_class, {'label'}):
             self.in_verse_label = True
             self.label_depth = self.depth
         # Detect beginning of verse content (excludes footnotes)
-        if 'content' in elem_class:
+        if self.class_matches_oneof(elem_class, {'content'}):
             self.in_verse_content = True
             self.content_depth = self.depth
         # Detect footnotes and cross-references
-        if 'note' in elem_class:
+        if self.class_matches_oneof(elem_class, {'note'}):
             self.in_verse_note = True
             self.note_depth = self.depth
 
