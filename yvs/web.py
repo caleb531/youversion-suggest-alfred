@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
+import re
 import urllib.request
 from gzip import GzipFile
 from html.parser import HTMLParser
@@ -12,6 +13,13 @@ import yvs.cache as cache
 USER_AGENT = 'YouVersion Suggest'
 # The number of seconds to wait before timing out an HTTP request connection
 REQUEST_CONNECTION_TIMEOUT = 5
+
+
+# Optimizes HTML contents from YouVersion to omit large <script> tags and other
+# things
+def optimize_html(html):
+    html = re.sub(r'<script>(.*?)</script>', '', html)
+    return html
 
 
 # Retrieves HTML contents of the given URL as a Unicode string
