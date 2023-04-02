@@ -18,7 +18,7 @@ REQUEST_CONNECTION_TIMEOUT = 5
 # Optimizes HTML contents from YouVersion to omit large <script> tags and other
 # things
 def optimize_html(html):
-    html = re.sub(r'<script>(.*?)</script>', '', html)
+    html = re.sub(r'<script(.*?)>(.*?)</script>', '', html)
     return html
 
 
@@ -56,7 +56,7 @@ def get_url_content_with_caching(url, entry_key, *, revalidate=False):
     # If revalidate is True OR if there is a cache-miss, then fetch the latest
     # HTML from YouVersion
     if not html:
-        html = get_url_content(url)
+        html = optimize_html(get_url_content(url))
         cache.add_cache_entry(entry_key, html)
 
     return html

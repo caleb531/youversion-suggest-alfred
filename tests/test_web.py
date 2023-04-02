@@ -80,7 +80,7 @@ def test_get_url_content_optimized(request):
     url = 'https://www.bible.com/bible/59/psa.23'
     html = web.get_url_content(url)
     optimized_html = web.optimize_html(html)
-    case.assertIn('<script>', html)
+    case.assertIn('<script', html)
     case.assertIn('Lorem ipsum', html)
-    case.assertNotIn('<script>', optimized_html)
+    case.assertNotIn('<script', optimized_html)
     case.assertIn('Lorem ipsum', optimized_html)
