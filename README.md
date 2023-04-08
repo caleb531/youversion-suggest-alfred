@@ -181,4 +181,5 @@ YouVersion website by holding down the `command` key.
 ## Disclaimer
 
 This project is not affiliated with YouVersion, and all Bible content is
-copyright of the respective publishers.
+copyright of the respective publishers. The Bible app icon used in this project
+is property of YouVersion.
