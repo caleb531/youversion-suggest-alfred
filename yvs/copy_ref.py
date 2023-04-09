@@ -76,15 +76,16 @@ class ReferenceParser(web.YVParser):
     # is in the elements set)
     def class_matches_oneof(self, class_name, elems_set):
         elems_union = '|'.join(elems_set)
-        # The normal regex word boundary (\b) considers underscores as part of
-        # the definition of a "word"; this will not work for us since the class
-        # names we are working with have underscore-delimited components, and we
-        # need to treat each of those components as distinct "words";
-        # fortunately, we can use negative lookbehinds/lookaheads to effectively
-        # implement a custom word boundary, per this blog post:
-        # <http://www.rexegg.com/regex-boundaries.html#diy>
-        word_patt = '[A-Za-z0-9]'
-        return bool(re.search(rf'(?<!{word_patt})({elems_union})(?!{word_patt})', class_name))
+        return bool(re.search(
+            rf'\b({elems_union})\b',
+            # The normal regex word boundary (\b) considers underscores as part
+            # of the definition of a "word"; this will not work for us since the
+            # class names we are working with have underscore-delimited
+            # components, and we need to treat each of those components as
+            # distinct "words"; fortunately, we can simply replace underscores
+            # in the class name string with hyphens (or spaces, for that matter)
+            # to appease the word boundaries
+            class_name.replace('_', '-')))
 
     # Detects the start of blocks, breaks, verses, and verse content
     def handle_starttag(self, tag, attrs):
