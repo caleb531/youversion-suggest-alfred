@@ -92,11 +92,11 @@ class ReferenceParser(web.YVParser):
         attrs = dict(attrs)
         # Keep track of element depth throughout entire document
         self.depth += 1
-        # We can't just use the Python 'in' operator to check if the key
-        # exists, because it's perfectly valid for an HTML element to have a
-        # attribute name present, but without any value (e.g. <div class>); in
-        # this case, the attrs dictionary would have a 'class' attribute with a
-        # value of None
+        # We can't just use the Python 'in' operator to check if the key exists,
+        # because it's perfectly valid for an HTML element to have a attribute
+        # name present, but without any value (e.g. <div class>); in this case,
+        # the attrs dictionary would have a 'class' attribute with a value of
+        # None
         elem_class = attrs.get('class')
         if not elem_class:
             return
