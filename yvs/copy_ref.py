@@ -22,15 +22,7 @@ class ReferenceParser(web.YVParser):
     def __init__(self, ref,
                  include_verse_numbers=False, include_line_breaks=False):
         super().__init__()
-        if 'verse' in ref:
-            # If reference is a verse or verse range, set the correct range of
-            # verses to copy
-            self.verse_start = ref['verse']
-            self.verse_end = ref.get('endverse', self.verse_start)
-        else:
-            # Otherwise, assume reference is a chapter
-            self.verse_start = 1
-            self.verse_end = None
+        self.ref = ref
         self.include_verse_numbers = include_verse_numbers
         self.include_line_breaks = include_line_breaks
 
@@ -53,9 +45,15 @@ class ReferenceParser(web.YVParser):
     # Returns True if parser is currently within the a verse to include
     # (otherwise, returns False)
     def is_in_verse(self):
+        # If reference represents an entire chapter, then all verses are within
+        # range
+        if 'verse' not in self.ref:
+            return True
+        verse_start = self.ref['verse']
+        verse_end = self.ref.get('endverse', verse_start)
         return any(self.in_verse and
-                   (verse_num >= self.verse_start and
-                    (not self.verse_end or verse_num <= self.verse_end))
+                   (verse_num >= verse_start and
+                    (not verse_end or verse_num <= verse_end))
                    for verse_num in self.verse_nums)
 
     # Returns True if parser is currently within the content of a verse to
