@@ -54,7 +54,6 @@ range of verses) with just a few keystrokes.
 - `yvfilter 1t3es` => 1 Thessalonians 3 (ESV), 1 Timothy 3 (ESV)
 - `yvfilter mat 6:34 nlt` => Matthew 6:34 (NLT)
 - `yvfilter 1 co 13.4-7` => 1 Corinthians 13:4-7
-- `yvfilter relevations 7` => Revelation 7
 
 ![Filtering by reference](screenshot-yvfilter.png)
 
