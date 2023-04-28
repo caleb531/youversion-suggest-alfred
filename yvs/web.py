@@ -18,7 +18,7 @@ REQUEST_CONNECTION_TIMEOUT = 5
 # Optimizes HTML contents from YouVersion to omit large <script> tags and other
 # things
 def optimize_html(html):
-    html = re.sub(r'<script(.*?)>(.*?)</script>', '', html)
+    html = re.sub(r'<script(.*?)>((.|\n)*?)</script>', '', html)
     return html
 
 
