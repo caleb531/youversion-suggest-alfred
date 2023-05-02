@@ -14,6 +14,8 @@ The workflow will be solely supporting Alfred 5 going forward, but the latest
 releases for Alfred 4 and earlier will remain available here for your
 convenience.
 
+**Warning: This workflow is not compliant with the Terms of Service of YouVersion. Use at your own risk.**
+
 ## Installation
 
 To download the workflow, simply click one of the download links below. Please
