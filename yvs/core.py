@@ -10,16 +10,6 @@ import unicodedata
 # Path to the directory where this workflow stores non-volatile local data (this
 # will be overridden when running tests, so CI will still work fine)
 LOCAL_DATA_DIR_PATH = os.environ.get('alfred_workflow_data')
-# When you duplicate a workflow (which some users do), the Bundle ID field is
-# blanked out; because this bundle ID must be populated for the workflow to
-# function, display a friendly error message to inform the user that they must
-# populate it
-if not LOCAL_DATA_DIR_PATH:
-    raise Exception('Workflow Bundle ID missing; this can happen if you '
-                    'duplicate the workflow. Please double-click the workflow '
-                    'in Alfred Preferences to view its settings and specify a '
-                    'unique Bundle ID.')
-
 # Path to the directory containing data files apart of the packaged workflow
 PACKAGED_CODE_DIR_PATH = os.path.join(os.getcwd(), 'yvs')
 
