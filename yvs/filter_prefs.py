@@ -47,10 +47,10 @@ def get_pref_defs(user_prefs):
         },
         {
             'id': 'linebreaks',
-            'name': 'Include Line Breaks?',
+            'name': 'Preserve Line Breaks?',
             'short_name': 'line breaks setting',
             'values': get_include_line_breaks_values(),
-            'description': 'Choose whether to include line breaks in copied'
+            'description': 'Choose whether to preserve line breaks in copied'
                            ' Bible content'
         },
         {
