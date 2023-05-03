@@ -14,7 +14,13 @@ The workflow will be solely supporting Alfred 5 going forward, but the latest
 releases for Alfred 4 and earlier will remain available here for your
 convenience.
 
-**Warning: This workflow is not compliant with the Terms of Service of YouVersion. Use at your own risk.**
+## Disclaimer
+
+**Warning: This workflow is not compliant with YouVersion's Terms of Service. Use at your own risk.**
+
+This project is not affiliated with YouVersion, and all Bible content is
+copyright of the respective publishers. The Bible app icon used in this project
+is property of YouVersion.
 
 ## Installation
 
@@ -178,9 +184,3 @@ If you would prefer to just press `Enter` (without holding down the `command`
 key) to copy the content of a Bible reference, type `yvset copybydefault yes`.
 When this is enabled, you can still open the selected reference on the
 YouVersion website by holding down the `command` key.
-
-## Disclaimer
-
-This project is not affiliated with YouVersion, and all Bible content is
-copyright of the respective publishers. The Bible app icon used in this project
-is property of YouVersion.
