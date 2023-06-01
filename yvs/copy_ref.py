@@ -85,6 +85,16 @@ class ReferenceParser(web.YVParser):
             # to appease the word boundaries
             class_name.replace('_', '-')))
 
+    # Return a list of verse numbers assigned to a particular verse, given a
+    # dictionary of that verse's HTML attributes (there can be multiple verse
+    # numbers in the case of versions like The Message / MSG)
+    def get_verse_nums_from_verse_attrs(self, verse_attrs):
+        if verse_attrs.get('data-usfm'):
+            verse_num_strs = re.findall(r'(?<=\.)\d+', verse_attrs['data-usfm'])
+            return [int(verse_num_str) for verse_num_str in verse_num_strs]
+        else:
+            return []
+
     # Detects the start of blocks, breaks, verses, and verse content
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -98,7 +108,6 @@ class ReferenceParser(web.YVParser):
         elem_class = attrs.get('class')
         if not elem_class:
             return
-        elem_class_names = elem_class.split(' ')
         # Detect paragraph breaks between verses
         if self.class_matches_oneof(elem_class, self.block_elems):
             self.in_block = True
@@ -113,8 +122,7 @@ class ReferenceParser(web.YVParser):
         if self.class_matches_oneof(elem_class, {'verse'}):
             self.in_verse = True
             self.verse_depth = self.depth
-            self.verse_nums = [int(class_name[1:])
-                               for class_name in elem_class_names[1:]]
+            self.verse_nums = self.get_verse_nums_from_verse_attrs(attrs)
         # Detect label containing the associated verse number(s)
         if self.class_matches_oneof(elem_class, {'label'}):
             self.in_verse_label = True
