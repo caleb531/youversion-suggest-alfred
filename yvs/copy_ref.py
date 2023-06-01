@@ -90,8 +90,8 @@ class ReferenceParser(web.YVParser):
     # numbers in the case of versions like The Message / MSG)
     def get_verse_nums_from_verse_attrs(self, verse_attrs):
         if verse_attrs.get('data-usfm'):
-            verse_num_strs = re.findall(r'(?<=\.)\d+', verse_attrs['data-usfm'])
-            return [int(verse_num_str) for verse_num_str in verse_num_strs]
+            verse_num_strs = re.findall(r'(\w{3})\.(\d+)\.(\d+)', verse_attrs['data-usfm'])
+            return [int(verse_num_str[2]) for verse_num_str in verse_num_strs]
         else:
             return []
 
