@@ -6,9 +6,15 @@ import os
 import os.path
 import shutil
 
+import yvs.core as yvs
+
 # Path to the directory where this workflow stores volatile local data (this
 # will be overridden during tests, so CI will still work fine)
-LOCAL_CACHE_DIR_PATH = os.environ.get('alfred_workflow_cache')
+LOCAL_CACHE_DIR_PATH = os.environ.get(
+    'alfred_workflow_cache',
+    os.path.join(
+        yvs.HOME_DIR_PATH, 'Library', 'Caches',
+        'com.runningwithcrayons.Alfred', 'Workflow Data', yvs.WORKFLOW_UID))
 
 # The maximum number of cache entries to store
 MAX_NUM_CACHE_ENTRIES = 50
