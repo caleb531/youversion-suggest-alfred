@@ -7,7 +7,7 @@ import os.path
 import re
 import unicodedata
 
-WORKFLOW_UID = os.environ.get('alfred_workflow_uid', 'com.calebevans.youversionsuggest')
+WORKFLOW_UID = os.environ.get('alfred_workflow_bundleid', 'com.calebevans.youversionsuggest')
 HOME_DIR_PATH = os.path.expanduser('~')
 # Path to the directory where this workflow stores non-volatile local data (this
 # will be overridden when running tests, so CI will still work fine)
