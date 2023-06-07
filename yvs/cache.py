@@ -14,7 +14,7 @@ LOCAL_CACHE_DIR_PATH = os.environ.get(
     'alfred_workflow_cache',
     os.path.join(
         yvs.HOME_DIR_PATH, 'Library', 'Caches',
-        'com.runningwithcrayons.Alfred', 'Workflow Data', yvs.WORKFLOW_UID))
+        'com.runningwithcrayons.Alfred', 'Workflow Data', yvs.WORKFLOW_BUNDLE_ID))
 
 # The maximum number of cache entries to store
 MAX_NUM_CACHE_ENTRIES = 50
