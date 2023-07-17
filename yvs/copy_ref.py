@@ -48,7 +48,7 @@ class ReferenceParser(web.YVParser):
         # If reference represents an entire chapter, then all verses are within
         # range
         if 'verse' not in self.ref:
-            return True
+            return self.in_verse
         verse_start = self.ref['verse']
         verse_end = self.ref.get('endverse', verse_start)
         return any(self.in_verse and

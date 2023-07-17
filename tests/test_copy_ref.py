@@ -36,6 +36,7 @@ def tear_down():
 def test_copy_chapter():
     """should copy reference content for chapter"""
     ref_content = yvs.get_copied_ref('111/psa.23')
+    case.assertNotRegexpMatches(ref_content, 'David')
     case.assertRegexpMatches(ref_content, 'Lorem')
     case.assertRegexpMatches(ref_content, 'nunc nulla')
     case.assertRegexpMatches(ref_content, 'fermentum')
