@@ -70,7 +70,6 @@ class SearchResultParser(web.YVParser):
         # Detect beginning of search result content
         elif self.in_ref and tag == 'p':
             self.in_verse = True
-        elif self.in_ref and attrs.get('class') == 'content':
             self.in_verse_content = True
             self.verse_content_depth = self.depth
 
@@ -79,6 +78,7 @@ class SearchResultParser(web.YVParser):
         if self.in_ref and tag == 'p':
             self.in_ref = False
             self.in_verse = False
+            self.in_verse_content = False
             self.current_result['subtitle'] = core.normalize_ref_content(
                 self.current_result['subtitle'])
         elif self.in_heading and tag == 'a':
@@ -91,8 +91,6 @@ class SearchResultParser(web.YVParser):
     def handle_data(self, data):
         if self.in_heading:
             self.current_result['title'] += data
-        elif self.in_verse and data.strip() == ',':
-            self.current_result['subtitle'] += ' '
         elif self.in_verse_content:
             self.current_result['subtitle'] += data
 
