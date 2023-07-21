@@ -83,8 +83,6 @@ class SearchResultParser(web.YVParser):
                 self.current_result['subtitle'])
         elif self.in_heading and tag == 'a':
             self.in_heading = False
-        elif self.in_verse_content and tag == 'span' and self.depth == self.verse_content_depth:
-            self.in_verse_content = False
         self.depth -= 1
 
     # Handles verse content
