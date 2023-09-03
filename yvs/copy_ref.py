@@ -108,14 +108,15 @@ class ReferenceParser(web.YVParser):
         elem_class = attrs.get('class')
         if not elem_class:
             return
+        is_in_verse = self.is_in_verse()
         # Detect paragraph breaks between verses
-        if self.class_matches_oneof(elem_class, self.block_elems):
+        if self.class_matches_oneof(elem_class, self.block_elems) and not is_in_verse:
             self.in_block = True
             self.block_depth = self.depth
             self.content_parts.append(
                 '\n\n' if self.include_line_breaks else ' ')
         # Detect line breaks within a single verse
-        if self.class_matches_oneof(elem_class, self.break_elems):
+        if self.class_matches_oneof(elem_class, self.break_elems) and not is_in_verse:
             self.content_parts.append(
                 '\n' if self.include_line_breaks else ' ')
         # Detect beginning of a single verse (may include footnotes)
