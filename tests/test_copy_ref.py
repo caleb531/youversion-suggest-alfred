@@ -71,7 +71,7 @@ def test_copy_verse_range():
 def test_refformat():
     """should honor the chosen reference format"""
     ref_content = yvs.get_copied_ref('59/psa.23.6')
-    case.assertEquals(ref_content, '"Proin nulla orci,"\n\n(Psalms 23:6 ESV)')
+    case.assertEqual(ref_content, '"Proin nulla orci,"\n\n(Psalms 23:6 ESV)')
 
 
 @with_setup(set_up)

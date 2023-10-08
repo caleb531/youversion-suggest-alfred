@@ -72,7 +72,7 @@ def test_main(out):
     }
     yvs.main(alfred_variables)
     alfred_json = json.loads(out.getvalue())
-    case.assertEquals(
+    case.assertEqual(
         alfred_json['alfredworkflow']['variables'], alfred_variables)
     user_prefs = yvs.core.get_user_prefs()
-    case.assertEquals(user_prefs['version'], 107)
+    case.assertEqual(user_prefs['version'], 107)
