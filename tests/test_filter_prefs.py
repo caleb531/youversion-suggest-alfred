@@ -149,7 +149,7 @@ def test_nonexistent_pref():
 def test_nonexistent_value():
     """should return null result for nonexistent value"""
     results = yvs.get_result_list('language xyz')
-    case.assertRegexpMatches(results[0]['title'], 'No Results')
+    case.assertRegex(results[0]['title'], 'No Results')
     case.assertEqual(results[0]['valid'], False)
     case.assertEqual(len(results), 1)
 

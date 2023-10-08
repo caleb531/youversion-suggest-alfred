@@ -36,10 +36,10 @@ def tear_down():
 def test_copy_chapter():
     """should copy reference content for chapter"""
     ref_content = yvs.get_copied_ref('111/psa.23')
-    case.assertNotRegexpMatches(ref_content, 'David')
-    case.assertRegexpMatches(ref_content, 'Lorem')
-    case.assertRegexpMatches(ref_content, 'nunc nulla')
-    case.assertRegexpMatches(ref_content, 'fermentum')
+    case.assertNotRegex(ref_content, 'David')
+    case.assertRegex(ref_content, 'Lorem')
+    case.assertRegex(ref_content, 'nunc nulla')
+    case.assertRegex(ref_content, 'fermentum')
 
 
 @with_setup(set_up)
@@ -47,9 +47,9 @@ def test_copy_chapter():
 def test_copy_verse():
     """should copy reference content for verse"""
     ref_content = yvs.get_copied_ref('111/psa.23.2')
-    case.assertNotRegexpMatches(ref_content, 'Lorem')
-    case.assertRegexpMatches(ref_content, 'nunc nulla')
-    case.assertNotRegexpMatches(ref_content, 'fermentum')
+    case.assertNotRegex(ref_content, 'Lorem')
+    case.assertRegex(ref_content, 'nunc nulla')
+    case.assertNotRegex(ref_content, 'fermentum')
 
 
 @with_setup(set_up)
@@ -57,9 +57,9 @@ def test_copy_verse():
 def test_copy_verse_range():
     """should copy reference content for verse range"""
     ref_content = yvs.get_copied_ref('111/psa.23.1-2')
-    case.assertRegexpMatches(ref_content, 'Lorem')
-    case.assertRegexpMatches(ref_content, 'nunc nulla')
-    case.assertNotRegexpMatches(ref_content, 'fermentum')
+    case.assertRegex(ref_content, 'Lorem')
+    case.assertRegex(ref_content, 'nunc nulla')
+    case.assertNotRegex(ref_content, 'fermentum')
 
 
 @with_setup(set_up)
@@ -79,7 +79,7 @@ def test_refformat():
 def test_header():
     """should prepend reference header to copied string"""
     ref_content = yvs.get_copied_ref('59/psa.23')
-    case.assertRegexpMatches(ref_content, r'^Psalms 23 \(ESV\)')
+    case.assertRegex(ref_content, r'^Psalms 23 \(ESV\)')
 
 
 @with_setup(set_up)
@@ -91,7 +91,7 @@ def test_header():
 def test_header_language():
     """reference header should reflect chosen language"""
     ref_content = yvs.get_copied_ref('128/psa.23')
-    case.assertRegexpMatches(ref_content, r'^Salmo 23 \(NVI\)')
+    case.assertRegex(ref_content, r'^Salmo 23 \(NVI\)')
 
 
 @with_setup(set_up)
@@ -99,10 +99,10 @@ def test_header_language():
 def test_whitespace_words():
     """should handle spaces appropriately"""
     ref_content = yvs.get_copied_ref('111/psa.23')
-    case.assertRegexpMatches(ref_content, 'adipiscing elit.',
-                             'should respect content consisting of spaces')
-    case.assertRegexpMatches(ref_content, 'consectetur adipiscing',
-                             'should collapse consecutive spaces')
+    case.assertRegex(ref_content, 'adipiscing elit.',
+                     'should respect content consisting of spaces')
+    case.assertRegex(ref_content, 'consectetur adipiscing',
+                     'should collapse consecutive spaces')
 
 
 @with_setup(set_up)
@@ -110,20 +110,20 @@ def test_whitespace_words():
 def test_linebreaks_yes():
     """should add line breaks where appropriate"""
     ref_content = yvs.get_copied_ref('111/psa.23')
-    case.assertRegexpMatches(ref_content, r'Psalms 23 \(NIV\)\n\n\S',
-                             'should add two line breaks after header')
-    case.assertRegexpMatches(ref_content, r'amet,\nconsectetur',
-                             'should add newline before each p block')
-    case.assertRegexpMatches(ref_content, r'erat.\n\n\S',
-                             'should add newline after each p block')
-    case.assertRegexpMatches(ref_content, r'orci,\ndapibus',
-                             'should add newline between each qc block')
-    case.assertRegexpMatches(ref_content, r'nec\nfermentum',
-                             'should add newline between each q block')
-    case.assertRegexpMatches(ref_content, r'elit.\n\nUt',
-                             'should add newlines around each li1 block')
-    case.assertRegexpMatches(ref_content, r'leo,\n\nhendrerit',
-                             'should add two newlines for each b block')
+    case.assertRegex(ref_content, r'Psalms 23 \(NIV\)\n\n\S',
+                     'should add two line breaks after header')
+    case.assertRegex(ref_content, r'amet,\nconsectetur',
+                     'should add newline before each p block')
+    case.assertRegex(ref_content, r'erat.\n\n\S',
+                     'should add newline after each p block')
+    case.assertRegex(ref_content, r'orci,\ndapibus',
+                     'should add newline between each qc block')
+    case.assertRegex(ref_content, r'nec\nfermentum',
+                     'should add newline between each q block')
+    case.assertRegex(ref_content, r'elit.\n\nUt',
+                     'should add newlines around each li1 block')
+    case.assertRegex(ref_content, r'leo,\n\nhendrerit',
+                     'should add two newlines for each b block')
 
 
 @with_setup(set_up)
@@ -135,20 +135,20 @@ def test_linebreaks_yes():
 def test_linebreaks_no():
     """should strip line breaks where appropriate"""
     ref_content = yvs.get_copied_ref('111/psa.23')
-    case.assertRegexpMatches(ref_content, r'Psalms 23 \(NIV\)\n\n\S',
-                             'should still add two line breaks after header')
-    case.assertRegexpMatches(ref_content, r'amet, consectetur',
-                             'should not add newline before each p block')
-    case.assertRegexpMatches(ref_content, r'erat. \S',
-                             'should not add newline after each p block')
-    case.assertRegexpMatches(ref_content, r'orci, dapibus',
-                             'should not add newline between each qc block')
-    case.assertRegexpMatches(ref_content, r'nec fermentum',
-                             'should not add newline between each q block')
-    case.assertRegexpMatches(ref_content, r'elit. Ut',
-                             'should not add newlines around each li1 block')
-    case.assertRegexpMatches(ref_content, r'leo, hendrerit',
-                             'should not add two newlines for each b block')
+    case.assertRegex(ref_content, r'Psalms 23 \(NIV\)\n\n\S',
+                     'should still add two line breaks after header')
+    case.assertRegex(ref_content, r'amet, consectetur',
+                     'should not add newline before each p block')
+    case.assertRegex(ref_content, r'erat. \S',
+                     'should not add newline after each p block')
+    case.assertRegex(ref_content, r'orci, dapibus',
+                     'should not add newline between each qc block')
+    case.assertRegex(ref_content, r'nec fermentum',
+                     'should not add newline between each q block')
+    case.assertRegex(ref_content, r'elit. Ut',
+                     'should not add newlines around each li1 block')
+    case.assertRegex(ref_content, r'leo, hendrerit',
+                     'should not add two newlines for each b block')
 
 
 @with_setup(set_up)
@@ -160,22 +160,22 @@ def test_linebreaks_no():
 def test_linebreaks_no_versenumbers_yes():
     """should display verse numbers correctly when stripping line breaks"""
     ref_content = yvs.get_copied_ref('111/psa.23')
-    case.assertRegexpMatches(ref_content, r'\(NIV\)\n\n1 » “Lorem ipsum”',
-                             'should display number for verse 1')
-    case.assertRegexpMatches(ref_content, r'elit. 2 Ut',
-                             'should display number for verse 2')
-    case.assertRegexpMatches(ref_content, r'erat. 3 › Nunc',
-                             'should display number for verse 3')
-    case.assertRegexpMatches(ref_content, r'leo, 4 hendrerit',
-                             'should display number for verse 4')
-    case.assertRegexpMatches(ref_content, r'leo, 4 hendrerit',
-                             'should display number for verse 4')
-    case.assertRegexpMatches(ref_content, r'nec 5 fermentum',
-                             'should display number for verse 5')
-    case.assertRegexpMatches(ref_content, r'orci, 7-9 dapibus',
-                             'should display number for verses 7-9')
-    case.assertRegexpMatches(ref_content, r'augue in, 10 dictum',
-                             'should display number for verse 10')
+    case.assertRegex(ref_content, r'\(NIV\)\n\n1 » “Lorem ipsum”',
+                     'should display number for verse 1')
+    case.assertRegex(ref_content, r'elit. 2 Ut',
+                     'should display number for verse 2')
+    case.assertRegex(ref_content, r'erat. 3 › Nunc',
+                     'should display number for verse 3')
+    case.assertRegex(ref_content, r'leo, 4 hendrerit',
+                     'should display number for verse 4')
+    case.assertRegex(ref_content, r'leo, 4 hendrerit',
+                     'should display number for verse 4')
+    case.assertRegex(ref_content, r'nec 5 fermentum',
+                     'should display number for verse 5')
+    case.assertRegex(ref_content, r'orci, 7-9 dapibus',
+                     'should display number for verses 7-9')
+    case.assertRegex(ref_content, r'augue in, 10 dictum',
+                     'should display number for verse 10')
 
 
 @with_setup(set_up)
@@ -187,8 +187,8 @@ def test_linebreaks_no_versenumbers_yes():
 def test_versenumbers():
     """should honor the versenumbers preference"""
     ref_content = yvs.get_copied_ref('111/psa.23')
-    case.assertRegexpMatches(ref_content, r'5 fermentum')
-    case.assertNotRegexpMatches(ref_content, r'#')
+    case.assertRegex(ref_content, r'5 fermentum')
+    case.assertNotRegex(ref_content, r'#')
 
 
 @with_setup(set_up)
@@ -200,8 +200,8 @@ def test_versenumbers():
 def test_versenumbers_range():
     """should handle verse range labels (used by versions like the MSG)"""
     ref_content = yvs.get_copied_ref('111/psa.23.7-9')
-    case.assertRegexpMatches(ref_content, r'7-9 dapibus et augue in,')
-    case.assertNotRegexpMatches(ref_content, r'#')
+    case.assertRegex(ref_content, r'7-9 dapibus et augue in,')
+    case.assertNotRegex(ref_content, r'#')
 
 
 @with_setup(set_up)
@@ -213,8 +213,8 @@ def test_versenumbers_range():
 def test_versenumbers_range_start():
     """should handle range labels when verse at start of range is given"""
     ref_content = yvs.get_copied_ref('111/psa.23.7')
-    case.assertRegexpMatches(ref_content, r'7-9 dapibus et augue in,')
-    case.assertNotRegexpMatches(ref_content, r'#')
+    case.assertRegex(ref_content, r'7-9 dapibus et augue in,')
+    case.assertNotRegex(ref_content, r'#')
 
 
 @with_setup(set_up)
@@ -226,8 +226,8 @@ def test_versenumbers_range_start():
 def test_versenumbers_range_end():
     """should handle range labels when verse at end of range is given"""
     ref_content = yvs.get_copied_ref('111/psa.23.9')
-    case.assertRegexpMatches(ref_content, r'7-9 dapibus et augue in,')
-    case.assertNotRegexpMatches(ref_content, r'#')
+    case.assertRegex(ref_content, r'7-9 dapibus et augue in,')
+    case.assertNotRegex(ref_content, r'#')
 
 
 @with_setup(set_up)
@@ -239,8 +239,8 @@ def test_versenumbers_range_end():
 def test_versenumbers_range_middle():
     """should handle range labels when verse in middle of range is given"""
     ref_content = yvs.get_copied_ref('111/psa.23.8')
-    case.assertRegexpMatches(ref_content, r'7-9 dapibus et augue in,')
-    case.assertNotRegexpMatches(ref_content, r'#')
+    case.assertRegex(ref_content, r'7-9 dapibus et augue in,')
+    case.assertNotRegex(ref_content, r'#')
 
 
 @with_setup(set_up)

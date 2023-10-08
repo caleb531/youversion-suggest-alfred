@@ -36,9 +36,9 @@ def tear_down():
 def test_result_titles():
     """should correctly parse result titles from HTML"""
     results = yvs.get_result_list('love others')
-    case.assertRegexpMatches(results[0]['title'], r'^Romans 13:8 \(NIV\)')
-    case.assertRegexpMatches(results[1]['title'], r'^John 15:12 \(NIV\)')
-    case.assertRegexpMatches(results[2]['title'], r'^1 Peter 4:8 \(NIV\)')
+    case.assertRegex(results[0]['title'], r'^Romans 13:8 \(NIV\)')
+    case.assertRegex(results[1]['title'], r'^John 15:12 \(NIV\)')
+    case.assertRegex(results[2]['title'], r'^1 Peter 4:8 \(NIV\)')
     case.assertEqual(len(results), 3)
 
 
@@ -47,9 +47,9 @@ def test_result_titles():
 def test_result_subtitles():
     """should correctly parse result subtitles from HTML"""
     results = yvs.get_result_list('love others')
-    case.assertRegexpMatches(results[0]['subtitle'], 'Lorem')
-    case.assertRegexpMatches(results[1]['subtitle'], 'consectetur')
-    case.assertRegexpMatches(results[2]['subtitle'], 'Ut aliquam')
+    case.assertRegex(results[0]['subtitle'], 'Lorem')
+    case.assertRegex(results[1]['subtitle'], 'consectetur')
+    case.assertRegex(results[2]['subtitle'], 'Ut aliquam')
     case.assertEqual(len(results), 3)
 
 
