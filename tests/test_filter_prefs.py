@@ -215,7 +215,7 @@ def test_filter_preferences_name():
 @with_teardown(tear_down)
 def test_filter_preferences_name_partial():
     """should match partial pref name at word boundaries"""
-    results = yvs.get_result_list('version en sta')
+    results = yvs.get_result_list('version en sta v')
     case.assertEqual(len(results), 1)
     case.assertEqual(results[0]['uid'], 'yvs-version-59')
     case.assertEqual(
