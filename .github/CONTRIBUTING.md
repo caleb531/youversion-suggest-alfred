@@ -68,7 +68,7 @@ nose2
 
 ## Code coverage
 
-The project currently boasts 100% code coverage across all source files.
+The project currently boasts high code coverage across all source files.
 Contributions are expected to maintain this high standard. You can view the
 current coverage report via the `coverage` command:
 
@@ -77,8 +77,8 @@ coverage run -m nose2
 coverage report
 ```
 
-If the coverage is ever less than 100%, you can generate and view a detailed
-HTML view of the coverage report like so:
+If you want to examine which lines are/aren't covered, you can generate and view
+a detailed HTML view of the coverage report like so:
 
 ```bash
 coverage html

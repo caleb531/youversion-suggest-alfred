@@ -54,7 +54,7 @@ def get_book_metadata():
 # Retrieves name of first book whose id matches the given id
 def get_book(books, book_id):
 
-    for book in books:  # pragma: no branch
+    for book in books:
         if book['id'] == book_id:
             return book['name']
 
