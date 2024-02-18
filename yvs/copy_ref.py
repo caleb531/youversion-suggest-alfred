@@ -16,7 +16,7 @@ class ReferenceParser(web.YVParser):
     # Elements that should be surrounded by blank lines
     block_elems = {'b', 'p', 'm'}
     # Elements that should trigger a line break
-    break_elems = {'li1', 'q1', 'q2', 'qc', 'qm1', 'qm2'}
+    break_elems = {'li1', 'q', 'q1', 'q2', 'qc', 'qm1', 'qm2'}
 
     # Associates the given reference object with this parser instance
     def __init__(self, ref,
