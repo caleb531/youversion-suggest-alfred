@@ -75,6 +75,15 @@ def test_partial_ambiguous():
 
 @with_setup(set_up)
 @with_teardown(tear_down)
+def test_numbers():
+    """should match versions containing numbers"""
+    results = yvs.get_result_list('luke 4:8 nasb2020')
+    case.assertEqual(results[0]['title'], 'Luke 4:8 (NASB2020)')
+    case.assertEqual(len(results), 1)
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
 def test_closest_match():
     """should try to find closest match for nonexistent versions"""
     results = yvs.get_result_list('hosea 6:3 nlab')
