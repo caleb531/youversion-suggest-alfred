@@ -11,10 +11,16 @@ import yvs.core as yvs
 # Path to the directory where this workflow stores volatile local data (this
 # will be overridden during tests, so CI will still work fine)
 LOCAL_CACHE_DIR_PATH = os.environ.get(
-    'alfred_workflow_cache',
+    "alfred_workflow_cache",
     os.path.join(
-        yvs.HOME_DIR_PATH, 'Library', 'Caches',
-        'com.runningwithcrayons.Alfred', 'Workflow Data', yvs.WORKFLOW_BUNDLE_ID))
+        yvs.HOME_DIR_PATH,
+        "Library",
+        "Caches",
+        "com.runningwithcrayons.Alfred",
+        "Workflow Data",
+        yvs.WORKFLOW_BUNDLE_ID,
+    ),
+)
 
 # The maximum number of cache entries to store
 MAX_NUM_CACHE_ENTRIES = 50
@@ -33,7 +39,7 @@ def create_local_cache_dirs():
 # Calculates the unique SHA1 checksum used as the filename for a cache entry
 def get_cache_entry_checksum(entry_key):
 
-    return hashlib.sha1(entry_key.encode('utf-8')).hexdigest()
+    return hashlib.sha1(entry_key.encode("utf-8")).hexdigest()
 
 
 # Retrieves the local filepath for a cache entry
@@ -46,13 +52,13 @@ def get_cache_entry_path(entry_key):
 # Retrieves the path to the directory where all cache entries are stored
 def get_cache_entry_dir_path():
 
-    return os.path.join(LOCAL_CACHE_DIR_PATH, 'entries')
+    return os.path.join(LOCAL_CACHE_DIR_PATH, "entries")
 
 
 # Retrieves the path to the manifest file listing all cache entries
 def get_cache_manifest_path():
 
-    return os.path.join(LOCAL_CACHE_DIR_PATH, 'manifest.txt')
+    return os.path.join(LOCAL_CACHE_DIR_PATH, "manifest.txt")
 
 
 # Purge all expired entries in the cache
@@ -64,8 +70,7 @@ def purge_expired_cache_entries(manifest_file):
     if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
         for i in range(len(entry_checksums) - MAX_NUM_CACHE_ENTRIES):
             old_entry_checksum = entry_checksums[0].rstrip()
-            os.remove(os.path.join(
-                get_cache_entry_dir_path(), old_entry_checksum))
+            os.remove(os.path.join(get_cache_entry_dir_path(), old_entry_checksum))
             entry_checksums.pop(0)
         manifest_file.truncate(0)
         manifest_file.seek(0)
@@ -79,15 +84,15 @@ def add_cache_entry(entry_key, entry_content):
 
     # Write entry content to entry file
     entry_path = get_cache_entry_path(entry_key)
-    with open(entry_path, 'w') as entry_file:
+    with open(entry_path, "w") as entry_file:
         entry_file.write(entry_content)
 
     entry_checksum = os.path.basename(entry_path)
     cache_manifest_path = get_cache_manifest_path()
-    with open(cache_manifest_path, 'a+') as manifest_file:
+    with open(cache_manifest_path, "a+") as manifest_file:
         # Write the new entry checksum to manifest file
         manifest_file.write(entry_checksum)
-        manifest_file.write('\n')
+        manifest_file.write("\n")
         purge_expired_cache_entries(manifest_file)
 
 
@@ -97,7 +102,7 @@ def get_cache_entry_content(entry_key):
     create_local_cache_dirs()
     entry_path = get_cache_entry_path(entry_key)
     try:
-        with open(entry_path, 'r') as entry_file:
+        with open(entry_path, "r") as entry_file:
             return entry_file.read()
     except IOError:
         return None

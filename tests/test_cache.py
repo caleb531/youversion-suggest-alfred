@@ -23,26 +23,24 @@ case = unittest.TestCase()
 @redirect_stdout
 def test_cache_purge_oldest(out):
     """should purge oldest entry when cache grows too large"""
-    entry_key = 'a'
+    entry_key = "a"
     num_entries = cache.MAX_NUM_CACHE_ENTRIES + 2
-    purged_entry_checksum = hashlib.sha1(
-        ('a' * 1).encode('utf-8')).hexdigest()
-    last_entry_checksum = hashlib.sha1(
-        ('a' * num_entries).encode('utf-8')).hexdigest()
+    purged_entry_checksum = hashlib.sha1(("a" * 1).encode("utf-8")).hexdigest()
+    last_entry_checksum = hashlib.sha1(("a" * num_entries).encode("utf-8")).hexdigest()
     case.assertFalse(
         os.path.exists(cache.get_cache_entry_dir_path()),
-        'local cache entry directory exists')
+        "local cache entry directory exists",
+    )
     for i in range(num_entries):
-        cache.add_cache_entry(entry_key, 'blah blah')
-        entry_key += 'a'
+        cache.add_cache_entry(entry_key, "blah blah")
+        entry_key += "a"
     entry_checksums = os.listdir(cache.get_cache_entry_dir_path())
     case.assertEqual(len(entry_checksums), cache.MAX_NUM_CACHE_ENTRIES)
     case.assertNotIn(purged_entry_checksum, entry_checksums)
     case.assertIn(last_entry_checksum, entry_checksums)
-    with open(cache.get_cache_manifest_path(), 'r') as manifest_file:
+    with open(cache.get_cache_manifest_path(), "r") as manifest_file:
         entry_checksums = manifest_file.read().splitlines()
-        case.assertEqual(
-            len(entry_checksums), cache.MAX_NUM_CACHE_ENTRIES)
+        case.assertEqual(len(entry_checksums), cache.MAX_NUM_CACHE_ENTRIES)
         case.assertNotIn(purged_entry_checksum, entry_checksums)
         case.assertIn(last_entry_checksum, entry_checksums)
 
@@ -55,30 +53,28 @@ def test_cache_truncate(out):
     should truncate cache if max entries count changes
     between workflow versions
     """
-    entry_key = 'a'
+    entry_key = "a"
     new_max_count = cache.MAX_NUM_CACHE_ENTRIES // 2
     num_entries = cache.MAX_NUM_CACHE_ENTRIES + 2
-    purged_entry_checksum = hashlib.sha1(
-        ('a' * 1).encode('utf-8')).hexdigest()
-    last_entry_checksum = hashlib.sha1(
-        ('a' * num_entries).encode('utf-8')).hexdigest()
+    purged_entry_checksum = hashlib.sha1(("a" * 1).encode("utf-8")).hexdigest()
+    last_entry_checksum = hashlib.sha1(("a" * num_entries).encode("utf-8")).hexdigest()
     case.assertFalse(
         os.path.exists(cache.get_cache_entry_dir_path()),
-        'local cache entry directory exists')
+        "local cache entry directory exists",
+    )
     for i in range(num_entries // 2):
-        cache.add_cache_entry(entry_key, 'blah blah')
-        entry_key += 'a'
-    with patch('yvs.cache.MAX_NUM_CACHE_ENTRIES', new_max_count):
+        cache.add_cache_entry(entry_key, "blah blah")
+        entry_key += "a"
+    with patch("yvs.cache.MAX_NUM_CACHE_ENTRIES", new_max_count):
         for i in range(num_entries // 2):
-            cache.add_cache_entry(entry_key, 'blah blah')
-            entry_key += 'a'
+            cache.add_cache_entry(entry_key, "blah blah")
+            entry_key += "a"
     entry_checksums = os.listdir(cache.get_cache_entry_dir_path())
     case.assertEqual(len(entry_checksums), new_max_count)
     case.assertNotIn(purged_entry_checksum, entry_checksums)
     case.assertIn(last_entry_checksum, entry_checksums)
-    with open(cache.get_cache_manifest_path(), 'r') as manifest_file:
+    with open(cache.get_cache_manifest_path(), "r") as manifest_file:
         entry_checksums = manifest_file.read().splitlines()
-        case.assertEqual(
-            len(entry_checksums), new_max_count)
+        case.assertEqual(len(entry_checksums), new_max_count)
         case.assertNotIn(purged_entry_checksum, entry_checksums)
         case.assertIn(last_entry_checksum, entry_checksums)

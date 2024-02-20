@@ -1,0 +1,14 @@
+{
+  "python.analysis.extraPaths": [".virtualenv"],
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "black-formatter.importStrategy": "fromEnvironment",
+  "isort.args": [
+    "--profile", "black"
+  ]
+}

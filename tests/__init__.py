@@ -5,19 +5,18 @@ import os
 import os.path
 import shutil
 import tempfile
-
 from unittest.mock import patch
 
-import yvs.core as core
 import yvs.cache as cache
+import yvs.core as core
 
 temp_dir = tempfile.gettempdir()
 local_data_dir_patcher = patch(
-    'yvs.core.LOCAL_DATA_DIR_PATH',
-    os.path.join(temp_dir, 'yvs-data'))
+    "yvs.core.LOCAL_DATA_DIR_PATH", os.path.join(temp_dir, "yvs-data")
+)
 local_cache_dir_patcher = patch(
-    'yvs.cache.LOCAL_CACHE_DIR_PATH',
-    os.path.join(temp_dir, 'yvs-cache'))
+    "yvs.cache.LOCAL_CACHE_DIR_PATH", os.path.join(temp_dir, "yvs-cache")
+)
 
 
 def set_up():

@@ -10,7 +10,6 @@ import yvs.filter_refs as yvs
 from tests import set_up, tear_down
 from tests.decorators import redirect_stdout
 
-
 case = unittest.TestCase()
 
 
@@ -19,7 +18,7 @@ case = unittest.TestCase()
 @redirect_stdout
 def test_output(out):
     """should output ref result list JSON"""
-    query_str = 'genesis 50:20'
+    query_str = "genesis 50:20"
     yvs.main(query_str)
     output = out.getvalue().rstrip()
     results = yvs.get_result_list(query_str)
@@ -32,11 +31,11 @@ def test_output(out):
 @redirect_stdout
 def test_null_result(out):
     """should output "No Results" JSON item for empty ref result list"""
-    query_str = 'xyz'
+    query_str = "xyz"
     yvs.main(query_str)
     feedback_str = out.getvalue()
     feedback = json.loads(feedback_str)
-    case.assertEqual(len(feedback['items']), 1, 'result item is missing')
-    item = feedback['items'][0]
-    case.assertEqual(item['title'], 'No Results')
-    case.assertEqual(item['valid'], False)
+    case.assertEqual(len(feedback["items"]), 1, "result item is missing")
+    item = feedback["items"][0]
+    case.assertEqual(item["title"], "No Results")
+    case.assertEqual(item["valid"], False)
