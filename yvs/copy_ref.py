@@ -80,13 +80,14 @@ class ReferenceParser(web.YVParser):
         return bool(
             re.search(
                 rf"\b({elems_union})\b",
-                # The normal regex word boundary (\b) considers underscores as part
-                # of the definition of a "word"; this will not work for us since the
-                # class names we are working with have underscore-delimited
-                # components, and we need to treat each of those components as
-                # distinct "words"; fortunately, we can simply replace underscores
-                # in the class name string with hyphens (or spaces, for that matter)
-                # to appease the word boundaries
+                # The normal regex word boundary (\b) considers underscores as
+                # part of the definition of a "word"; this will not work for us
+                # since the class names we are working with have
+                # underscore-delimited components, and we need to treat each of
+                # those components as distinct "words"; fortunately, we can
+                # simply replace underscores in the class name string with
+                # hyphens (or spaces, for that matter) to appease the word
+                # boundaries
                 class_name.replace("_", "-"),
             )
         )
