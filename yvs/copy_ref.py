@@ -79,7 +79,7 @@ class ReferenceParser(web.YVParser):
         elems_union = "|".join(elems_set)
         return bool(
             re.search(
-                rf"\b({elems_union})\b",
+                rf"\b({elems_union})--",
                 # The normal regex word boundary (\b) considers underscores as
                 # part of the definition of a "word"; this will not work for us
                 # since the class names we are working with have
