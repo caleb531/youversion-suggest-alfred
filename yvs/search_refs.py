@@ -52,9 +52,6 @@ class SearchResultParser(web.YVParser):
                 "ref_url": core.get_ref_url(self.current_result["arg"]),
                 "copybydefault": str(self.user_prefs["copybydefault"]),
             }
-            self.current_result["quicklookurl"] = self.current_result["variables"][
-                "ref_url"
-            ]
             self.current_result["mods"] = {
                 "cmd": {"subtitle": "Copy content to clipboard"}
             }

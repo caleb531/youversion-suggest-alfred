@@ -33,7 +33,6 @@ def test_structure():
     item = feedback["items"][0]
     case.assertEqual(item["uid"], result["uid"])
     case.assertEqual(item["arg"], result["arg"])
-    case.assertEqual(item["quicklookurl"], "https://www.bible.com/bible/111/MAT.6.34")
     case.assertEqual(item["title"], "Matthew 6:34 (NIV)")
     case.assertEqual(item["text"]["copy"], result["title"])
     case.assertEqual(item["text"]["largetype"], result["title"])

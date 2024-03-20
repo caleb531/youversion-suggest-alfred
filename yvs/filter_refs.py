@@ -180,7 +180,6 @@ def get_result(book, query, chosen_version, user_prefs):
         "ref_url": core.get_ref_url(result["arg"]),
         "copybydefault": str(user_prefs["copybydefault"]),
     }
-    result["quicklookurl"] = result["variables"]["ref_url"]
     result["uid"] = "yvs-{}".format(result["arg"])
     result["title"] += " ({version})".format(version=chosen_version["name"])
     result["subtitle"] = "View on YouVersion"

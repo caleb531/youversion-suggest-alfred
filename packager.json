@@ -1,12 +1,12 @@
 {
   "export_files": [
-    "YouVersion Suggest (Alfred 4).alfredworkflow",
     "YouVersion Suggest (Alfred 5).alfredworkflow"
   ],
   "bundle_id": "com.calebevans.youversionsuggest",
   "resources": [
       "icon.png",
       "yvs/*.py",
+      "yvs/*.sh",
       "yvs/data/bible/*.json",
       "yvs/preferences/*.json"
   ]

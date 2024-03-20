@@ -118,7 +118,6 @@ def test_structure():
     item = feedback["items"][0]
     case.assertNotIn("uid", item)
     case.assertEqual(item["arg"], result["arg"])
-    case.assertEqual(item["quicklookurl"], "https://www.bible.com/bible/111/ROM.13.8")
     case.assertEqual(item["title"], "Romans 13:8 (NIV) ♥")
     case.assertEqual(item["text"]["copy"], result["title"])
     case.assertEqual(item["text"]["largetype"], result["title"])
