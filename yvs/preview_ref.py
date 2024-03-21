@@ -10,7 +10,9 @@ import yvs.core as core
 
 def main(ref_uid):
 
-    #
+    # For the preview mode, we want to ignore the user's preferred reference
+    # format so that we can always display the reference address consistently at
+    # the top of the text view
     user_prefs = {
         **core.get_user_prefs(),
         "refformat": core.get_default_user_prefs()["refformat"],
