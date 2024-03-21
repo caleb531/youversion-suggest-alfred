@@ -17,11 +17,18 @@ def main(ref_uid):
     }
     ref = core.get_ref(ref_uid, user_prefs)
     copied_ref = copy_ref.get_copied_ref_from_object(ref, user_prefs)
+    full_ref_name = core.get_full_ref_name(ref)
     print(
         json.dumps(
             {
                 "response": copied_ref,
-                "footer": core.get_full_ref_name(ref),
+                "footer": " · ".join(
+                    (
+                        full_ref_name,
+                        "⏎ View on YouVersion",
+                        "⎋ Return to results",
+                    )
+                ),
                 "behaviour": {
                     "response": "replace",
                     "scroll": "auto",

@@ -49,6 +49,7 @@ class SearchResultParser(web.YVParser):
             self.results.append(self.current_result)
             self.current_result["arg"] = get_uid_from_url(attrs["href"])
             self.current_result["variables"] = {
+                "ref_uid": self.current_result["arg"],
                 "ref_url": core.get_ref_url(self.current_result["arg"]),
                 "copybydefault": str(self.user_prefs["copybydefault"]),
             }

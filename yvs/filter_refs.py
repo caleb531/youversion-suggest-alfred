@@ -176,14 +176,16 @@ def get_result(book, query, chosen_version, user_prefs):
     result["arg"] = "{version}/{uid}".format(
         version=chosen_version["id"], uid=result["uid"]
     )
-    result["variables"] = {
-        "ref_url": core.get_ref_url(result["arg"]),
-        "copybydefault": str(user_prefs["copybydefault"]),
-    }
     result["uid"] = "yvs-{}".format(result["arg"])
     result["title"] += " ({version})".format(version=chosen_version["name"])
     result["subtitle"] = "View on YouVersion"
     result["mods"] = {"cmd": {"subtitle": "Copy content to clipboard"}}
+    result["variables"] = {
+        "full_ref_name": result["title"],
+        "ref_uid": result["arg"],
+        "ref_url": core.get_ref_url(result["arg"]),
+        "copybydefault": str(user_prefs["copybydefault"]),
+    }
 
     # Make "Copy" the default action (instead of "View") when the copybydefault
     # preference is set to true
