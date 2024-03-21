@@ -53,13 +53,16 @@ class SearchResultParser(web.YVParser):
                 "ref_url": core.get_ref_url(self.current_result["arg"]),
                 "copybydefault": str(self.user_prefs["copybydefault"]),
             }
-            self.current_result["mods"] = {
-                "cmd": {"subtitle": "Copy content to clipboard"}
-            }
             # Make "Copy" the default action (instead of "View") when the
             # copybydefault preference is set to true
             if self.user_prefs["copybydefault"]:
-                self.current_result["mods"]["cmd"]["subtitle"] = "View on YouVersion"
+                self.current_result["mods"] = {
+                    "cmd": {"subtitle": "View on YouVersion"}
+                }
+            else:
+                self.current_result["mods"] = {
+                    "cmd": {"subtitle": "Copy content to clipboard"}
+                }
         # Detect beginning of search result content
         elif self.in_ref and tag == "p":
             self.in_verse = True
