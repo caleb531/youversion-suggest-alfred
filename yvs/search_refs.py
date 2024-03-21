@@ -72,6 +72,9 @@ class SearchResultParser(web.YVParser):
             self.in_ref = False
             self.in_verse = False
             self.in_verse_content = False
+            self.current_result["variables"]["full_ref_name"] = self.current_result[
+                "title"
+            ]
             self.current_result["subtitle"] = core.normalize_ref_content(
                 self.current_result["subtitle"]
             )
