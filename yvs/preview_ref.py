@@ -8,6 +8,15 @@ import yvs.copy_ref as copy_ref
 import yvs.core as core
 
 
+# Display the correct message for whichever default action is set based on the
+# user's copybydefault preference
+def get_default_action_message(user_prefs):
+    if user_prefs["copybydefault"]:
+        return "⏎ Copy content to clipboard"
+    else:
+        return "⏎ View on YouVersion"
+
+
 def main(ref_uid):
 
     # For the preview mode, we want to ignore the user's preferred reference
@@ -27,7 +36,7 @@ def main(ref_uid):
                 "footer": " · ".join(
                     (
                         full_ref_name,
-                        "⏎ View on YouVersion",
+                        get_default_action_message(user_prefs),
                         "⎋ Return to results",
                     )
                 ),
