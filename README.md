@@ -75,8 +75,11 @@ reference to the clipboard
 - Choosing a result while pressing `ctrl` will open a Google search for the
 Bible reference.
 
-- Pressing `shift` while a result is selected will preview the contents of the
-Bible reference without leaving the search results (new in v6.1.0)
+- Choosing a result while pressing `shift` will preview the contents of the
+Bible reference; hitting the Escape key will return you to the results
+
+- Choosing a result while pressing `option` will copy the URL of the Bible
+reference to the clipboard
 
 - Pressing `command-c` while a result is selected will copy to the clipboard the
 full Bible reference identifier, such as *1 Corinthians 13:4-7 (ESV)*
