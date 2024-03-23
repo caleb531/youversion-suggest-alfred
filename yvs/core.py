@@ -61,12 +61,12 @@ def get_book_metadata():
         return json.load(book_metadata_file)
 
 
-# Retrieves name of first book whose id matches the given id
+# Retrieves the first book whose id matches the given id
 def get_book(books, book_id):
 
     for book in books:
         if book["id"] == book_id:
-            return book["name"]
+            return book
 
 
 # Retrieves first version object whose id matches the given id
@@ -217,8 +217,8 @@ def get_ref(ref_uid, user_prefs):
 
     # Include book name using book ID and currently-set language
     bible = get_bible(user_prefs["language"])
-    book_name = get_book(bible["books"], ref["book_id"])
-    ref["book"] = book_name
+    book = get_book(bible["books"], ref["book_id"])
+    ref["book"] = book["name"]
 
     # Include verse number if it exists
     verse_match = ref_uid_match.group(4)
