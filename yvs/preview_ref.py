@@ -12,9 +12,9 @@ import yvs.core as core
 # user's copybydefault preference
 def get_default_action_message(user_prefs):
     if user_prefs["copybydefault"]:
-        return "⏎ Copy content to clipboard"
+        return "↩ Copy content to clipboard"
     else:
-        return "⏎ View on YouVersion"
+        return "↩ View on YouVersion"
 
 
 def main(ref_uid):
