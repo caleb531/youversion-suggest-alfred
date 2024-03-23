@@ -97,3 +97,26 @@ def test_copybydefault_no(out):
     preview_feedback = json.loads(out.getvalue())
     case.assertIn("View on YouVersion", preview_feedback["footer"])
     case.assertNotIn("Copy content to clipboard", preview_feedback["footer"])
+
+
+@with_setup(set_up)
+@with_teardown(tear_down)
+@use_user_prefs(
+    {
+        "language": "eng",
+        "version": 59,
+        "refformat": '{name}\n"{content}"',
+        "versenumbers": False,
+        "linebreaks": True,
+        "copybydefault": False,
+    }
+)
+@redirect_stdout
+def test_refformat(out):
+    """
+    should bypass user's refformat and use consistent refformat for preview
+    """
+    yvs.main("59/psa.23.2")
+    preview_feedback = json.loads(out.getvalue())
+    case.assertIn("Psalms 23:2 (ESV)\n\n", preview_feedback["response"])
+    case.assertNotIn("- Psalms 23:2\n", preview_feedback["response"])
