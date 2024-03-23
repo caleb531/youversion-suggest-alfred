@@ -82,10 +82,10 @@ Bible reference; hitting the Escape key will return you to the results
 reference to the clipboard
 
 - Pressing `command-c` while a result is selected will copy to the clipboard the
-full Bible reference identifier, such as *1 Corinthians 13:4-7 (ESV)*
+full Bible reference address, such as *1 Corinthians 13:4-7 (ESV)*
 
 - Pressing `command-l` while a result is selected will show the full Bible
-reference identifier as Large Type
+reference address as Large Type
 
 ### Searching by content
 
