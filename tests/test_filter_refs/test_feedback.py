@@ -2,39 +2,31 @@
 # coding=utf-8
 
 import json
-import unittest
-
-from nose2.tools.decorators import with_setup, with_teardown
 
 import yvs.filter_refs as yvs
-from tests import set_up, tear_down
-
-case = unittest.TestCase()
+from tests import YVSTestCase
 
 
-@with_setup(set_up)
-@with_teardown(tear_down)
-def test_validity():
-    """should return syntactically-valid JSON"""
-    results = yvs.get_result_list("john 3:16")
-    feedback_str = yvs.core.get_result_list_feedback_str(results)
-    case.assertIsInstance(json.loads(feedback_str), dict)
+class TestFeedback(YVSTestCase):
 
+    def test_validity(self):
+        """should return syntactically-valid JSON"""
+        results = yvs.get_result_list("john 3:16")
+        feedback_str = yvs.core.get_result_list_feedback_str(results)
+        self.assertIsInstance(json.loads(feedback_str), dict)
 
-@with_setup(set_up)
-@with_teardown(tear_down)
-def test_structure():
-    """JSON should match result list"""
-    results = yvs.get_result_list("matthew 6:34")
-    result = results[0]
-    feedback_str = yvs.core.get_result_list_feedback_str(results)
-    feedback = json.loads(feedback_str)
-    case.assertIn("items", feedback, "feedback object must have result items")
-    item = feedback["items"][0]
-    case.assertEqual(item["uid"], result["uid"])
-    case.assertEqual(item["arg"], result["arg"])
-    case.assertEqual(item["title"], "Matthew 6:34 (NIV)")
-    case.assertEqual(item["text"]["copy"], result["title"])
-    case.assertEqual(item["text"]["largetype"], result["title"])
-    case.assertEqual(item["subtitle"], result["subtitle"])
-    case.assertEqual(item["icon"]["path"], "icon.png")
+    def test_structure(self):
+        """JSON should match result list"""
+        results = yvs.get_result_list("matthew 6:34")
+        result = results[0]
+        feedback_str = yvs.core.get_result_list_feedback_str(results)
+        feedback = json.loads(feedback_str)
+        self.assertIn("items", feedback, "feedback object must have result items")
+        item = feedback["items"][0]
+        self.assertEqual(item["uid"], result["uid"])
+        self.assertEqual(item["arg"], result["arg"])
+        self.assertEqual(item["title"], "Matthew 6:34 (NIV)")
+        self.assertEqual(item["text"]["copy"], result["title"])
+        self.assertEqual(item["text"]["largetype"], result["title"])
+        self.assertEqual(item["subtitle"], result["subtitle"])
+        self.assertEqual(item["icon"]["path"], "icon.png")
