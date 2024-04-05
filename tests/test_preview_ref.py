@@ -95,9 +95,10 @@ class TestPreviewRef(YVSTestCase):
     @redirect_stdout
     def test_refformat(self, out):
         """
-        should bypass user's refformat and use consistent refformat for preview
+        should bypass user's refformat and use consistent (Markdown-based)
+        refformat for preview
         """
         yvs.main("59/psa.23.2")
         preview_feedback = json.loads(out.getvalue())
-        self.assertIn("Psalms 23:2 (ESV)\n\n", preview_feedback["response"])
+        self.assertIn("## Psalms 23:2 (ESV)  \n\n", preview_feedback["response"])
         self.assertNotIn("- Psalms 23:2\n", preview_feedback["response"])
