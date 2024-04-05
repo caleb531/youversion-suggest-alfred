@@ -2,6 +2,7 @@
 # coding=utf-8
 
 import json
+import re
 import sys
 
 import yvs.copy_ref as copy_ref
@@ -34,7 +35,10 @@ def main(ref_uid):
     print(
         json.dumps(
             {
-                "response": copied_ref.replace("\n", "  \n"),
+                # Because we are rendering the reference content as Markdown, we
+                # need to add a double-space before each newline (but not
+                # between consecutive newlines)
+                "response": re.sub(r"(\n+)", (2 * " ") + r"\1", copied_ref),
                 "footer": " · ".join(
                     (
                         full_ref_name,
