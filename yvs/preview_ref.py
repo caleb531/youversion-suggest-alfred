@@ -24,7 +24,9 @@ def main(ref_uid):
     # the top of the text view
     user_prefs = {
         **core.get_user_prefs(),
-        "refformat": core.get_default_user_prefs()["refformat"],
+        "versenumbers": False,
+        "linebreaks": True,
+        "refformat": "## {name} ({version})\n\n{content}",
     }
     ref = core.get_ref(ref_uid, user_prefs)
     copied_ref = copy_ref.get_copied_ref_from_object(ref, user_prefs)
@@ -32,7 +34,7 @@ def main(ref_uid):
     print(
         json.dumps(
             {
-                "response": copied_ref,
+                "response": copied_ref.replace("\n", "  \n"),
                 "footer": " · ".join(
                     (
                         full_ref_name,
