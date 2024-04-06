@@ -7,11 +7,13 @@ import shutil
 
 import yvs.clear_cache as yvs
 from tests import YVSTestCase
+from tests.decorators import redirect_stdout
 
 
 class TestClearCachw(YVSTestCase):
 
-    def test_clear_cache(self):
+    @redirect_stdout
+    def test_clear_cache(self, out):
         """should remove cache directory when cache is cleared"""
         yvs.main()
         self.assertFalse(
@@ -19,7 +21,8 @@ class TestClearCachw(YVSTestCase):
             "local cache directory exists",
         )
 
-    def test_clear_cache_silent_fail(self):
+    @redirect_stdout
+    def test_clear_cache_silent_fail(self, out):
         """should fail silently if cache directory does not exist"""
         shutil.rmtree(yvs.cache.LOCAL_CACHE_DIR_PATH)
         yvs.main()

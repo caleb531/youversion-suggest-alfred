@@ -56,6 +56,8 @@ class TestSetPref(YVSTestCase):
         }
         yvs.main(alfred_variables)
         alfred_json = json.loads(out.getvalue())
-        self.assertEqual(alfred_json["alfredworkflow"]["variables"], alfred_variables)
+        self.assertEqual(
+            alfred_json["alfredworkflow"]["variables"], {"did_set_pref": "True"}
+        )
         user_prefs = yvs.core.get_user_prefs()
         self.assertEqual(user_prefs["version"], 107)

@@ -28,7 +28,7 @@ def main(variables):
     # value_id needs to be parsed as JSON so we can preserve type data for
     # proper serialization to the preferences file
     set_pref(variables["pref_id"], json.loads(variables["value_id"]))
-    print(json.dumps({"alfredworkflow": {"variables": variables}}))
+    print(json.dumps({"alfredworkflow": {"variables": {"did_set_pref": "True"}}}))
 
 
 if __name__ == "__main__":
