@@ -182,7 +182,14 @@ def get_value_result(value, user_prefs, pref_def):
         "title": value["name"],
     }
 
-    if value["id"] == user_prefs[pref_def["id"]]:
+    if value["id"] == user_prefs[pref_def["id"]] and pref_def["id"] == "refformat":
+        # If this value is the current value, indicate such
+        result["subtitle"] = (
+            "This is already your preferred {}; press Enter to tweak".format(
+                pref_def.get("short_name")
+            )
+        )
+    elif value["id"] == user_prefs[pref_def["id"]]:
         # If this value is the current value, indicate such
         result["subtitle"] = "This is already your preferred {}".format(
             pref_def.get("short_name")

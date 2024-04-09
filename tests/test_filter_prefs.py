@@ -115,7 +115,6 @@ class TestFilterPrefs(YVSTestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]["uid"], "yvs-refformat-Z {content}")
         self.assertEqual(results[0]["title"], "Z Jesus wept.")
-        self.assertEqual(results[0]["valid"], False)
         self.assertEqual(
             results[0]["variables"],
             {
