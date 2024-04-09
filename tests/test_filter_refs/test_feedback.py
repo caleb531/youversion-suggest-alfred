@@ -3,7 +3,8 @@
 
 import json
 
-import yvs.filter_refs as yvs
+import yvs.core as core
+import yvs.filter_refs as filter_refs
 from tests import YVSTestCase
 
 
@@ -11,15 +12,15 @@ class TestFeedback(YVSTestCase):
 
     def test_validity(self):
         """should return syntactically-valid JSON"""
-        results = yvs.get_result_list("john 3:16")
-        feedback_str = yvs.core.get_result_list_feedback_str(results)
+        results = filter_refs.get_result_list("john 3:16")
+        feedback_str = core.get_result_list_feedback_str(results)
         self.assertIsInstance(json.loads(feedback_str), dict)
 
     def test_structure(self):
         """JSON should match result list"""
-        results = yvs.get_result_list("matthew 6:34")
+        results = filter_refs.get_result_list("matthew 6:34")
         result = results[0]
-        feedback_str = yvs.core.get_result_list_feedback_str(results)
+        feedback_str = core.get_result_list_feedback_str(results)
         feedback = json.loads(feedback_str)
         self.assertIn("items", feedback, "feedback object must have result items")
         item = feedback["items"][0]

@@ -4,7 +4,7 @@
 import json
 from unittest.mock import Mock, NonCallableMock, patch
 
-import yvs.copy_ref as yvs
+import yvs.copy_ref as copy_ref
 from tests import YVSTestCase
 from tests.decorators import redirect_stdout, use_user_prefs
 
@@ -27,7 +27,7 @@ class TestCopyRef(YVSTestCase):
 
     def test_copy_chapter(self):
         """should copy reference content for chapter"""
-        ref_content = yvs.get_copied_ref("111/psa.23")
+        ref_content = copy_ref.get_copied_ref("111/psa.23")
         self.assertNotRegex(ref_content, "David")
         self.assertRegex(ref_content, "Lorem")
         self.assertRegex(ref_content, "nunc nulla")
@@ -35,14 +35,14 @@ class TestCopyRef(YVSTestCase):
 
     def test_copy_verse(self):
         """should copy reference content for verse"""
-        ref_content = yvs.get_copied_ref("111/psa.23.2")
+        ref_content = copy_ref.get_copied_ref("111/psa.23.2")
         self.assertNotRegex(ref_content, "Lorem")
         self.assertRegex(ref_content, "nunc nulla")
         self.assertNotRegex(ref_content, "fermentum")
 
     def test_copy_verse_range(self):
         """should copy reference content for verse range"""
-        ref_content = yvs.get_copied_ref("111/psa.23.1-2")
+        ref_content = copy_ref.get_copied_ref("111/psa.23.1-2")
         self.assertRegex(ref_content, "Lorem")
         self.assertRegex(ref_content, "nunc nulla")
         self.assertNotRegex(ref_content, "fermentum")
@@ -58,12 +58,12 @@ class TestCopyRef(YVSTestCase):
     )
     def test_refformat(self):
         """should honor the chosen reference format"""
-        ref_content = yvs.get_copied_ref("59/psa.23.6")
+        ref_content = copy_ref.get_copied_ref("59/psa.23.6")
         self.assertEqual(ref_content, '"Proin nulla orci,"\n\n(Psalms 23:6 ESV)')
 
     def test_header(self):
         """should prepend reference header to copied string"""
-        ref_content = yvs.get_copied_ref("59/psa.23")
+        ref_content = copy_ref.get_copied_ref("59/psa.23")
         self.assertRegex(ref_content, r"^Psalms 23 \(ESV\)")
 
     @use_user_prefs(
@@ -77,12 +77,12 @@ class TestCopyRef(YVSTestCase):
     )
     def test_header_language(self):
         """reference header should reflect chosen language"""
-        ref_content = yvs.get_copied_ref("128/psa.23")
+        ref_content = copy_ref.get_copied_ref("128/psa.23")
         self.assertRegex(ref_content, r"^Salmo 23 \(NVI\)")
 
     def test_whitespace_words(self):
         """should handle spaces appropriately"""
-        ref_content = yvs.get_copied_ref("111/psa.23")
+        ref_content = copy_ref.get_copied_ref("111/psa.23")
         self.assertRegex(
             ref_content,
             "adipiscing elit.",
@@ -94,7 +94,7 @@ class TestCopyRef(YVSTestCase):
 
     def test_linebreaks_yes(self):
         """should add line breaks where appropriate"""
-        ref_content = yvs.get_copied_ref("111/psa.23")
+        ref_content = copy_ref.get_copied_ref("111/psa.23")
         self.assertRegex(
             ref_content,
             r"Psalms 23 \(NIV\)\n\n\S",
@@ -132,7 +132,7 @@ class TestCopyRef(YVSTestCase):
     )
     def test_linebreaks_no(self):
         """should strip line breaks where appropriate"""
-        ref_content = yvs.get_copied_ref("111/psa.23")
+        ref_content = copy_ref.get_copied_ref("111/psa.23")
         self.assertRegex(
             ref_content,
             r"Psalms 23 \(NIV\)\n\n\S",
@@ -174,7 +174,7 @@ class TestCopyRef(YVSTestCase):
     )
     def test_linebreaks_no_versenumbers_yes(self):
         """should display verse numbers correctly when stripping line breaks"""
-        ref_content = yvs.get_copied_ref("111/psa.23")
+        ref_content = copy_ref.get_copied_ref("111/psa.23")
         self.assertRegex(
             ref_content,
             r"\(NIV\)\n\n1 » “Lorem ipsum”",
@@ -213,7 +213,7 @@ class TestCopyRef(YVSTestCase):
     )
     def test_versenumbers(self):
         """should honor the versenumbers preference"""
-        ref_content = yvs.get_copied_ref("111/psa.23")
+        ref_content = copy_ref.get_copied_ref("111/psa.23")
         self.assertRegex(ref_content, r"5 fermentum")
         self.assertNotRegex(ref_content, r"#")
 
@@ -228,7 +228,7 @@ class TestCopyRef(YVSTestCase):
     )
     def test_versenumbers_range(self):
         """should handle verse range labels (used by versions like the MSG)"""
-        ref_content = yvs.get_copied_ref("111/psa.23.7-9")
+        ref_content = copy_ref.get_copied_ref("111/psa.23.7-9")
         self.assertRegex(ref_content, r"7-9 dapibus et augue in,")
         self.assertNotRegex(ref_content, r"#")
 
@@ -243,7 +243,7 @@ class TestCopyRef(YVSTestCase):
     )
     def test_versenumbers_range_start(self):
         """should handle range labels when verse at start of range is given"""
-        ref_content = yvs.get_copied_ref("111/psa.23.7")
+        ref_content = copy_ref.get_copied_ref("111/psa.23.7")
         self.assertRegex(ref_content, r"7-9 dapibus et augue in,")
         self.assertNotRegex(ref_content, r"#")
 
@@ -258,7 +258,7 @@ class TestCopyRef(YVSTestCase):
     )
     def test_versenumbers_range_end(self):
         """should handle range labels when verse at end of range is given"""
-        ref_content = yvs.get_copied_ref("111/psa.23.9")
+        ref_content = copy_ref.get_copied_ref("111/psa.23.9")
         self.assertRegex(ref_content, r"7-9 dapibus et augue in,")
         self.assertNotRegex(ref_content, r"#")
 
@@ -273,38 +273,38 @@ class TestCopyRef(YVSTestCase):
     )
     def test_versenumbers_range_middle(self):
         """should handle range labels when verse in middle of range is given"""
-        ref_content = yvs.get_copied_ref("111/psa.23.8")
+        ref_content = copy_ref.get_copied_ref("111/psa.23.8")
         self.assertRegex(ref_content, r"7-9 dapibus et augue in,")
         self.assertNotRegex(ref_content, r"#")
 
     @patch("yvs.web.get_url_content", return_value="abc")
     def test_url_always_chapter(self, get_url_content):
         """should always fetch HTML from chapter URL"""
-        yvs.get_copied_ref("59/psa.23.2")
+        copy_ref.get_copied_ref("59/psa.23.2")
         get_url_content.assert_called_with("https://www.bible.com/bible/59/PSA.23")
 
     def test_cache_url_content(self):
         """should cache chapter URL content after first fetch"""
-        yvs.get_copied_ref("59/psa.23.2")
+        copy_ref.get_copied_ref("59/psa.23.2")
         with patch("urllib.request.Request") as request:
-            yvs.get_copied_ref("59/psa.23.3")
+            copy_ref.get_copied_ref("59/psa.23.3")
             request.assert_not_called()
 
     def test_nonexistent_verse(self):
         """should return empty string for nonexistent verses"""
-        ref_content = yvs.get_copied_ref("111/psa.23.13")
+        ref_content = copy_ref.get_copied_ref("111/psa.23.13")
         self.assertEqual(ref_content, "")
 
     def test_unicode_content(self):
         """should return copied reference content as Unicode"""
-        ref_content = yvs.get_copied_ref("111/psa.23")
+        ref_content = copy_ref.get_copied_ref("111/psa.23")
         self.assertIsInstance(ref_content, str)
 
     @patch("yvs.cache.get_cache_entry_content", return_value="<a>")
-    @patch("yvs.web.get_url_content", side_effect=yvs.web.get_url_content)
+    @patch("yvs.web.get_url_content", side_effect=copy_ref.web.get_url_content)
     def test_revalidate(self, get_cache_entry_content, get_url_content):
         """should re-fetch latest HTML when cached HTML can no longer be parsed"""
-        ref_content = yvs.get_copied_ref("111/psa.23.1")
+        ref_content = copy_ref.get_copied_ref("111/psa.23.1")
         self.assertNotEqual(ref_content, "")
         self.assertEqual(get_url_content.call_count, 1)
 
@@ -312,8 +312,8 @@ class TestCopyRef(YVSTestCase):
     def test_main(self, out):
         """main function should output copied reference content"""
         ref_uid = "59/psa.23"
-        ref_content = yvs.get_copied_ref(ref_uid)
-        yvs.main(ref_uid)
+        ref_content = copy_ref.get_copied_ref(ref_uid)
+        copy_ref.main(ref_uid)
         main_json = json.loads(out.getvalue())
         self.assertEqual(
             main_json,

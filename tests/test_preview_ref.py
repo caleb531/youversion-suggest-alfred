@@ -4,7 +4,7 @@
 import json
 from unittest.mock import Mock, NonCallableMock, patch
 
-import yvs.preview_ref as yvs
+import yvs.preview_ref as preview_ref
 from tests import YVSTestCase
 from tests.decorators import redirect_stdout, use_user_prefs
 
@@ -28,7 +28,7 @@ class TestPreviewRef(YVSTestCase):
     @redirect_stdout
     def test_preview_chapter(self, out):
         """should preview reference content for chapter"""
-        yvs.main("111/psa.23")
+        preview_ref.main("111/psa.23")
         preview_feedback = json.loads(out.getvalue())
         self.assertNotRegex(preview_feedback["response"], "David")
         self.assertRegex(preview_feedback["response"], "Lorem")
@@ -39,7 +39,7 @@ class TestPreviewRef(YVSTestCase):
     @redirect_stdout
     def test_preview_verse(self, out):
         """should preview reference content for verse"""
-        yvs.main("59/psa.23.2")
+        preview_ref.main("59/psa.23.2")
         preview_feedback = json.loads(out.getvalue())
         self.assertNotRegex(preview_feedback["response"], "Lorem")
         self.assertRegex(preview_feedback["response"], "nunc nulla")
@@ -59,7 +59,7 @@ class TestPreviewRef(YVSTestCase):
     @redirect_stdout
     def test_copybydefault_yes(self, out):
         """should display copy action when copybydefault is enabled"""
-        yvs.main("59/psa.23.2")
+        preview_ref.main("59/psa.23.2")
         preview_feedback = json.loads(out.getvalue())
         self.assertIn("Copy content to clipboard", preview_feedback["footer"])
         self.assertNotIn("View on YouVersion", preview_feedback["footer"])
@@ -77,7 +77,7 @@ class TestPreviewRef(YVSTestCase):
     @redirect_stdout
     def test_copybydefault_no(self, out):
         """should display view action when copybydefault is disabled"""
-        yvs.main("59/psa.23.2")
+        preview_ref.main("59/psa.23.2")
         preview_feedback = json.loads(out.getvalue())
         self.assertIn("View on YouVersion", preview_feedback["footer"])
         self.assertNotIn("Copy content to clipboard", preview_feedback["footer"])
@@ -98,7 +98,7 @@ class TestPreviewRef(YVSTestCase):
         should bypass user's refformat and use consistent (Markdown-based)
         refformat for preview
         """
-        yvs.main("59/psa.23.2")
+        preview_ref.main("59/psa.23.2")
         preview_feedback = json.loads(out.getvalue())
         self.assertIn("## Psalms 23:2 (ESV)  \n\n", preview_feedback["response"])
         self.assertNotIn("- Psalms 23:2\n", preview_feedback["response"])
