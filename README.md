@@ -188,3 +188,19 @@ If you would prefer to just press `Enter` (without holding down the `command`
 key) to copy the content of a Bible reference, type `yvset copybydefault yes`.
 When this is enabled, you can still open the selected reference on the
 YouVersion website by holding down the `command` key.
+
+### Universal Actions
+
+Version 15 of the workflow brings integration with Alfred's
+[Universal Actions][universal-actions] feature, enabling you to pass any
+arbitrary text to the workflow when you select it within an app or on a webpage.
+
+To use this, you must enable the **Workflow Universal Actions** checkbox in
+Alfred Preferences, under **Features > Universal Actions > Actions**.
+
+In particularly, there are two universal actions available:
+
+1. Look up Bible address
+2. Search phrase in Bible
+
+[universal-actions]: https://www.alfredapp.com/help/features/universal-actions/
