@@ -231,6 +231,7 @@ class TestCopyRef(YVSTestCase):
         ref_content = copy_ref.get_copied_ref("111/psa.23.7-9")
         self.assertRegex(ref_content, r"7-9 dapibus et augue in,")
         self.assertNotRegex(ref_content, r"#")
+        self.assertNotRegex(ref_content, r"\b(1|2|3|4|5|6|10)\b")
 
     @use_user_prefs(
         {
