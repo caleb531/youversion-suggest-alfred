@@ -16,7 +16,8 @@ convenience.
 
 ## Disclaimer
 
-**This workflow is not compliant with YouVersion's Terms of Service. Use at your own risk.**
+This workflow is not compliant with YouVersion's Terms of Service. Use at your
+own risk.
 
 This project is not affiliated with YouVersion, and all Bible content is
 copyright of the respective publishers. The Bible app icon used in this project
