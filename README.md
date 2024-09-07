@@ -16,12 +16,12 @@ convenience.
 
 ## Disclaimer
 
-This workflow is not compliant with YouVersion's Terms of Service. Use at your
-own risk.
-
 This project is not affiliated with YouVersion, and all Bible content is
-copyright of the respective publishers. The Bible app icon used in this project
-is property of YouVersion.
+copyright of the respective publishers.
+
+This tool also retrieves Bible content directly from YouVersion for personal
+use. However, please be aware that this functionality does not fully comply with
+YouVersion's Terms of Use.
 
 ## Installation
 
