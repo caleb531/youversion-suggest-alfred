@@ -11,7 +11,6 @@ from tests.decorators import redirect_stdout
 
 
 class TestClearCachw(YVSTestCase):
-
     @redirect_stdout
     def test_clear_cache(self, out):
         """should remove cache directory when cache is cleared"""

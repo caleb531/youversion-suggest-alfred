@@ -10,7 +10,6 @@ from tests.decorators import redirect_stdout
 
 
 class TestMain(YVSTestCase):
-
     @redirect_stdout
     def test_output(self, out):
         """should output ref result list JSON"""

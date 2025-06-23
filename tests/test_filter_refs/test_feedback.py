@@ -9,7 +9,6 @@ from tests import YVSTestCase
 
 
 class TestFeedback(YVSTestCase):
-
     def test_validity(self):
         """should return syntactically-valid JSON"""
         results = filter_refs.get_result_list("john 3:16")

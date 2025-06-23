@@ -14,7 +14,6 @@ from tests.decorators import redirect_stdout
 
 
 class TestCache(YVSTestCase):
-
     @redirect_stdout
     def test_cache_purge_oldest(self, out):
         """should purge oldest entry when cache grows too large"""

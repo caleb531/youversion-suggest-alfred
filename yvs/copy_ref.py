@@ -12,7 +12,6 @@ import yvs.web as web
 # An HTML parser which receives HTML from the page for a YouVersion
 # Bible reference and parses it to construct a shareable plain text reference
 class ReferenceParser(web.YVParser):
-
     # Elements that should be surrounded by blank lines
     block_elems = {"b", "p", "m"}
     # Elements that should trigger a line break
@@ -169,7 +168,6 @@ class ReferenceParser(web.YVParser):
 
 # Retrieves the UID of the chapter to which this reference belongs
 def get_ref_chapter_uid(ref):
-
     return "{version}/{book}.{chapter}".format(
         version=ref["version_id"], book=ref["book_id"], chapter=ref["chapter"]
     )
@@ -177,7 +175,6 @@ def get_ref_chapter_uid(ref):
 
 # Retrieves HTML for of the chapter to which the reference belongs
 def get_chapter_html(ref, revalidate=False):
-
     chapter_uid = get_ref_chapter_uid(ref)
     url = core.get_ref_url(ref_uid=chapter_uid)
     entry_key = "{}.html".format(chapter_uid)
@@ -189,7 +186,6 @@ def get_chapter_html(ref, revalidate=False):
 def get_formatted_ref_content(
     ref, ref_format, include_verse_numbers, include_line_breaks
 ):
-
     parser = ReferenceParser(
         ref,
         include_verse_numbers=include_verse_numbers,
@@ -220,7 +216,6 @@ def get_formatted_ref_content(
 
 # Retrieves reference content using the given reference object and preferences
 def get_copied_ref_from_object(ref, user_prefs):
-
     return get_formatted_ref_content(
         ref,
         ref_format=user_prefs["refformat"],
@@ -231,14 +226,12 @@ def get_copied_ref_from_object(ref, user_prefs):
 
 # Retrieves entire reference (header and content) to be copied
 def get_copied_ref(ref_uid):
-
     user_prefs = core.get_user_prefs()
     ref = core.get_ref(ref_uid, user_prefs)
     return get_copied_ref_from_object(ref, user_prefs)
 
 
 def main(ref_uid):
-
     user_prefs = core.get_user_prefs()
     ref = core.get_ref(ref_uid, user_prefs)
     print(

@@ -19,7 +19,6 @@ def get_default_action_message(user_prefs):
 
 
 def main(ref_uid):
-
     # For the preview mode, we want to ignore the user's preferred reference
     # format so that we can always display the reference address consistently at
     # the top of the text view

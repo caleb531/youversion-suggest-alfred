@@ -10,7 +10,6 @@ import yvs.web as web
 
 # Parses unique reference identifier from the given reference URL
 def get_uid_from_url(url):
-
     return (
         url.replace(core.BASE_REF_URL, "")
         # Handle case where origin may be absent from 'href' value
@@ -20,7 +19,6 @@ def get_uid_from_url(url):
 
 # Parser for search result HTML
 class SearchResultParser(web.YVParser):
-
     def __init__(self, user_prefs):
         super().__init__()
         self.user_prefs = user_prefs
@@ -95,7 +93,6 @@ class SearchResultParser(web.YVParser):
 
 # Retrieves HTML for reference with the given ID
 def get_search_html(query_str, user_prefs, revalidate=False):
-
     url = "https://www.bible.com/search/bible?q={}&version_id={}".format(
         urllib.parse.quote_plus(query_str), user_prefs["version"]
     )
@@ -106,7 +103,6 @@ def get_search_html(query_str, user_prefs, revalidate=False):
 
 # Parses actual reference content from reference HTML
 def get_result_list(query_str):
-
     query_str = core.normalize_query_str(query_str)
     user_prefs = core.get_user_prefs()
     parser = SearchResultParser(user_prefs)
@@ -122,7 +118,6 @@ def get_result_list(query_str):
 
 
 def main(query_str):
-
     results = get_result_list(query_str)
     if not results:
         results.append(

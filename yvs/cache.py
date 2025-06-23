@@ -29,7 +29,6 @@ MAX_NUM_CACHE_ENTRIES = 50
 # Creates the directory (and any nonexistent parent directories) where this
 # workflow stores volatile local data (i.e. cache data)
 def create_local_cache_dirs():
-
     try:
         os.makedirs(get_cache_entry_dir_path())
     except OSError:
@@ -38,26 +37,22 @@ def create_local_cache_dirs():
 
 # Calculates the unique SHA1 checksum used as the filename for a cache entry
 def get_cache_entry_checksum(entry_key):
-
     return hashlib.sha1(entry_key.encode("utf-8")).hexdigest()
 
 
 # Retrieves the local filepath for a cache entry
 def get_cache_entry_path(entry_key):
-
     entry_checksum = get_cache_entry_checksum(entry_key)
     return os.path.join(get_cache_entry_dir_path(), entry_checksum)
 
 
 # Retrieves the path to the directory where all cache entries are stored
 def get_cache_entry_dir_path():
-
     return os.path.join(LOCAL_CACHE_DIR_PATH, "entries")
 
 
 # Retrieves the path to the manifest file listing all cache entries
 def get_cache_manifest_path():
-
     return os.path.join(LOCAL_CACHE_DIR_PATH, "manifest.txt")
 
 
@@ -79,7 +74,6 @@ def purge_expired_cache_entries(manifest_file):
 
 # Adds to the cache a new entry with the given content
 def add_cache_entry(entry_key, entry_content):
-
     create_local_cache_dirs()
 
     # Write entry content to entry file
@@ -98,7 +92,6 @@ def add_cache_entry(entry_key, entry_content):
 
 # Retrieves the unmodified content of a cache entry
 def get_cache_entry_content(entry_key):
-
     create_local_cache_dirs()
     entry_path = get_cache_entry_path(entry_key)
     try:
@@ -110,7 +103,6 @@ def get_cache_entry_content(entry_key):
 
 # Removes all cache entries and the directory itself
 def clear_cache():
-
     try:
         shutil.rmtree(LOCAL_CACHE_DIR_PATH)
     except OSError:

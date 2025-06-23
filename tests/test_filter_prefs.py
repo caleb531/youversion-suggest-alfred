@@ -11,7 +11,6 @@ from tests.decorators import redirect_stdout, use_user_prefs
 
 
 class TestFilterPrefs(YVSTestCase):
-
     def test_show_languages(self):
         """should show all languages if no value is given"""
         results = filter_prefs.get_result_list("language")

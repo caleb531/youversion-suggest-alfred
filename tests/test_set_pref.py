@@ -12,7 +12,6 @@ from tests.decorators import redirect_stdout
 
 
 class TestSetPref(YVSTestCase):
-
     def test_set_language(self):
         """should set preferred language"""
         set_pref.set_pref("language", "spa")

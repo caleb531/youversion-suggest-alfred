@@ -7,7 +7,6 @@ from tests import YVSTestCase
 
 
 class TestChapter(YVSTestCase):
-
     def test_basic(self):
         """should match chapters"""
         results = filter_refs.get_result_list("matthew 5")

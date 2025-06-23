@@ -8,7 +8,6 @@ from tests.decorators import use_user_prefs
 
 
 class TestShorthand(YVSTestCase):
-
     def test_book(self):
         """should recognize shorthand book syntax"""
         results = filter_refs.get_result_list("1co")

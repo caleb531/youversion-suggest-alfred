@@ -7,7 +7,6 @@ from tests import YVSTestCase
 
 
 class TestIncomplete(YVSTestCase):
-
     def test_incomplete_verse(self):
         """should treat incomplete verse reference as chapter reference"""
         results = filter_refs.get_result_list("Psalms 19:")

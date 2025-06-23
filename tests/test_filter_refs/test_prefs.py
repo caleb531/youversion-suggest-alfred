@@ -10,7 +10,6 @@ from tests.decorators import use_user_prefs
 
 
 class TestPrefs(YVSTestCase):
-
     @use_user_prefs({"language": "eng", "version": 59, "copybydefault": False})
     def test_version_persistence(self):
         """should remember version preferences"""

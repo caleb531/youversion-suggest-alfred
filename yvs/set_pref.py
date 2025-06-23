@@ -10,7 +10,6 @@ import yvs.core as core
 
 # Set the YouVersion Suggest preference with the given key
 def set_pref(pref_id, value_id):
-
     user_prefs = core.get_user_prefs()
     user_prefs[pref_id] = value_id
 
@@ -24,7 +23,6 @@ def set_pref(pref_id, value_id):
 
 
 def main(variables):
-
     # value_id needs to be parsed as JSON so we can preserve type data for
     # proper serialization to the preferences file
     set_pref(variables["pref_id"], json.loads(variables["value_id"]))

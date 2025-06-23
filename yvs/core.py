@@ -34,7 +34,6 @@ BASE_REF_URL = "https://www.bible.com/bible/"
 # Creates the directory (and any nonexistent parent directories) where this
 # workflow stores non-volatile local data
 def create_local_data_dir():
-
     try:
         os.makedirs(LOCAL_DATA_DIR_PATH)
     except OSError:
@@ -43,7 +42,6 @@ def create_local_data_dir():
 
 # Retrieves bible data object (books, versions, etc.) for the given language
 def get_bible(language_id):
-
     bible_path = os.path.join(
         PACKAGED_CODE_DIR_PATH, "data", "bible", "bible-{}.json".format(language_id)
     )
@@ -53,7 +51,6 @@ def get_bible(language_id):
 
 # Retrieves metadata for every book of the Bible, including chapter counts
 def get_book_metadata():
-
     book_metadata_path = os.path.join(
         PACKAGED_CODE_DIR_PATH, "data", "bible", "book-metadata.json"
     )
@@ -63,7 +60,6 @@ def get_book_metadata():
 
 # Retrieves the first book whose id matches the given id
 def get_book(books, book_id):
-
     for book in books:
         if book["id"] == book_id:
             return book
@@ -71,7 +67,6 @@ def get_book(books, book_id):
 
 # Retrieves first version object whose id matches the given id
 def get_version(versions, version_id):
-
     for version in versions:
         if version["id"] == version_id:
             return version
@@ -79,14 +74,12 @@ def get_version(versions, version_id):
 
 # Retrieves a list of all supported versions for the given language
 def get_versions(language_id):
-
     bible = get_bible(language_id)
     return bible["versions"]
 
 
 # Retrieves a list of all supported languages
 def get_languages():
-
     languages_path = os.path.join(
         PACKAGED_CODE_DIR_PATH, "data", "bible", "languages.json"
     )
@@ -96,7 +89,6 @@ def get_languages():
 
 # Build the object for a single result list feedback item
 def get_result_list_feedback_item(result):
-
     item = result.copy()
 
     item["text"] = result.get("text", {}).copy()
@@ -112,7 +104,6 @@ def get_result_list_feedback_item(result):
 
 # Constructs an Alfred JSON string from the given result list
 def get_result_list_feedback_str(results):
-
     return json.dumps(
         {"items": [get_result_list_feedback_item(result) for result in results]}
     )
@@ -123,26 +114,22 @@ def get_result_list_feedback_str(results):
 
 # Retrieves the path to the workflow's default user preferences file
 def get_default_user_prefs_path():
-
     return os.path.join(PACKAGED_CODE_DIR_PATH, "preferences", "defaults.json")
 
 
 # Retrieves the default values for all workflow preferences
 def get_default_user_prefs():
-
     with open(get_default_user_prefs_path(), "r") as defaults_file:
         return json.load(defaults_file)
 
 
 # Retrieves the path to the workflow's user preferences file
 def get_user_prefs_path():
-
     return os.path.join(LOCAL_DATA_DIR_PATH, "preferences.json")
 
 
 # Overrwrites (or creates) user preferences using the given preferences object
 def set_user_prefs(user_prefs):
-
     # Always ensure that the data directory (where prefrences reside) exists
     create_local_data_dir()
     with open(get_user_prefs_path(), "w") as prefs_file:
@@ -151,7 +138,6 @@ def set_user_prefs(user_prefs):
 
 # Extends user preferences with any missing keys
 def extend_user_prefs(user_prefs, default_user_prefs):
-
     # Add any missing preferences
     for pref_key in default_user_prefs:
         if pref_key not in user_prefs:
@@ -167,7 +153,6 @@ def extend_user_prefs(user_prefs, default_user_prefs):
 
 # Retrieves map of user preferences
 def get_user_prefs():
-
     default_user_prefs = get_default_user_prefs()
     try:
         with open(get_user_prefs_path(), "r") as prefs_file:
@@ -183,7 +168,6 @@ def get_user_prefs():
 
 # Normalizes the format of the query string
 def normalize_query_str(query_str):
-
     # Normalize all Unicode characters
     query_str = unicodedata.normalize("NFC", query_str)
     query_str = query_str.lower()
@@ -198,7 +182,6 @@ def normalize_query_str(query_str):
 
 # Parses the given reference UID into a dictionary representing that reference
 def get_ref(ref_uid, user_prefs):
-
     patt = r"^{version}/{book_id}\.{chapter}(?:\.{verse}{endverse})?$".format(
         version=r"(\d+)",
         book_id=r"(\d?[a-z]+)",
@@ -239,7 +222,6 @@ def get_ref(ref_uid, user_prefs):
 
 # Retrieves the basic reference name without the version abbreviation
 def get_basic_ref_name(ref):
-
     ref_name = "{book} {chapter}".format(book=ref["book"], chapter=ref["chapter"])
 
     if "verse" in ref:
@@ -253,7 +235,6 @@ def get_basic_ref_name(ref):
 
 # Retrieves the full reference name with the version abbreviation
 def get_full_ref_name(ref):
-
     return "{name} ({version})".format(
         name=get_basic_ref_name(ref), version=ref["version"]
     )
@@ -266,7 +247,6 @@ def get_ref_url(ref_uid):
 
 # Normalizes format of reference content by removing superfluous whitespace
 def normalize_ref_content(ref_content):
-
     # Collapse consecutive spaces into a single space
     ref_content = re.sub(r" {2,}", " ", ref_content)
     # Collapse sequences of three or more newlines into two

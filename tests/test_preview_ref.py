@@ -16,7 +16,6 @@ with open("tests/html/psa.23.html") as html_file:
 
 
 class TestPreviewRef(YVSTestCase):
-
     def setUp(self):
         patch_urlopen.start()
         super().setUp()

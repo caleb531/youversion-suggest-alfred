@@ -11,7 +11,6 @@ import yvs.core as core
 
 # Returns a list of definition objects for all available preferences
 def get_pref_defs(user_prefs):
-
     return [
         {
             "id": "language",
@@ -37,7 +36,7 @@ def get_pref_defs(user_prefs):
             "name": "Reference Format",
             "short_name": "reference format",
             "values": get_ref_format_values(user_prefs),
-            "description": "Set your preferred format for copied Bible" " content",
+            "description": "Set your preferred format for copied Bible content",
         },
         {
             "id": "versenumbers",
@@ -79,7 +78,6 @@ def get_version_value(version):
 
 # Get a list of all available ref formats
 def get_ref_format_values(user_prefs):
-
     ref = core.get_ref("111/jhn.11.35", core.get_default_user_prefs())
     ref_formats = [
         "{name} ({version})\n\n{content}",
@@ -96,7 +94,6 @@ def get_ref_format_values(user_prefs):
 
 
 def get_ref_format_value(ref_format, ref):
-
     return {
         "id": ref_format,
         "name": ref_format.format(
@@ -104,7 +101,8 @@ def get_ref_format_value(ref_format, ref):
             version=ref["version"],
             content="Jesus wept.",
             url=core.get_ref_url(ref["uid"]),
-        ).replace("\n", " ¬ ")
+        )
+        .replace("\n", " ¬ ")
         # Since the above substitution adds whitespace to both sides of the
         # return symbol, the whitespace needs to be collapsed in the case of
         # consecutive return symbols
@@ -115,7 +113,6 @@ def get_ref_format_value(ref_format, ref):
 # Get a list of all available values for including verse numbers in copied
 # Bible content
 def get_include_verse_numbers_values():
-
     return [
         {"id": True, "name": "Yes (include in copied content)"},
         {"id": False, "name": "No (do not include in copied content)"},
@@ -125,7 +122,6 @@ def get_include_verse_numbers_values():
 # Get a list of all available values for including line breaks in copied
 # Bible content
 def get_include_line_breaks_values():
-
     return [
         {"id": True, "name": "Yes (include in copied content)"},
         {"id": False, "name": "No (do not include in copied content)"},
@@ -134,7 +130,6 @@ def get_include_line_breaks_values():
 
 # Get a list of all available values for the "Copy By Default" preference
 def get_copy_by_default_values():
-
     return [
         {"id": True, "name": "Yes (make Enter key copy to clipboard)"},
         {"id": False, "name": "No (make Cmd-Enter copy to clipboard)"},
@@ -143,7 +138,6 @@ def get_copy_by_default_values():
 
 # Get the value object with the given ID for the given preference
 def get_pref_value(pref_def, value_id):
-
     values = pref_def["values"]
     for value in values:
         if value["id"] == value_id:
@@ -153,7 +147,6 @@ def get_pref_value(pref_def, value_id):
 
 # Retrieves Alfred result object for this preference
 def get_pref_def_result(pref_def, user_prefs):
-
     value = get_pref_value(pref_def, user_prefs[pref_def["id"]])
     result = {}
 
@@ -170,7 +163,6 @@ def get_pref_def_result(pref_def, user_prefs):
 
 # Get the result object for a single preference value
 def get_value_result(value, user_prefs, pref_def):
-
     result = {
         "uid": "yvs-{}-{}".format(pref_def["id"], value["id"]),
         "variables": {
@@ -214,7 +206,6 @@ def if_query_str_matches(pref_field, query_str):
 
 # Retrieves Alfred result list of all available values for this preference
 def get_value_result_list(user_prefs, pref_def, query_str):
-
     results = [
         get_value_result(value, user_prefs, pref_def)
         for value in pref_def["values"]
@@ -235,14 +226,12 @@ def get_value_result_list(user_prefs, pref_def, query_str):
 
 # Parses a preference key and optional value from the given query string
 def get_pref_match(query_str):
-
     patt = r"^{key}{value}.*?$".format(key=r"(\w+)", value=r"(?:\s?(.+))?")
     return re.search(patt, query_str, flags=re.UNICODE)
 
 
 # Retrieves result list of available preferences, filtered by the given query
 def get_pref_result_list(user_prefs, pref_defs, pref_key_query=""):
-
     return [
         get_pref_def_result(pref_def, user_prefs)
         for pref_def in pref_defs
@@ -254,7 +243,6 @@ def get_pref_result_list(user_prefs, pref_defs, pref_key_query=""):
 # Retrieves result list of preferences or their respective values (depending on
 # the given query string)
 def get_result_list(query_str):
-
     user_prefs = core.get_user_prefs()
     pref_defs = get_pref_defs(user_prefs)
     query_str = core.normalize_query_str(query_str)
@@ -262,7 +250,6 @@ def get_result_list(query_str):
     results = []
 
     if pref_match:
-
         pref_key_query = pref_match.group(1)
         pref_value_query = pref_match.group(2)
 
@@ -277,7 +264,6 @@ def get_result_list(query_str):
             results = get_pref_result_list(user_prefs, pref_defs, pref_key_query)
 
     else:
-
         # Should show all available preferences if query is empty
         # or if query does not match
         results = get_pref_result_list(user_prefs, pref_defs)
@@ -286,7 +272,6 @@ def get_result_list(query_str):
 
 
 def main(query_str):
-
     results = get_result_list(query_str)
     if not results:
         results.append(

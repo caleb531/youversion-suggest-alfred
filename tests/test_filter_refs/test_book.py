@@ -8,7 +8,6 @@ from tests.decorators import use_user_prefs
 
 
 class TestBook(YVSTestCase):
-
     def test_partial(self):
         """should match books by partial name"""
         results = filter_refs.get_result_list("luk")

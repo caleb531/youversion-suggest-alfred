@@ -8,7 +8,6 @@ from tests import YVSTestCase
 
 
 class TestOverflow(YVSTestCase):
-
     def test_chapter_overflow(self):
         """should constrain specified chapter to last chapter if too high"""
         results = filter_refs.get_result_list("a 25:2")

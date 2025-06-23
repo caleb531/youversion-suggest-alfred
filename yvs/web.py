@@ -24,7 +24,6 @@ def optimize_html(html):
 
 # Retrieves HTML contents of the given URL as a Unicode string
 def get_url_content(url):
-
     request = urllib.request.Request(
         url, headers={"User-Agent": USER_AGENT, "Accept-Encoding": "gzip, deflate"}
     )
@@ -42,7 +41,6 @@ def get_url_content(url):
 
 # Retrieve HTML contents of the given URL
 def get_url_content_with_caching(url, entry_key, *, revalidate=False):
-
     # If revalidate is True, then we should skip lookup of cached HTML, fetch
     # latest the HTML directly from server, and cache that new HTML
     if revalidate:
@@ -61,7 +59,6 @@ def get_url_content_with_caching(url, entry_key, *, revalidate=False):
 
 # A base class for parsing YouVersion HTML
 class YVParser(HTMLParser):
-
     pass
 
 
@@ -76,12 +73,11 @@ def get_and_parse_html(
     # 'revalidate' boolean parameter
     html_getter_args,  # An iterable of any initial arguments
     # to the html_getter function
-    parser_results_attr  # The name of the attribute on the HTMLParser object
+    parser_results_attr,  # The name of the attribute on the HTMLParser object
     # that represents the results of the parsing; ideally,
     # this should be a sequence or string so that a falsy
     # value indicates emptiness
 ):
-
     parser_exception = None
     try:
         parser.feed(html_getter(*html_getter_args))

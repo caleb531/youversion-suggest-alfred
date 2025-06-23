@@ -21,7 +21,6 @@ local_cache_dir_patcher = patch(
 
 
 class YVSTestCase(unittest.TestCase):
-
     def setUp(self):
         local_data_dir_patcher.start()
         try:

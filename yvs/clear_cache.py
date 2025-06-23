@@ -7,7 +7,6 @@ import yvs.cache as cache
 
 
 def main():
-
     cache.clear_cache()
     print(json.dumps({"alfredworkflow": {"variables": {"did_clear_cache": "True"}}}))
 

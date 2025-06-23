@@ -17,7 +17,6 @@ with open("tests/html/search.html") as html_file:
 
 
 class TestSearchRefs(YVSTestCase):
-
     def setUp(self):
         patch_urlopen.start()
         super().setUp()

@@ -8,7 +8,6 @@ from tests.decorators import use_user_prefs
 
 
 class TestVersion(YVSTestCase):
-
     @use_user_prefs({"language": "spa", "version": 128, "copybydefault": False})
     def test_numbered(self):
         """should match versions ending in number by partial name"""

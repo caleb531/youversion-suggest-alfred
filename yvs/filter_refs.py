@@ -10,7 +10,6 @@ import yvs.core as core
 
 # Parses the given query string into components of a Bible reference
 def get_ref_match(query_str):
-
     # Pattern for parsing any bible reference
     patt = "^{book}(?:{chapter}(?:{verse}{endverse})?{version})?$".format(
         book=r"(\d?(?:[^\W\d_]|\s)+|\d)\s?",
@@ -23,7 +22,6 @@ def get_ref_match(query_str):
 
 
 def normalize_query_str(query_str):
-
     query_str = core.normalize_query_str(query_str)
     # Parse shorthand reference notation
     query_str = re.sub(r"(\d)(?=[a-z])", "\\1 ", query_str)
@@ -35,7 +33,6 @@ def normalize_query_str(query_str):
 
 # Builds the query object from the given query string
 def get_query_object(query_str):
-
     # Match section of the bible based on query
     ref_match = get_ref_match(query_str)
 
@@ -69,7 +66,6 @@ def get_query_object(query_str):
 
 # Finds a version which best matches the given version query
 def guess_version(versions, version_query):
-
     # Chop off character from version query until matching version can be
     # found (if a matching version even exists)
     for i in range(len(version_query), 0, -1):
@@ -89,7 +85,6 @@ def guess_version(versions, version_query):
 
 # Formats book name by removing non-alphanumeric characters
 def normalize_book_name(book_name):
-
     book_name = book_name.lower()
     # Remove all non-alphanumeric characters
     book_name = re.sub(r"[\W_]", " ", book_name, flags=re.UNICODE)
@@ -102,14 +97,12 @@ def normalize_book_name(book_name):
 
 # Split the given book name into substrings
 def split_book_name_into_parts(book_name):
-
     book_words = normalize_book_name(book_name).split(" ")
     return (" ".join(book_words[w:]) for w in range(len(book_words)))
 
 
 # Retrieves list of books matching the given query
 def get_matching_books(books, query):
-
     matching_books = []
     book_metadata = core.get_book_metadata()
 
@@ -138,7 +131,6 @@ def get_matching_books(books, query):
 
 # Chooses most appropriate version based on current parameters
 def choose_best_version(user_prefs, bible, query):
-
     chosen_version = None
 
     if "version" in query:
@@ -152,7 +144,6 @@ def choose_best_version(user_prefs, bible, query):
 
 # Builds a single result item
 def get_result(book, query, chosen_version, user_prefs):
-
     chapter = min(query["chapter"], book["metadata"]["chapters"])
     last_verse = book["metadata"]["verses"][chapter - 1]
 
@@ -200,7 +191,6 @@ def get_result(book, query, chosen_version, user_prefs):
 
 # Retrieves search resylts matching the given query
 def get_result_list(query_str):
-
     query_str = normalize_query_str(query_str)
     query = get_query_object(query_str)
 
@@ -223,7 +213,6 @@ def get_result_list(query_str):
 
 
 def main(query_str):
-
     results = get_result_list(query_str)
     if not results:
         results.append(

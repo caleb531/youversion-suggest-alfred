@@ -8,7 +8,6 @@ from tests.decorators import use_user_prefs
 
 
 class TestEdge(YVSTestCase):
-
     def test_empty(self):
         """should not match empty input"""
         results = filter_refs.get_result_list("")

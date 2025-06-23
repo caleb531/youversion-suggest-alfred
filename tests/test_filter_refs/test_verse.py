@@ -7,7 +7,6 @@ from tests import YVSTestCase
 
 
 class TestVerse(YVSTestCase):
-
     def test_basic(self):
         """should match verses"""
         results = filter_refs.get_result_list("luke 4:8")
