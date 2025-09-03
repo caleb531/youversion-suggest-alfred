@@ -82,6 +82,11 @@ Bible reference; hitting the Escape key will return you to the results
 - Choosing a result while pressing `option` will copy the URL of the Bible
 reference to the clipboard
 
+- Choosing a `yvsearch` result while pressing `command-shift` will switch to
+  `yvfilter` to filter by that particular Bible reference. This allows you to
+  change the version or add on subsequent verses, after which you can then copy
+  the reference contents or perform some other action
+
 - Pressing `command-c` while a result is selected will copy to the clipboard the
 full Bible reference address, such as *1 Corinthians 13:4-7 (ESV)*
 
