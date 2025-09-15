@@ -10,12 +10,10 @@ from unittest.mock import patch
 
 import yvs.cache as cache
 from tests import YVSTestCase
-from tests.decorators import redirect_stdout
 
 
 class TestCache(YVSTestCase):
-    @redirect_stdout
-    def test_cache_purge_oldest(self, out):
+    def test_cache_purge_oldest(self):
         """should purge oldest entry when cache grows too large"""
         entry_key = "a"
         num_entries = cache.MAX_NUM_CACHE_ENTRIES + 2
@@ -40,8 +38,7 @@ class TestCache(YVSTestCase):
             self.assertNotIn(purged_entry_checksum, entry_checksums)
             self.assertIn(last_entry_checksum, entry_checksums)
 
-    @redirect_stdout
-    def test_cache_truncate(self, out):
+    def test_cache_truncate(self):
         """
         should truncate cache if max entries count changes
         between workflow versions
