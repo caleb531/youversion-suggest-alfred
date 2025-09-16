@@ -1,3 +1,4 @@
+import sys
 from collections import OrderedDict
 
 
@@ -6,9 +7,9 @@ from collections import OrderedDict
 # again, it is moved to the top of the stack. If the stack exceeds the maximum
 # size, the oldest entry is purged
 class MRUStack:
-    # Initialize the MRUStack with a maximum number of entries to keep before
-    # purging
-    def __init__(self, sequence, maxsize):
+    # Initialize the MRUStack with an initial set of elements and an optional
+    # maximum number of entries to keep before purging
+    def __init__(self, sequence, maxsize=sys.maxsize):
         self.maxsize = maxsize
         self.stack = OrderedDict()
         for element in sequence[:maxsize]:
