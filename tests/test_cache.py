@@ -70,3 +70,59 @@ class TestCache(YVSTestCase):
             self.assertEqual(len(entry_checksums), new_max_count)
             self.assertNotIn(purged_entry_checksum, entry_checksums)
             self.assertIn(last_entry_checksum, entry_checksums)
+
+    def test_cache_add_duplicate_keys(self):
+        """
+        should delete duplicate cache entries without error
+        """
+        num_entries = cache.MAX_NUM_CACHE_ENTRIES + 10
+        first_entry_key = "first_foo"
+        last_entry_key = "last_foo"
+        # Add duplicate entries to verify that no FileNotFoundError is raised
+        # when attempting to purge a cache entry that has already been purged
+        cache.add_cache_entry(first_entry_key, f"{first_entry_key}_value")
+        cache.add_cache_entry(first_entry_key, f"{first_entry_key}_value")
+        # Fill up the cache to force the first entry to be purged
+        for i in range(num_entries):
+            # Since the new MRU-based implementation moves new entries to the
+            # top if they already exist in the stack, adding the same key over
+            # and over will not fill up the cache; we need to add uniquely-keyed
+            # entries to the cache in order to fill up the cache
+            cache.add_cache_entry(f"key_{i}", "bar")
+        cache.add_cache_entry(last_entry_key, f"{last_entry_key}_value")
+        with open(cache.get_cache_manifest_path(), "r") as manifest_file:
+            entry_checksums = manifest_file.read().splitlines()
+            first_entry_checksum = hashlib.sha1(
+                first_entry_key.encode("utf-8")
+            ).hexdigest()
+            last_entry_checksum = hashlib.sha1(
+                last_entry_key.encode("utf-8")
+            ).hexdigest()
+            self.assertNotIn(
+                first_entry_checksum,
+                entry_checksums,
+                f"cache key {first_entry_key} exists in manifest when it should not",
+            )
+            self.assertFalse(
+                os.path.exists(
+                    os.path.join(
+                        cache.get_cache_entry_dir_path(),
+                        first_entry_checksum,
+                    )
+                ),
+                f"cache entry {first_entry_key} exists on disk when it should not",
+            )
+            self.assertIn(
+                last_entry_checksum,
+                entry_checksums,
+                f"cache key {last_entry_key} does not exist in manifest when it should",
+            )
+            self.assertTrue(
+                os.path.exists(
+                    os.path.join(
+                        cache.get_cache_entry_dir_path(),
+                        last_entry_checksum,
+                    )
+                ),
+                f"cache entry {last_entry_key} does not exist on disk when it should",
+            )

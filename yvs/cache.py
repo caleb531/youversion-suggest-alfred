@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
+import contextlib
 import hashlib
 import os
 import os.path
 import shutil
 
 import yvs.core as core
+from yvs.mru_stack import MRUStack
 
 # Path to the directory where this workflow stores volatile local data (this
 # will be overridden during tests, so CI will still work fine)
@@ -57,37 +59,48 @@ def get_cache_manifest_path():
 
 
 # Purge all expired entries in the cache
-def purge_expired_cache_entries(manifest_file):
-    # Read checksums from manifest; splitlines(True) preserves newlines
-    manifest_file.seek(0)
-    entry_checksums = manifest_file.read().splitlines(True)
-    # Purge the oldest entry if the cache is too large
-    if len(entry_checksums) > MAX_NUM_CACHE_ENTRIES:
-        for i in range(len(entry_checksums) - MAX_NUM_CACHE_ENTRIES):
-            old_entry_checksum = entry_checksums[0].rstrip()
-            os.remove(os.path.join(get_cache_entry_dir_path(), old_entry_checksum))
-            entry_checksums.pop(0)
-        manifest_file.truncate(0)
-        manifest_file.seek(0)
-        manifest_file.writelines(entry_checksums)
+def purge_expired_cache_entries(removed_checksums):
+    # Remove any files that are no longer referenced in the manifest
+    for checksum in removed_checksums:
+        # if checksum == entry_checksum:
+        #     # Never remove the cache entry we just wrote
+        #     continue
+        purged_path = os.path.join(get_cache_entry_dir_path(), checksum)
+        with contextlib.suppress(FileNotFoundError):
+            os.remove(purged_path)
 
 
 # Adds to the cache a new entry with the given content
 def add_cache_entry(entry_key, entry_content):
     create_local_cache_dirs()
 
-    # Write entry content to entry file
+    # Write/overwrite entry content to entry file
     entry_path = get_cache_entry_path(entry_key)
     with open(entry_path, "w") as entry_file:
         entry_file.write(entry_content)
 
     entry_checksum = os.path.basename(entry_path)
     cache_manifest_path = get_cache_manifest_path()
-    with open(cache_manifest_path, "a+") as manifest_file:
-        # Write the new entry checksum to manifest file
-        manifest_file.write(entry_checksum)
-        manifest_file.write("\n")
-        purge_expired_cache_entries(manifest_file)
+
+    # Update manifest using MRU semantics
+
+    try:
+        with open(cache_manifest_path, "r") as manifest_file:
+            existing_lines = manifest_file.read().splitlines()
+    except FileNotFoundError:
+        existing_lines = []
+
+    # Build MRU from existing entries
+    mru_cache = MRUStack(existing_lines, maxsize=MAX_NUM_CACHE_ENTRIES)
+    # Add the new entry, moving it to the top if it already exists
+    mru_cache.add(entry_checksum)
+
+    with open(cache_manifest_path, "w+") as manifest_file:
+        manifest_file.write("\n".join(mru_cache) + "\n")
+
+    # Determine which checksums were removed by normalization/truncation
+    removed_checksums = set(existing_lines) - set(mru_cache)
+    purge_expired_cache_entries(removed_checksums)
 
 
 # Retrieves the unmodified content of a cache entry
