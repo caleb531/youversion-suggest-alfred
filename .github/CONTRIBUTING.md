@@ -41,20 +41,12 @@ repository. You must pull this data down to properly run this project:
 git submodule update --recursive --init
 ```
 
-### Configuring a virtualenv
-
-The dependencies for the project and best run inside a `virtualenv`. For
-instructions on how to configure virtual environments in Python, please see the
-[Virtual Environments](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
-section of the Hitchhiker's Guide to Python.
-
 ### Installing project dependencies
 
-You can install all project dependencies via `pip` (assuming your project
-virtualenv is active):
+You can install all project dependencies via `uv`. This will automatically install a virtualenv for you.
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ### Running unit tests
