@@ -45,6 +45,4 @@ branch = true
 exclude_lines = [
     "if __name__ == .__main__.:",
 ]
-include = [
-    "yvs/*.py",
-]
+include = ["yvs/*.py"]
