@@ -2,6 +2,6 @@
 
 - [ ] Added/modified the appropriate unit tests
 - [ ] All unit tests pass
-    - `nose2`
+    - `uv run pytest`
 - [ ] Code coverage report covers new code
-    - `coverage run -m nose2 && coverage report`
+    - `uv run pytest --cov --cov-report=term-missing`

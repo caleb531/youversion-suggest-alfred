@@ -51,22 +51,21 @@ uv sync
 
 ### Running unit tests
 
-The project's unit tests are written using and managed under the [nose2][nose2]
-Python package. You can run all unit tests via the `nose2` command.
+The project's unit tests are written with [pytest][pytest]. You can run all unit
+tests via the `pytest` command (using `uv run` to pick up the managed environment).
 
 ```bash
-nose2
+uv run pytest
 ```
 
 ## Code coverage
 
 The project currently boasts high code coverage across all source files.
 Contributions are expected to maintain this high standard. You can view the
-current coverage report via the `coverage` command:
+current coverage report via `pytest`'s coverage plugin:
 
 ```bash
-coverage run -m nose2
-coverage report
+uv run pytest --cov --cov-report=term-missing
 ```
 
 If you want to examine which lines are/aren't covered, you can generate and view
@@ -80,4 +79,4 @@ open htmlcov/index.html
 [issues-page]: https://github.com/caleb531/youversion-suggest-alfred/issues
 [language-list]: https://www.bible.com/languages
 [data-contributing-guide]: https://github.com/caleb531/youversion-suggest-data/blob/master/CONTRIBUTING.md
-[nose2]: https://docs.nose2.io/en/latest/
+[pytest]: https://docs.pytest.org/en/stable/

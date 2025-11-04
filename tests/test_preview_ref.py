@@ -2,10 +2,10 @@
 # coding=utf-8
 
 import json
+import re
 from unittest.mock import Mock, NonCallableMock, patch
 
 import yvs.preview_ref as preview_ref
-from tests import YVSTestCase
 from tests.decorators import redirect_stdout, use_user_prefs
 
 with open("tests/html/psa.23.html") as html_file:
@@ -15,89 +15,104 @@ with open("tests/html/psa.23.html") as html_file:
     )
 
 
-class TestPreviewRef(YVSTestCase):
-    def setUp(self):
-        patch_urlopen.start()
-        super().setUp()
+def setup_function(function):
+    patch_urlopen.start()
 
-    def tearDown(self):
-        patch_urlopen.stop()
-        super().tearDown()
 
-    @redirect_stdout
-    def test_preview_chapter(self, out):
-        """should preview reference content for chapter"""
+def teardown_function(function):
+    patch_urlopen.stop()
+
+
+def test_preview_chapter():
+    """should preview reference content for chapter"""
+
+    with redirect_stdout() as out:
         preview_ref.main("111/psa.23")
-        preview_feedback = json.loads(out.getvalue())
-        self.assertNotRegex(preview_feedback["response"], "David")
-        self.assertRegex(preview_feedback["response"], "Lorem")
-        self.assertRegex(preview_feedback["response"], "nunc nulla")
-        self.assertRegex(preview_feedback["response"], "fermentum")
-        self.assertIn("Psalms 23 (NIV)", preview_feedback["footer"])
 
-    @redirect_stdout
-    def test_preview_verse(self, out):
-        """should preview reference content for verse"""
-        preview_ref.main("59/psa.23.2")
-        preview_feedback = json.loads(out.getvalue())
-        self.assertNotRegex(preview_feedback["response"], "Lorem")
-        self.assertRegex(preview_feedback["response"], "nunc nulla")
-        self.assertNotRegex(preview_feedback["response"], "fermentum")
-        self.assertIn("Psalms 23:2 (ESV)", preview_feedback["footer"])
+    preview_feedback = json.loads(out.getvalue())
 
-    @use_user_prefs(
-        {
-            "language": "eng",
-            "version": 59,
-            "refformat": "{name} ({version})\n\n{content}",
-            "versenumbers": False,
-            "linebreaks": True,
-            "copybydefault": True,
-        }
-    )
-    @redirect_stdout
-    def test_copybydefault_yes(self, out):
-        """should display copy action when copybydefault is enabled"""
-        preview_ref.main("59/psa.23.2")
-        preview_feedback = json.loads(out.getvalue())
-        self.assertIn("Copy content to clipboard", preview_feedback["footer"])
-        self.assertNotIn("View on YouVersion", preview_feedback["footer"])
+    assert not re.search("David", preview_feedback["response"])
+    assert re.search("Lorem", preview_feedback["response"])
+    assert re.search("nunc nulla", preview_feedback["response"])
+    assert re.search("fermentum", preview_feedback["response"])
+    assert "Psalms 23 (NIV)" in preview_feedback["footer"]
 
-    @use_user_prefs(
-        {
-            "language": "eng",
-            "version": 59,
-            "refformat": "{name} ({version})\n\n{content}",
-            "versenumbers": False,
-            "linebreaks": True,
-            "copybydefault": False,
-        }
-    )
-    @redirect_stdout
-    def test_copybydefault_no(self, out):
-        """should display view action when copybydefault is disabled"""
-        preview_ref.main("59/psa.23.2")
-        preview_feedback = json.loads(out.getvalue())
-        self.assertIn("View on YouVersion", preview_feedback["footer"])
-        self.assertNotIn("Copy content to clipboard", preview_feedback["footer"])
 
-    @use_user_prefs(
-        {
-            "language": "eng",
-            "version": 59,
-            "refformat": '{name}\n"{content}"',
-            "versenumbers": False,
-            "linebreaks": True,
-            "copybydefault": False,
-        }
-    )
-    @redirect_stdout
-    def test_refformat(self, out):
-        """
-        should bypass user's refformat and use consistent (Markdown-based)
-        refformat for preview
-        """
+def test_preview_verse():
+    """should preview reference content for verse"""
+
+    with redirect_stdout() as out:
         preview_ref.main("59/psa.23.2")
-        preview_feedback = json.loads(out.getvalue())
-        self.assertIn("## Psalms 23:2 (ESV)  \n\n", preview_feedback["response"])
-        self.assertNotIn("- Psalms 23:2\n", preview_feedback["response"])
+
+    preview_feedback = json.loads(out.getvalue())
+
+    assert not re.search("Lorem", preview_feedback["response"])
+    assert re.search("nunc nulla", preview_feedback["response"])
+    assert not re.search("fermentum", preview_feedback["response"])
+    assert "Psalms 23:2 (ESV)" in preview_feedback["footer"]
+
+
+@use_user_prefs(
+    {
+        "language": "eng",
+        "version": 59,
+        "refformat": "{name} ({version})\n\n{content}",
+        "versenumbers": False,
+        "linebreaks": True,
+        "copybydefault": True,
+    }
+)
+def test_copybydefault_yes():
+    """should display copy action when copybydefault is enabled"""
+
+    with redirect_stdout() as out:
+        preview_ref.main("59/psa.23.2")
+
+    preview_feedback = json.loads(out.getvalue())
+
+    assert "Copy content to clipboard" in preview_feedback["footer"]
+    assert "View on YouVersion" not in preview_feedback["footer"]
+
+
+@use_user_prefs(
+    {
+        "language": "eng",
+        "version": 59,
+        "refformat": "{name} ({version})\n\n{content}",
+        "versenumbers": False,
+        "linebreaks": True,
+        "copybydefault": False,
+    }
+)
+def test_copybydefault_no():
+    """should display view action when copybydefault is disabled"""
+
+    with redirect_stdout() as out:
+        preview_ref.main("59/psa.23.2")
+
+    preview_feedback = json.loads(out.getvalue())
+
+    assert "View on YouVersion" in preview_feedback["footer"]
+    assert "Copy content to clipboard" not in preview_feedback["footer"]
+
+
+@use_user_prefs(
+    {
+        "language": "eng",
+        "version": 59,
+        "refformat": '{name}\n"{content}"',
+        "versenumbers": False,
+        "linebreaks": True,
+        "copybydefault": False,
+    }
+)
+def test_refformat():
+    """should prefer Markdown refformat when generating preview"""
+
+    with redirect_stdout() as out:
+        preview_ref.main("59/psa.23.2")
+
+    preview_feedback = json.loads(out.getvalue())
+
+    assert "## Psalms 23:2 (ESV)  \n\n" in preview_feedback["response"]
+    assert "- Psalms 23:2\n" not in preview_feedback["response"]

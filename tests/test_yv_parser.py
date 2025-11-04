@@ -3,7 +3,8 @@
 
 from unittest.mock import Mock, NonCallableMock, patch
 
-from tests import YVSTestCase
+import pytest
+
 from yvs.web import YVParser
 
 with open("tests/html/psa.23.html") as html_file:
@@ -13,32 +14,37 @@ with open("tests/html/psa.23.html") as html_file:
     )
 
 
-class TestYVParser(YVSTestCase):
-    def setUp(self):
-        patch_urlopen.start()
-        super().setUp()
+@pytest.fixture(autouse=True)
+def _patch_urlopen():
+    with patch_urlopen:
+        yield
 
-    def tearDown(self):
-        patch_urlopen.stop()
-        super().tearDown()
 
-    @patch("yvs.web.YVParser.handle_data")
-    def test_charref_name(self, handle_data):
-        """should evaluate named character references"""
-        parser = YVParser()
-        parser.feed("&deg;")
-        handle_data.assert_called_once_with("°")
+@patch("yvs.web.YVParser.handle_data")
+def test_charref_name(handle_data):
+    """should evaluate named character references"""
 
-    @patch("yvs.web.YVParser.handle_data")
-    def test_charref_dec(self, handle_data):
-        """should evaluate decimal character references"""
-        parser = YVParser()
-        parser.feed("&#176;")
-        handle_data.assert_called_once_with("°")
+    parser = YVParser()
+    parser.feed("&deg;")
 
-    @patch("yvs.web.YVParser.handle_data")
-    def test_charref_hex(self, handle_data):
-        """should evaluate hexadecimal character references"""
-        parser = YVParser()
-        parser.feed("&#x00b0;")
-        handle_data.assert_called_once_with("°")
+    handle_data.assert_called_once_with("°")
+
+
+@patch("yvs.web.YVParser.handle_data")
+def test_charref_dec(handle_data):
+    """should evaluate decimal character references"""
+
+    parser = YVParser()
+    parser.feed("&#176;")
+
+    handle_data.assert_called_once_with("°")
+
+
+@patch("yvs.web.YVParser.handle_data")
+def test_charref_hex(handle_data):
+    """should evaluate hexadecimal character references"""
+
+    parser = YVParser()
+    parser.feed("&#x00b0;")
+
+    handle_data.assert_called_once_with("°")
