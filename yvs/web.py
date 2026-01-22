@@ -23,10 +23,17 @@ def optimize_html(html):
 
 
 # Retrieves HTML contents of the given URL as a Unicode string
-def get_url_content(url):
-    request = urllib.request.Request(
-        url, headers={"User-Agent": USER_AGENT, "Accept-Encoding": "gzip, deflate"}
-    )
+def get_url_content(url, request_headers=None):
+    if request_headers is None:
+        request_headers = {}
+
+    headers = {
+        "User-Agent": USER_AGENT,
+        "Accept-Encoding": "gzip, deflate",
+        **request_headers,
+    }
+
+    request = urllib.request.Request(url, headers=headers)
     response = urllib.request.urlopen(request, timeout=REQUEST_CONNECTION_TIMEOUT)
     url_content = response.read()
 
@@ -40,7 +47,13 @@ def get_url_content(url):
 
 
 # Retrieve HTML contents of the given URL
-def get_url_content_with_caching(url, entry_key, *, revalidate=False):
+def get_url_content_with_caching(
+    url,
+    entry_key,
+    *,
+    revalidate=False,
+    request_headers=None,
+):
     # If revalidate is True, then we should skip lookup of cached HTML, fetch
     # latest the HTML directly from server, and cache that new HTML
     if revalidate:
@@ -51,7 +64,7 @@ def get_url_content_with_caching(url, entry_key, *, revalidate=False):
     # If revalidate is True OR if there is a cache-miss, then fetch the latest
     # HTML from YouVersion
     if not html:
-        html = optimize_html(get_url_content(url))
+        html = optimize_html(get_url_content(url, request_headers=request_headers))
         cache.add_cache_entry(entry_key, html)
 
     return html

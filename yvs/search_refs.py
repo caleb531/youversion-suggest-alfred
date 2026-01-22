@@ -97,8 +97,14 @@ def get_search_html(query_str, user_prefs, revalidate=False):
         urllib.parse.quote_plus(query_str), user_prefs["version"]
     )
     entry_key = "{}/{}.html".format(user_prefs["version"], query_str)
+    request_headers = {"Cookie": "version={}".format(user_prefs["version"])}
 
-    return web.get_url_content_with_caching(url, entry_key, revalidate=revalidate)
+    return web.get_url_content_with_caching(
+        url,
+        entry_key,
+        revalidate=revalidate,
+        request_headers=request_headers,
+    )
 
 
 # Parses actual reference content from reference HTML

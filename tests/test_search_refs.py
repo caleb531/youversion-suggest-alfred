@@ -64,7 +64,8 @@ def test_unicode_input(get_url_content):
     search_refs.get_result_list("é")
 
     get_url_content.assert_called_with(
-        "https://www.bible.com/search/bible?q=%C3%A9&version_id=111"
+        "https://www.bible.com/search/bible?q=%C3%A9&version_id=111",
+        request_headers={"Cookie": "version=111"},
     )
 
 

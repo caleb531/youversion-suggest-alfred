@@ -326,7 +326,9 @@ def test_url_always_chapter(get_url_content):
 
     copy_ref.get_copied_ref("59/psa.23.2")
 
-    get_url_content.assert_called_with("https://www.bible.com/bible/59/PSA.23")
+    get_url_content.assert_called_with(
+        "https://www.bible.com/bible/59/PSA.23", request_headers=None
+    )
 
 
 def test_cache_url_content():
