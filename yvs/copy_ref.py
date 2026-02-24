@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # coding=utf-8
-
 import json
 import re
 import sys
@@ -78,7 +77,7 @@ class ReferenceParser(web.YVParser):
         elems_union = "|".join(elems_set)
         return bool(
             re.search(
-                rf"\b({elems_union})--",
+                rf"\b({elems_union})\b",
                 # The normal regex word boundary (\b) considers underscores as
                 # part of the definition of a "word"; this will not work for us
                 # since the class names we are working with have
