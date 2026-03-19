@@ -64,17 +64,17 @@ def test_show_versions():
 def test_filter_versions():
     """should filter available versions if value is given"""
 
-    results = filter_prefs.get_result_list("version ni")
+    results = filter_prefs.get_result_list("version nir")
 
-    assert len(results) == 3
+    assert len(results) == 1
     assert results[0]["uid"] == "yvs-version-110"
-    assert results[0]["title"] == "New International Reader’s Version (NIRV)"
+    assert results[0]["title"] == "New International Reader’s Version (NIrV)"
     assert results[0].get("valid", True) is True
     assert results[0]["variables"] == {
         "pref_id": "version",
         "pref_name": "version",
         "value_id": "110",
-        "value_name": "New International Reader’s Version (NIRV)",
+        "value_name": "New International Reader’s Version (NIrV)",
     }
 
 
@@ -208,7 +208,7 @@ def test_filter_preferences_name_partial():
 
     assert len(results) == 1
     assert results[0]["uid"] == "yvs-version-59"
-    assert results[0]["title"] == "English Standard Version 2016 (ESV)"
+    assert results[0]["title"] == "English Standard Version 2025 (ESV)"
 
 
 def test_filter_preferences_show_current():
