@@ -51,9 +51,9 @@ def test_result_arg():
 
     results = search_refs.get_result_list("love others")
 
-    assert results[0]["arg"] == "111/rom.13.8"
-    assert results[1]["arg"] == "111/jhn.15.12"
-    assert results[2]["arg"] == "111/1pe.4.8"
+    assert results[0]["arg"] == "111/rom.13.8.NIV"
+    assert results[1]["arg"] == "111/jhn.15.12.NIV"
+    assert results[2]["arg"] == "111/1pe.4.8.NIV"
     assert len(results) == 3
 
 
