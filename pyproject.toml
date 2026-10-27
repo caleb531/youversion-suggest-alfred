@@ -18,7 +18,7 @@ required-version = ">=0.13.5,<0.14"
 
 [dependency-groups]
 dev = [
-    "alfred-workflow-packager==3.1.1",
+    "alfred-workflow-packager>=3.1.1",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
     "ruff>=0.12.0",
